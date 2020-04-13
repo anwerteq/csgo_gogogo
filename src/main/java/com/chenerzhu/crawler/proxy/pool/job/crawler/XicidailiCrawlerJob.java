@@ -1,9 +1,12 @@
 package com.chenerzhu.crawler.proxy.pool.job.crawler;
 
+import com.chenerzhu.crawler.proxy.pool.common.HttpMethod;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
 import com.chenerzhu.crawler.proxy.pool.entity.WebPage;
 import com.chenerzhu.crawler.proxy.pool.job.crawler.AbstractCrawler;
+import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -21,6 +24,10 @@ import java.util.concurrent.TimeUnit;
 public class XicidailiCrawlerJob extends AbstractCrawler {
     public XicidailiCrawlerJob(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl) {
         super(proxyIpQueue, pageUrl);
+    }
+
+    public XicidailiCrawlerJob(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl, int pageCount) {
+        super(proxyIpQueue, pageUrl, pageCount);
     }
 
     @Override
@@ -46,4 +53,14 @@ public class XicidailiCrawlerJob extends AbstractCrawler {
             }
         }
     }
+
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
+
+        XicidailiCrawlerJob xicidailiCrawlerJob = new XicidailiCrawlerJob(proxyIpQueue, "https://www.xicidaili.com/nn");
+
+        xicidailiCrawlerJob.run();
+    }
+
+
 }

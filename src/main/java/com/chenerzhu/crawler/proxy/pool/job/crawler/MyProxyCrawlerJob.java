@@ -51,7 +51,13 @@ public class MyProxyCrawlerJob extends AbstractCrawler {
                 log.error("myProxyCrawlerJob error:{0}",e);
             }
         }
+    }
 
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
 
+        MyProxyCrawlerJob myProxyCrawlerJob = new MyProxyCrawlerJob(proxyIpQueue, "https://www.my-proxy.com/free-proxy-list.html");
+
+        myProxyCrawlerJob.run();
     }
 }

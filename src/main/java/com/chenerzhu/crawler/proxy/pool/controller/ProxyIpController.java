@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +72,21 @@ public class ProxyIpController extends BaseController {
         result.setData(Arrays.asList(proxyIp));
         return result;
     }
+
+    @GetMapping("/proxyAllByTXT")
+    public void proxyAllByTXT(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
+        StringBuffer str = new StringBuffer();
+        List<Serializable>  allByPage = proxyIpRedisService.findAllByPageRt(0, -1);
+        for (Serializable serializable : allByPage) {
+            ProxyIp proxyIp =(ProxyIp) serializable;
+            str.append(proxyIp.getIp()+":"+proxyIp.getPort());
+            str.append("\r\n");
+        }
+        PrintWriter out = response.getWriter();
+        out.println(str.toString());
+        out.close();
+    }
+
 
     @PostMapping("/test")
     @ResponseBody

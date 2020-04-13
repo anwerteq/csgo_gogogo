@@ -21,10 +21,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public abstract class AbstractCrawler extends AbstractSchedulerJob implements ICrawler, Runnable {
     protected ConcurrentLinkedQueue<ProxyIp> proxyIpQueue;
     protected String pageUrl;
+
+    protected int pageCount = 1;
+    protected String pageUrlTemplate;
+
     protected WebPage webPage;
     protected HttpMethod httpMethd=HttpMethod.GET;
     protected Map<String,String> formParamMap;
-    private Map<String, String> headerMap = new HashMap<String, String>() {{
+    protected Map<String, String> headerMap = new HashMap<String, String>() {{
         put("Connection", "keep-alive");
         put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
         put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
@@ -40,6 +44,14 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
         this.httpMethd=HttpMethod.GET;
     }
 
+    // For the site that have more than 1 proxy ip page
+    public AbstractCrawler(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrlTemplate, int pageCount) {
+        this.proxyIpQueue = proxyIpQueue;
+        this.pageUrlTemplate = pageUrlTemplate;
+        this.pageCount = pageCount;
+        this.httpMethd=HttpMethod.GET;
+    }
+
     public AbstractCrawler(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl,HttpMethod httpMethd,Map<String,String> formParamMap) {
         this.proxyIpQueue = proxyIpQueue;
         this.pageUrl = pageUrl;
@@ -50,8 +62,16 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
     @Override
     public void run() {
         try {
-            getPage();
-            parsePage(webPage);
+            if (pageCount != 1 && pageCount > 0) {
+                for (int i = 1; i <= pageCount; i++) {
+                    this.pageUrl = this.pageUrlTemplate.replace("#", String.valueOf(i));
+                    getPage();
+                    parsePage(webPage);
+                }
+            } else {
+                getPage();
+                parsePage(webPage);
+            }
         }catch (Exception e){
             log.error("{} page process error",pageUrl,e);
         }

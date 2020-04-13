@@ -37,7 +37,7 @@ public class SyncDbSchedulerJob extends AbstractSchedulerJob {
         try {
             List<ProxyIp> availableIpList = new CopyOnWriteArrayList();
             List<ProxyIp> unAvailableIpList = new CopyOnWriteArrayList();
-            int validateCountBefore = 3;
+            int validateCountBefore = 1;
             int validateCountAfter = 100;
             double availableRate=0.5;//可用率大于0.5的重新取出来
             long totalCount = proxyIpService.totalCount(validateCountBefore,validateCountAfter,availableRate);

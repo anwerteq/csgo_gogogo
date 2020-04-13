@@ -5,7 +5,7 @@
 
 	<groupId>com.chenerzhu.crawler</groupId>
 	<artifactId>proxy-pool</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>proxy-pool</name>
@@ -70,10 +70,11 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.47</version>
 		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.5</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.10</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -95,7 +96,7 @@
     </dependencies>
 
     <build>
-		<finalName>proxy-pool-1.0</finalName>
+		<finalName>proxy-pool-2.0</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

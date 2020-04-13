@@ -44,4 +44,12 @@ public class Data5uCrawlerJob extends AbstractCrawler {
             }
         }
     }
+
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
+
+        Data5uCrawlerJob data5uCrawlerJob = new Data5uCrawlerJob(proxyIpQueue, "http://www.data5u.com/");
+
+        data5uCrawlerJob.run();
+    }
 }
