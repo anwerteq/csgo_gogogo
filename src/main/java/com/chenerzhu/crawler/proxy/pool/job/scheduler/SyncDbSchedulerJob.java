@@ -1,12 +1,15 @@
 package com.chenerzhu.crawler.proxy.pool.job.scheduler;
 
+import com.chenerzhu.crawler.proxy.pool.entity.ProxyConfig;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
+import com.chenerzhu.crawler.proxy.pool.service.IProxyConfigService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +29,27 @@ import java.util.stream.IntStream;
 @SuppressWarnings("unchecked")
 public class SyncDbSchedulerJob extends AbstractSchedulerJob {
 
+    /** 验证次数 */
+    private static Integer validateCount = null;
+
     @Autowired
     private IProxyIpRedisService proxyIpRedisService;
     @Autowired
     private IProxyIpService proxyIpService;
+    @Autowired
+    private IProxyConfigService proxyConfigService;
+
+    /**
+     * 初始化
+     */
+    @PostConstruct
+    public void init(){
+        ProxyConfig config = proxyConfigService.getConfig();
+        if(null != config){
+            validateCount = config.getValidateCount();
+        }
+
+    }
 
 
     @Override
@@ -37,9 +57,17 @@ public class SyncDbSchedulerJob extends AbstractSchedulerJob {
         try {
             List<ProxyIp> availableIpList = new CopyOnWriteArrayList();
             List<ProxyIp> unAvailableIpList = new CopyOnWriteArrayList();
-            int validateCountBefore = 1;
+
+            // 默认为3次验证
+            int validateCountBefore = 3;
             int validateCountAfter = 100;
             double availableRate=0.5;//可用率大于0.5的重新取出来
+
+            // 修改验证次数
+            if(null != validateCount){
+                validateCountBefore = validateCount;
+            }
+
             long totalCount = proxyIpService.totalCount(validateCountBefore,validateCountAfter,availableRate);
             log.info("proxyIp total count:{}", totalCount);
             AtomicInteger availableIpCount=new AtomicInteger(0);
@@ -48,8 +76,9 @@ public class SyncDbSchedulerJob extends AbstractSchedulerJob {
             int pageCount = (int) ((int) (totalCount % pageSize) == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
             List<FutureTask<ProxyIp>> taskList = new ArrayList<>();
             long start = System.currentTimeMillis();
+            int finalValidateCountBefore = validateCountBefore;
             IntStream.range(0, pageCount).forEach(pageNumber -> {
-                List<ProxyIp> proxyIpList = proxyIpService.findAllByPage(pageNumber, pageSize, validateCountBefore,validateCountAfter ,availableRate);
+                List<ProxyIp> proxyIpList = proxyIpService.findAllByPage(pageNumber, pageSize, finalValidateCountBefore,validateCountAfter ,availableRate);
                 proxyIpList.forEach(proxyIp -> {
                     FutureTask task = new FutureTask(new Callable<ProxyIp>() {
                         @Override

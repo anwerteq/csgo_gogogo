@@ -1,9 +1,12 @@
 package com.chenerzhu.crawler.proxy.pool.job.crawler;
 
-import com.chenerzhu.crawler.proxy.pool.config.ProxyConfig;
+import com.chenerzhu.crawler.proxy.pool.entity.ProxyApi;
+import com.chenerzhu.crawler.proxy.pool.entity.ProxyConfig;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
 import com.chenerzhu.crawler.proxy.pool.job.execute.ISchedulerJobExecutor;
 import com.chenerzhu.crawler.proxy.pool.job.execute.impl.SchedulerJobExecutor;
+import com.chenerzhu.crawler.proxy.pool.service.IProxyApiService;
+import com.chenerzhu.crawler.proxy.pool.service.IProxyConfigService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -30,25 +33,38 @@ public class CrawlerJob implements Runnable {
     private IProxyIpService proxyIpService;
 
     @Autowired
-    private ProxyConfig proxyConfig;
+    private IProxyApiService proxyApiService;
+
+    @Autowired
+    private IProxyConfigService proxyConfigService;
 
     @Override
     public void run() {
         try{
             ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
-            //生产者
 
+            // 获得配置信息
+            ProxyConfig proxyConfig = proxyConfigService.getConfig();
+
+            //生产者
 
             // 私有化 txt api
             if(null != proxyConfig){
-                List<String> addrList = proxyConfig.getAddrList();
-                int delay = Integer.parseInt(proxyConfig.getDelayTime());
-                for (String addr : addrList) {
+                List<ProxyApi> addrList = proxyApiService.findAll();
+                int delay = proxyConfig.getDelayTime();
+                for (ProxyApi api : addrList) {
+                    if(null == api){
+                        continue;
+                    }
+
                     // 如果为0 则为随机数
                     if(delay == 0){
                         delay = RandomUtils.nextInt(10, 30);
                     }
-                    schedulerJobExecutor.execute(new PrivateTXTJob(proxyIpQueue, addr), delay, 10, TimeUnit.SECONDS);
+                    // 处理 txt 类型接口
+                    if("txt".equals(api.getType())){
+                        schedulerJobExecutor.execute(new PrivateTXTJob(proxyIpQueue, api.getIpApi()), delay, 10, TimeUnit.SECONDS);
+                    }
                 }
             }
 

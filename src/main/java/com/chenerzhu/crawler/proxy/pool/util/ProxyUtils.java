@@ -1,13 +1,18 @@
 package com.chenerzhu.crawler.proxy.pool.util;
 
-import com.alibaba.fastjson.JSONObject;
+
+import com.chenerzhu.crawler.proxy.pool.entity.ProxyConfig;
+import com.chenerzhu.crawler.proxy.pool.service.IProxyConfigService;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sun.net.www.protocol.https.Handler;
 
+import javax.annotation.PostConstruct;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
@@ -21,9 +26,35 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @create 2018-09-05 21:14
  **/
 @Slf4j
+@Component
 public final class ProxyUtils {
-    //private static final String VALIDATE_URL = "http://115.239.211.112";
-    private static final String VALIDATE_URL = "http://www.baidu.com/";
+
+    /** 验证代理IP网址 只能是 http网址 不要使用 http转https会有302错误 */
+    private static String VALIDATE_URL = "http://www.baidu.com";
+
+    /** 私有接口-认证用户名 */
+    private static String PRIVATE_USERNAME = "";
+
+
+    /** 私有接口-认证用户密码 */
+    private static String PRIVATE_PASSWORD = "";
+
+
+    @Autowired
+    private IProxyConfigService proxyConfigService;
+
+    /**
+     * 初始化
+     */
+    @PostConstruct
+    public void init(){
+        ProxyConfig config = proxyConfigService.getConfig();
+        if(null != config){
+            VALIDATE_URL = config.getValidateUrl();
+        }
+
+    }
+
 
     public static boolean validateIp(String ip, int port, ProxyType proxyType) {
         boolean available = false;
@@ -48,13 +79,23 @@ public final class ProxyUtils {
             connection.setConnectTimeout(2 * 1000);
             connection.setReadTimeout(3 * 1000);
             connection.setInstanceFollowRedirects(false);
+
+            // 设置私有代理-认证头部
+            if(StringUtils.isNotEmpty(PRIVATE_USERNAME) && StringUtils.isNotEmpty(PRIVATE_PASSWORD)){
+                final String userName = PRIVATE_USERNAME;
+                final String password = PRIVATE_PASSWORD;
+                String nameAndPass = userName +":"+ password;
+                String encoding =new String(Base64.encodeBase64(nameAndPass.getBytes()));
+                connection.setRequestProperty("Proxy-Authorization","Basic " + encoding);
+            }
+
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String s = null;
             StringBuilder sb = new StringBuilder();
             while ((s = br.readLine()) != null) {
                 sb.append(s);
             }
-            if (sb.toString().contains("baidu.com") && connection.getResponseCode() == 200) {
+            if (connection.getResponseCode() == 200) {
                 available = true;
             }
             log.info("validateHttp ==> ip:{} port:{} info:{}", ip, port, connection.getResponseMessage());
@@ -84,13 +125,23 @@ public final class ProxyUtils {
             httpsURLConnection.setConnectTimeout(2 * 1000);
             httpsURLConnection.setReadTimeout(3 * 1000);
             httpsURLConnection.setInstanceFollowRedirects(false);
+
+            // 设置私有代理-认证头部
+            if(StringUtils.isNotEmpty(PRIVATE_USERNAME) && StringUtils.isNotEmpty(PRIVATE_PASSWORD)){
+                final String userName = PRIVATE_USERNAME;
+                final String password = PRIVATE_PASSWORD;
+                String nameAndPass = userName +":"+ password;
+                String encoding =new String(Base64.encodeBase64(nameAndPass.getBytes()));
+                httpsURLConnection.setRequestProperty("Proxy-Authorization","Basic " + encoding);
+            }
+
             BufferedReader br = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
             String s = null;
             StringBuilder sb = new StringBuilder();
             while ((s = br.readLine()) != null) {
                 sb.append(s);
             }
-            if (sb.toString().contains("baidu.com") && httpsURLConnection.getResponseCode() == 200) {
+            if (httpsURLConnection.getResponseCode() == 200) {
                 available = true;
             }
             log.info("validateHttps ==> ip:{} port:{} info:{}", ip, port, httpsURLConnection.getResponseMessage());
@@ -112,8 +163,8 @@ public final class ProxyUtils {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String ip = "185.28.248.238";
-                    int port = 23500;
+                    String ip = "115.216.43.251";
+                    int port = 15238;
                     boolean availableHttp = ProxyUtils.validateHttp(ip, port);
                     boolean availableHttps = ProxyUtils.validateHttps(ip, port);
                     if(availableHttp||availableHttps){
@@ -147,4 +198,5 @@ public final class ProxyUtils {
             return type;
         }
     }
+
 }
