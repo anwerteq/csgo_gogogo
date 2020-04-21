@@ -56,4 +56,12 @@ public class ProxyConfig implements Serializable {
      */
     @Column(name="private_password" ,nullable=false)
     private String privatePassword;
+
+
+    /**
+     * 授权
+     */
+    @Column(name="auth")
+    private String auth;
+
 }

@@ -5,6 +5,7 @@ import com.chenerzhu.crawler.proxy.pool.entity.ProxyConfig;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
 import com.chenerzhu.crawler.proxy.pool.job.execute.ISchedulerJobExecutor;
 import com.chenerzhu.crawler.proxy.pool.job.execute.impl.SchedulerJobExecutor;
+import com.chenerzhu.crawler.proxy.pool.service.IPWhiteListService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyApiService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyConfigService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpService;
@@ -37,6 +38,9 @@ public class CrawlerJob implements Runnable {
 
     @Autowired
     private IProxyConfigService proxyConfigService;
+
+    @Autowired
+    private IPWhiteListService whiteListService;
 
     @Override
     public void run() {
@@ -144,4 +148,5 @@ public class CrawlerJob implements Runnable {
 
         }
     }
+
 }

@@ -3,10 +3,13 @@ package com.chenerzhu.crawler.proxy.pool.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.chenerzhu.crawler.proxy.pool.entity.IPWhiteList;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
 import com.chenerzhu.crawler.proxy.pool.entity.Result;
+import com.chenerzhu.crawler.proxy.pool.service.IPWhiteListService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpService;
+import com.chenerzhu.crawler.proxy.pool.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,17 +36,51 @@ import java.util.List;
 @Slf4j
 @Controller
 public class ProxyIpController extends BaseController {
+
+    /** Redis ip key */
+    private static final String REDIS_IP_KEY = "ip_white_list";
+
     @Autowired
     private IProxyIpRedisService proxyIpRedisService;
 
     @Resource
     private IProxyIpService proxyIpService;
 
+    @Autowired
+    private IPWhiteListService whiteListService;
+
     @GetMapping("/")
     public String index(ModelMap modelMap){
         List proxyIpList=proxyIpRedisService.findAllByPageRt(0,20);
         modelMap.put("proxyIpList", JSON.toJSON(proxyIpList));
         return "index";
+    }
+
+    /**
+     * 更新白名单
+     * @param request
+     * @param response
+     * @param modelMap
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/updateIpWhiteList")
+    @ResponseBody
+    public Result updateIpWhiteList(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
+
+        Result result=new Result();
+
+        // 更新白名单
+        boolean flag = whiteListService.updateIpWhiteList();
+        if(!flag){
+            result.setCode(500);
+            result.setMessage("clean error !");
+            return result;
+        }
+
+        result.setCode(200);
+        result.setMessage("clean success !");
+        return result;
     }
 
     @GetMapping("/proxyIpLow")
