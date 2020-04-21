@@ -11,11 +11,27 @@
  Target Server Version : 50709
  File Encoding         : 65001
 
- Date: 20/04/2020 20:08:44
+ Date: 21/04/2020 15:35:10
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for ip_white_list
+-- ----------------------------
+DROP TABLE IF EXISTS `ip_white_list`;
+CREATE TABLE `ip_white_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '白名单IP',
+  `is_usable` smallint(6) NOT NULL COMMENT '可用状态 否 0  / 是  1',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of ip_white_list
+-- ----------------------------
+INSERT INTO `ip_white_list` VALUES (1, '39.254.12.176', 1);
 
 -- ----------------------------
 -- Table structure for proxy_api
@@ -31,7 +47,7 @@ CREATE TABLE `proxy_api`  (
 -- ----------------------------
 -- Records of proxy_api
 -- ----------------------------
-INSERT INTO `proxy_api` VALUES (1, 'http://dps.kdlapi.com/api/getdps/?orderid=948736843604899&num=10&pt=1&sep=1', 'txt');
+INSERT INTO `proxy_api` VALUES (1, 'http://ent.kdlapi.com/api/getproxy/?orderid=938745381844768&num=10&protocol=1&method=2&an_an=1&an_ha=1&sep=1', 'txt');
 
 -- ----------------------------
 -- Table structure for proxy_config
@@ -44,13 +60,14 @@ CREATE TABLE `proxy_config`  (
   `delay_time` int(6) NOT NULL COMMENT '如果为0 则开启随机',
   `private_username` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '私有接口-认证用户名',
   `private_password` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '私有接口-认证用户密码',
+  `auth` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权key',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of proxy_config
 -- ----------------------------
-INSERT INTO `proxy_config` VALUES (1, 'http://www.blyuan.com/', 1, 0, 'meet.parker', 'ca0ngogx');
+INSERT INTO `proxy_config` VALUES (1, 'http://www.blyuan.com/', 1, 0, 'meet.parker', 'ca0ngogx', '');
 
 -- ----------------------------
 -- Table structure for proxyip
@@ -75,6 +92,6 @@ CREATE TABLE `proxyip`  (
   `useTime` bigint(20) NOT NULL,
   `validateCount` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 4080 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 4549 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
