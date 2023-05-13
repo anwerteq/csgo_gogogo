@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.pool;
 
+import com.chenerzhu.crawler.proxy.pool.service.impl.ProxyIpServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;

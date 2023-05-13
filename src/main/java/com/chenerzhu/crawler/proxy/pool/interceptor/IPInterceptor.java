@@ -34,6 +34,10 @@ public class IPInterceptor implements HandlerInterceptor{
             return false;
         }
 
+        if (true){
+            return true;
+        }
+
         // 等于 本地IP 直接放行
         if("127.0.0.1".equals(ipAddress) || "localhost".equals(ipAddress)){
             return true;

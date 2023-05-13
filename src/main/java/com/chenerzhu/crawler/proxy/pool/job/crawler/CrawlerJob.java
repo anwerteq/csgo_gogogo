@@ -72,28 +72,16 @@ public class CrawlerJob implements Runnable {
                 }
             }
 
-            // 刷一下 自有网站 访问量  可以注掉
-            schedulerJobExecutor.execute(new WebSiteJob(proxyIpQueue, "https://www.arcinbj.com/page/#", 5), 30, 60, TimeUnit.SECONDS);
-/*
-            schedulerJobExecutor.execute(new XicidailiCrawlerJob(proxyIpQueue, "https://www.xicidaili.com/nn/#", 5), 0, 60, TimeUnit.SECONDS);
-            schedulerJobExecutor.execute(new XicidailiCrawlerJob(proxyIpQueue, "https://www.xicidaili.com/nt/#", 5), 30, 120, TimeUnit.SECONDS);
-            schedulerJobExecutor.execute(new XicidailiCrawlerJob(proxyIpQueue, "https://www.xicidaili.com/wn/#", 5), 40, 180, TimeUnit.SECONDS);
-            schedulerJobExecutor.execute(new XicidailiCrawlerJob(proxyIpQueue, "https://www.xicidaili.com/wt/#", 5), 50, 240, TimeUnit.SECONDS);
 
-            schedulerJobExecutor.execute(new Data5uCrawlerJob(proxyIpQueue, "http://www.data5u.com/"), 0, 120, TimeUnit.SECONDS);
+//            schedulerJobExecutor.execute(new Data5uCrawlerJob(proxyIpQueue, "http://www.data5u.com/"), 0, 120, TimeUnit.SECONDS);
 
-            schedulerJobExecutor.execute(new QuanWangCrawlerJob(proxyIpQueue, "http://www.goubanjia.com/"), 30, 120, TimeUnit.SECONDS);
 
             schedulerJobExecutor.execute(new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/inha/#/",5), 60, 120, TimeUnit.SECONDS);
             schedulerJobExecutor.execute(new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/intr/#/", 5), 60, 120, TimeUnit.SECONDS);
 
-            schedulerJobExecutor.execute(new IPHaiCrawlerJob(proxyIpQueue, "http://www.iphai.com/"), 0, 100, TimeUnit.SECONDS);
 
             schedulerJobExecutor.execute(new IP366CrawlerJob(proxyIpQueue, "http://www.ip3366.net/?stype=1&page=#", 5), 50, 100, TimeUnit.SECONDS);
 
-            schedulerJobExecutor.execute(new GaoKeYongCrawlerJob(proxyIpQueue, "http://ip.jiangxianli.com/?page=#", 5), 0, 100, TimeUnit.SECONDS);
-*/
-/*
             // Not available in China mainland
             schedulerJobExecutor.execute(new FreeProxyListCrawlerJob(proxyIpQueue, "https://free-proxy-list.net"), 20, 100, TimeUnit.SECONDS);
             schedulerJobExecutor.execute(new SpysOneCrawlerJob(proxyIpQueue, "http://spys.one/en/free-proxy-list/"), 40, 100, TimeUnit.SECONDS);
@@ -102,7 +90,6 @@ public class CrawlerJob implements Runnable {
 
             // Slow in China mainland
             schedulerJobExecutor.execute(new MyProxyCrawlerJob(proxyIpQueue, "https://www.my-proxy.com/free-proxy-list.html"), 30, 100, TimeUnit.SECONDS);
-*/
 
 
             //消费者

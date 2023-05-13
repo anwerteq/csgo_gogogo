@@ -65,7 +65,7 @@ public class HttpClientUtils {
         standardHandler = new StandardHttpRequestRetryHandler(3, true);
     }
 
-    public static String send(final String url, String content, Map<String, String> headerMap,Map<String, String> formParamMap, String contentCharset, String resultCharset, HttpMethod method) {
+    public static String send(final String url, String content, Map<String, String> headerMap, Map<String, String> formParamMap, String contentCharset, String resultCharset, HttpMethod method) {
         if (StringUtils.isEmpty(contentCharset)) {
             contentCharset = DEFAULT_CHARSET;
         }
@@ -87,14 +87,14 @@ public class HttpClientUtils {
                     HttpPost httpPost = new HttpPost(url);
                     httpPost.setConfig(reqConf);
                     addHeader(httpPost, headerMap);
-                    if(formParamMap==null||formParamMap.isEmpty()){
+                    if (formParamMap == null || formParamMap.isEmpty()) {
                         httpPost.setEntity(new StringEntity(content, contentCharset));
-                    }else{
+                    } else {
                         List<NameValuePair> ls = new ArrayList<NameValuePair>();
-                        for(Map.Entry<String, String> param:formParamMap.entrySet()){
-                            ls.add(new BasicNameValuePair(param.getKey(),param.getValue()));
+                        for (Map.Entry<String, String> param : formParamMap.entrySet()) {
+                            ls.add(new BasicNameValuePair(param.getKey(), param.getValue()));
                         }
-                        httpPost.setEntity(new UrlEncodedFormEntity(ls,"UTF-8"));
+                        httpPost.setEntity(new UrlEncodedFormEntity(ls, "UTF-8"));
                     }
                     httpResponse = httpClient.execute(httpPost);
                     break;
@@ -194,12 +194,15 @@ public class HttpClientUtils {
         try {
             sslContext = SSLContext.getInstance("SSL");
             final X509TrustManager trustManager = new X509TrustManager() {
+                @Override
                 public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
                 }
 
+                @Override
                 public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
                 }
 
+                @Override
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
@@ -222,7 +225,7 @@ public class HttpClientUtils {
     }
 
     public static String sendGet(final String url, Map<String, String> headerMap, String contentCharset, String resultCharset) {
-        return send(url, "", headerMap,null, contentCharset, resultCharset, HttpMethod.GET);
+        return send(url, "", headerMap, null, contentCharset, resultCharset, HttpMethod.GET);
     }
 
     public static String sendPost(final String url, String content, Map<String, String> headerMap) {
@@ -230,15 +233,15 @@ public class HttpClientUtils {
     }
 
     public static String sendPostForm(final String url, String content, Map<String, String> headerMap, Map<String, String> formParamMap) {
-        return send(url, content, headerMap,formParamMap, DEFAULT_CHARSET, DEFAULT_CHARSET,HttpMethod.POST);
+        return send(url, content, headerMap, formParamMap, DEFAULT_CHARSET, DEFAULT_CHARSET, HttpMethod.POST);
     }
 
     public static String sendPost(final String url, String content, Map<String, String> headerMap, String contentCharset, String resultCharset) {
-        return send(url, content, headerMap,null, contentCharset, resultCharset, HttpMethod.POST);
+        return send(url, content, headerMap, null, contentCharset, resultCharset, HttpMethod.POST);
     }
 
-    public static String sendPostForm(final String url, String content, Map<String, String> headerMap, Map<String, String> formParamMap,String contentCharset, String resultCharset) {
-        return send(url, content, headerMap, formParamMap,contentCharset, resultCharset, HttpMethod.POST);
+    public static String sendPostForm(final String url, String content, Map<String, String> headerMap, Map<String, String> formParamMap, String contentCharset, String resultCharset) {
+        return send(url, content, headerMap, formParamMap, contentCharset, resultCharset, HttpMethod.POST);
     }
 
     public static String sendDelete(final String url, String content, Map<String, String> headerMap) {
@@ -246,7 +249,7 @@ public class HttpClientUtils {
     }
 
     public static String sendDelete(final String url, String content, Map<String, String> headerMap, String contentCharset, String resultCharset) {
-        return send(url, content, headerMap, null,contentCharset, resultCharset, HttpMethod.DELETE);
+        return send(url, content, headerMap, null, contentCharset, resultCharset, HttpMethod.DELETE);
     }
 
     public static String sendPut(final String url, String content, Map<String, String> headerMap) {
@@ -254,7 +257,7 @@ public class HttpClientUtils {
     }
 
     public static String sendPut(final String url, String content, Map<String, String> headerMap, String contentCharset, String resultCharset) {
-        return send(url, content, headerMap,null, contentCharset, resultCharset, HttpMethod.PUT);
+        return send(url, content, headerMap, null, contentCharset, resultCharset, HttpMethod.PUT);
     }
 
     public static String sendPatch(final String url, String content, Map<String, String> headerMap) {
@@ -262,7 +265,7 @@ public class HttpClientUtils {
     }
 
     public static String sendPatch(final String url, String content, Map<String, String> headerMap, String contentCharset, String resultCharset) {
-        return send(url, content, headerMap, null,contentCharset, resultCharset, HttpMethod.PATCH);
+        return send(url, content, headerMap, null, contentCharset, resultCharset, HttpMethod.PATCH);
     }
 
     public static void main(String[] args) {
