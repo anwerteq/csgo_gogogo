@@ -44,11 +44,11 @@ public class SchedulerJob implements Runnable {
     public void run() {
         try{
             // 默认授权验证
-            authSchedulerJobService.auth();
+//            authSchedulerJobService.auth();
             // 定时授权验证
-            schedulerJobExecutor.execute(authSchedulerJob,90,30, TimeUnit.SECONDS);
+//            schedulerJobExecutor.execute(authSchedulerJob,90,30, TimeUnit.SECONDS);
             // 更新白名单
-            schedulerJobExecutor.execute(updateWhiteListSchedulerJob,60,30, TimeUnit.SECONDS);
+//            schedulerJobExecutor.execute(updateWhiteListSchedulerJob,60,30, TimeUnit.SECONDS);
 
             schedulerJobExecutor.execute(syncDbSchedulerJob,10, 5, TimeUnit.SECONDS);
             schedulerJobExecutor.execute(syncRedisSchedulerJob,50, 30, TimeUnit.SECONDS);

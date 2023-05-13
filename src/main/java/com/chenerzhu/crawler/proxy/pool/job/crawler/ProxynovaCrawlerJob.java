@@ -10,6 +10,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +28,22 @@ public class ProxynovaCrawlerJob extends AbstractCrawler {
     public ProxynovaCrawlerJob(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl) {
         super(proxyIpQueue, pageUrl);
     }
+
+    protected Map<String, String> headerMap = new HashMap<String, String>() {{
+        put("sec-ch-ua", "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
+        put("sec-ch-ua-mobile", "?0");
+        put("sec-ch-ua-platform", "\"Windows\"");
+        put("Upgrade-Insecure-Requests", "1");
+        put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+        put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+        put("Sec-Fetch-Site", "same-origin");
+        put("Sec-Fetch-Mode", "navigate");
+        put("Sec-Fetch-User", "?1");
+        put("Sec-Fetch-Dest", "document");
+    }};
+
+
+
 
     @Override
     public void parsePage(WebPage webPage) {
@@ -71,4 +89,13 @@ public class ProxynovaCrawlerJob extends AbstractCrawler {
         }
         return ip;
     }
+
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
+
+        ProxynovaCrawlerJob proxyListCrawlerJob =  new ProxynovaCrawlerJob(proxyIpQueue, "https://www.proxynova.com/proxy-server-list/");
+
+        proxyListCrawlerJob.run();
+    }
+
 }

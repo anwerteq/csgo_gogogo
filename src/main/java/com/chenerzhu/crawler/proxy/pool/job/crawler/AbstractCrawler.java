@@ -26,8 +26,8 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
     protected String pageUrlTemplate;
 
     protected WebPage webPage;
-    protected HttpMethod httpMethd=HttpMethod.GET;
-    protected Map<String,String> formParamMap;
+    protected HttpMethod httpMethd = HttpMethod.GET;
+    protected Map<String, String> formParamMap;
     protected Map<String, String> headerMap = new HashMap<String, String>() {{
         put("Connection", "keep-alive");
         put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
@@ -36,12 +36,23 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
         put("Accept-Language", "zh-CN,zh;q=0.9");
         put("Redis-Control", "max-age=0");
         put("Upgrade-Insecure-Requests", "1");
+
+        put("sec-ch-ua","\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
+        put("sec-ch-ua-mobile","?0");
+        put("sec-ch-ua-platform","\"Windows\"");
+        put("Upgrade-Insecure-Requests","1");
+        put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+        put("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+        put("Sec-Fetch-Site","same-origin");
+        put("Sec-Fetch-Mode","navigate");
+        put("Sec-Fetch-User","?1");
+        put("Sec-Fetch-Dest","document");
     }};
 
     public AbstractCrawler(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl) {
         this.proxyIpQueue = proxyIpQueue;
         this.pageUrl = pageUrl;
-        this.httpMethd=HttpMethod.GET;
+        this.httpMethd = HttpMethod.GET;
     }
 
     // For the site that have more than 1 proxy ip page
@@ -49,14 +60,14 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
         this.proxyIpQueue = proxyIpQueue;
         this.pageUrlTemplate = pageUrlTemplate;
         this.pageCount = pageCount;
-        this.httpMethd=HttpMethod.GET;
+        this.httpMethd = HttpMethod.GET;
     }
 
-    public AbstractCrawler(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl,HttpMethod httpMethd,Map<String,String> formParamMap) {
+    public AbstractCrawler(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl, HttpMethod httpMethd, Map<String, String> formParamMap) {
         this.proxyIpQueue = proxyIpQueue;
         this.pageUrl = pageUrl;
-        this.httpMethd=httpMethd;
-        this.formParamMap=formParamMap;
+        this.httpMethd = httpMethd;
+        this.formParamMap = formParamMap;
     }
 
     @Override
@@ -72,8 +83,8 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
                 getPage();
                 parsePage(webPage);
             }
-        }catch (Exception e){
-            log.error("{} page process error",pageUrl,e);
+        } catch (Exception e) {
+            log.error("{} page process error", pageUrl, e);
         }
 
     }
@@ -84,11 +95,11 @@ public abstract class AbstractCrawler extends AbstractSchedulerJob implements IC
         try {
             log.debug("start get page:{}", pageUrl);
             headerMap.put("Referer", pageUrl);
-            String pageContent="";
-            if(httpMethd==HttpMethod.GET){
-                pageContent= HttpClientUtils.sendGet(pageUrl, headerMap);
-            }else if(httpMethd==HttpMethod.POST){
-                pageContent= HttpClientUtils.sendPostForm(pageUrl, "",headerMap,formParamMap);
+            String pageContent = "";
+            if (httpMethd == HttpMethod.GET) {
+                pageContent = HttpClientUtils.sendGet(pageUrl, headerMap);
+            } else if (httpMethd == HttpMethod.POST) {
+                pageContent = HttpClientUtils.sendPostForm(pageUrl, "", headerMap, formParamMap);
             }
             webPage = new WebPage();
             webPage.setCrawlTime(new Date());

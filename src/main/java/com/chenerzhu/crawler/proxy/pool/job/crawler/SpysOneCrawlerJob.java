@@ -30,13 +30,18 @@ import java.util.regex.Pattern;
 public class SpysOneCrawlerJob extends AbstractCrawler {
     public SpysOneCrawlerJob(ConcurrentLinkedQueue<ProxyIp> proxyIpQueue, String pageUrl) {
         super(proxyIpQueue, pageUrl);
-        this.httpMethd=HttpMethod.POST;
+        this.httpMethd=HttpMethod.GET;
         this.formParamMap=new HashMap(){{
-            put("xpp","5");
-            put("xf1","0");
-            put("xf2","0");
-            put("xf4","0");
-            put("xf5","1");
+            put("sec-ch-ua","\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
+            put("sec-ch-ua-mobile","?0");
+            put("sec-ch-ua-platform","\"Windows\"");
+            put("Upgrade-Insecure-Requests","1");
+            put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+            put("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            put("Sec-Fetch-Site","same-origin");
+            put("Sec-Fetch-Mode","navigate");
+            put("Sec-Fetch-User","?1");
+            put("Sec-Fetch-Dest","document");
         }};
     }
 
@@ -87,5 +92,15 @@ public class SpysOneCrawlerJob extends AbstractCrawler {
         }
         return port;
     }
+
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
+
+        SpysOneCrawlerJob proxyListCrawlerJob =  new SpysOneCrawlerJob(proxyIpQueue, "http://spys.one/en/free-proxy-list/");
+
+        proxyListCrawlerJob.run();
+    }
+
+
 
 }
