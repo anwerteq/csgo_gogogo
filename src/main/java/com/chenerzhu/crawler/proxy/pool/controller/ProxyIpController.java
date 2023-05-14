@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.pool.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
 import com.chenerzhu.crawler.proxy.pool.entity.IPWhiteList;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
 import com.chenerzhu.crawler.proxy.pool.entity.Result;
@@ -24,10 +25,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.InetAddress;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.UnknownHostException;
+import java.util.*;
 
 /**
  * @author chenerzhu
@@ -37,7 +38,9 @@ import java.util.List;
 @Controller
 public class ProxyIpController extends BaseController {
 
-    /** Redis ip key */
+    /**
+     * Redis ip key
+     */
     private static final String REDIS_IP_KEY = "ip_white_list";
 
     @Autowired
@@ -49,15 +52,19 @@ public class ProxyIpController extends BaseController {
     @Autowired
     private IPWhiteListService whiteListService;
 
+    @Autowired
+    private HttpsSendUtil httpsSendUtil;
+
     @GetMapping("/")
-    public String index(ModelMap modelMap){
-        List proxyIpList=proxyIpRedisService.findAllByPageRt(0,20);
+    public String index(ModelMap modelMap) {
+        List proxyIpList = proxyIpRedisService.findAllByPageRt(0, 20);
         modelMap.put("proxyIpList", JSON.toJSON(proxyIpList));
         return "index";
     }
 
     /**
      * 更新白名单
+     *
      * @param request
      * @param response
      * @param modelMap
@@ -68,11 +75,11 @@ public class ProxyIpController extends BaseController {
     @ResponseBody
     public Result updateIpWhiteList(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
 
-        Result result=new Result();
+        Result result = new Result();
 
         // 更新白名单
         boolean flag = whiteListService.updateIpWhiteList();
-        if(!flag){
+        if (!flag) {
             result.setCode(500);
             result.setMessage("clean error !");
             return result;
@@ -87,12 +94,12 @@ public class ProxyIpController extends BaseController {
     @ResponseBody
     public Object getProxyIpLow(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
         ProxyIp proxyIp = proxyIpRedisService.getOne();
-        boolean available = proxyIpService.testIp(proxyIp.getIp(), proxyIp.getPort(),proxyIp.getType());
-        while (!available){
+        boolean available = proxyIpService.testIp(proxyIp.getIp(), proxyIp.getPort(), proxyIp.getType());
+        while (!available) {
             proxyIp = proxyIpRedisService.getOne();
-            available = proxyIpService.testIp(proxyIp.getIp(), proxyIp.getPort(),proxyIp.getType());
+            available = proxyIpService.testIp(proxyIp.getIp(), proxyIp.getPort(), proxyIp.getType());
         }
-        Result result=new Result();
+        Result result = new Result();
         result.setCode(200);
         result.setMessage("success");
         result.setData(Arrays.asList(proxyIp));
@@ -103,7 +110,7 @@ public class ProxyIpController extends BaseController {
     @ResponseBody
     public Object getProxyIp(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
         ProxyIp proxyIp = proxyIpRedisService.getOneRt();
-        Result result=new Result();
+        Result result = new Result();
         result.setCode(200);
         result.setMessage("success");
         result.setData(Arrays.asList(proxyIp));
@@ -113,10 +120,10 @@ public class ProxyIpController extends BaseController {
     @GetMapping("/proxyAllByTXT")
     public void proxyAllByTXT(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
         StringBuffer str = new StringBuffer();
-        List<Serializable>  allByPage = proxyIpRedisService.findAllByPageRt(0, -1);
+        List<Serializable> allByPage = proxyIpRedisService.findAllByPageRt(0, -1);
         for (Serializable serializable : allByPage) {
-            ProxyIp proxyIp =(ProxyIp) serializable;
-            str.append(proxyIp.getIp()+":"+proxyIp.getPort());
+            ProxyIp proxyIp = (ProxyIp) serializable;
+            str.append(proxyIp.getIp() + ":" + proxyIp.getPort());
             str.append("\r\n");
         }
         PrintWriter out = response.getWriter();
@@ -131,12 +138,43 @@ public class ProxyIpController extends BaseController {
         String ip = request.getParameter("ip").trim();
         String port = request.getParameter("port").trim();
         boolean available = proxyIpService.testIp(ip, Integer.parseInt(port));
-        Result result=new Result();
+        Result result = new Result();
         result.setCode(200);
         result.setData(new ArrayList());
-        result.setMessage(available==true?"available":"unavailable");
+        result.setMessage(available == true ? "available" : "unavailable");
         return result;
     }
+
+    @GetMapping("/test1")
+    public String test1() {
+        Map<String, String> map = new HashMap() {
+            {
+                put("sec-ch-ua", "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
+                put("Accept", "application/json, text/javascript, */*; q=0.07");
+                put("X-Requested-With", "XMLHttpRequest");
+                put("sec-ch-ua-mobile", "?0");
+                put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                put("sec-ch-ua-platform", "\"Windows\"");
+                put("Sec-Fetch-Site", "same-origin");
+                put("Sec-Fetch-Mode", "cors");
+                put("Sec-Fetch-Dest", "empty");
+
+            }
+        };
+//        ProxyIp oneRt = proxyIpRedisService.getOneRt();
+        ProxyIp oneRt = new ProxyIp();
+        String url = "https://buff.163.com/api/market/goods?game=csgo&page_num=1&use_suggestion=0&_=1683997415442";
+//        String url = "http://buff.163.com/api/market/goods?game=csgo&page_num=1&use_suggestion=0&_=1684037703215";
+        Object send = httpsSendUtil.send(oneRt.getIp(), oneRt.getPort(), url, map);
+
+        return "test";
+    }
+
+    public static void main(String[] args) {
+        ProxyIpController proxyIpController = new ProxyIpController();
+        proxyIpController.test1();
+    }
+
 
     @GetMapping("/test")
     public String test() {

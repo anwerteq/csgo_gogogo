@@ -82,7 +82,7 @@ public class ProxyIpRedisServiceImpl implements IProxyIpRedisService {
     }
 
     @Override
-    public ProxyIp getOneRt() {
+    public ProxyIp  getOneRt() {
         int totalCount = (int) totalCountRt();
         int range=new Random().nextInt(totalCount);
         Set<Serializable> set = redisCacheTemplate.opsForZSet().range(RedisKey.PROXY_IP_RT_KEY, range, range);

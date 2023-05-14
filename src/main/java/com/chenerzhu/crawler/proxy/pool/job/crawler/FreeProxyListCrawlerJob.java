@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -25,7 +26,8 @@ public class FreeProxyListCrawlerJob extends AbstractCrawler {
 
     @Override
     public void parsePage(WebPage webPage) {
-        Elements elements = webPage.getDocument().getElementById("proxylisttable").getElementsByTag("tr");
+        Elements elements = webPage.getDocument().getElementsByClass("table-bordered").get(0).getElementsByTag("tbody").get(0).getElementsByTag("tr");
+        //getElementById("proxylisttable").getElementsByTag("tr");
         Element element;
         ProxyIp proxyIp;
         for (int i = 1; i < elements.size() - 1; i++) {
@@ -42,8 +44,16 @@ public class FreeProxyListCrawlerJob extends AbstractCrawler {
                 proxyIp.setValidateCount(0);
                 proxyIpQueue.offer(proxyIp);
             } catch (Exception e) {
-                log.error("freeProxyListCrawlerJob error:{0}",e);
+                log.error("freeProxyListCrawlerJob error:{0}", e);
             }
         }
+    }
+
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
+
+        FreeProxyListCrawlerJob proxyListCrawlerJob = new FreeProxyListCrawlerJob(proxyIpQueue, "https://free-proxy-list.net/");
+
+        proxyListCrawlerJob.run();
     }
 }
