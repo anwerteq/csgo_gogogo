@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.pool.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.chenerzhu.crawler.proxy.pool.csgo.entity.ProductList;
 import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
 import com.chenerzhu.crawler.proxy.pool.entity.IPWhiteList;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
@@ -147,26 +148,6 @@ public class ProxyIpController extends BaseController {
 
     @GetMapping("/test1")
     public String test1() {
-        Map<String, String> map = new HashMap() {
-            {
-                put("sec-ch-ua", "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
-                put("Accept", "application/json, text/javascript, */*; q=0.07");
-                put("X-Requested-With", "XMLHttpRequest");
-                put("sec-ch-ua-mobile", "?0");
-                put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
-                put("sec-ch-ua-platform", "\"Windows\"");
-                put("Sec-Fetch-Site", "same-origin");
-                put("Sec-Fetch-Mode", "cors");
-                put("Sec-Fetch-Dest", "empty");
-
-            }
-        };
-//        ProxyIp oneRt = proxyIpRedisService.getOneRt();
-        ProxyIp oneRt = new ProxyIp();
-        String url = "https://buff.163.com/api/market/goods?game=csgo&page_num=1&use_suggestion=0&_=1683997415442";
-//        String url = "http://buff.163.com/api/market/goods?game=csgo&page_num=1&use_suggestion=0&_=1684037703215";
-        Object send = httpsSendUtil.send(oneRt.getIp(), oneRt.getPort(), url, map);
-
         return "test";
     }
 

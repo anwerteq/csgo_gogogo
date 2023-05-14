@@ -24,8 +24,8 @@ public class JobContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         log.debug("JobContextListener contextInitialized");
-        new Thread(schedulerJob).start();
-        new Thread(crawlerJob).start();
+//        new Thread(schedulerJob).start();
+//        new Thread(crawlerJob).start();
     }
 
     @Override

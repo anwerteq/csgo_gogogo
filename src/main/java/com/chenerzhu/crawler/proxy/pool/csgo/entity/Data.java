@@ -12,15 +12,15 @@ import java.util.List;
  */
 public class Data {
 
-    private List<Items> items;
+    private List<Item> items;
     private int page_num;
     private int page_size;
     private int total_count;
     private int total_page;
-    public void setItems(List<Items> items) {
+    public void setItems(List<Item> items) {
          this.items = items;
      }
-     public List<Items> getItems() {
+     public List<Item> getItems() {
          return items;
      }
 

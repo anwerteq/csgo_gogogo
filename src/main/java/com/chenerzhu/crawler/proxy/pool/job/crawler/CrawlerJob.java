@@ -76,8 +76,8 @@ public class CrawlerJob implements Runnable {
 //            schedulerJobExecutor.execute(new Data5uCrawlerJob(proxyIpQueue, "http://www.data5u.com/"), 0, 120, TimeUnit.SECONDS);
 
 
-            schedulerJobExecutor.execute(new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/inha/#/",5), 10, 20, TimeUnit.SECONDS);
-            schedulerJobExecutor.execute(new KuaidailiCrawlerJob(proxyIpQueue, "http://www.kuaidaili.com/free/intr/#/", 5), 10, 20, TimeUnit.SECONDS);
+            schedulerJobExecutor.execute(new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/inha/#/",5), 30, 50, TimeUnit.SECONDS);
+            schedulerJobExecutor.execute(new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/intr/#/", 5), 30, 50, TimeUnit.SECONDS);
 
 
             schedulerJobExecutor.execute(new IP366CrawlerJob(proxyIpQueue, "http://www.ip3366.net/?stype=1&page=#", 5), 30, 50, TimeUnit.SECONDS);

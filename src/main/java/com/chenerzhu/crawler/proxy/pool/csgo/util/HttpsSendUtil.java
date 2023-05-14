@@ -14,35 +14,38 @@ import sun.net.www.protocol.https.Handler;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.*;
 import java.util.Map;
 
 @Slf4j
 @Component
 public class HttpsSendUtil {
 
-    public Object send(String ip, int port, String searchUrl, Map<String, String> headMap) {
+    public String send(String ip, int port, String searchUrl, Map<String, String> headMap) {
+        if (StrUtil.isEmpty(ip)) {
+            String htmlDate = HttpClientUtils.sendGet(searchUrl, headMap);
+            return htmlDate;
+        }
+        if (true){
+//            System.setProperty("http.proxyHost",ip);
+//            System.setProperty("http.proxyPort",String.valueOf(port));
+            String htmlDate = HttpClientUtils.sendGet(searchUrl, headMap);
+            return htmlDate;
+        }
+        searchUrl = searchUrl.replace("https","http");
         boolean available = false;
         HttpURLConnection connection = null;
         StringBuilder sb = new StringBuilder();
         try {
-            URL url = new URL(searchUrl);
-            Proxy proxy = null;
-            if (StrUtil.isEmpty(ip)){
-                String htmlDate = HttpClientUtils.sendGet(searchUrl,headMap);
-                return htmlDate;
-            }else {
-                proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ip, port));
-            }
+            URL url = new URL("http://buff.163.com/api/market/goods?game=csgo&page_num=1");
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ip, port));
             connection = (HttpURLConnection) url.openConnection(proxy);
+            connection.setDoOutput(false);
             connection.setRequestProperty("accept", "");
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
             for (Map.Entry<String, String> entry : headMap.entrySet()) {
-                connection.setRequestProperty(entry.getKey(),entry.getValue());
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
             }
             connection.setConnectTimeout(2 * 1000);
             connection.setReadTimeout(3 * 1000);
@@ -76,7 +79,7 @@ public class HttpsSendUtil {
                 connection.disconnect();
             }
         }
-        if (!available){
+        if (!available) {
             return "";
         }
         return sb.toString();

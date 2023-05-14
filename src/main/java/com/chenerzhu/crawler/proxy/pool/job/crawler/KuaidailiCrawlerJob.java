@@ -53,7 +53,7 @@ public class KuaidailiCrawlerJob extends AbstractCrawler {
         ConcurrentLinkedQueue<ProxyIp> proxyIpQueue = new ConcurrentLinkedQueue<>();
 
 //        KuaidailiCrawlerJob kuaidailiCrawlerJob = new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/inha/1/");
-        KuaidailiCrawlerJob kuaidailiCrawlerJob = new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/inha/#/");
+        KuaidailiCrawlerJob kuaidailiCrawlerJob = new KuaidailiCrawlerJob(proxyIpQueue, "https://www.kuaidaili.com/free/inha/4/");
 
         kuaidailiCrawlerJob.run();
     }
