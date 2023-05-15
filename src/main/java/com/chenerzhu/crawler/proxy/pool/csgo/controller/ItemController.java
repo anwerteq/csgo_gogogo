@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author chenerzhu
@@ -19,9 +20,24 @@ public class ItemController extends BaseController {
     @Autowired
     private ItemGoodsService itemGoodsService;
 
+    /**
+     * 拉取商品简要信息
+     */
     @RequestMapping("pullItmeGoods")
+    @ResponseBody
     public void pullItem(){
         itemGoodsService.pullItmeGoods();
+
+    }
+
+
+    /**
+     * 拉取商品的历史记录
+     */
+    @RequestMapping("pullHistoryPrice")
+    @ResponseBody
+    public void pullHistoryPrice(){
+        itemGoodsService.pullHistoryPrice();
 
     }
 
