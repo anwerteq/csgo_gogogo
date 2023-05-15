@@ -19,9 +19,9 @@ public class ItemController extends BaseController {
     @Autowired
     private ItemGoodsService itemGoodsService;
 
-    @RequestMapping("pullItme")
+    @RequestMapping("pullItmeGoods")
     public void pullItem(){
-        itemGoodsService.pullItem();
+        itemGoodsService.pullItmeGoods();
 
     }
 

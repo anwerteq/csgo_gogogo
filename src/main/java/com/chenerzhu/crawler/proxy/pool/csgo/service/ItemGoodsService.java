@@ -1,10 +1,12 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.ItemGoods;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.ProductList;
+import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.feign.CsgoFeign;
+import com.chenerzhu.crawler.proxy.pool.csgo.repository.GoodsInfoRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.IItemGoodsRepository;
+import com.chenerzhu.crawler.proxy.pool.csgo.repository.TagRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,12 @@ public class ItemGoodsService {
 
     @Autowired
     IItemGoodsRepository itemRepository;
+
+    @Autowired
+    GoodsInfoRepository goodsInfoRepository;
+
+    @Autowired
+    TagRepository tagRepository;
 
     @Autowired
     CsgoFeign csgoFeign;
@@ -66,9 +74,8 @@ public class ItemGoodsService {
     /**
      * 拉取csgo商品列表
      */
-    public void pullItem() {
+    public void pullItmeGoods() {
         int pageIndex = 1;
-//        pageIndex = pullOnePage(pageIndex);
         while (pageCount >= pageIndex) {
             pageIndex = pullOnePage(pageIndex);
             pageIndex++;
@@ -81,11 +88,6 @@ public class ItemGoodsService {
             }
             System.out.println("正在查询的页数：" + pageIndex);
         }
-
-
-//        ProductList productList = csgoFeign.getItems("1");
-
-
     }
 
 
@@ -112,9 +114,30 @@ public class ItemGoodsService {
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
 
         for (ItemGoods itemGoods : itemGoodsList) {
-            itemRepository.save(itemGoods);
+            saveItem(itemGoods);
         }
 
         return pageNum;
+    }
+
+    public void saveItem(ItemGoods itemGoods){
+        itemRepository.save(itemGoods);
+        Goods_info goods_info = itemGoods.getGoods_info();
+        goods_info.setItem_id(itemGoods.getId());
+        goodsInfoRepository.save(goods_info);
+        Tags tags = goods_info.getInfo().getTags();
+        saveTags(tags,itemGoods.getId());
+    }
+
+    public void saveTags(Tags tags,long item_id){
+        String tagsStr = JSON.toJSONString(tags);
+        HashMap<String, JSONObject> tagsHash = JSON.parseObject(tagsStr, HashMap.class);
+        JSONObject tagsValue = tagsHash.get("tags");
+        for (Map.Entry<String, Object> entry : tagsValue.entrySet()) {
+            String tagStr = JSONObject.toJSONString(entry.getValue());
+            Tag tag = JSONObject.parseObject(tagStr, Tag.class);
+            tag.setItem_id(item_id);
+            tagRepository.save(tag);
+        }
     }
 }
