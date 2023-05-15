@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -132,12 +133,17 @@ public class ItemGoodsService {
     public void saveTags(Tags tags,long item_id){
         String tagsStr = JSON.toJSONString(tags);
         HashMap<String, JSONObject> tagsHash = JSON.parseObject(tagsStr, HashMap.class);
-        JSONObject tagsValue = tagsHash.get("tags");
-        for (Map.Entry<String, Object> entry : tagsValue.entrySet()) {
+        for (Map.Entry<String, JSONObject> entry : tagsHash.entrySet()) {
             String tagStr = JSONObject.toJSONString(entry.getValue());
             Tag tag = JSONObject.parseObject(tagStr, Tag.class);
             tag.setItem_id(item_id);
-            tagRepository.save(tag);
+            try {
+                tagRepository.save(tag);
+
+            }catch (Exception e){
+                System.out.println("12312");
+                throw e;
+            }
         }
     }
 }
