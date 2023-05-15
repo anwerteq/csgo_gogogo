@@ -3,7 +3,6 @@
  */
 package com.chenerzhu.crawler.proxy.pool.csgo.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.ToString;
 
@@ -18,8 +17,8 @@ import javax.persistence.*;
 @Data
 @ToString
 @Entity
-@Table(name = "item")
-public class Item {
+@Table(name = "item_goods")
+public class ItemGoods {
 
     private static final long serialVersionUID = 1L;
     @Id
