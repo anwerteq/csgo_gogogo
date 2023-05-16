@@ -14,5 +14,5 @@ import java.util.List;
 public interface BuffPriceHistory2Repository extends JpaRepository<BuffPriceHistory2, BuffPriceHistoryPk> {
 
     @Query(value = "select DISTINCT max(up_time_stamp) from buff_price_history2  where item_id = ?1  limit 1", nativeQuery = true)
-    long findlastUpByItemId(long item_id);
+    Long findlastUpByItemId(long item_id);
 }

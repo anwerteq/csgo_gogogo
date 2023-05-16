@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -90,6 +91,13 @@ public class ItemGoodsService {
             pageIndex++;
             System.out.println("正在查询的页数：" + pageIndex);
         }
+
+        try {
+            Thread.sleep(1000 * 12);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        pullHistoryPrice();
     }
 
 
@@ -104,9 +112,6 @@ public class ItemGoodsService {
                 return pageNum;
             }
             pullOnePage(pageNum);
-        }
-        if (true){
-            throw new RuntimeException("123");
         }
         ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
         //获取最新页数
@@ -128,7 +133,7 @@ public class ItemGoodsService {
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity<>(headers1);
         try {
             double random = Math.random() * 2000;
-            int shleepTime = (int) (random) + 1500;
+            int shleepTime = (int) (random) + 500;
             Thread.sleep(shleepTime);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -169,46 +174,59 @@ public class ItemGoodsService {
         String buffHistoryUrl1 = "https://buff.163.com/api/market/goods/price_history?game=csgo&currency=CNY&days=180&buff_price_type=1&_=1684155597514&goods_id=";
         String steamHistoryUrl = "https://buff.163.com/api/market/goods/price_history?game=csgo&currency=CNY&days=30&buff_price_type=2&_=1684161693973&goods_id=";
         List<Long> itemIds = itemRepository.findAllId();
-        itemIds = itemIds.subList(0, 1);
         long timeMillis = System.currentTimeMillis();
+        int i = 0;
         for (Long itemId : itemIds) {
-            long lastUpStamp = history2Repository.findlastUpByItemId(itemId);
-            if (timeMillis < lastUpStamp + 604800){
+            i++;
+            if (i > 1000) {
+                try {
+                    Thread.sleep(1000 * 12);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                i = i - 1000;
+            }
+            Long lastUpStamp = history2Repository.findlastUpByItemId(itemId);
+            if (lastUpStamp == null){
+                lastUpStamp = 0L;
+            }
+            if (timeMillis < lastUpStamp + 604800) {
                 //7天内更新过
                 continue;
             }
             ResponseEntity<HistoryPriceRep> responseEntity = restTemplate.exchange(buffHistoryUrl2 + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
-            if (200 != responseEntity.getStatusCode().value()){
+            if (200 != responseEntity.getStatusCode().value()) {
                 continue;
             }
-            saveBuffHistory2(responseEntity,itemId);
+            saveBuffHistory2(responseEntity, itemId);
             responseEntity = restTemplate.exchange(buffHistoryUrl1 + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
-            if (200 != responseEntity.getStatusCode().value()){
+            if (200 != responseEntity.getStatusCode().value()) {
                 continue;
             }
-            saveBuffHistory1(responseEntity,itemId);
+            saveBuffHistory1(responseEntity, itemId);
             responseEntity = restTemplate.exchange(steamHistoryUrl + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
-            if (200 != responseEntity.getStatusCode().value()){
+            if (200 != responseEntity.getStatusCode().value()) {
                 continue;
             }
-            saveSteamHistory(responseEntity,itemId);
+            saveSteamHistory(responseEntity, itemId);
 
-            System.out.println("123123");
         }
     }
 
     public static void main(String[] args) {
-        long a =  1684080000- 1683475200 ;
+        long a = 1684080000 - 1683475200;
         System.out.println(a);
     }
 
     /**
      * buff在售最低
+     *
      * @param responseEntity
      * @param itemId
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveBuffHistory2(ResponseEntity<HistoryPriceRep> responseEntity,long itemId){
+    @Async
+    public void saveBuffHistory2(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
         List<List<String>> price_historys = historyPriceRep.getData().getPrice_history();
         List<BuffPriceHistory2> buffPriceHistory2List = new ArrayList<>();
@@ -227,11 +245,13 @@ public class ItemGoodsService {
 
     /**
      * buff成交记录
+     *
      * @param responseEntity
      * @param itemId
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveBuffHistory1(ResponseEntity<HistoryPriceRep> responseEntity,long itemId){
+    @Async
+    public void saveBuffHistory1(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
         List<List<String>> price_historys = historyPriceRep.getData().getPrice_history();
         List<BuffPriceHistory1> buffPriceHistory1List = new ArrayList<>();
@@ -249,11 +269,13 @@ public class ItemGoodsService {
 
     /**
      * buff成交记录
+     *
      * @param responseEntity
      * @param itemId
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveSteamHistory(ResponseEntity<HistoryPriceRep> responseEntity,long itemId){
+    @Async
+    public void saveSteamHistory(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
         List<List<String>> price_historys = historyPriceRep.getData().getPrice_history();
         List<SteamPriceHistory> steamPriceHistories = new ArrayList<>();

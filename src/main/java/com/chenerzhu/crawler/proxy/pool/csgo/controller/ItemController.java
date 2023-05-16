@@ -25,7 +25,7 @@ public class ItemController extends BaseController {
      */
     @RequestMapping("pullItmeGoods")
     @ResponseBody
-    public void pullItem(){
+    public void pullItem() {
         itemGoodsService.pullItmeGoods();
 
     }
@@ -36,8 +36,21 @@ public class ItemController extends BaseController {
      */
     @RequestMapping("pullHistoryPrice")
     @ResponseBody
-    public void pullHistoryPrice(){
-        itemGoodsService.pullHistoryPrice();
+    public void pullHistoryPrice() {
+        Boolean flag = true;
+        while (flag) {
+            try {
+                itemGoodsService.pullHistoryPrice();
+                flag=false;
+            }catch (Exception e){
+                try {
+                    Thread.sleep(5 * 1000 * 60);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            }
+
+        }
 
     }
 
