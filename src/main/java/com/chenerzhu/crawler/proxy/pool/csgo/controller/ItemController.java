@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.controller;
 
 import com.chenerzhu.crawler.proxy.pool.controller.BaseController;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService;
+import com.chenerzhu.crawler.proxy.pool.csgo.service.SteamItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class ItemController extends BaseController {
 
     @Autowired
     private ItemGoodsService itemGoodsService;
+
+    @Autowired
+    SteamItemService steamItemService;
 
     /**
      * 拉取商品简要信息
@@ -49,9 +53,17 @@ public class ItemController extends BaseController {
                     interruptedException.printStackTrace();
                 }
             }
-
         }
+    }
 
+
+    /**
+     * 拉取商品的历史记录
+     */
+    @RequestMapping("pullSteamItems")
+    @ResponseBody
+    public void pullSteamItems() {
+        steamItemService.pullItems();
     }
 
 }

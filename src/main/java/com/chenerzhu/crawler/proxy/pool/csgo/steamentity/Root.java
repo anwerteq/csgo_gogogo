@@ -1,6 +1,5 @@
 
 package com.chenerzhu.crawler.proxy.pool.csgo.steamentity;
-import java.util.ArrayList;
 import java.util.List;
 public class Root
 {
@@ -12,9 +11,9 @@ public class Root
 
     private int total_count;
 
-    private Searchdata searchdata;
+    private SteamSearchdata steamSearchdata;
 
-    private List<Results> results;
+    private List<SteamItem> results;
 
     public void setSuccess(boolean success){
         this.success = success;
@@ -40,16 +39,16 @@ public class Root
     public int getTotal_count(){
         return this.total_count;
     }
-    public void setSearchdata(Searchdata searchdata){
-        this.searchdata = searchdata;
+    public void setSearchdata(SteamSearchdata steamSearchdata){
+        this.steamSearchdata = steamSearchdata;
     }
-    public Searchdata getSearchdata(){
-        return this.searchdata;
+    public SteamSearchdata getSearchdata(){
+        return this.steamSearchdata;
     }
-    public void setResults(List<Results> results){
+    public void setResults(List<SteamItem> results){
         this.results = results;
     }
-    public List<Results> getResults(){
+    public List<SteamItem> getResults(){
         return this.results;
     }
 }
