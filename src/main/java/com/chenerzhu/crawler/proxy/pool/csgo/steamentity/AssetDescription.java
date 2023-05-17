@@ -3,10 +3,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.steamentity;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -25,8 +22,12 @@ public class AssetDescription {
 
     private String background_color;
 
+    @Column(name = "icon_url",length = 512)
+
     private String icon_url;
 
+
+    @Column(name = "icon_url_large",length = 512)
     private String icon_url_large;
 
 

@@ -6,6 +6,8 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamItemRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamtDescriptionRepository;
+import com.chenerzhu.crawler.proxy.pool.thread.ThreadFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,12 +21,15 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * steam服务实体类
  */
 @Service
+@Slf4j
 public class SteamItemService {
 
     static AtomicInteger atomicInteger = new AtomicInteger();
@@ -38,28 +43,32 @@ public class SteamItemService {
     @Autowired
     SteamtDescriptionRepository descriptionRepository;
 
+    private volatile static ExecutorService executorService = Executors.newFixedThreadPool(3, new ThreadFactory("crawlerJob-consumer"));
+
     int searchPagecount = 0;
 
     public void pullItems() {
         int start = 0;
         //调用第一次，拿总条数
         pullItem(start);
-        int pageNo =  searchPagecount/100;
-       List<Integer> pageNoList = new ArrayList<>();
+        int pageNo = searchPagecount / 100;
+        List<Integer> pageNoList = new ArrayList<>();
         for (int i = 1; i <= pageNo; i++) {
             pageNoList.add(i);
         }
-        pageNoList.parallelStream().forEach(pageIndex -> pullItem(pageIndex));
+        pageNoList.forEach(pageIndex -> executorService.execute(() -> {
+            pullItem(pageIndex);
+        }));
     }
 
     /**
      * 拉取具体一页数据
+     *
      * @param start
      * @return
      */
     public int pullItem(int start) {
-        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&start=0&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1";
-
+        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
         ResponseEntity<String> responseEntity = restTemplate.exchange(itemUrl, HttpMethod.GET, getHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
             atomicInteger.addAndGet(1);
@@ -72,6 +81,7 @@ public class SteamItemService {
         searchPagecount = steamSearchdata.getTotal_count();
         List<SteamItem> results = steamSearchdata.getResults();
         saveSteamItems(results);
+        log.info("查询的页数：" + start);
         return 0;
     }
 
