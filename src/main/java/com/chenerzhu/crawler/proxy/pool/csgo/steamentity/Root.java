@@ -1,0 +1,55 @@
+
+package com.chenerzhu.crawler.proxy.pool.csgo.steamentity;
+import java.util.ArrayList;
+import java.util.List;
+public class Root
+{
+    private boolean success;
+
+    private int start;
+
+    private int pagesize;
+
+    private int total_count;
+
+    private Searchdata searchdata;
+
+    private List<Results> results;
+
+    public void setSuccess(boolean success){
+        this.success = success;
+    }
+    public boolean getSuccess(){
+        return this.success;
+    }
+    public void setStart(int start){
+        this.start = start;
+    }
+    public int getStart(){
+        return this.start;
+    }
+    public void setPagesize(int pagesize){
+        this.pagesize = pagesize;
+    }
+    public int getPagesize(){
+        return this.pagesize;
+    }
+    public void setTotal_count(int total_count){
+        this.total_count = total_count;
+    }
+    public int getTotal_count(){
+        return this.total_count;
+    }
+    public void setSearchdata(Searchdata searchdata){
+        this.searchdata = searchdata;
+    }
+    public Searchdata getSearchdata(){
+        return this.searchdata;
+    }
+    public void setResults(List<Results> results){
+        this.results = results;
+    }
+    public List<Results> getResults(){
+        return this.results;
+    }
+}

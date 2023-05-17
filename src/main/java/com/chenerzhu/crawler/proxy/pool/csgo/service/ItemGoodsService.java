@@ -131,12 +131,15 @@ public class ItemGoodsService {
             headers1.set(entry.getKey(), entry.getValue());
         }
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity<>(headers1);
-        try {
-            double random = Math.random() * 2000;
-            int shleepTime = (int) (random) + 500;
-            Thread.sleep(shleepTime);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        synchronized (this) {
+
+            try {
+                double random = Math.random() * 2000;
+                int shleepTime = (int) (random) + 500;
+                Thread.sleep(shleepTime);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         return entity1;
     }
@@ -175,42 +178,32 @@ public class ItemGoodsService {
         String steamHistoryUrl = "https://buff.163.com/api/market/goods/price_history?game=csgo&currency=CNY&days=30&buff_price_type=2&_=1684161693973&goods_id=";
         List<Long> itemIds = itemRepository.findAllId();
         long timeMillis = System.currentTimeMillis();
-        int i = 0;
-        for (Long itemId : itemIds) {
-            i++;
-            if (i > 1000) {
-                try {
-                    Thread.sleep(1000 * 12);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                i = i - 1000;
-            }
+        itemIds.parallelStream().forEach(itemId -> {
             Long lastUpStamp = history2Repository.findlastUpByItemId(itemId);
-            if (lastUpStamp == null){
+            if (lastUpStamp == null) {
                 lastUpStamp = 0L;
             }
-            if (timeMillis < lastUpStamp + 604800) {
+            if (timeMillis < lastUpStamp + 60480000) {
                 //7天内更新过
-                continue;
+                return;
             }
             ResponseEntity<HistoryPriceRep> responseEntity = restTemplate.exchange(buffHistoryUrl2 + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
             if (200 != responseEntity.getStatusCode().value()) {
-                continue;
+                return;
             }
             saveBuffHistory2(responseEntity, itemId);
             responseEntity = restTemplate.exchange(buffHistoryUrl1 + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
             if (200 != responseEntity.getStatusCode().value()) {
-                continue;
+                return;
             }
             saveBuffHistory1(responseEntity, itemId);
             responseEntity = restTemplate.exchange(steamHistoryUrl + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
             if (200 != responseEntity.getStatusCode().value()) {
-                continue;
+                return;
             }
             saveSteamHistory(responseEntity, itemId);
+        });
 
-        }
     }
 
     public static void main(String[] args) {
@@ -239,7 +232,7 @@ public class ItemGoodsService {
             buffPriceHistory2.setUp_time_stamp(upLastTime);
             buffPriceHistory2List.add(buffPriceHistory2);
         }
-        history2Repository.saveAll(buffPriceHistory2List);
+        buffPriceHistory2List.parallelStream().forEach(history2 -> history2Repository.save(history2));
     }
 
 
@@ -264,7 +257,7 @@ public class ItemGoodsService {
             buffPriceHistory1.setUp_time_stamp(upLastTime);
             buffPriceHistory1List.add(buffPriceHistory1);
         }
-        history1Repository.saveAll(buffPriceHistory1List);
+        buffPriceHistory1List.parallelStream().forEach(buffPriceHistory1 -> history1Repository.save(buffPriceHistory1));
     }
 
     /**
@@ -288,7 +281,7 @@ public class ItemGoodsService {
             steamPriceHistory.setUp_time_stamp(upLastTime);
             steamPriceHistories.add(steamPriceHistory);
         }
-        historyRepository.saveAll(steamPriceHistories);
+        steamPriceHistories.parallelStream().forEach(steamPriceHistory -> historyRepository.save(steamPriceHistory));
     }
 
 }
