@@ -10,13 +10,13 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 /**
- * 推荐购买记录
+ * 在buff上售卖
  */
 @Data
 @ToString
 @Entity
-@Table(name = "profit")
-public class ProfitEntity {
+@Table(name = "sell_buff_profit")
+public class SellBuffProfitEntity {
 
     @Id
     private long item_id;

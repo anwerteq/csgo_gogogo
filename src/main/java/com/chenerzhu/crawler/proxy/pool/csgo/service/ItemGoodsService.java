@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.feign.CsgoFeign;
-import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.ProfitEntity;
+import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
+import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
@@ -12,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +66,10 @@ public class ItemGoodsService {
     SteamPriceHistoryRepository historyRepository;
 
     @Autowired
-    ProfitRepository profitRepository;
+    SellBuffProfitRepository sellBuffProfitRepository;
+
+    @Autowired
+    SellSteamProfitRepository sellSteamProfitRepository;
 
     //总页数
     Integer pageCount = 1;
@@ -155,7 +157,7 @@ public class ItemGoodsService {
     @Async
     public void saveItem(ItemGoods itemGoods) {
         itemRepository.save(itemGoods);
-        saveProfitEntity(itemGoods);
+        saveSellBuffProfitEntity(itemGoods);
         Goods_info goods_info = itemGoods.getGoods_info();
         goods_info.setItem_id(itemGoods.getId());
         goodsInfoRepository.save(goods_info);
@@ -164,29 +166,56 @@ public class ItemGoodsService {
     }
 
     /**
-     * 保存购买推荐记录
+     * 保存推荐在steam购买的记录
      */
     @Async
-    public void saveProfitEntity(ItemGoods itemGoods){
-        ProfitEntity profitEntity = new ProfitEntity();
-        profitEntity.setItem_id(itemGoods.getId());
-        profitEntity.setName(itemGoods.getName());
-        profitEntity.setSteam_price_cny(itemGoods.getGoods_info().getSteam_price_cny());;
+    public void saveSellBuffProfitEntity(ItemGoods itemGoods){
+        SellBuffProfitEntity sellBuffProfitEntity = new SellBuffProfitEntity();
+        sellBuffProfitEntity.setItem_id(itemGoods.getId());
+        sellBuffProfitEntity.setName(itemGoods.getName());
+        sellBuffProfitEntity.setSteam_price_cny(itemGoods.getGoods_info().getSteam_price_cny());;
         //购买成本
-        double profit = Double.parseDouble(profitEntity.getSteam_price_cny()) * 1.15 *0.85;
-        profitEntity.setIn_fact_steam_price_cny(String.valueOf(profit));
-        profitEntity.setSell_min_price(itemGoods.getSell_min_price());
-        profitEntity.setQuick_price(itemGoods.getQuick_price());
-        profitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
-        double interest =Double.parseDouble(profitEntity.getSell_min_price())
-                -  Double.parseDouble(profitEntity.getIn_fact_steam_price_cny());
-        double interest_rate = interest / Double.parseDouble(profitEntity.getIn_fact_steam_price_cny());
-        profitEntity.setInterest_rate(String.valueOf(interest_rate * 100));
-
-        if (0.0f < interest_rate){
-            profitRepository.save(profitEntity);
+        double profit = Double.parseDouble(sellBuffProfitEntity.getSteam_price_cny()) * 1.15 *0.85;
+        sellBuffProfitEntity.setIn_fact_steam_price_cny(String.valueOf(profit));
+        sellBuffProfitEntity.setSell_min_price(itemGoods.getSell_min_price());
+        sellBuffProfitEntity.setQuick_price(itemGoods.getQuick_price());
+        sellBuffProfitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
+        double interest =Double.parseDouble(sellBuffProfitEntity.getSell_min_price())
+                -  Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny());
+        double interest_rate = (interest / Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny()) * 100);
+        sellBuffProfitEntity.setInterest_rate(String.valueOf(interest_rate ));
+        Boolean flag = false;
+        if (3.0f < interest_rate){
+            //在buff售卖，利率超过3%
+            flag = true;
+        }
+        if (flag){
+            sellBuffProfitRepository.save(sellBuffProfitEntity);
         }
     }
+
+    /**
+     * 保存在steam售卖的购买记录
+     */
+    @Async
+    public void saveSellSteamProfit(ItemGoods itemGoods){
+        SellSteamProfitEntity entity = new SellSteamProfitEntity();
+        entity.setItem_id(itemGoods.getId());
+        entity.setName(itemGoods.getName());
+        entity.setBuff_price(itemGoods.getMarket_min_price());
+        entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());
+        entity.setSell_num(itemGoods.getSell_num());
+        //税后价格
+        double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
+                0.85;
+        //buff购买价格
+        double buff_price = Double.parseDouble(entity.getBuff_price()) * 1.025;
+        if (0.83 > in_fact_price /buff_price){
+            sellSteamProfitRepository.save(entity);
+        }
+    }
+
+
 
     @Async
     public void saveTags(Tags tags, long item_id) {

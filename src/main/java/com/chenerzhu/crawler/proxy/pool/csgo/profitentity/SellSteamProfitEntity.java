@@ -1,0 +1,36 @@
+package com.chenerzhu.crawler.proxy.pool.csgo.profitentity;
+
+import lombok.Data;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * 在steam上售卖
+ */
+@Data
+@ToString
+@Entity
+@Table(name = "sell_steam_profit")
+public class SellSteamProfitEntity {
+
+    @Id
+    private long item_id;
+    //物品名称
+    String name;
+    //buff价格购买
+    private String buff_price;
+
+    //steam上销售价格
+    private String sell_steam_price;
+
+    //steam税后的价格
+    private String in_fact_sell_steam_price;
+
+    //buff卖的数量
+    long sell_num;
+    //折扣%
+    private String interest_rate;
+}
