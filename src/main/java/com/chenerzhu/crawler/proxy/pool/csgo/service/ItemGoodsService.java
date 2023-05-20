@@ -4,10 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.feign.CsgoFeign;
+import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.ProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -60,6 +65,9 @@ public class ItemGoodsService {
 
     @Autowired
     SteamPriceHistoryRepository historyRepository;
+
+    @Autowired
+    ProfitRepository profitRepository;
 
     //总页数
     Integer pageCount = 1;
@@ -144,9 +152,10 @@ public class ItemGoodsService {
         return entity1;
     }
 
+    @Async
     public void saveItem(ItemGoods itemGoods) {
         itemRepository.save(itemGoods);
-
+        saveProfitEntity(itemGoods);
         Goods_info goods_info = itemGoods.getGoods_info();
         goods_info.setItem_id(itemGoods.getId());
         goodsInfoRepository.save(goods_info);
@@ -154,10 +163,36 @@ public class ItemGoodsService {
         saveTags(tags, itemGoods.getId());
     }
 
+    /**
+     * 保存购买推荐记录
+     */
+    @Async
+    public void saveProfitEntity(ItemGoods itemGoods){
+        ProfitEntity profitEntity = new ProfitEntity();
+        profitEntity.setItem_id(itemGoods.getId());
+        profitEntity.setName(itemGoods.getName());
+        profitEntity.setSteam_price_cny(itemGoods.getGoods_info().getSteam_price_cny());;
+        //购买成本
+        double profit = Double.parseDouble(profitEntity.getSteam_price_cny()) * 1.15 *0.85;
+        profitEntity.setIn_fact_steam_price_cny(String.valueOf(profit));
+        profitEntity.setSell_min_price(itemGoods.getSell_min_price());
+        profitEntity.setQuick_price(itemGoods.getQuick_price());
+        profitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
+        double interest =Double.parseDouble(profitEntity.getSell_min_price())
+                -  Double.parseDouble(profitEntity.getIn_fact_steam_price_cny());
+        double interest_rate = interest / Double.parseDouble(profitEntity.getIn_fact_steam_price_cny());
+        profitEntity.setInterest_rate(String.valueOf(interest_rate * 100));
+
+        if (0.0f < interest_rate){
+            profitRepository.save(profitEntity);
+        }
+    }
+
+    @Async
     public void saveTags(Tags tags, long item_id) {
         String tagsStr = JSON.toJSONString(tags);
         HashMap<String, JSONObject> tagsHash = JSON.parseObject(tagsStr, HashMap.class);
-        for (Map.Entry<String, JSONObject> entry : tagsHash.entrySet()) {
+        tagsHash.entrySet().parallelStream().forEach(entry ->{
             String tagStr = JSONObject.toJSONString(entry.getValue());
             Tag tag = JSONObject.parseObject(tagStr, Tag.class);
             tag.setItem_id(item_id);
@@ -168,7 +203,7 @@ public class ItemGoodsService {
                 System.out.println("12312");
                 throw e;
             }
-        }
+        });
     }
 
     public void pullHistoryPrice() {
@@ -183,10 +218,11 @@ public class ItemGoodsService {
             if (lastUpStamp == null) {
                 lastUpStamp = 0L;
             }
-            if (timeMillis < lastUpStamp + 60480000) {
+            if (timeMillis < lastUpStamp + 604800000) {
                 //7天内更新过
                 return;
             }
+            System.out.println("输出的itemId:" + itemId);
             ResponseEntity<HistoryPriceRep> responseEntity = restTemplate.exchange(buffHistoryUrl2 + itemId, HttpMethod.GET, getHttpEntity(), HistoryPriceRep.class);
             if (200 != responseEntity.getStatusCode().value()) {
                 return;
@@ -207,8 +243,10 @@ public class ItemGoodsService {
     }
 
     public static void main(String[] args) {
-        long a = 1684080000 - 1683475200;
+        long a = 1684246931279L - 1684246931279L;
+        long b = 1684166400000L - 1683561600000L;
         System.out.println(a);
+        System.out.println(b);
     }
 
     /**
@@ -284,4 +322,10 @@ public class ItemGoodsService {
         steamPriceHistories.parallelStream().forEach(steamPriceHistory -> historyRepository.save(steamPriceHistory));
     }
 
+    public Page selectHistory1() {
+        Pageable pageable = new PageRequest(1,10);
+
+        Page<BuffPriceHistory1> all = history1Repository.findAll(pageable);
+        return all;
+    }
 }

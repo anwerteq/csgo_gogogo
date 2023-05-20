@@ -5,6 +5,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.SteamItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,5 +66,17 @@ public class ItemController extends BaseController {
     public void pullSteamItems() {
         steamItemService.pullItems();
     }
+
+
+    /**
+     * 拉取商品的历史记录
+     */
+    @RequestMapping("selectHistory1")
+    @ResponseBody
+    public Page selectHistory1() {
+        return   itemGoodsService.selectHistory1();
+
+    }
+
 
 }
