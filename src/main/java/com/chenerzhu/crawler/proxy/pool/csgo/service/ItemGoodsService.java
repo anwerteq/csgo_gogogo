@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,7 +146,7 @@ public class ItemGoodsService {
 
             try {
                 double random = Math.random() * 2000;
-                int shleepTime = (int) (random) + 500;
+                int shleepTime = (int) (random) + 1100;
                 Thread.sleep(shleepTime);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -158,6 +159,7 @@ public class ItemGoodsService {
     public void saveItem(ItemGoods itemGoods) {
         itemRepository.save(itemGoods);
         saveSellBuffProfitEntity(itemGoods);
+        saveSellSteamProfit(itemGoods);
         Goods_info goods_info = itemGoods.getGoods_info();
         goods_info.setItem_id(itemGoods.getId());
         goodsInfoRepository.save(goods_info);
@@ -176,14 +178,14 @@ public class ItemGoodsService {
         sellBuffProfitEntity.setSteam_price_cny(itemGoods.getGoods_info().getSteam_price_cny());;
         //购买成本
         double profit = Double.parseDouble(sellBuffProfitEntity.getSteam_price_cny()) * 1.15 *0.85;
-        sellBuffProfitEntity.setIn_fact_steam_price_cny(String.valueOf(profit));
+        sellBuffProfitEntity.setIn_fact_steam_price_cny(String.format("%.3f",profit));
         sellBuffProfitEntity.setSell_min_price(itemGoods.getSell_min_price());
         sellBuffProfitEntity.setQuick_price(itemGoods.getQuick_price());
         sellBuffProfitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
         double interest =Double.parseDouble(sellBuffProfitEntity.getSell_min_price())
                 -  Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny());
         double interest_rate = (interest / Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny()) * 100);
-        sellBuffProfitEntity.setInterest_rate(String.valueOf(interest_rate ));
+        sellBuffProfitEntity.setInterest_rate(String.format("%.3f",interest_rate ));
         Boolean flag = false;
         if (3.0f < interest_rate){
             //在buff售卖，利率超过3%
@@ -202,19 +204,27 @@ public class ItemGoodsService {
         SellSteamProfitEntity entity = new SellSteamProfitEntity();
         entity.setItem_id(itemGoods.getId());
         entity.setName(itemGoods.getName());
-        entity.setBuff_price(itemGoods.getMarket_min_price());
+        entity.setBuff_price(itemGoods.getSell_min_price());
         entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());
         entity.setSell_num(itemGoods.getSell_num());
         //税后价格
         double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
                 0.85;
+        entity.setIn_fact_sell_steam_price(String.format("%.3f", in_fact_price) );
         //buff购买价格
         double buff_price = Double.parseDouble(entity.getBuff_price()) * 1.025;
-        if (0.83 > in_fact_price /buff_price){
+        entity.setInterest_rate( String.format("%.3f", buff_price / in_fact_price) );
+        if (0.83 > buff_price / in_fact_price ){
             sellSteamProfitRepository.save(entity);
         }
     }
 
+
+    public static void main(String[] args) {
+        double a = 123.123123;
+        String format = String.format("%.2f", a);
+        System.out.println(format);
+    }
 
 
     @Async
@@ -271,12 +281,6 @@ public class ItemGoodsService {
 
     }
 
-    public static void main(String[] args) {
-        long a = 1684246931279L - 1684246931279L;
-        long b = 1684166400000L - 1683561600000L;
-        System.out.println(a);
-        System.out.println(b);
-    }
 
     /**
      * buff在售最低
