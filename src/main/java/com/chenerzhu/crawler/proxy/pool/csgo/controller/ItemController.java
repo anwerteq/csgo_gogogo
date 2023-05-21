@@ -101,7 +101,7 @@ public class ItemController extends BaseController {
     @RequestMapping("test")
     @ResponseBody
     public void test() {
-        buffBuyItemService.confirmDending();
+        buffBuyItemService.getBuyOrder();
 
     }
 
