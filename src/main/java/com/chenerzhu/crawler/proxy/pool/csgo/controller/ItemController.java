@@ -93,4 +93,16 @@ public class ItemController extends BaseController {
 
     }
 
+
+
+    /**
+     * 购买buff中的商品
+     */
+    @RequestMapping("test")
+    @ResponseBody
+    public void test() {
+        buffBuyItemService.confirmDending();
+
+    }
+
 }

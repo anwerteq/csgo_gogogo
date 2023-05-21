@@ -4,6 +4,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyRoot;
+import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.ConfirmDendingRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPayBillRoot;
 import lombok.extern.slf4j.Slf4j;
@@ -114,8 +115,7 @@ public class BuffBuyItemService {
 
 
     /**
-     * buff销售商品
-     *
+     *购买buff商品的逻辑
      * @param goods_id:商品id
      */
     public void buffSellOrder(String goods_id, int num) {
@@ -140,11 +140,53 @@ public class BuffBuyItemService {
             }
             //支付订单
             payBill(item.getId(), item.getGoods_id(), item.getPrice());
-            if (num == 0) {
+            if (num <= 0) {
                 log.info("商品购买完成");
                 return;
             }
         }
+    }
+
+
+    /**
+     * 主动报价：确定交易
+     */
+    public void confirmDending(){
+        String url = "https://buff.163.com/api/message/notification?_=1684656228738";
+
+        while (true){
+            ResponseEntity<ConfirmDendingRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), ConfirmDendingRoot.class);
+
+            System.out.println("123123");
+            try {
+                Thread.sleep(20000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
+
+
+    public void getSteamTrade(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String url = "https://buff.163.com/api/market/steam_trade";
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), String.class);
+        System.out.println("getSteamTrade:" + responseEntity.getBody());
+        System.out.println("123123");
+
+    }
+
+    public void getToDeliver(){
+        String url = "https://buff.163.com/api/market/sell_order/to_deliver?game=csgo&appid=730";
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), String.class);
+        System.out.println("getToDeliver:" + responseEntity.getBody());
+
+    }
+
+
 }
