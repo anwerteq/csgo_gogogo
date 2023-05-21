@@ -77,6 +77,8 @@ public class ItemGoodsService {
     //总页数
     Integer pageCount = 1;
 
+    static String cookie = "csrf_token=IjcxMTBkMzY5ZDhjMGU3YWMyZjI1MDRmZGExZTZlYWQ5NWFiOTdlZmIi.F0ti0A.OBh4vnjjjSasyB2YCkuScPtAzJQ; Device-Id=gWuF5A6BKxVnJNmFrnkt; Locale-Supported=zh-Hans; game=csgo; session=1-WfiWDKomdnq5YqFXQ5OaffzeQqM6mSHuM4XyYLGNmZXn2030407391";
+
     //csgo请求头数据
     static Map<String, String> map = new HashMap() {
         {
@@ -90,7 +92,9 @@ public class ItemGoodsService {
             put("Sec-Fetch-Mode", "cors");
             put("Sec-Fetch-Dest", "empty");
             put("Referer", "http://buff.163.com/market/csgo");
-            put("Cookie", "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; Device-Id=dClYQRNmcSAs5uUWiiRJ; timing_user_id=time_7Ix5JzrCca; Locale-Supported=zh-Hans; game=csgo; steam_info_to_bind=; NTES_YD_SESS=Y3W6DesW535sbxMzmdG2pLTLLFy94Il_wxLdVH9OAA56Xu9MX1ahwnlrxFKNykvj_2hlaO8LePxSbcWO.gx2hWOXC.l5tkQF55VgiR398doQ6y78QM_LC9xZyS_el_epoYaM4IKEAw4s4uvc1XjREef1vnWTbAU5GXHgBFWdtq1GuANXexwo8HqbBcDQuhrz13sMxHDCrVhaJr4lqNUcYciMeN0CY35g2GCdCPERTVsGy; S_INFO=1684131704|0|0&60##|15989173318; P_INFO=15989173318|1684131704|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0||15989173318; remember_me=U1103827335|VekMfEHVSUzj0WydiCEOm3670Luyu4Mb; session=1-xqoGj7ecAA5hzi3EvNHvrgmvZwgpSJvkjRhUGM99HTNk2030407391; csrf_token=IjUwNmMzMDUyMjgwZjhlODI5OTJmZmMwOWVjZTQ2MGY3NDk4YzYzYTIi.F0NhDg.8KKnlpj1tnyjfTdgJ_jyM3OX_Q8");
+//            put("Cookie", "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; Device-Id=dClYQRNmcSAs5uUWiiRJ; timing_user_id=time_7Ix5JzrCca; Locale-Supported=zh-Hans; game=csgo; steam_info_to_bind=; NTES_YD_SESS=Y3W6DesW535sbxMzmdG2pLTLLFy94Il_wxLdVH9OAA56Xu9MX1ahwnlrxFKNykvj_2hlaO8LePxSbcWO.gx2hWOXC.l5tkQF55VgiR398doQ6y78QM_LC9xZyS_el_epoYaM4IKEAw4s4uvc1XjREef1vnWTbAU5GXHgBFWdtq1GuANXexwo8HqbBcDQuhrz13sMxHDCrVhaJr4lqNUcYciMeN0CY35g2GCdCPERTVsGy; S_INFO=1684131704|0|0&60##|15989173318; P_INFO=15989173318|1684131704|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0||15989173318; remember_me=U1103827335|VekMfEHVSUzj0WydiCEOm3670Luyu4Mb; session=1-xqoGj7ecAA5hzi3EvNHvrgmvZwgpSJvkjRhUGM99HTNk2030407391; csrf_token=IjUwNmMzMDUyMjgwZjhlODI5OTJmZmMwOWVjZTQ2MGY3NDk4YzYzYTIi.F0NhDg.8KKnlpj1tnyjfTdgJ_jyM3OX_Q8");
+//            put("Cookie", "_clck=1306jcq|2|fbs|0|1236; nie_video_speed=257.6; _clsk=17ot5x9|1684643502912|1|1|t.clarity.ms/collect; csrf_token=ImEwZTUyMzM2NjMwNjNmYWJjNzg2MzI4OTNkOWRhOTFmNDhmY2ZlOTEi.F0tbvg.ifwHA3oD5JqXAqGNOlCCqDqXCbQ;Device-Id=wAzsoRK1TlGO7PRdSbtl;Locale-Supported=zh-Hans; game=csgo; session=1-WfiWDKomdnq5YqFXQ5OaffzeQqM6mSHuM4XyYLGNmZXn2030407391");
+            put("Cookie", cookie);
         }
     };
 
@@ -139,18 +143,32 @@ public class ItemGoodsService {
     }
 
 
-    public HttpEntity<MultiValueMap<String, String>> getHttpEntity() {
-        return getHttpEntity(new HashMap<>());
-
+    public static HttpEntity<MultiValueMap<String, String>> getHttpEntity() {
+        HttpHeaders headers1 = new HttpHeaders();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            headers1.set(entry.getKey(), entry.getValue());
+        }
+        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(headers1);
+        syncCookie();
+        return entity1;
     }
 
-    public HttpEntity<MultiValueMap<String, String>> getHttpEntity(Map<String, Object> whereMap) {
+    public static HttpEntity<MultiValueMap<String, String>> getHttpEntity(Map<String, Object> whereMap) {
         HttpHeaders headers1 = new HttpHeaders();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             headers1.set(entry.getKey(), entry.getValue());
         }
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
-        synchronized (this) {
+        syncCookie();
+        return entity1;
+    }
+
+
+    /**
+     * 控制整个项目使用cookie的频率
+     */
+    public static void syncCookie() {
+        synchronized ("12345678909876") {
             try {
                 double random = Math.random() * 2000;
                 int shleepTime = (int) (random) + 1100;
@@ -159,7 +177,6 @@ public class ItemGoodsService {
                 throw new RuntimeException(e);
             }
         }
-        return entity1;
     }
 
     @Async
@@ -363,58 +380,4 @@ public class ItemGoodsService {
         return all;
     }
 
-
-    /**
-     * 在buff购买下订单
-     *
-     * @param sell_order_id：销售订单
-     * @param goods_id：商品id
-     * @param price:销售价格         //allow_tradable_cooldown：是否可以否定（0：是，1：否）,cdkey_id： _:时间戳
-     */
-    public void createBill(String sell_order_id, String goods_id, String price) {
-        //get请求
-        String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
-                "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
-        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), BuffCreateBillRoot.class);
-        if (responseEntity.getStatusCode().value() != 200) {
-            throw new ArithmeticException("创建订单接口调用失败");
-        }
-        BuffCreateBillRoot body = responseEntity.getBody();
-        if (!"ok".equals(body.getCode())) {
-            throw new ArithmeticException("创建订单异常");
-        }
-        log.info("buff订单创建成功");
-    }
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
-    }
-
-
-    /**
-     * buff购买支付订单   post请求 pay_method:3(支付宝)
-     * //参数： {"game":"csgo","goods_id":903832,"sell_order_id":"230521T0369835303","price":0.86,"pay_method":3,"allow_tradable_cooldown":0,"token":"","cdkey_id":""}
-     */
-    public void payBill(String sell_order_id, String goods_id, String price) {
-        HashMap<String, Object> hashMap = new HashMap();
-        hashMap.put("game", "csgo");
-        hashMap.put("goods_id", goods_id);
-        hashMap.put("sell_order_id", sell_order_id);
-        hashMap.put("price", price);
-        hashMap.put("pay_method", "3");
-        hashMap.put("allow_tradable_cooldown", "0");
-        hashMap.put("token", "");
-        hashMap.put("cdkey_id", "");
-
-        String url = "https://buff.163.com/api/market/goods/buy";
-        ResponseEntity<BuffPayBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(hashMap), BuffPayBillRoot.class);
-        if (responseEntity.getStatusCode().value() != 200) {
-            throw new ArithmeticException("支付接口调用失败");
-        }
-        BuffPayBillRoot body = responseEntity.getBody();
-        if (!"ok".equals(body.getCode())) {
-            throw new ArithmeticException("支付接口调用异常");
-        }
-        log.info("buff订单支付成功");
-    }
 }

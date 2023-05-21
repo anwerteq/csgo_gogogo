@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.controller;
 
 import com.chenerzhu.crawler.proxy.pool.controller.BaseController;
+import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.SteamItemService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ public class ItemController extends BaseController {
 
     @Autowired
     SteamItemService steamItemService;
+
+    @Autowired
+    BuffBuyItemService buffBuyItemService;
 
     /**
      * 拉取商品简要信息
@@ -78,5 +82,15 @@ public class ItemController extends BaseController {
 
     }
 
+
+    /**
+     * 购买buff中的商品
+     */
+    @RequestMapping("buffBuyItems")
+    @ResponseBody
+    public void buffBuyItems() {
+        buffBuyItemService.buffSellOrder("903822",1);
+
+    }
 
 }
