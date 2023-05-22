@@ -9,12 +9,14 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Invento
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -102,7 +104,6 @@ public class BuffBuyItemService {
 
         System.out.println(JSONObject.toJSONString(whereMap));
         String url = "https://buff.163.com/api/market/goods/buy";
-        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
         BuffPayBillRoot responseEntity = new BuffPayBillRoot();
         if (responseEntity1.getStatusCode().value() != 200) {
@@ -226,7 +227,7 @@ public class BuffBuyItemService {
     /**
      * 获取steam库存
      */
-    public String getSteamInventory() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    public String getSteamInventory() {
         HttpHeaders headers1 = new HttpHeaders() {{
             //buff支付订单添加请求头
             set("Host", "steamcommunity.com");
@@ -242,14 +243,12 @@ public class BuffBuyItemService {
             set("Sec-Fetch-Mode", "cors");
             set("Sec-Fetch-Site", "same-origin");
             set("TE", "trailers");
-            set("Content-Type", "application/json; charset=utf-8");
+            set("Content-Type", "application/json; charset=ISO-8859-1");
         }};
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(headers1);
 //        String url = "https://steamcommunity.com/inventory/76561199351185401/730/2?l=schinese&count=75&market=1";
-        String url = "https://steamcommunity.com/market/mylistings?count=10";
+        String url = "https://steamcommunity.com/market/itemordershistogram?country=US&language=schinese&currency=1&item_nameid=176047364&two_factor=0";
 
-
-        restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.ISO_8859_1));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity1, String.class);
 //        InventoryRootBean body = responseEntity.getBody();
         return "123";

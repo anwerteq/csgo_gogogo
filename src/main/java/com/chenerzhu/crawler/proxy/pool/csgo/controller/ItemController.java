@@ -4,6 +4,7 @@ import com.chenerzhu.crawler.proxy.pool.controller.BaseController;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.SteamItemService;
+import com.chenerzhu.crawler.proxy.pool.util.ProxyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,9 @@ public class ItemController extends BaseController {
 
     @Autowired
     BuffBuyItemService buffBuyItemService;
+
+    @Autowired
+    ProxyUtils proxyUtils;
 
     /**
      * 拉取商品简要信息
@@ -104,7 +108,7 @@ public class ItemController extends BaseController {
      */
     @RequestMapping("test")
     @ResponseBody
-    public String  test() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    public String  test() {
        return   buffBuyItemService.getSteamInventory();
 
     }
