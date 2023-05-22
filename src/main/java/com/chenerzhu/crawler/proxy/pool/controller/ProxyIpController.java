@@ -1,34 +1,23 @@
 package com.chenerzhu.crawler.proxy.pool.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.ProductList;
-import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
-import com.chenerzhu.crawler.proxy.pool.entity.IPWhiteList;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
 import com.chenerzhu.crawler.proxy.pool.entity.Result;
 import com.chenerzhu.crawler.proxy.pool.service.IPWhiteListService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpService;
-import com.chenerzhu.crawler.proxy.pool.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.*;
 
 /**
@@ -53,8 +42,6 @@ public class ProxyIpController extends BaseController {
     @Autowired
     private IPWhiteListService whiteListService;
 
-    @Autowired
-    private HttpsSendUtil httpsSendUtil;
 
     @GetMapping("/")
     public String index(ModelMap modelMap) {

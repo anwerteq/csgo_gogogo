@@ -7,7 +7,6 @@ import com.chenerzhu.crawler.proxy.pool.csgo.feign.CsgoFeign;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.*;
-import com.chenerzhu.crawler.proxy.pool.csgo.util.HttpsSendUtil;
 import com.chenerzhu.crawler.proxy.pool.service.IProxyIpRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ItemGoodsService {
 
 
-    @Autowired
-    HttpsSendUtil httpsSendUtil;
 
     @Autowired
     IProxyIpRedisService proxyIpRedisService;

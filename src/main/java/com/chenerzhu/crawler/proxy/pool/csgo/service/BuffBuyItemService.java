@@ -1,28 +1,31 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPayBillRoot;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Descriptions;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.InventoryRootBean;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
+import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService.getHttpEntity;
 import static com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService.syncCookie;
@@ -228,31 +231,104 @@ public class BuffBuyItemService {
      * 获取steam库存
      */
     public String getSteamInventory() {
-        HttpHeaders headers1 = new HttpHeaders() {{
-            //buff支付订单添加请求头
-            set("Host", "steamcommunity.com");
-            set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0");
-            set("Accept", "*/*");
-            set("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            set("Accept-Encoding", "gzip, deflate, br");
-            set("X-Requested-With", "XMLHttpRequest");
-            set("Connection", "keep-alive");
-            set("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
-            set("Cookie", "timezoneOffset=28800,0; _ga=GA1.2.1888222838.1684654738; _gid=GA1.2.1146899614.1684654738; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyRV8yMjhEQTdBN183REE2NiIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDc0MTYzMywgIm5iZiI6IDE2NzYwMTQ4MjMsICJpYXQiOiAxNjg0NjU0ODIzLCAianRpIjogIjEyMTNfMjI4RUVCQTJfNjQwNDIiLCAib2F0IjogMTY4NDY1NDgyMSwgInJ0X2V4cCI6IDE3MDI1OTIzNzksICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxNjMuMTIzLjE5Mi40NSIsICJpcF9jb25maXJtZXIiOiAiMTYzLjEyMy4xOTIuNDUiIH0.46epJ50pEEs-kdMz5KcfTvJp8lCOSyVUhCz_j5sPaBM-CFledrIWQXZsRK7kohDy43uRWfiiuyEN3F_aRnwmBQ; browserid=2911059127808429915; sessionid=b96bccb6a6416ad19df2e8f6; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684730443%7D; strInventoryLastContext=730_2");
-            set("Sec-Fetch-Dest", "empty");
-            set("Sec-Fetch-Mode", "cors");
-            set("Sec-Fetch-Site", "same-origin");
-            set("TE", "trailers");
-            set("Content-Type", "application/json; charset=ISO-8859-1");
-        }};
-        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(headers1);
-//        String url = "https://steamcommunity.com/inventory/76561199351185401/730/2?l=schinese&count=75&market=1";
-        String url = "https://steamcommunity.com/market/itemordershistogram?country=US&language=schinese&currency=1&item_nameid=176047364&two_factor=0";
+        String url = "https://steamcommunity.com/inventory/76561199351185401/730/2?l=schinese&count=75&market=1";
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity1, String.class);
-//        InventoryRootBean body = responseEntity.getBody();
+        String resStr = HttpClientUtils.sendGet(url, getSteamHeader());
+        if (StrUtil.isEmpty(resStr)) {
+            log.error("获取steam库存失败");
+        }
+        InventoryRootBean inventoryRootBean = JSONObject.parseObject(resStr, InventoryRootBean.class);
+        for (Descriptions description : inventoryRootBean.getDescriptions()) {
+            //价格数据
+            PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
+            //获取 assetid
+            String assetid = "";
+            for (Assets asset : inventoryRootBean.getAssets()) {
+                if (asset.getClassid() == description.getClassid()) {
+                    assetid = asset.getAssetid();
+                }
+            }
+            saleItem(assetid, priceVerview.getLowest_price());
+            log.info("steam成功上架商品名称：" + description.getName());
+        }
         return "123";
 
     }
 
+    /**
+     * 获取商品的参考价格
+     *
+     * @param market_hash_name
+     * @return
+     */
+    public PriceVerviewRoot getPriceVerview(String market_hash_name) {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        String url = null;
+        try {
+            url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode(market_hash_name, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        String resStr = HttpClientUtils.sendGet(url, getSteamHeader());
+        if (StrUtil.isEmpty(resStr)) {
+            log.error("获取参数的参考价格失败");
+            throw new ArithmeticException("获取参数的参考价格失败");
+        }
+        PriceVerviewRoot priceVerviewRoot = JSONObject.parseObject(resStr, PriceVerviewRoot.class);
+        return priceVerviewRoot;
+    }
+
+    /**
+     * 销售商品
+     *
+     * @param assetid
+     * @param price
+     */
+    public void saleItem(String assetid, String price) {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        String url = "https://steamcommunity.com/market/sellitem/";
+        Map<String, String> paramerMap = new HashMap<>();
+        paramerMap.put("sessionid", "4442a1bda6b1feee2ca2727f");
+        paramerMap.put("appid", "730");
+        paramerMap.put("contextid", "2");
+        paramerMap.put("assetid", assetid);
+        paramerMap.put("price", price);
+        String responseStr = HttpClientUtils.sendPostForm(url, "", getSteamHeader(), paramerMap);
+        System.out.println("1231231");
+    }
+
+
+    /**
+     * steam请求头
+     *
+     * @return
+     */
+    public static Map<String, String> getSteamHeader() {
+        Map<String, String> headers1 = new HashMap() {{
+            //buff支付订单添加请求头
+            put("Host", "steamcommunity.com");
+            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0");
+            put("Accept", "*/*");
+            put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+            put("Accept-Encoding", "gzip, deflate, br");
+            put("X-Requested-With", "XMLHttpRequest");
+            put("Connection", "keep-alive");
+            put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
+            put("Cookie", "timezoneOffset=28800,0; browserid=2911058493333424353; sessionid=4442a1bda6b1feee2ca2727f; steamCountry=SG%7Cc4c23dc904408d47f98262d48bc48452; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyRl8yMjhEQTdDRV9GQ0M4NCIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDgxMjM2NSwgIm5iZiI6IDE2NzYwODUwMTEsICJpYXQiOiAxNjg0NzI1MDExLCAianRpIjogIjEyMTNfMjI4RUVCQ0FfOTU3NTMiLCAib2F0IjogMTY4NDcyNTAwOSwgInJ0X2V4cCI6IDE3MDI5MjkwMjEsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIzLjEuODUuMjA4IiwgImlwX2NvbmZpcm1lciI6ICIzLjEuODUuMjA4IiB9.emm9iOPWnMDu8B-5Jrza15iTMmPjw44cwztnJ4R6l7Z7dfyc8tCjc85HKcWyOdjq0EONPYM49U-BjqeMkqqVDg; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684728034%7D; strInventoryLastContext=730_2");
+            put("Sec-Fetch-Dest", "empty");
+            put("Sec-Fetch-Mode", "cors");
+            put("Sec-Fetch-Site", "same-origin");
+            put("TE", "trailers");
+            put("Content-Type", "application/json; charput=ISO-8859-1");
+        }};
+        return headers1;
+    }
 }
