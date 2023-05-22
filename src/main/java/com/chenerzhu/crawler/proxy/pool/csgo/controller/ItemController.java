@@ -11,6 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * @author chenerzhu
  * @create 2018-08-29 19:51
@@ -100,8 +104,8 @@ public class ItemController extends BaseController {
      */
     @RequestMapping("test")
     @ResponseBody
-    public void test() {
-        buffBuyItemService.getBuyOrder();
+    public void test() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        buffBuyItemService.getSteamInventory();
 
     }
 
