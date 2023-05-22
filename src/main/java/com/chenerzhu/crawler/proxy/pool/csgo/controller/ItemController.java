@@ -104,8 +104,8 @@ public class ItemController extends BaseController {
      */
     @RequestMapping("test")
     @ResponseBody
-    public void test() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        buffBuyItemService.getSteamInventory();
+    public String  test() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+       return   buffBuyItemService.getSteamInventory();
 
     }
 

@@ -1,10 +1,8 @@
 package com.chenerzhu.crawler.proxy.pool.config;
 
 
-import com.chenerzhu.crawler.proxy.pool.csgo.config.SSL;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -17,14 +15,8 @@ import org.springframework.web.client.RestTemplate;
 public class ApplicationContextConfig {
 
     @Bean
-    public RestTemplate getRestTemplate(ClientHttpRequestFactory factory) {
-        return new RestTemplate(factory);
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
     }
-    @Bean
-    public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
-        SSL factory = new SSL();
-        factory.setReadTimeout(5000);
-        factory.setConnectTimeout(15000);
-        return factory;
-    }
+
 }
