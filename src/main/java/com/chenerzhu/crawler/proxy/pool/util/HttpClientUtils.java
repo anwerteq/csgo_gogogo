@@ -45,10 +45,10 @@ public class HttpClientUtils {
 
     static {
         reqConf = RequestConfig.custom()
-                .setSocketTimeout(10000)
-                .setConnectTimeout(10000)
-                .setConnectionRequestTimeout(10000)
-                .setRedirectsEnabled(true)
+                .setSocketTimeout(60000)
+                .setConnectTimeout(60000)
+                .setConnectionRequestTimeout(60000)
+                .setRedirectsEnabled(false)
                 .setMaxRedirects(2)
                 .build();
         standardHandler = new StandardHttpRequestRetryHandler(3, true);
