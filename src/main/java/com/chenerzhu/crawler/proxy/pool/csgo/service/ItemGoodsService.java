@@ -27,12 +27,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
 public class ItemGoodsService {
 
+
+    ExecutorService executorService = Executors.newFixedThreadPool(1);
 
 
     @Autowired
@@ -73,7 +77,8 @@ public class ItemGoodsService {
     //总页数
     Integer pageCount = 1;
 
-    static String cookie = "csrf_token=IjcxMTBkMzY5ZDhjMGU3YWMyZjI1MDRmZGExZTZlYWQ5NWFiOTdlZmIi.F0ti0A.OBh4vnjjjSasyB2YCkuScPtAzJQ; Device-Id=gWuF5A6BKxVnJNmFrnkt; Locale-Supported=zh-Hans; game=csgo; session=1-WfiWDKomdnq5YqFXQ5OaffzeQqM6mSHuM4XyYLGNmZXn2030407391";
+    //    static String cookie = "csrf_token=IjcxMTBkMzY5ZDhjMGU3YWMyZjI1MDRmZGExZTZlYWQ5NWFiOTdlZmIi.F0ti0A.OBh4vnjjjSasyB2YCkuScPtAzJQ; Device-Id=gWuF5A6BKxVnJNmFrnkt; Locale-Supported=zh-Hans; game=csgo; session=1-WfiWDKomdnq5YqFXQ5OaffzeQqM6mSHuM4XyYLGNmZXn2030407391";
+    static String cookie = "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; timing_user_id=time_7Ix5JzrCca; P_INFO=15989173318|1684131704|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0||15989173318; Device-Id=eNsnpKlEE3KrEa39TVdI; hb_MA-BFF5-63705950A31C_source=www.toolchest.cn; Locale-Supported=zh-Hans; game=csgo; session=1-iuN--N6z1CGWt8vr26-X0yPx8upbF1K8ukskO5R4N7ms2030407391; csrf_token=ImJkYTU3OWFlY2MzMGEzMjQwOThkNmNhNjliNTIzOTgxZWRkMjAyZDYi.F04ClQ.SPsHNU0P-FOTEkamaYdqu04HXIk";
 
     //csgo请求头数据
     static Map<String, String> map = new HashMap() {
@@ -98,19 +103,25 @@ public class ItemGoodsService {
      * 拉取csgo商品列表
      */
     public void pullItmeGoods() {
-        int pageIndex = 1;
-        while (pageCount >= pageIndex) {
-            pageIndex = pullOnePage(pageIndex);
-            pageIndex++;
-            System.out.println("正在查询的页数：" + pageIndex);
-        }
 
-        try {
-            Thread.sleep(1000 * 12);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        pullHistoryPrice();
+
+        executorService.execute(()->{
+            int pageIndex = 1;
+            while (pageCount >= pageIndex) {
+
+                pageIndex = pullOnePage(pageIndex);
+                pageIndex++;
+                System.out.println("正在查询的页数：" + pageIndex);
+                try {
+                    Thread.sleep(1000 * 3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+//        pullHistoryPrice();
     }
 
 

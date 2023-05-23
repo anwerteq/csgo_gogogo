@@ -27,13 +27,6 @@ public class ProxyPoolApplication {
 //        System.setProperty("https.proxyPort", proxyPort);
 
         ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
-        Map<String, String> paramerMap = new HashMap<>();
-        paramerMap.put("sessionid", "6ae449625751c147d2e777d9");
-        paramerMap.put("appid", "730");
-        paramerMap.put("contextid", "2");
-        paramerMap.put("assetid", "30483593352");
-        paramerMap.put("amount", "1");
-        paramerMap.put("price", "25");
-        ItemController.getContent("https://steamcommunity.com/market/sellitem?",paramerMap);
+
     }
 }
