@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPayBillRoot;
+import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
+import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Descriptions;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.InventoryRootBean;
@@ -40,6 +42,9 @@ public class BuffBuyItemService {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    SellSteamProfitRepository sellSteamProfitRepository;
 
 
     /**
@@ -76,23 +81,9 @@ public class BuffBuyItemService {
     public void payBill(String sell_order_id, int goods_id, String price) {
         HttpHeaders headers1 = new HttpHeaders() {{
             //buff支付订单添加请求头
-            set("Host", " buff.163.com");
-            set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/111.0");
-            set("Accept", " application/json, text/javascript, */*; q=0.01");
-            set("Accept-Language", " zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            set("Accept-Encoding", " gzip, deflate, br");
-            set("Content-Type", " application/json");
-            set("X-CSRFToken", " IjcxMTBkMzY5ZDhjMGU3YWMyZjI1MDRmZGExZTZlYWQ5NWFiOTdlZmIi.F0ti0A.OBh4vnjjjSasyB2YCkuScPtAzJQ");
-            set("X-Requested-With", " XMLHttpRequest");
-            set("Connection", " keep-alive");
-            set("Cookie", " csrf_token=IjcxMTBkMzY5ZDhjMGU3YWMyZjI1MDRmZGExZTZlYWQ5NWFiOTdlZmIi.F0ti0A.OBh4vnjjjSasyB2YCkuScPtAzJQ; Device-Id=gWuF5A6BKxVnJNmFrnkt; Locale-Supported=zh-Hans; game=csgo; session=1-WfiWDKomdnq5YqFXQ5OaffzeQqM6mSHuM4XyYLGNmZXn2030407391");
-            set("Sec-Fetch-Dest", " empty");
-            set("Sec-Fetch-Mode", " cors");
-            set("Sec-Fetch-Site", " same-origin");
+            set("X-CSRFToken", "IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw");
+            set("Cookie", "Device-Id=gWuF5A6BKxVnJNmFrnkt; csrf_token=IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw; Locale-Supported=zh-Hans; game=csgo; session=1-uSYsxebCWGxk1doSRtnwsrMO4OaAJ6lM47T6LOjN9dQb2030407391");
             set("Referer", "https://buff.163.com/goods/903822?from=market");
-            ;
-            set("Origin", "https://buff.163.com");
-            ;
         }};
         HashMap<String, Object> whereMap = new HashMap();
         whereMap.put("game", "csgo");
@@ -127,32 +118,39 @@ public class BuffBuyItemService {
      * @param goods_id:商品id
      */
     public void buffSellOrder(String goods_id, int num) {
-        String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
-                "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
-        ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), BuffBuyRoot.class);
-        if (responseEntity.getStatusCode().value() != 200) {
-            throw new ArithmeticException("查询接口调用失败");
-        }
-        BuffBuyRoot body = responseEntity.getBody();
-        if (!"OK".equals(body.getCode())) {
-            throw new ArithmeticException("查询接口调用异常");
-        }
-        for (BuffBuyItems item : responseEntity.getBody().getData().getItems()) {
-            num--;
-            //创建订单
-            createBill(item.getId(), item.getGoods_id(), item.getPrice());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+        List<SellSteamProfitEntity> select = sellSteamProfitRepository.select();
+        for (SellSteamProfitEntity entity : select) {
+            goods_id = String.valueOf(entity.getItem_id());
+            //获取该商品售卖的列表信息
+            String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
+                    "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
+            ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), BuffBuyRoot.class);
+            if (responseEntity.getStatusCode().value() != 200) {
+                throw new ArithmeticException("查询接口调用失败");
             }
-            //支付订单
-            payBill(item.getId(), item.getGoods_id(), item.getPrice());
-            if (num <= 0) {
-                log.info("商品购买完成");
-                return;
+            BuffBuyRoot body = responseEntity.getBody();
+            if (!"OK".equals(body.getCode())) {
+                throw new ArithmeticException("查询接口调用异常");
+            }
+            num = 1;
+            for (BuffBuyItems item : responseEntity.getBody().getData().getItems()) {
+                num--;
+                //创建订单
+                createBill(item.getId(), item.getGoods_id(), item.getPrice());
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //支付订单
+                payBill(item.getId(), item.getGoods_id(), item.getPrice());
+                if (num <= 0) {
+                    log.info("商品购买完成");
+                }
             }
         }
+
     }
 
 
