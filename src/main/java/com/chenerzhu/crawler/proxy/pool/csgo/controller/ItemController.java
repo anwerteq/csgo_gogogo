@@ -109,7 +109,8 @@ public class ItemController extends BaseController {
     @RequestMapping("test")
     @ResponseBody
     public String  test() {
-       return   buffBuyItemService.getSteamInventory();
+        buffBuyItemService.saleItem("1","1");
+        return  "";
 
     }
 

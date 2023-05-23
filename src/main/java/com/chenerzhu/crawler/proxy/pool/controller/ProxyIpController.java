@@ -123,8 +123,10 @@ public class ProxyIpController extends BaseController {
     @PostMapping("/test")
     @ResponseBody
     public Object testIp(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
-        String ip = request.getParameter("ip").trim();
-        String port = request.getParameter("port").trim();
+        String ip ="".trim();
+        String port = "".trim();
+        ip = "127.0.0.1";
+        port="1080";
         boolean available = proxyIpService.testIp(ip, Integer.parseInt(port));
         Result result = new Result();
         result.setCode(200);

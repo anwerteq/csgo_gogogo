@@ -48,7 +48,7 @@ public class HttpClientUtils {
                 .setSocketTimeout(60000)
                 .setConnectTimeout(60000)
                 .setConnectionRequestTimeout(60000)
-                .setRedirectsEnabled(false)
+                .setRedirectsEnabled(true)
                 .setMaxRedirects(2)
                 .build();
         standardHandler = new StandardHttpRequestRetryHandler(3, true);

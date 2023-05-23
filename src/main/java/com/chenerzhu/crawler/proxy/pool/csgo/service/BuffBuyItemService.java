@@ -308,15 +308,15 @@ public class BuffBuyItemService {
         paramerMap.put("sessionid", "738dc9f7afd74bef14c8ad21");
         paramerMap.put("appid", "730");
         paramerMap.put("contextid", "2");
-        paramerMap.put("assetid", assetid);
+        paramerMap.put("assetid", "30483593352");
         paramerMap.put("amount", "1");
-        paramerMap.put("price", String.valueOf(priceCount));
+        paramerMap.put("price", "25");
         for (Map.Entry<String, String> entry : paramerMap.entrySet()) {
             url = url + entry.getKey() + "=" + entry.getValue() + "&";
         }
         url = url.substring(0,url.length()-1);
 
-        String responseStr = HttpClientUtils.sendPost(url, "", getSaleHeader());
+        String responseStr = HttpClientUtils.sendPostForm(url, "", getSaleHeader(),paramerMap);
         System.out.println("1231231");
     }
 
@@ -353,21 +353,24 @@ public class BuffBuyItemService {
     public static Map<String, String> getSaleHeader() {
         Map<String, String> headers1 = new HashMap() {
             {
-                put("Host", "steamcommunity.com");
-                put("User-Agent", " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0");
-                put("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
-                put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+                put("Accept", "*/*");
                 put("Accept-Encoding", "gzip, deflate, br");
-                put("X-Requested-With", "XMLHttpRequest");
-                put("X-Prototype-Version", "1.7");
+                put("Accept-Language", "zh-CN,zh;q=0.9");
                 put("Connection", "keep-alive");
-                put("Referer", " https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
-                put("Cookie", "timezoneOffset=28800,0; _ga=GA1.2.1888222838.1684654738; _gid=GA1.2.1146899614.1684654738; browserid=2911059127808429915; strInventoryLastContext=730_2; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyRV8yMjhEQTdBN183REE2NiIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDg2ODg0OSwgIm5iZiI6IDE2NzYxNDE2OTksICJpYXQiOiAxNjg0NzgxNjk5LCAianRpIjogIjEyMTNfMjI4RUVCRURfMjg2MzYiLCAib2F0IjogMTY4NDY1NDgyMSwgInJ0X2V4cCI6IDE3MDI1OTIzNzksICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxNjMuMTIzLjE5Mi40NSIsICJpcF9jb25maXJtZXIiOiAiMTYzLjEyMy4xOTIuNDUiIH0.F2MMD3dN54Akpo0Thgnaz0GxXMWQTb7eGm6wxdaWvxRPmQWTjLWDUTjL2l10JLoTz9G2SYuQmUFK2jnAMnyTCA; sessionid=90841cb03c7f7f4a6031ea0c; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684783394%7D");
+//                put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                put("Content-Type", "application/form-data; charset=UTF-8");
+                put("Cookie", "timezoneOffset=28800,0; browserid=2911058493333424353; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyRl8yMjhEQTdDRV9GQ0M4NCIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDkwMTY4OCwgIm5iZiI6IDE2NzYxNzQwNTAsICJpYXQiOiAxNjg0ODE0MDUwLCAianRpIjogIjEyMTNfMjI4RUVCRkRfQUEzQTYiLCAib2F0IjogMTY4NDcyNTAwOSwgInJ0X2V4cCI6IDE3MDI5MjkwMjEsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIzLjEuODUuMjA4IiwgImlwX2NvbmZpcm1lciI6ICIzLjEuODUuMjA4IiB9.pjdxS7Zl4fFdKaMEUnfY8sYKWHbeOb4MZjvuipmGwcaZisMSpcK39RuaADuZT0DO7KqC3vhkVcy2I9_Zdw91CQ; strInventoryLastContext=730_2; sessionid=6ae449625751c147d2e777d9; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684816201%7D");
+                put("Host", "steamcommunity.com");
+                put("Origin", "https://steamcommunity.com");
+                put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
                 put("Sec-Fetch-Dest", "empty");
                 put("Sec-Fetch-Mode", "cors");
                 put("Sec-Fetch-Site", "same-origin");
-                put("If-Modified-Since", "Mon, 22 May 2023 19:25:00 GMT");
-                put("TE", "trailers");
+                put("User-Agent", " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0");
+                put("sec-ch-ua", "\"Google Chrome\";v=\"113\", \"Chromium\";v=\"113\", \"Not-A.Brand\";v=\"24\"");
+                put("sec-ch-ua-mobile", "?0");
+                put("Content-Length", "94");
+                put("sec-ch-ua-platform", "\"Windows\"");
             }
         };
         return headers1;
