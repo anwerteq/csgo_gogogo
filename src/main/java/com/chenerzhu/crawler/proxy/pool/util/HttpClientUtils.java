@@ -71,12 +71,13 @@ public class HttpClientUtils {
             contentCharset = DEFAULT_CHARSET;
         }
         CloseableHttpClient httpClient = null;
+        HttpResponse httpResponse = null;
         try {
             httpClient = HttpClientBuilder.create().setRetryHandler(standardHandler).build();
             if (url.toLowerCase().startsWith("https")) {
                 initSSL(httpClient, getPort(url));
             }
-            HttpResponse httpResponse = null;
+
             switch (method) {
                 case GET:
                     HttpGet httpGet = new HttpGet(url);
@@ -135,6 +136,7 @@ public class HttpClientUtils {
             log.error("Network error", e);
         } finally {
             try {
+                log.info("返回数据为："+EntityUtils.toString(httpResponse.getEntity(), resultCharset));
                 if (httpClient != null) {
                     httpClient.close();
                 }

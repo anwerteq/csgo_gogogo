@@ -18,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -293,36 +292,31 @@ public class BuffBuyItemService {
         if (price.startsWith("$")) {
             price = price.replace("$", "");
             priceCount = new BigDecimal(100 * Double.parseDouble(price) * 0.85).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            System.out.println("123123");
         }
         Boolean flag = true;
         if (priceCount == null) {
-        }
-        {
             flag = false;
         }
         if (flag) {
             throw new ArithmeticException("参数异常");
         }
-        String url = "https://steamcommunity.com/market/sellitem?";
+        Map<String, String> saleHeader = getSaleHeader();
+        String url = "https://steamcommunity.com/market/sellitem";
         Map<String, String> paramerMap = new HashMap<>();
-        paramerMap.put("sessionid", "738dc9f7afd74bef14c8ad21");
+        for (String cookie : saleHeader.get("Cookie").split(";")) {
+            if ("sessionid".equals(cookie.split("=")[0].trim())) {
+                paramerMap.put("sessionid", cookie.split("=")[1].trim());
+                break;
+            }
+        }
         paramerMap.put("appid", "730");
         paramerMap.put("contextid", "2");
-        paramerMap.put("assetid", "30483593352");
+        paramerMap.put("assetid", assetid);
         paramerMap.put("amount", "1");
-        paramerMap.put("price", "25");
-        String json = JSONObject.toJSONString(paramerMap);
-        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-        postParameters.add("data",json);
+        paramerMap.put("price", price);
+//        ItemController.getContent("https://steamcommunity.com/market/sellitem",paramerMap);
+        String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        for (Map.Entry<String, String> entry : getSaleHeader().entrySet()) {
-            httpHeaders.add(entry.getKey(),entry.getValue());
-        }
-
-        url = url.substring(0,url.length()-1);
-        String responseStr = HttpClientUtils.sendPostForm(url, "", getSaleHeader(),paramerMap);
         System.out.println("1231231");
     }
 

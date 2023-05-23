@@ -1,10 +1,14 @@
 package com.chenerzhu.crawler.proxy.pool;
 
+import com.chenerzhu.crawler.proxy.pool.csgo.controller.ItemController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 @ServletComponentScan("com.chenerzhu.crawler.proxy.pool.listener")
@@ -23,5 +27,13 @@ public class ProxyPoolApplication {
 //        System.setProperty("https.proxyPort", proxyPort);
 
         ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
+        Map<String, String> paramerMap = new HashMap<>();
+        paramerMap.put("sessionid", "6ae449625751c147d2e777d9");
+        paramerMap.put("appid", "730");
+        paramerMap.put("contextid", "2");
+        paramerMap.put("assetid", "30483593352");
+        paramerMap.put("amount", "1");
+        paramerMap.put("price", "25");
+        ItemController.getContent("https://steamcommunity.com/market/sellitem?",paramerMap);
     }
 }
