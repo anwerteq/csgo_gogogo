@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -311,11 +312,16 @@ public class BuffBuyItemService {
         paramerMap.put("assetid", "30483593352");
         paramerMap.put("amount", "1");
         paramerMap.put("price", "25");
-        for (Map.Entry<String, String> entry : paramerMap.entrySet()) {
-            url = url + entry.getKey() + "=" + entry.getValue() + "&";
-        }
-        url = url.substring(0,url.length()-1);
+        String json = JSONObject.toJSONString(paramerMap);
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        postParameters.add("data",json);
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        for (Map.Entry<String, String> entry : getSaleHeader().entrySet()) {
+            httpHeaders.add(entry.getKey(),entry.getValue());
+        }
+
+        url = url.substring(0,url.length()-1);
         String responseStr = HttpClientUtils.sendPostForm(url, "", getSaleHeader(),paramerMap);
         System.out.println("1231231");
     }
@@ -353,24 +359,14 @@ public class BuffBuyItemService {
     public static Map<String, String> getSaleHeader() {
         Map<String, String> headers1 = new HashMap() {
             {
-                put("Accept", "*/*");
-                put("Accept-Encoding", "gzip, deflate, br");
-                put("Accept-Language", "zh-CN,zh;q=0.9");
-                put("Connection", "keep-alive");
-//                put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-                put("Content-Type", "application/form-data; charset=UTF-8");
                 put("Cookie", "timezoneOffset=28800,0; browserid=2911058493333424353; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyRl8yMjhEQTdDRV9GQ0M4NCIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDkwMTY4OCwgIm5iZiI6IDE2NzYxNzQwNTAsICJpYXQiOiAxNjg0ODE0MDUwLCAianRpIjogIjEyMTNfMjI4RUVCRkRfQUEzQTYiLCAib2F0IjogMTY4NDcyNTAwOSwgInJ0X2V4cCI6IDE3MDI5MjkwMjEsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIzLjEuODUuMjA4IiwgImlwX2NvbmZpcm1lciI6ICIzLjEuODUuMjA4IiB9.pjdxS7Zl4fFdKaMEUnfY8sYKWHbeOb4MZjvuipmGwcaZisMSpcK39RuaADuZT0DO7KqC3vhkVcy2I9_Zdw91CQ; strInventoryLastContext=730_2; sessionid=6ae449625751c147d2e777d9; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684816201%7D");
+                put("Accept-Language", "zh-CN,zh;q=0.9");
+                put("Content-Type", "application/x-www-form-urlencoded");
                 put("Host", "steamcommunity.com");
-                put("Origin", "https://steamcommunity.com");
+//                put("Transfer-Encoding", "chunked");
+
+//                put("Transfer-Encoding", "chunked");
                 put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
-                put("Sec-Fetch-Dest", "empty");
-                put("Sec-Fetch-Mode", "cors");
-                put("Sec-Fetch-Site", "same-origin");
-                put("User-Agent", " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0");
-                put("sec-ch-ua", "\"Google Chrome\";v=\"113\", \"Chromium\";v=\"113\", \"Not-A.Brand\";v=\"24\"");
-                put("sec-ch-ua-mobile", "?0");
-                put("Content-Length", "94");
-                put("sec-ch-ua-platform", "\"Windows\"");
             }
         };
         return headers1;
