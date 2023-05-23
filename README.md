@@ -61,3 +61,5 @@ https://www.bedebug.com/archives/ipproxypool
 ```java
 java -jar proxy-pool-1.0.jar
 ```
+
+// https://buff.163.com/api/market/manual_plus/buyer_send_offer  :发送报价接口

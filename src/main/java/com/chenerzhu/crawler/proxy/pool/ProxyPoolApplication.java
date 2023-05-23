@@ -9,6 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @SpringBootApplication
 @ServletComponentScan("com.chenerzhu.crawler.proxy.pool.listener")
@@ -17,15 +18,6 @@ public class ProxyPoolApplication {
 
 
     public static void main(String[] args) {
-//        String proxyHost = "127.0.0.1";
-//        String proxyPort = "1080";
-//// 对http开启代理
-//        System.setProperty("http.proxyHost", proxyHost);
-//        System.setProperty("http.proxyPort", proxyPort);
-//// 对https也开启代理
-//        System.setProperty("https.proxyHost", proxyHost);
-//        System.setProperty("https.proxyPort", proxyPort);
-
         ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
 
     }

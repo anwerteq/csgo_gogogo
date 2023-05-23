@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.pool.util;
 
 import com.chenerzhu.crawler.proxy.pool.common.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.RequestLine;
@@ -20,6 +21,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.util.StringUtils;
@@ -73,7 +75,10 @@ public class HttpClientUtils {
         CloseableHttpClient httpClient = null;
         HttpResponse httpResponse = null;
         try {
-            httpClient = HttpClientBuilder.create().setRetryHandler(standardHandler).build();
+            //设置代理IP、端口
+            HttpHost proxy = new HttpHost("127.0.0.1", 1080);
+            DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
             if (url.toLowerCase().startsWith("https")) {
                 initSSL(httpClient, getPort(url));
             }
@@ -136,7 +141,6 @@ public class HttpClientUtils {
             log.error("Network error", e);
         } finally {
             try {
-                log.info("返回数据为："+EntityUtils.toString(httpResponse.getEntity(), resultCharset));
                 if (httpClient != null) {
                     httpClient.close();
                 }
