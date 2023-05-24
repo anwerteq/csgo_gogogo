@@ -55,7 +55,7 @@ public class GroundingService {
     private InventoryRootBean getSteamInventory() {
         SleepUtil.sleep();
         String url = "https://steamcommunity.com/inventory/76561199351185401/730/2?l=schinese&count=75&market=1";
-        String resStr = HttpClientUtils.sendGet(url, getSteamHeader());
+        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取steam库存失败");
             throw new ArithmeticException("获取steam库存失败");
@@ -79,7 +79,7 @@ public class GroundingService {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        String resStr = HttpClientUtils.sendGet(url, getSteamHeader());
+        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取参数的参考价格失败");
             throw new ArithmeticException("获取参数的参考价格失败");
@@ -109,7 +109,7 @@ public class GroundingService {
         if (flag) {
             throw new ArithmeticException("参数异常");
         }
-        Map<String, String> saleHeader = getSaleHeader();
+        Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         String url = "https://steamcommunity.com/market/sellitem";
         Map<String, String> paramerMap = new HashMap<>();
         for (String cookie : saleHeader.get("Cookie").split(";")) {
@@ -127,30 +127,5 @@ public class GroundingService {
         System.out.println("1231231");
     }
 
-    /**
-     * steam请求头
-     *
-     * @return
-     */
-    public static Map<String, String> getSteamHeader() {
-        Map<String, String> headers1 = new HashMap() {{
-            //steam请求头
-            put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            put("Cookie", SteamConfig.STEAM_COOKIE);
-            put("Host", "steamcommunity.com");
-            put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
-        }};
-        return headers1;
-    }
 
-
-    /**
-     * 获取上架需要的请求头
-     */
-    public static Map<String, String> getSaleHeader() {
-        Map<String, String> steamHeader = getSteamHeader();
-        steamHeader.put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
-        steamHeader.put("Content-Type", "application/x-www-form-urlencoded");
-        return steamHeader;
-    }
 }
