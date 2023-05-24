@@ -1,7 +1,7 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.controller;
 
-import com.chenerzhu.crawler.proxy.pool.buff.service.PullHistoryService;
-import com.chenerzhu.crawler.proxy.pool.buff.service.PullItemService;
+import com.chenerzhu.crawler.proxy.buff.service.PullHistoryService;
+import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.pool.controller.BaseController;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService;

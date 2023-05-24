@@ -1,7 +1,7 @@
-package com.chenerzhu.crawler.proxy.pool.steam.controller;
+package com.chenerzhu.crawler.proxy.steam.controller;
 
-import com.chenerzhu.crawler.proxy.pool.steam.service.GroundingService;
-import com.chenerzhu.crawler.proxy.pool.steam.service.SteamItemService;
+import com.chenerzhu.crawler.proxy.steam.service.GroundingService;
+import com.chenerzhu.crawler.proxy.steam.service.SteamItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -1,7 +1,7 @@
-package com.chenerzhu.crawler.proxy.pool.buff.controller;
+package com.chenerzhu.crawler.proxy.buff.controller;
 
-import com.chenerzhu.crawler.proxy.pool.buff.service.PullHistoryService;
-import com.chenerzhu.crawler.proxy.pool.buff.service.PullItemService;
+import com.chenerzhu.crawler.proxy.buff.service.PullHistoryService;
+import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

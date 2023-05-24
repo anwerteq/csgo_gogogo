@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.pool;
 
+import com.chenerzhu.crawler.proxy.ProxyPoolApplication;
 import com.chenerzhu.crawler.proxy.pool.common.RedisKey;
 import com.chenerzhu.crawler.proxy.pool.context.SpringContextHolder;
 import com.chenerzhu.crawler.proxy.pool.entity.ProxyIp;
@@ -12,7 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 /**

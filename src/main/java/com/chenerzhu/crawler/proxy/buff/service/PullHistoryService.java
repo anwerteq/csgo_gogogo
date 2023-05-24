@@ -1,6 +1,6 @@
-package com.chenerzhu.crawler.proxy.pool.buff.service;
+package com.chenerzhu.crawler.proxy.buff.service;
 
-import com.chenerzhu.crawler.proxy.pool.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPriceHistory1;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPriceHistory2;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.HistoryPriceRep;

@@ -1,13 +1,10 @@
-package com.chenerzhu.crawler.proxy.pool.buff.service;
+package com.chenerzhu.crawler.proxy.buff.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.pool.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
-import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.GoodsInfoRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.IItemGoodsRepository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

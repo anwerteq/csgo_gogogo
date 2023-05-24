@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.buff;
+package com.chenerzhu.crawler.proxy.buff;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

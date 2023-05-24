@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.steam.service;
+package com.chenerzhu.crawler.proxy.steam.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.AssetDescription;

@@ -1,8 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.steam;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.util.MultiValueMap;
+package com.chenerzhu.crawler.proxy.steam;
 
 import java.util.HashMap;
 import java.util.Map;
