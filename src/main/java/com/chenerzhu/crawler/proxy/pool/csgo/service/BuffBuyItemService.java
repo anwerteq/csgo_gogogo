@@ -4,6 +4,8 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
+import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
+import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
@@ -69,7 +71,7 @@ public class BuffBuyItemService {
      * buff购买支付订单   post请求 pay_method:3(支付宝)
      * //参数： {"game":"csgo","goods_id":903832,"sell_order_id":"230521T0369835303","price":0.86,"pay_method":3,"allow_tradable_cooldown":0,"token":"","cdkey_id":""}
      */
-    public void payBill(String sell_order_id, int goods_id, String price) {
+    public PayBillRepData payBill(String sell_order_id, int goods_id, String price) {
         HttpHeaders headers1 = new HttpHeaders() {{
             //buff支付订单添加请求头
             set("Referer", "https://buff.163.com/goods/903822?from=market");
@@ -99,6 +101,9 @@ public class BuffBuyItemService {
             throw new ArithmeticException("支付接口调用失败");
         }
         log.info("buff订单支付成功");
+        String body = responseEntity1.getBody();
+        PayBillRepRoot payBillRepRoot = JSONObject.parseObject(body, PayBillRepRoot.class);
+        return payBillRepRoot.getData();
     }
 
 
@@ -138,14 +143,16 @@ public class BuffBuyItemService {
                 //创建订单
                 createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
                 //支付订单
-                payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+                PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
 
-                //然卖家发货
-                askSellerToSendOffer(buyItems.getId(),String.valueOf(buyItems.getGoods_id()));
+                //卖家报价
+                askSellerToSendOffer(payBillRepData.getId(),String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
                     log.info("商品购买完成");
                     break;
                 }
+
+                // 230524T0364404819
             }
         }
 
@@ -159,20 +166,28 @@ public class BuffBuyItemService {
         String referer = "https://buff.163.com/goods/#?from=market".replace("#", goodsId);
         HttpHeaders headers1 = new HttpHeaders() {{
             //buff支付订单添加请求头
-            set("X-CSRFToken", "IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw");
-            set("Cookie", "Device-Id=gWuF5A6BKxVnJNmFrnkt; csrf_token=IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw; Locale-Supported=zh-Hans; game=csgo; session=1-uSYsxebCWGxk1doSRtnwsrMO4OaAJ6lM47T6LOjN9dQb2030407391");
             set("Referer", referer);
         }};
+        headers1.add("Cookie", BuffConfig.buffCookie);
+        for (String one : BuffConfig.buffCookie.split(";")) {
+            if ("csrf_token".equals(one.split("=")[0].trim())) {
+                headers1.add("X-CSRFToken", one.split("=")[1].trim());
+            }
+        }
         HashMap<String, Object> whereMap = new HashMap();
         List<String> bill_orders = new ArrayList() {{
-            add(bill_orderId);
+            add(bill_orderId);// 230524T0364391346
         }};
         whereMap.put("bill_orders", bill_orders);
         whereMap.put("game", "csgo");
+        System.out.println(JSONObject.toJSONString(whereMap));
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
         BuffConfig.syncCookie();
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
-        System.out.println("123123");
+        if (responseEntity1.getStatusCode().value()  != 200){
+            log.error("让卖家发送报价失败");
+        }
+        log.info("让卖家报价返回的数据：" + responseEntity1.getBody());
     }
 
     /**
