@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -75,151 +73,11 @@ public class ItemGoodsService {
     @Autowired
     SellSteamProfitRepository sellSteamProfitRepository;
 
-    //总页数
-    Integer pageCount = 1;
-
-
-    /**
-     * 拉取csgo商品列表
-     */
-    public void pullItmeGoods() {
-
-
-        executorService.execute(()->{
-            int pageIndex = 1;
-            while (pageCount >= pageIndex) {
-
-                pageIndex = pullOnePage(pageIndex);
-                pageIndex++;
-                System.out.println("正在查询的页数：" + pageIndex);
-                try {
-                    Thread.sleep(1000 * 3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-//        pullHistoryPrice();
-    }
-
-
-    @Transactional(rollbackFor = Exception.class)
-    public Integer pullOnePage(int pageNum) {
-        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + pageNum + "&use_suggestion=0&_=1684057330094&page_size=80";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
-
-        if (responseEntity.getStatusCode().value() == 302) {
-            atomicInteger.addAndGet(1);
-            if (atomicInteger.get() > 5) {
-                return pageNum;
-            }
-            pullOnePage(pageNum);
-        }
-        ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
-        //获取最新页数
-        pageCount = productList.getData().getTotal_page();
-        List<ItemGoods> itemGoodsList = productList.getData().getItems();
-
-        for (ItemGoods itemGoods : itemGoodsList) {
-            saveItem(itemGoods);
-        }
-
-        return pageNum;
-    }
 
 
 
 
 
-
-
-
-
-    @Async
-    public void saveItem(ItemGoods itemGoods) {
-        itemRepository.save(itemGoods);
-        saveSellBuffProfitEntity(itemGoods);
-        saveSellSteamProfit(itemGoods);
-        Goods_info goods_info = itemGoods.getGoods_info();
-        goods_info.setItem_id(itemGoods.getId());
-        goodsInfoRepository.save(goods_info);
-        Tags tags = goods_info.getInfo().getTags();
-        saveTags(tags, itemGoods.getId());
-    }
-
-    /**
-     * 保存推荐在steam购买的记录
-     */
-    @Async
-    public void saveSellBuffProfitEntity(ItemGoods itemGoods) {
-        SellBuffProfitEntity sellBuffProfitEntity = new SellBuffProfitEntity();
-        sellBuffProfitEntity.setItem_id(itemGoods.getId());
-        sellBuffProfitEntity.setName(itemGoods.getName());
-        sellBuffProfitEntity.setSteam_price_cny(itemGoods.getGoods_info().getSteam_price_cny());
-        ;
-        //购买成本
-        double profit = Double.parseDouble(sellBuffProfitEntity.getSteam_price_cny()) * 1.15 * 0.85;
-        sellBuffProfitEntity.setIn_fact_steam_price_cny(String.format("%.3f", profit));
-        sellBuffProfitEntity.setSell_min_price(itemGoods.getSell_min_price());
-        sellBuffProfitEntity.setQuick_price(itemGoods.getQuick_price());
-        sellBuffProfitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
-        double interest = Double.parseDouble(sellBuffProfitEntity.getSell_min_price())
-                - Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny());
-        double interest_rate = (interest / Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny()) * 100);
-        sellBuffProfitEntity.setInterest_rate(String.format("%.3f", interest_rate));
-        Boolean flag = false;
-        if (3.0f < interest_rate) {
-            //在buff售卖，利率超过3%
-            flag = true;
-        }
-        if (flag) {
-            sellBuffProfitRepository.save(sellBuffProfitEntity);
-        }
-    }
-
-    /**
-     * 保存在steam售卖的购买记录
-     */
-    @Async
-    public void saveSellSteamProfit(ItemGoods itemGoods) {
-        SellSteamProfitEntity entity = new SellSteamProfitEntity();
-        entity.setItem_id(itemGoods.getId());
-        entity.setName(itemGoods.getName());
-        entity.setBuff_price(itemGoods.getSell_min_price());
-        entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());
-        entity.setSell_num(itemGoods.getSell_num());
-        //税后价格
-        double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
-                0.85;
-        entity.setIn_fact_sell_steam_price(String.format("%.3f", in_fact_price));
-        //buff购买价格
-        double buff_price = Double.parseDouble(entity.getBuff_price()) * 1.025;
-        entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
-        if (0.83 > buff_price / in_fact_price) {
-            sellSteamProfitRepository.save(entity);
-        }
-    }
-
-
-    @Async
-    public void saveTags(Tags tags, long item_id) {
-        String tagsStr = JSON.toJSONString(tags);
-        HashMap<String, JSONObject> tagsHash = JSON.parseObject(tagsStr, HashMap.class);
-        tagsHash.entrySet().parallelStream().forEach(entry -> {
-            String tagStr = JSONObject.toJSONString(entry.getValue());
-            Tag tag = JSONObject.parseObject(tagStr, Tag.class);
-            tag.setItem_id(item_id);
-            try {
-                tagRepository.save(tag);
-
-            } catch (Exception e) {
-                System.out.println("12312");
-                throw e;
-            }
-        });
-    }
 
     public void pullHistoryPrice() {
         //

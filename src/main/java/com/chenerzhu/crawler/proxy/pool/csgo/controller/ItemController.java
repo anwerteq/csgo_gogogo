@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.controller;
 
+import com.chenerzhu.crawler.proxy.pool.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.pool.controller.BaseController;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService;
@@ -47,14 +48,16 @@ public class ItemController extends BaseController {
     @Autowired
     ProxyUtils proxyUtils;
 
+    @Autowired
+    PullItemService pullItemService;
+
     /**
      * 拉取商品简要信息
      */
     @RequestMapping("pullItmeGoods")
     @ResponseBody
     public void pullItem() {
-        itemGoodsService.pullItmeGoods();
-
+        pullItemService.pullItmeGoods();
     }
 
 
