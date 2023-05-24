@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.csgo.service;
+package com.chenerzhu.crawler.proxy.pool.steam.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.AssetDescription;
@@ -6,7 +6,6 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamItemRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamtDescriptionRepository;
-import com.chenerzhu.crawler.proxy.pool.thread.ThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,14 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * steam服务实体类
@@ -32,7 +28,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class SteamItemService {
 
-    static AtomicInteger atomicInteger = new AtomicInteger();
 
     @Autowired
     RestTemplate restTemplate;
@@ -43,46 +38,37 @@ public class SteamItemService {
     @Autowired
     SteamtDescriptionRepository descriptionRepository;
 
-    private volatile static ExecutorService executorService = Executors.newFixedThreadPool(3, new ThreadFactory("crawlerJob-consumer"));
+    ExecutorService executorService = Executors.newFixedThreadPool(1);
 
-    int searchPagecount = 0;
 
     public void pullItems() {
-        int start = 0;
-        //调用第一次，拿总条数
-        pullItem(start);
-        int pageNo = searchPagecount / 100;
-        List<Integer> pageNoList = new ArrayList<>();
-        for (int i = 1; i <= pageNo; i++) {
-            pageNoList.add(i);
-        }
-        pageNoList.forEach(pageIndex -> executorService.execute(() -> {
-            pullItem(pageIndex);
-        }));
+        executorService.execute(() -> {
+            int page_index = 0;
+            while (pullItem(page_index)) {
+
+            }
+        });
     }
 
     /**
      * 拉取具体一页数据
      *
-     * @param start
+     * @param page_index
      * @return
      */
-    public int pullItem(int start) {
-        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
-        ResponseEntity<String> responseEntity = restTemplate.exchange(itemUrl, HttpMethod.GET, getHttpEntity(), String.class);
+    public boolean pullItem(int page_index) {
+        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + page_index;
+        ResponseEntity<String> responseEntity = restTemplate.exchange(itemUrl, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
-            atomicInteger.addAndGet(1);
-            if (atomicInteger.get() > 5) {
-                return start;
-            }
+            return true;
         }
-        atomicInteger.set(0);
         SteamSearchdata steamSearchdata = JSONObject.parseObject(responseEntity.getBody(), SteamSearchdata.class);
-        searchPagecount = steamSearchdata.getTotal_count();
-        List<SteamItem> results = steamSearchdata.getResults();
-        saveSteamItems(results);
-        log.info("查询的页数：" + start);
-        return 0;
+        saveSteamItems(steamSearchdata.getResults());
+        log.info("查询的页数：" + page_index);
+        if (page_index >= steamSearchdata.getTotal_count()) {
+            return false;
+        }
+        return true;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -100,10 +86,4 @@ public class SteamItemService {
         descriptionRepository.save(assetDescription);
     }
 
-    public HttpEntity<MultiValueMap<String, String>> getHttpEntity() {
-        HttpHeaders headers1 = new HttpHeaders();
-
-        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity<>(headers1);
-        return entity1;
-    }
 }
