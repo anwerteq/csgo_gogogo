@@ -47,6 +47,7 @@ public class BuffBuyItemService {
         //get请求
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
+        log.info("商品id:"+goods_id);
         ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffCreateBillRoot.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("创建订单接口调用失败");
@@ -125,6 +126,10 @@ public class BuffBuyItemService {
             }
             num = 1;
             for (BuffBuyItems buyItems : responseEntity.getBody().getData().getItems()) {
+                //单件商品大于10的 跳过
+                if (Double.parseDouble(buyItems.getPrice()) >= 10){
+                    break;
+                }
                 //不支持支付宝跳过
                 if (!buyItems.getSupported_pay_methods().contains(3)){
                     continue;
@@ -136,7 +141,7 @@ public class BuffBuyItemService {
                 payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
 
                 //然卖家发货
-                askSellerToSendOffer(buyItems.getId(),String.valueOf(buyItems.getGoods_id()));
+//                askSellerToSendOffer(buyItems.getId(),String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
                     log.info("商品购买完成");
                     break;
