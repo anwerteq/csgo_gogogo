@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam.controller;
 
 import com.chenerzhu.crawler.proxy.steam.service.GroundingService;
+import com.chenerzhu.crawler.proxy.steam.service.RemovelistingService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,9 @@ public class SteamController {
     @Autowired
     SteamItemService steamItemService;
 
+    @Autowired
+    RemovelistingService removelistingService;
+
     /**
      * 上架商品接口
      */
@@ -36,6 +40,17 @@ public class SteamController {
     @ResponseBody
     public void pullSteamItems() {
         steamItemService.pullItems();
+    }
+
+
+
+    /**
+     * 拉取商品的历史记录
+     */
+    @RequestMapping("unlistingBlock")
+    @ResponseBody
+    public void unlistingBlock() {
+        removelistingService.unlisting();
     }
 
 }
