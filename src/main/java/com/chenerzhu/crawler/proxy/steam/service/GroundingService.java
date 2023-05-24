@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.InventoryRootBean;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
@@ -32,19 +33,12 @@ public class GroundingService {
         //获取库存
         InventoryRootBean inventoryRootBean = getSteamInventory();
         //获取商品类的价格信息集合
-        List<PriceVerviewRoot> priceVerviewRoots = inventoryRootBean.getDescriptions().stream().map(description -> {
+        inventoryRootBean.getDescriptions().stream().forEach(description -> {
             PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
             priceVerview.setClassid(description.getClassid());
-            return priceVerview;
-        }).collect(Collectors.toList());
-        //根据库存 商品类信息 上架
-        inventoryRootBean.getAssets().forEach(asset -> {
-            //查找该类的推荐价格
-            PriceVerviewRoot pricePo = priceVerviewRoots.stream().filter(pricePo1 -> asset.getClassid().equals(pricePo1.getClassid())).findFirst().get();
-            if (pricePo == null) {
-                return;
-            }
-            saleItem(asset.getAssetid(), pricePo.getLowest_price(), asset.getAmount());
+            Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
+            saleItem(assets.getAssetid(), priceVerview.getLowest_price(), assets.getAmount());
+            log.info("steam商品上架完成:"+ priceVerview.getClassid());
         });
         log.info("steam全部商品上架完成");
     }

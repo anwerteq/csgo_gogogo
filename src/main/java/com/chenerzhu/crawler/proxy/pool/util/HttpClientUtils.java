@@ -141,6 +141,11 @@ public class HttpClientUtils {
             log.error("Network error", e);
         } finally {
             try {
+                log.info(EntityUtils.toString(httpResponse.getEntity(), resultCharset));
+            } catch (IOException e) {
+                log.info(e.getMessage());
+            }
+            try {
                 if (httpClient != null) {
                     httpClient.close();
                 }

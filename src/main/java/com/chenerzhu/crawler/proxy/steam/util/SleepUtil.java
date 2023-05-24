@@ -7,7 +7,7 @@ public class SleepUtil {
 
     public static void sleep(){
         try {
-            Thread.sleep(400);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
