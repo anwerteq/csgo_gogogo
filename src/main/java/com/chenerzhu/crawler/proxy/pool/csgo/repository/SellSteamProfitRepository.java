@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface SellSteamProfitRepository extends JpaRepository<SellSteamProfitEntity, Long> {
 
-    @Query(value = "select * from sell_steam_profit where sell_num > 20 and buff_price < '50'  and buff_price > '0.1'  and interest_rate < '0.75' ORDER BY interest_rate", nativeQuery = true)
+    @Query(value = "select * from sell_steam_profit where sell_num > 20 and buff_price < '50'  and buff_price > '0.1'  and interest_rate < '0.73' ORDER BY interest_rate", nativeQuery = true)
     List<SellSteamProfitEntity> selectOrderAsc();
 
 }

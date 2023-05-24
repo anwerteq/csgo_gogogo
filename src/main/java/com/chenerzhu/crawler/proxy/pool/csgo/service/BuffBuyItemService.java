@@ -18,6 +18,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,11 +45,6 @@ public class BuffBuyItemService {
      * @param price:销售价格         //allow_tradable_cooldown：是否可以否定（0：是，1：否）,cdkey_id： _:时间戳
      */
     public void createBill(String sell_order_id, int goods_id, String price) {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         //get请求
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
@@ -114,6 +110,7 @@ public class BuffBuyItemService {
     public void buffSellOrder(String goods_id, int num) {
 
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.selectOrderAsc();
+        Collections.shuffle(select);
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
             //获取该商品售卖的列表信息
@@ -144,7 +141,7 @@ public class BuffBuyItemService {
                 payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
 
                 //然卖家发货
-//                askSellerToSendOffer(buyItems.getId(),String.valueOf(buyItems.getGoods_id()));
+                askSellerToSendOffer(buyItems.getId(),String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
                     log.info("商品购买完成");
                     break;
