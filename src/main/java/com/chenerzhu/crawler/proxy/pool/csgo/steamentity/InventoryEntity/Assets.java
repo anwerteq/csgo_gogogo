@@ -9,6 +9,10 @@ package com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity;
  * @author json.cn (i@json.cn)
  * @website http://www.json.cn/java2pojo/
  */
+
+/**
+ * 库存商品类信息
+ */
 public class Assets {
 
     private int appid;
