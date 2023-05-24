@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * buff利率服务
  */
@@ -42,6 +44,7 @@ public class ProfitService {
                 - Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny());
         double interest_rate = (interest / Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny()) * 100);
         sellBuffProfitEntity.setInterest_rate(String.format("%.3f", interest_rate));
+        sellBuffProfitEntity.setUp_date(new Date());
         Boolean flag = false;
         if (3.0f < interest_rate) {
             //在buff售卖，利率超过3%
@@ -71,7 +74,8 @@ public class ProfitService {
         //buff购买价格
         double buff_price = Double.parseDouble(entity.getBuff_price()) * 1.025;
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
-        if (0.83 > buff_price / in_fact_price) {
+        entity.setUp_date(new Date());
+        if (0.80 > buff_price / in_fact_price) {
             sellSteamProfitRepository.save(entity);
         }
     }

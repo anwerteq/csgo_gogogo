@@ -1,13 +1,12 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.profitentity;
 
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPriceHistoryPk;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * 在buff上售卖
@@ -34,4 +33,6 @@ public class SellBuffProfitEntity {
     String sell_num;
     //利率%
     private String interest_rate;
+
+    private Date up_date;
 }

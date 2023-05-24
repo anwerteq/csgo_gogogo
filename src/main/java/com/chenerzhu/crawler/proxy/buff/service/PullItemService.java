@@ -41,7 +41,7 @@ public class PullItemService {
 
 
     /**
-     * 拉取csgo商品列表
+     * 拉取buff商品列表
      */
     public void pullItmeGoods() {
         executorService.execute(() -> {
@@ -65,8 +65,10 @@ public class PullItemService {
             return false;
         }
         ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
+
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
         itemGoodsList.forEach(this::saveItem);
+        log.info("拉取完，第："+ pageNum);
         //是否是最后一页
         if (pageNum >= productList.getData().getTotal_page()) {
             return false;
@@ -91,7 +93,7 @@ public class PullItemService {
         goods_info.setItem_id(itemGoods.getId());
         goodsInfoRepository.save(goods_info);
         Tags tags = goods_info.getInfo().getTags();
-        tagService.saveTags(tags, itemGoods.getId());
+       // tagService.saveTags(tags, itemGoods.getId());
     }
 
 

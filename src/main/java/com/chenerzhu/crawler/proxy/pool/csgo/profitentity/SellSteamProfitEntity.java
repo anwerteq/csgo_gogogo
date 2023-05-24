@@ -6,6 +6,7 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * 在steam上售卖
@@ -33,4 +34,6 @@ public class SellSteamProfitEntity {
     long sell_num;
     //折扣%
     private String interest_rate;
+
+    private Date up_date;
 }
