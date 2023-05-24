@@ -17,6 +17,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -26,21 +28,26 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GroundingService {
 
+    ExecutorService executorService = Executors.newFixedThreadPool(1);
+
     /**
      * steam上架操作逻辑
      */
     public void productListingOperation() {
-        //获取库存
-        InventoryRootBean inventoryRootBean = getSteamInventory();
-        //获取商品类的价格信息集合
-        inventoryRootBean.getDescriptions().stream().forEach(description -> {
-            PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
-            priceVerview.setClassid(description.getClassid());
-            Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
-            saleItem(assets.getAssetid(), priceVerview.getLowest_price(), assets.getAmount());
-            log.info("steam商品上架完成:"+ priceVerview.getClassid());
+        executorService.execute(()->{
+            //获取库存
+            InventoryRootBean inventoryRootBean = getSteamInventory();
+            //获取商品类的价格信息集合
+            inventoryRootBean.getDescriptions().stream().forEach(description -> {
+                PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
+                priceVerview.setClassid(description.getClassid());
+                Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
+                saleItem(assets.getAssetid(), priceVerview.getLowest_price(), assets.getAmount());
+                log.info("steam商品上架完成:"+ priceVerview.getClassid());
+            });
+            log.info("steam全部商品上架完成");
         });
-        log.info("steam全部商品上架完成");
+
     }
 
     /**
@@ -48,7 +55,7 @@ public class GroundingService {
      */
     private InventoryRootBean getSteamInventory() {
         SleepUtil.sleep();
-        String url = "https://steamcommunity.com/inventory/76561199351185401/730/2?l=schinese&count=75&market=1";
+        String url = "https://steamcommunity.com/inventory/76561199351185401/730/2?l=schinese&count=100&market=1";
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取steam库存失败");
