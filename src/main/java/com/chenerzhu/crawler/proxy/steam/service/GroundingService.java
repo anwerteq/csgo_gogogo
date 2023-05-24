@@ -116,7 +116,7 @@ public class GroundingService {
         paramerMap.put("contextid", "2");
         paramerMap.put("assetid", assetid);
         paramerMap.put("amount", amount);
-        paramerMap.put("price", String.valueOf(priceCount));
+        paramerMap.put("price", String.valueOf(priceCount-1));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
         System.out.println("1231231");
     }
