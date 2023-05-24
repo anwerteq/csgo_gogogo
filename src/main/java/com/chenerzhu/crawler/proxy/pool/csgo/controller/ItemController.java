@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.controller;
 
+import com.chenerzhu.crawler.proxy.pool.buff.service.PullHistoryService;
 import com.chenerzhu.crawler.proxy.pool.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.pool.controller.BaseController;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
@@ -51,6 +52,9 @@ public class ItemController extends BaseController {
     @Autowired
     PullItemService pullItemService;
 
+    @Autowired
+    PullHistoryService pullHistoryService;
+
     /**
      * 拉取商品简要信息
      */
@@ -62,24 +66,12 @@ public class ItemController extends BaseController {
 
 
     /**
-     * 拉取商品的历史记录
+     * 拉取商品的历史交易价格
      */
     @RequestMapping("pullHistoryPrice")
     @ResponseBody
     public void pullHistoryPrice() {
-        Boolean flag = true;
-        while (flag) {
-            try {
-                itemGoodsService.pullHistoryPrice();
-                flag=false;
-            }catch (Exception e){
-                try {
-                    Thread.sleep(5 * 1000 * 60);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-            }
-        }
+        pullHistoryService.pullHistoryPrice();
     }
 
 
@@ -92,16 +84,6 @@ public class ItemController extends BaseController {
         steamItemService.pullItems();
     }
 
-
-    /**
-     * 拉取商品的历史记录
-     */
-    @RequestMapping("selectHistory1")
-    @ResponseBody
-    public Page selectHistory1() {
-        return   itemGoodsService.selectHistory1();
-
-    }
 
 
     /**
