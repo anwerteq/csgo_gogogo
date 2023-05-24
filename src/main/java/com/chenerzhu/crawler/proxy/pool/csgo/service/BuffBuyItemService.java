@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService.getHttpEntity;
 import static com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService.syncCookie;
 
 /**
@@ -59,7 +58,7 @@ public class BuffBuyItemService {
         //get请求
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
-        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), BuffCreateBillRoot.class);
+        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), BuffCreateBillRoot.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("创建订单接口调用失败");
         }
@@ -86,6 +85,13 @@ public class BuffBuyItemService {
             set("Cookie", "Device-Id=gWuF5A6BKxVnJNmFrnkt; csrf_token=IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw; Locale-Supported=zh-Hans; game=csgo; session=1-uSYsxebCWGxk1doSRtnwsrMO4OaAJ6lM47T6LOjN9dQb2030407391");
             set("Referer", "https://buff.163.com/goods/903822?from=market");
         }};
+        headers1.add("Cookie", ItemGoodsService.buffCookie);
+        for (String one : ItemGoodsService.buffCookie.split(";")) {
+            if ("X-CSRFToken".equals(one.split("=")[0].trim())){
+                headers1.add("X-CSRFToken", one.split("=")[1].trim());
+            }
+        }
+
         HashMap<String, Object> whereMap = new HashMap();
         whereMap.put("game", "csgo");
         whereMap.put("goods_id", goods_id);
@@ -101,14 +107,9 @@ public class BuffBuyItemService {
         System.out.println(JSONObject.toJSONString(whereMap));
         String url = "https://buff.163.com/api/market/goods/buy";
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
-        BuffPayBillRoot responseEntity = new BuffPayBillRoot();
         if (responseEntity1.getStatusCode().value() != 200) {
             throw new ArithmeticException("支付接口调用失败");
         }
-//        BuffPayBillRoot body = responseEntity.get();
-//        if (!"OK".equals(body.getCode())) {
-//            throw new ArithmeticException("支付接口调用异常");
-//        }
         log.info("buff订单支付成功");
     }
 
@@ -120,14 +121,14 @@ public class BuffBuyItemService {
      */
     public void buffSellOrder(String goods_id, int num) {
 
-        List<SellSteamProfitEntity> select = sellSteamProfitRepository.select();
+        List<SellSteamProfitEntity> select = sellSteamProfitRepository.selectOrderAsc();
         select = select.subList(0,1);
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
             //获取该商品售卖的列表信息
             String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
                     "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
-            ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), BuffBuyRoot.class);
+            ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), BuffBuyRoot.class);
             if (responseEntity.getStatusCode().value() != 200) {
                 throw new ArithmeticException("查询接口调用失败");
             }
@@ -193,7 +194,7 @@ public class BuffBuyItemService {
         String url = "https://buff.163.com/api/message/notification?_=" + System.currentTimeMillis();
 
         while (true) {
-            ResponseEntity<ConfirmDendingRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), ConfirmDendingRoot.class);
+            ResponseEntity<ConfirmDendingRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), ConfirmDendingRoot.class);
             int csgo = responseEntity.getBody().getData().getTo_deliver_order().getCsgo();
             if (csgo != 0) {
 //   // https://buff.163.com/api/market/goods/recommendation
@@ -218,7 +219,7 @@ public class BuffBuyItemService {
             e.printStackTrace();
         }
         String url = "https://buff.163.com/api/market/steam_trade";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), String.class);
         System.out.println("getSteamTrade:" + responseEntity.getBody());
         System.out.println("123123");
         try {
@@ -235,7 +236,7 @@ public class BuffBuyItemService {
      */
     public void getToDeliver() {
         String url = "https://buff.163.com/api/market/sell_order/to_deliver?game=csgo&appid=730";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), String.class);
         System.out.println("getToDeliver:" + responseEntity.getBody());
 
     }
@@ -243,7 +244,7 @@ public class BuffBuyItemService {
 
     public void getBuyOrder() {
         String url = "https://buff.163.com/api/market/buy_order/history?page_num=1&page_size=200&state=trading&game=csgo&appid=730";
-        ResponseEntity<BuyOrderHistoryRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), BuyOrderHistoryRoot.class);
+        ResponseEntity<BuyOrderHistoryRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), BuyOrderHistoryRoot.class);
         List<BuyOrderHistoryData> dataList = responseEntity.getBody().getData();
         if (dataList.isEmpty()) {
             //没有需要确认发货的数据
@@ -329,9 +330,9 @@ public class BuffBuyItemService {
             price = price.replace("$", "");
             priceCount = new BigDecimal(100 * Double.parseDouble(price) * 0.85).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
         }
-        Boolean flag = false;
+        Boolean flag = true;
         if (priceCount == null) {
-            flag = true;
+            flag = false;
         }
         if (flag) {
             throw new ArithmeticException("参数异常");
@@ -349,7 +350,7 @@ public class BuffBuyItemService {
         paramerMap.put("contextid", "2");
         paramerMap.put("assetid", assetid);
         paramerMap.put("amount", "1");
-        paramerMap.put("price", String.valueOf(priceCount));
+        paramerMap.put("price", price);
 //        ItemController.getContent("https://steamcommunity.com/market/sellitem",paramerMap);
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
 
@@ -373,7 +374,7 @@ public class BuffBuyItemService {
             put("X-Requested-With", "XMLHttpRequest");
             put("Connection", "keep-alive");
             put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
-            put("Cookie", "sessionid=738dc9f7afd74bef14c8ad21; timezoneOffset=28800,0; _ga=GA1.2.1844427038.1683893075; browserid=2790587293957642904; _gid=GA1.2.405450854.1684580346; Steam_Language=schinese; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684630093%7D; strInventoryLastContext=730_2; steamCountry=JP%7C2fccff9f399252ee7aba930e64e24777; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQxOV8yMjhEQTc5OV8wMjY5MiIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDkyOTM5NywgIm5iZiI6IDE2NzYyMDE2NjIsICJpYXQiOiAxNjg0ODQxNjYyLCAianRpIjogIjEyMTNfMjI4RUVDMEVfNjdDQjciLCAib2F0IjogMTY4NDYzMDAzOCwgInJ0X2V4cCI6IDE3MDI5OTc0MjAsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxNjMuMTIzLjE5Mi41MyIsICJpcF9jb25maXJtZXIiOiAiMTYzLjEyMy4xOTIuNTMiIH0.uWiZtkmOnhCR8ljo0R5-nZgWRdqj6U7jn5OE_RxWJbOA3QmF0OvVCXiwfzpE65M78fOZekWi_ZzAiK0WnGc8BA");
+            put("Cookie", "sessionid=738dc9f7afd74bef14c8ad21; timezoneOffset=28800,0; _ga=GA1.2.1844427038.1683893075; browserid=2790587293957642904; _gid=GA1.2.405450854.1684580346; Steam_Language=schinese; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684630093%7D; steamCountry=SG%7Cc1cc23a87a2277eaec0480c89ac5e115; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQxOV8yMjhEQTc5OV8wMjY5MiIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDgxMzQyMiwgIm5iZiI6IDE2NzYwODYyOTcsICJpYXQiOiAxNjg0NzI2Mjk3LCAianRpIjogIjEyMTNfMjI4RUVCQ0JfNTZDN0EiLCAib2F0IjogMTY4NDYzMDAzOCwgInJ0X2V4cCI6IDE3MDI5OTc0MjAsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxNjMuMTIzLjE5Mi41MyIsICJpcF9jb25maXJtZXIiOiAiMTYzLjEyMy4xOTIuNTMiIH0.smiGCe23gypnGRQqDyEPH1uGh_orNaTaLk8TU4ZMOc5qXEF7too9Gmuth78I22iEhj4phUF5F7ZyoNWPDT6pBw; strInventoryLastContext=730_2");
             put("Sec-Fetch-Dest", "empty");
             put("Sec-Fetch-Mode", "cors");
             put("Sec-Fetch-Site", "same-origin");
@@ -389,7 +390,7 @@ public class BuffBuyItemService {
     public static Map<String, String> getSaleHeader() {
         Map<String, String> headers1 = new HashMap() {
             {
-                put("Cookie", "sessionid=738dc9f7afd74bef14c8ad21; timezoneOffset=28800,0; _ga=GA1.2.1844427038.1683893075; browserid=2790587293957642904; _gid=GA1.2.405450854.1684580346; Steam_Language=schinese; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684630093%7D; strInventoryLastContext=730_2; steamCountry=JP%7C2fccff9f399252ee7aba930e64e24777; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQxOV8yMjhEQTc5OV8wMjY5MiIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDkyOTM5NywgIm5iZiI6IDE2NzYyMDE2NjIsICJpYXQiOiAxNjg0ODQxNjYyLCAianRpIjogIjEyMTNfMjI4RUVDMEVfNjdDQjciLCAib2F0IjogMTY4NDYzMDAzOCwgInJ0X2V4cCI6IDE3MDI5OTc0MjAsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxNjMuMTIzLjE5Mi41MyIsICJpcF9jb25maXJtZXIiOiAiMTYzLjEyMy4xOTIuNTMiIH0.uWiZtkmOnhCR8ljo0R5-nZgWRdqj6U7jn5OE_RxWJbOA3QmF0OvVCXiwfzpE65M78fOZekWi_ZzAiK0WnGc8BA");
+                put("Cookie", "timezoneOffset=28800,0; browserid=2911058493333424353; steamLoginSecure=76561199351185401%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyRl8yMjhEQTdDRV9GQ0M4NCIsICJzdWIiOiAiNzY1NjExOTkzNTExODU0MDEiLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY4NDkwMTY4OCwgIm5iZiI6IDE2NzYxNzQwNTAsICJpYXQiOiAxNjg0ODE0MDUwLCAianRpIjogIjEyMTNfMjI4RUVCRkRfQUEzQTYiLCAib2F0IjogMTY4NDcyNTAwOSwgInJ0X2V4cCI6IDE3MDI5MjkwMjEsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIzLjEuODUuMjA4IiwgImlwX2NvbmZpcm1lciI6ICIzLjEuODUuMjA4IiB9.pjdxS7Zl4fFdKaMEUnfY8sYKWHbeOb4MZjvuipmGwcaZisMSpcK39RuaADuZT0DO7KqC3vhkVcy2I9_Zdw91CQ; strInventoryLastContext=730_2; sessionid=6ae449625751c147d2e777d9; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1684816201%7D");
                 put("Accept-Language", "zh-CN,zh;q=0.9");
                 put("Content-Type", "application/x-www-form-urlencoded");
                 put("Host", "steamcommunity.com");
