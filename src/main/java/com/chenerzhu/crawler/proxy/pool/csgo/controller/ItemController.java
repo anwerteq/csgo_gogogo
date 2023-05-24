@@ -120,59 +120,9 @@ public class ItemController extends BaseController {
     @ResponseBody
     public String  test() {
 //        buffBuyItemService.saleItem("1","1");/
-        buffBuyItemService.getSteamInventory();
         return  "";
 
     }
 
-    public static String getContent(String url, Map<String, String> mapdata) {
-        CloseableHttpResponse response = null;
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        // 创建httppost
-        HttpPost httpPost = new HttpPost(url);
-        try {
-            // 设置提交方式
-            for (Map.Entry<String, String> entry : BuffBuyItemService.getSaleHeader().entrySet()) {
-                httpPost.addHeader(entry.getKey(),entry.getValue());
-            }
-            httpPost.addHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
-            // 添加参数
-            List<NameValuePair> nameValuePairs = new ArrayList<>();
-            if (mapdata.size() != 0) {
-                // 将mapdata中的key存在set集合中，通过迭代器取出所有的key，再获取每一个键对应的值
-                Set keySet = mapdata.keySet();
-                Iterator it = keySet.iterator();
-                while (it.hasNext()) {
-                    String k =  it.next().toString();// key
-                    String v = mapdata.get(k);// value
-                    nameValuePairs.add(new BasicNameValuePair(k, v));
-                }
-            }
-            httpPost.setEntity( new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
-            // 执行http请求
-            response = httpClient.execute(httpPost);
-            // 获得http响应体
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                // 响应的结果
-                String content = EntityUtils.toString(entity, "UTF-8");
-                return content;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "获取数据错误";
-    }
-
-    public static void main(String[] args) {
-        Map<String, String> paramerMap = new HashMap<>();
-        paramerMap.put("sessionid", "6ae449625751c147d2e777d9");
-        paramerMap.put("appid", "730");
-        paramerMap.put("contextid", "2");
-        paramerMap.put("assetid", "30483593352");
-        paramerMap.put("amount", "1");
-        paramerMap.put("price", "25");
-        getContent("https://steamcommunity.com/market/sellitem?",paramerMap);
-    }
 
 }
