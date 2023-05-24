@@ -126,6 +126,10 @@ public class BuffBuyItemService {
             }
             num = 1;
             for (BuffBuyItems buyItems : responseEntity.getBody().getData().getItems()) {
+                //不支持支付宝跳过
+                if (!buyItems.getSupported_pay_methods().contains("3")){
+                    continue;
+                }
                 num--;
                 //创建订单
                 createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());

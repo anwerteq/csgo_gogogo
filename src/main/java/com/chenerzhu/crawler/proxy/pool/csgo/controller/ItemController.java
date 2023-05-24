@@ -57,14 +57,6 @@ public class ItemController extends BaseController {
     }
 
 
-    /**
-     * 购买buff中的商品
-     */
-    @RequestMapping("buffBuyItems")
-    @ResponseBody
-    public void buffBuyItems() {
-        buffBuyItemService.buffSellOrder("903822", 1);
-        System.out.println("t推出接口调用");
-    }
+
 
 }
