@@ -31,7 +31,7 @@ public class RemovelistingService {
 
         Element marketListingsRows = parse.getElementById("tabContentsMyActiveMarketListingsRows");
         //下架，已经上架的商品
-//        parseActiveMarketList(marketListingsRows);
+        parseActiveMarketList(marketListingsRows);
         Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
         //取消需要审核的商品
         parseMarkBlockList(market_content_block);
@@ -49,8 +49,8 @@ public class RemovelistingService {
                 continue;
             }
             removeList(id.split("_")[1]);
-
         }
+        log.info("最早上架的十个商品，已经取消");
     }
 
     /**
@@ -65,7 +65,7 @@ public class RemovelistingService {
             }
             removeList(id.split("_")[1]);
         }
-
+        log.info("被锁的商品，已经全部取消");
     }
 
     public void getMylistings(){
@@ -82,6 +82,5 @@ public class RemovelistingService {
             }
         }
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-        log.info("被锁的商品，已经全部取消");
     }
 }

@@ -1,5 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam;
 
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ public class SteamConfig {
             put("Host", "steamcommunity.com");
             put("Referer", "https://steamcommunity.com/profiles/76561199351185401/inventory?modal=1&market=1");
         }};
+        SleepUtil.sleep(550);
         return headers1;
     }
 
