@@ -47,7 +47,7 @@ public class BuffBuyItemService {
         //get请求
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
-        log.info("商品id:"+goods_id);
+        log.info("商品id:" + goods_id);
         ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffCreateBillRoot.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("创建订单接口调用失败");
@@ -71,13 +71,11 @@ public class BuffBuyItemService {
     public void payBill(String sell_order_id, int goods_id, String price) {
         HttpHeaders headers1 = new HttpHeaders() {{
             //buff支付订单添加请求头
-            set("X-CSRFToken", "IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw");
-            set("Cookie", "Device-Id=gWuF5A6BKxVnJNmFrnkt; csrf_token=IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw; Locale-Supported=zh-Hans; game=csgo; session=1-uSYsxebCWGxk1doSRtnwsrMO4OaAJ6lM47T6LOjN9dQb2030407391");
             set("Referer", "https://buff.163.com/goods/903822?from=market");
         }};
         headers1.add("Cookie", BuffConfig.buffCookie);
         for (String one : BuffConfig.buffCookie.split(";")) {
-            if ("X-CSRFToken".equals(one.split("=")[0].trim())){
+            if ("csrf_token".equals(one.split("=")[0].trim())) {
                 headers1.add("X-CSRFToken", one.split("=")[1].trim());
             }
         }
@@ -127,11 +125,11 @@ public class BuffBuyItemService {
             num = 1;
             for (BuffBuyItems buyItems : responseEntity.getBody().getData().getItems()) {
                 //单件商品大于10的 跳过
-                if (Double.parseDouble(buyItems.getPrice()) >= 10){
+                if (Double.parseDouble(buyItems.getPrice()) >= 10) {
                     break;
                 }
                 //不支持支付宝跳过
-                if (!buyItems.getSupported_pay_methods().contains(3)){
+                if (!buyItems.getSupported_pay_methods().contains(3)) {
                     continue;
                 }
                 num--;
@@ -156,7 +154,7 @@ public class BuffBuyItemService {
      */
     public void askSellerToSendOffer(String bill_orderId, String goodsId) {
         String url = "https://buff.163.com/api/market/bill_order/ask_seller_to_send_offer";
-        String referer = "https://buff.163.com/goods/#?from=market".replace("#",goodsId);
+        String referer = "https://buff.163.com/goods/#?from=market".replace("#", goodsId);
         HttpHeaders headers1 = new HttpHeaders() {{
             //buff支付订单添加请求头
             set("X-CSRFToken", "IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw");
@@ -170,10 +168,11 @@ public class BuffBuyItemService {
         whereMap.put("bill_orders", bill_orders);
         whereMap.put("game", "csgo");
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
-        BuffConfig. syncCookie();
+        BuffConfig.syncCookie();
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
         System.out.println("123123");
     }
+
     /**
      * 主动报价：确定交易
      */

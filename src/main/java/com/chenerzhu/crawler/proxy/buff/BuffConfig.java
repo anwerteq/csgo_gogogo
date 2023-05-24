@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class BuffConfig {
 
-   public static String buffCookie = "Locale-Supported=zh-Hans; game=csgo; session=1-EFxKl8WSH7Hp6jieYLt_s4vQuTIoCX1yIPE4TVJccjZT2030407391; csrf_token=IjIxZGIxNDRiYmY0ZTBjNmJjMTk0OTY4MmM4ZmMzZmQ1NGYxMzAyNjEi.F09LwQ.d9opFeH-bNnnkZhx3niSxUSjmxc";
+   public static String buffCookie = "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; timing_user_id=time_7Ix5JzrCca; P_INFO=15989173318|1684131704|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0||15989173318; Device-Id=eNsnpKlEE3KrEa39TVdI; hb_MA-BFF5-63705950A31C_source=www.toolchest.cn; Locale-Supported=zh-Hans; game=csgo; session=1-EFxKl8WSH7Hp6jieYLt_s4vQuTIoCX1yIPE4TVJccjZT2030407391; csrf_token=IjIxZGIxNDRiYmY0ZTBjNmJjMTk0OTY4MmM4ZmMzZmQ1NGYxMzAyNjEi.F09c9A.KMXlcGh7Hw0XF_SEGBByis0sif4";
 
     public  static Map<String, String> map = new HashMap() {
         {
