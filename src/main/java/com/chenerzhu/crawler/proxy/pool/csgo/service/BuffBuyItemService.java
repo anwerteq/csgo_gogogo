@@ -110,7 +110,6 @@ public class BuffBuyItemService {
     public void buffSellOrder(String goods_id, int num) {
 
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.selectOrderAsc();
-        select = select.subList(0,1);
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
             //获取该商品售卖的列表信息
@@ -127,24 +126,15 @@ public class BuffBuyItemService {
             num = 1;
             for (BuffBuyItems buyItems : responseEntity.getBody().getData().getItems()) {
                 //不支持支付宝跳过
-                if (!buyItems.getSupported_pay_methods().contains("3")){
+                if (!buyItems.getSupported_pay_methods().contains(3)){
                     continue;
                 }
                 num--;
                 //创建订单
                 createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 //支付订单
                 payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
                 //然卖家发货
                 askSellerToSendOffer(buyItems.getId(),String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
