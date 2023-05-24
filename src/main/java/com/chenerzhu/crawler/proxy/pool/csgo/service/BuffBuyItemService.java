@@ -93,8 +93,6 @@ public class BuffBuyItemService {
         whereMap.put("token", "");
         whereMap.put("cdkey_id", "");
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
-
-        System.out.println(JSONObject.toJSONString(whereMap));
         String url = "https://buff.163.com/api/market/goods/buy";
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
         if (responseEntity1.getStatusCode().value() != 200) {

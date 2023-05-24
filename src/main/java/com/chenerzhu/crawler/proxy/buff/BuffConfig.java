@@ -60,7 +60,7 @@ public class BuffConfig {
         synchronized ("12345678909876") {
             try {
                 double random = Math.random() * 2000;
-                int shleepTime = (int) (random) + 5500;
+                int shleepTime = (int) (random) + 3500;
                 Thread.sleep(shleepTime);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
