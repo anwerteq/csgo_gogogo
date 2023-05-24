@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.pool.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPayBillRoot;
@@ -23,15 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.chenerzhu.crawler.proxy.pool.csgo.service.ItemGoodsService.syncCookie;
 
 /**
  * buff购买商品服务
@@ -58,7 +55,7 @@ public class BuffBuyItemService {
         //get请求
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
-        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), BuffCreateBillRoot.class);
+        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffCreateBillRoot.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("创建订单接口调用失败");
         }
@@ -85,8 +82,8 @@ public class BuffBuyItemService {
             set("Cookie", "Device-Id=gWuF5A6BKxVnJNmFrnkt; csrf_token=IjQyODU5ZjI4MDNhNTA5YzRjZGY0NmY3OWE0YzBjMmZmNDIxYzE3YWQi.F044yw.8noD5WJCXpbxr-IsV3Yx5SABnTw; Locale-Supported=zh-Hans; game=csgo; session=1-uSYsxebCWGxk1doSRtnwsrMO4OaAJ6lM47T6LOjN9dQb2030407391");
             set("Referer", "https://buff.163.com/goods/903822?from=market");
         }};
-        headers1.add("Cookie", ItemGoodsService.buffCookie);
-        for (String one : ItemGoodsService.buffCookie.split(";")) {
+        headers1.add("Cookie", BuffConfig.buffCookie);
+        for (String one : BuffConfig.buffCookie.split(";")) {
             if ("X-CSRFToken".equals(one.split("=")[0].trim())){
                 headers1.add("X-CSRFToken", one.split("=")[1].trim());
             }
@@ -102,7 +99,6 @@ public class BuffBuyItemService {
         whereMap.put("token", "");
         whereMap.put("cdkey_id", "");
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
-        syncCookie();
 
         System.out.println(JSONObject.toJSONString(whereMap));
         String url = "https://buff.163.com/api/market/goods/buy";
@@ -128,7 +124,7 @@ public class BuffBuyItemService {
             //获取该商品售卖的列表信息
             String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
                     "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
-            ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), BuffBuyRoot.class);
+            ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffBuyRoot.class);
             if (responseEntity.getStatusCode().value() != 200) {
                 throw new ArithmeticException("查询接口调用失败");
             }
@@ -183,7 +179,7 @@ public class BuffBuyItemService {
         whereMap.put("bill_orders", bill_orders);
         whereMap.put("game", "csgo");
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
-        syncCookie();
+        BuffConfig. syncCookie();
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
         System.out.println("123123");
     }
@@ -194,7 +190,7 @@ public class BuffBuyItemService {
         String url = "https://buff.163.com/api/message/notification?_=" + System.currentTimeMillis();
 
         while (true) {
-            ResponseEntity<ConfirmDendingRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), ConfirmDendingRoot.class);
+            ResponseEntity<ConfirmDendingRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), ConfirmDendingRoot.class);
             int csgo = responseEntity.getBody().getData().getTo_deliver_order().getCsgo();
             if (csgo != 0) {
 //   // https://buff.163.com/api/market/goods/recommendation
@@ -219,7 +215,7 @@ public class BuffBuyItemService {
             e.printStackTrace();
         }
         String url = "https://buff.163.com/api/market/steam_trade";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         System.out.println("getSteamTrade:" + responseEntity.getBody());
         System.out.println("123123");
         try {
@@ -236,7 +232,7 @@ public class BuffBuyItemService {
      */
     public void getToDeliver() {
         String url = "https://buff.163.com/api/market/sell_order/to_deliver?game=csgo&appid=730";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         System.out.println("getToDeliver:" + responseEntity.getBody());
 
     }
@@ -244,7 +240,7 @@ public class BuffBuyItemService {
 
     public void getBuyOrder() {
         String url = "https://buff.163.com/api/market/buy_order/history?page_num=1&page_size=200&state=trading&game=csgo&appid=730";
-        ResponseEntity<BuyOrderHistoryRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, ItemGoodsService.getBuffHttpEntity(), BuyOrderHistoryRoot.class);
+        ResponseEntity<BuyOrderHistoryRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuyOrderHistoryRoot.class);
         List<BuyOrderHistoryData> dataList = responseEntity.getBody().getData();
         if (dataList.isEmpty()) {
             //没有需要确认发货的数据
