@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.SteamTradeData;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.SteamTradeRoot;
+import com.chenerzhu.crawler.proxy.steam.service.GroundingService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamTradeofferService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ConfirmTradeService {
     @Autowired
     SteamTradeofferService steamTradeofferService;
 
+    @Autowired
+    GroundingService groundingService;
+
     /**
      * 获取需要确认收货的订单号
      */
@@ -45,7 +49,19 @@ public class ConfirmTradeService {
             return;
         }
         Set<String> tradeIds = steamTradeRoot.getData().stream().map(SteamTradeData::getTradeofferid).collect(Collectors.toSet());
-        steamTradeofferService.steamaccept(tradeIds);
+        if (tradeIds.isEmpty()){
+            log.info("没有需要确认发货的信息");
+            return;
+        }
+        try{
+            steamTradeofferService.steamaccept(tradeIds);
+            log.info("确认收货完成");
+        }catch (Exception ex){
+            log.error("确认收货失败");
+        }
+        //steam上架商品
+        groundingService.productListingOperation();
+        log.info("确认收货完成和上架完成");
 
     }
 }

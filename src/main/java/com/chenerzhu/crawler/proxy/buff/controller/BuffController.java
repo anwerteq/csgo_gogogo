@@ -65,6 +65,6 @@ public class BuffController {
     @ResponseBody
     public void getSteamTrade() {
         confirmTradeService.SteamTrade();
-        System.out.println("接口调用，购买商品完成");
+        System.out.println("接口调用，buff确认收货完成");
     }
 }

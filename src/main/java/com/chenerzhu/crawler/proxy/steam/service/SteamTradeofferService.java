@@ -63,7 +63,7 @@ public class SteamTradeofferService {
         paramerMap.put("tradeofferid",tradeofferid);
         paramerMap.put("partner",partner);
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-        log.info("确认收货："+partner);
+        log.info("确认收货{}：,接口返回的参数{}",partner,responseStr);
     }
 
 }

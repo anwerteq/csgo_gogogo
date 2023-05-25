@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GroundingService {
 
-    ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     @Autowired
     SellBuffProfitRepository buffProfitRepository;
@@ -40,25 +39,26 @@ public class GroundingService {
      * steam上架操作逻辑
      */
     public void productListingOperation() {
-        executorService.execute(()->{
-            //获取库存
-            InventoryRootBean inventoryRootBean = getSteamInventory();
-            Set<String> collect = buffProfitRepository.selectSellBuffItem().stream().map(SellBuffProfitEntity::getMarket_hash_name).collect(Collectors.toSet());
-            //获取商品类的价格信息集合
-            inventoryRootBean.getDescriptions().stream().forEach(description -> {
-                //售卖到buff的商品，不上架
-                if (collect.contains(description.getMarket_hash_name())){
-                    return;
-                }
-                PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
-                priceVerview.setClassid(description.getClassid());
-                Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
-                saleItem(assets.getAssetid(), priceVerview.getLowest_price(), assets.getAmount());
-                log.info("steam商品上架完成:"+ priceVerview.getClassid());
-            });
-            log.info("steam全部商品上架完成");
+        //获取库存
+        InventoryRootBean inventoryRootBean = getSteamInventory();
+        if (inventoryRootBean.getDescriptions().isEmpty()){
+            log.info("未有需要上架的商品");
+            return;
+        }
+        Set<String> collect = buffProfitRepository.selectSellBuffItem().stream().map(SellBuffProfitEntity::getMarket_hash_name).collect(Collectors.toSet());
+        //获取商品类的价格信息集合
+        inventoryRootBean.getDescriptions().stream().forEach(description -> {
+            //售卖到buff的商品，不上架
+            if (collect.contains(description.getMarket_hash_name())){
+                return;
+            }
+            PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
+            priceVerview.setClassid(description.getClassid());
+            Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
+            saleItem(assets.getAssetid(), priceVerview.getLowest_price(), assets.getAmount());
+            log.info("steam商品上架完成:"+ priceVerview.getClassid());
         });
-
+        log.info("steam全部商品上架完成");
     }
 
     /**
