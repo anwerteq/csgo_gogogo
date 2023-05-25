@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
@@ -42,8 +43,6 @@ public class BuffBuyItemService {
     @Autowired
     SellSteamProfitRepository sellSteamProfitRepository;
 
-    ExecutorService executorService = Executors.newFixedThreadPool(1);
-
 
     @Autowired
     ProfitService profitService;
@@ -72,9 +71,6 @@ public class BuffBuyItemService {
         log.info("buff订单创建成功");
     }
 
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
-    }
 
 
     /**
@@ -115,9 +111,7 @@ public class BuffBuyItemService {
     }
 
     public void buffBuyItems() {
-        executorService.execute(() -> {
-            buffSellOrder();
-        });
+        ExecutorUtil.pool.execute(this::buffSellOrder);
     }
 
     /**
@@ -126,6 +120,7 @@ public class BuffBuyItemService {
     public void buffSellOrder() {
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.selectOrderAsc();
         Collections.shuffle(select);
+        select = select.subList(0,10);
         String goods_id = "";
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
@@ -140,36 +135,55 @@ public class BuffBuyItemService {
             if (!"OK".equals(body.getCode())) {
                 throw new ArithmeticException("查询接口调用异常");
             }
-            int num = 1;
-            for (BuffBuyItems buyItems : responseEntity.getBody().getData().getItems()) {
-                //单件商品大于10的 跳过
-                if (Double.parseDouble(buyItems.getPrice()) >= 10) {
-                    break;
-                }
-                //不支持支付宝跳过
-                if (!buyItems.getSupported_pay_methods().contains(3)) {
-                    continue;
-                }
-                //校验折扣
-                entity.setBuff_price(Double.parseDouble(buyItems.getPrice()));
-                if (!profitService.checkBuyBuffItem(entity)){
-                    break;
-                }
-                num--;
-                //创建订单
-                createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-                SleepUtil.sleep(2000);
-                //支付订单
-                PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-                //卖家报价
-                askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
-                if (num <= 0) {
-                    log.info("商品购买完成");
-                    break;
-                }
+            List<BuffBuyItems> items = responseEntity.getBody().getData().getItems();
+            if (items.isEmpty()){
+                log.info("该商品没有售卖：{}",entity.getName());
             }
+            BuffBuyItems  buyItems = items.get(0);
+            //单件商品大于10的 跳过
+            if (Double.parseDouble(buyItems.getPrice()) >= 10) {
+                break;
+            }
+            //不支持支付宝跳过
+            if (!buyItems.getSupported_pay_methods().contains(3)) {
+                continue;
+            }
+            //校验折扣
+            entity.setBuff_price(Double.parseDouble(buyItems.getPrice()));
+            if (!profitService.checkBuyBuffItem(entity)){
+                break;
+            }
+            //创建订单
+            createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+            SleepUtil.sleep(2000);
+            //支付订单
+            PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+            //卖家报价
+            ExecutorUtil.pool.execute(()->{
+                int sum = 4;
+                while (sum > 0){
+                    try {
+                        askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
+                        sum = 0;
+                    }catch (Exception e){
+                        log.error("确认订单失败{}",e);
+                        sum--;
+                    }
+                }
+            });
+            log.info("商品购买完成");
         }
+    }
 
+    public static void main(String[] args) {
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("1");
+        arrayList.add("2");
+        arrayList.add("3");
+        arrayList.add("4");
+        arrayList.add("5");
+        Collections.shuffle(arrayList);
+        System.out.println("123123");
     }
 
     /**
