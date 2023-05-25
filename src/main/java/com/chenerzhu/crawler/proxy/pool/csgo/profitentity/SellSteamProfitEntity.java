@@ -24,10 +24,10 @@ public class SellSteamProfitEntity {
     //buff价格购买
     private double buff_price;
 
-    //steam上销售价格
+    //steam上销售价格 人民币价格
     private String sell_steam_price;
 
-    //steam税后的价格
+    //steam税后的价格 人民币价格
     private double in_fact_sell_steam_price;
 
     //buff卖的数量

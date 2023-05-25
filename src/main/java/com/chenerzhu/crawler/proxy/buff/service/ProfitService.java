@@ -60,6 +60,19 @@ public class ProfitService {
      */
     @Async
     public void saveSellSteamProfit(ItemGoods itemGoods) {
+        SellSteamProfitEntity item = checkBuyBuffItem(itemGoods);
+        if (item != null){
+            sellSteamProfitRepository.save(item);
+        }
+    }
+
+
+    /**
+     *
+     * @param itemGoods
+     * @return 返回null 不推荐购买
+     */
+    public SellSteamProfitEntity checkBuyBuffItem(ItemGoods itemGoods){
         SellSteamProfitEntity entity = new SellSteamProfitEntity();
         entity.setItem_id(itemGoods.getId());
         entity.setName(itemGoods.getName());
@@ -75,7 +88,27 @@ public class ProfitService {
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
         entity.setUp_date(new Date());
         if (0.80 > buff_price / in_fact_price) {
-            sellSteamProfitRepository.save(entity);
+            return entity;
         }
+        return null;
+    }
+
+    /**
+     * 校验购买
+     * @param entity
+     * @return
+     */
+    public Boolean checkBuyBuffItem( SellSteamProfitEntity entity){
+        //税后价格
+        double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
+                0.85;
+        //buff购买价格
+        double buff_price =entity.getBuff_price() * 1.025;
+        entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
+        entity.setUp_date(new Date());
+        if (0.80 > buff_price / in_fact_price) {
+           return true;
+        }
+        return false;
     }
 }

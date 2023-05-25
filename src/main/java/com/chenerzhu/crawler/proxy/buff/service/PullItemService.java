@@ -84,9 +84,9 @@ public class PullItemService {
     @Async
     public void saveItem(ItemGoods itemGoods) {
         itemRepository.save(itemGoods);
-        //保存buff购买推荐商品
+        //推荐商品再buff售卖
         profitService.saveSellBuffProfitEntity(itemGoods);
-        //保存buff售卖推荐商品
+        //推荐商品再buff购买
         profitService. saveSellSteamProfit(itemGoods);
         //保存buff商品信息
         Goods_info goods_info = itemGoods.getGoods_info();

@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepRoot;
@@ -41,6 +42,10 @@ public class BuffBuyItemService {
     SellSteamProfitRepository sellSteamProfitRepository;
 
     ExecutorService executorService = Executors.newFixedThreadPool(1);
+
+
+    @Autowired
+    ProfitService profitService;
 
 
     /**
@@ -143,6 +148,11 @@ public class BuffBuyItemService {
                 //不支持支付宝跳过
                 if (!buyItems.getSupported_pay_methods().contains(3)) {
                     continue;
+                }
+                //校验折扣
+                entity.setBuff_price(Double.parseDouble(buyItems.getPrice()));
+                if (!profitService.checkBuyBuffItem(entity)){
+                    break;
                 }
                 num--;
                 //创建订单
