@@ -32,17 +32,16 @@ public class ProfitService {
         SellBuffProfitEntity sellBuffProfitEntity = new SellBuffProfitEntity();
         sellBuffProfitEntity.setItem_id(itemGoods.getId());
         sellBuffProfitEntity.setName(itemGoods.getName());
-        sellBuffProfitEntity.setSteam_price_cny(itemGoods.getGoods_info().getSteam_price_cny());
+        sellBuffProfitEntity.setSteam_price_cny(Double.parseDouble(itemGoods.getGoods_info().getSteam_price_cny()));
         ;
         //购买成本
-        double profit = Double.parseDouble(sellBuffProfitEntity.getSteam_price_cny()) * 1.15 * 0.85;
-        sellBuffProfitEntity.setIn_fact_steam_price_cny(String.format("%.3f", profit));
-        sellBuffProfitEntity.setSell_min_price(itemGoods.getSell_min_price());
-        sellBuffProfitEntity.setQuick_price(itemGoods.getQuick_price());
+        double profit = sellBuffProfitEntity.getSteam_price_cny() * 1.15 * 0.85;
+        sellBuffProfitEntity.setIn_fact_steam_price_cny(Double.valueOf(String.format("%.3f", profit)));
+        sellBuffProfitEntity.setSell_min_price(Double.valueOf(itemGoods.getSell_min_price()));
+        sellBuffProfitEntity.setQuick_price(Double.valueOf(itemGoods.getQuick_price()));
         sellBuffProfitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
-        double interest = Double.parseDouble(sellBuffProfitEntity.getSell_min_price())
-                - Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny());
-        double interest_rate = (interest / Double.parseDouble(sellBuffProfitEntity.getIn_fact_steam_price_cny()) * 100);
+        double interest =sellBuffProfitEntity.getSell_min_price() - sellBuffProfitEntity.getIn_fact_steam_price_cny();
+        double interest_rate = (interest / sellBuffProfitEntity.getIn_fact_steam_price_cny() * 100);
         sellBuffProfitEntity.setInterest_rate(String.format("%.3f", interest_rate));
         sellBuffProfitEntity.setUp_date(new Date());
         Boolean flag = false;
@@ -64,15 +63,15 @@ public class ProfitService {
         SellSteamProfitEntity entity = new SellSteamProfitEntity();
         entity.setItem_id(itemGoods.getId());
         entity.setName(itemGoods.getName());
-        entity.setBuff_price(itemGoods.getSell_min_price());
+        entity.setBuff_price(Double.valueOf(itemGoods.getSell_min_price()));
         entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());
         entity.setSell_num(itemGoods.getSell_num());
         //税后价格
         double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
                 0.85;
-        entity.setIn_fact_sell_steam_price(String.format("%.3f", in_fact_price));
+        entity.setIn_fact_sell_steam_price(Double.valueOf(String.format("%.3f", in_fact_price)));
         //buff购买价格
-        double buff_price = Double.parseDouble(entity.getBuff_price()) * 1.025;
+        double buff_price =entity.getBuff_price() * 1.025;
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
         entity.setUp_date(new Date());
         if (0.80 > buff_price / in_fact_price) {

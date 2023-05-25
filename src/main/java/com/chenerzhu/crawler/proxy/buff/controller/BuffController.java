@@ -49,7 +49,7 @@ public class BuffController {
     @RequestMapping("buffBuyItems")
     @ResponseBody
     public void buffBuyItems() {
-        buffBuyItemService.buffSellOrder("903822", 1);
-        System.out.println("t推出接口调用");
+        buffBuyItemService.buffBuyItems();
+        System.out.println("接口调用，购买商品完成");
     }
 }

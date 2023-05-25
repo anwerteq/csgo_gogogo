@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -37,6 +39,8 @@ public class BuffBuyItemService {
 
     @Autowired
     SellSteamProfitRepository sellSteamProfitRepository;
+
+    ExecutorService executorService = Executors.newFixedThreadPool(1);
 
 
     /**
@@ -104,16 +108,19 @@ public class BuffBuyItemService {
         return payBillRepRoot.getData();
     }
 
+    public void buffBuyItems() {
+        executorService.execute(() -> {
+            buffSellOrder();
+        });
+    }
 
     /**
      * 购买buff商品的逻辑
-     *
-     * @param goods_id:商品id
      */
-    public void buffSellOrder(String goods_id, int num) {
-
+    public void buffSellOrder() {
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.selectOrderAsc();
         Collections.shuffle(select);
+        String goods_id = "";
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
             //获取该商品售卖的列表信息
@@ -127,7 +134,7 @@ public class BuffBuyItemService {
             if (!"OK".equals(body.getCode())) {
                 throw new ArithmeticException("查询接口调用异常");
             }
-            num = 1;
+            int num = 1;
             for (BuffBuyItems buyItems : responseEntity.getBody().getData().getItems()) {
                 //单件商品大于10的 跳过
                 if (Double.parseDouble(buyItems.getPrice()) >= 10) {
@@ -142,15 +149,12 @@ public class BuffBuyItemService {
                 createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
                 //支付订单
                 PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-
                 //卖家报价
-                askSellerToSendOffer(payBillRepData.getId(),String.valueOf(buyItems.getGoods_id()));
+                askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
                     log.info("商品购买完成");
                     break;
                 }
-
-                // 230524T0364404819
             }
         }
 
@@ -182,7 +186,7 @@ public class BuffBuyItemService {
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
         BuffConfig.syncCookie();
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);
-        if (responseEntity1.getStatusCode().value()  != 200){
+        if (responseEntity1.getStatusCode().value() != 200) {
             log.error("让卖家发送报价失败");
         }
         log.info("让卖家报价返回的数据：" + responseEntity1.getBody());

@@ -22,13 +22,13 @@ public class SellSteamProfitEntity {
     //物品名称
     String name;
     //buff价格购买
-    private String buff_price;
+    private double buff_price;
 
     //steam上销售价格
     private String sell_steam_price;
 
     //steam税后的价格
-    private String in_fact_sell_steam_price;
+    private double in_fact_sell_steam_price;
 
     //buff卖的数量
     long sell_num;
