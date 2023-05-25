@@ -53,7 +53,7 @@ public class SteamController {
         if (sum == 0 ){
             sum = 1;
         }
-        removelistingService.unlistings(10);
+        removelistingService.unlistings(1);
     }
 
 }

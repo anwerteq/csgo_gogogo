@@ -23,9 +23,10 @@ public class RemovelistingService {
 
     /**
      * 下架几页商品（一页等于十个）
+     *
      * @param sum
      */
-    public void unlistings(int sum){
+    public void unlistings(int sum) {
         for (int i = 0; i < sum; i++) {
             unlisting();
         }
@@ -34,7 +35,7 @@ public class RemovelistingService {
     /**
      * 取消被block的货物
      */
-    public void unlisting(){
+    public void unlisting() {
         String url = "https://steamcommunity.com/market";
 
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
@@ -51,26 +52,30 @@ public class RemovelistingService {
     /**
      * 解析已经上架的商品id集合
      */
-    public void parseActiveMarketList(Element marketListingsRows){
-
-        for (Element child : marketListingsRows.children()) {
-            String id = child.id();
-            if (StrUtil.isEmpty(id)){
-                continue;
+    public void parseActiveMarketList(Element marketListingsRows) {
+        try {
+            for (Element child : marketListingsRows.children()) {
+                String id = child.id();
+                if (StrUtil.isEmpty(id)) {
+                    continue;
+                }
+                removeList(id.split("_")[1]);
             }
-            removeList(id.split("_")[1]);
+            log.info("最早上架的十个商品，已经取消");
+        } catch (Exception e) {
+
         }
-        log.info("最早上架的十个商品，已经取消");
+
     }
 
     /**
      * 解析被阻塞的商品
      */
-    public  void parseMarkBlockList(Elements market_content_block){
+    public void parseMarkBlockList(Elements market_content_block) {
         Element element = market_content_block.get(0);
         for (Element child : element.children()) {
             String id = child.id();
-            if (StrUtil.isEmpty(id)){
+            if (StrUtil.isEmpty(id)) {
                 continue;
             }
             removeList(id.split("_")[1]);
@@ -78,10 +83,11 @@ public class RemovelistingService {
         log.info("被锁的商品，已经全部取消");
     }
 
-    public void getMylistings(){
+    public void getMylistings() {
         String url = "https://steamcommunity.com/market/mylistings/render/?query=&start=1&count=100";
     }
-    public void removeList(String id){
+
+    public void removeList(String id) {
         String url = "https://steamcommunity.com/market/removelisting/" + id;
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
