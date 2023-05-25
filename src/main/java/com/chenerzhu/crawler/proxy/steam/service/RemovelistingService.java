@@ -20,6 +20,12 @@ import java.util.Map;
 @Slf4j
 public class RemovelistingService {
 
+    public void unlistings(int sum){
+        for (int i = 0; i < sum; i++) {
+            unlisting();
+        }
+    }
+
     /**
      * 取消被block的货物
      */
@@ -31,7 +37,7 @@ public class RemovelistingService {
 
         Element marketListingsRows = parse.getElementById("tabContentsMyActiveMarketListingsRows");
         //下架，已经上架的商品
-//        parseActiveMarketList(marketListingsRows);
+        parseActiveMarketList(marketListingsRows);
         Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
         //取消需要审核的商品
         parseMarkBlockList(market_content_block);

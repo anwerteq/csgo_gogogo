@@ -33,6 +33,15 @@ public class BuffConfig {
         }
     };
 
+    public static HttpEntity<MultiValueMap<String, String>> getBuffCreateBillHttpEntity() {
+        HttpHeaders headers1 = new HttpHeaders();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            headers1.set(entry.getKey(), entry.getValue());
+        }
+        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(headers1);
+        return entity1;
+    }
+
 
     public static HttpEntity<MultiValueMap<String, String>> getBuffHttpEntity() {
         HttpHeaders headers1 = new HttpHeaders();

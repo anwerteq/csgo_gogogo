@@ -50,7 +50,7 @@ public class SteamController {
     @RequestMapping("unlistingBlock")
     @ResponseBody
     public void unlistingBlock() {
-        removelistingService.unlisting();
+        removelistingService.unlistings(10);
     }
 
 }

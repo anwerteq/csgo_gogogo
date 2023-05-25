@@ -61,7 +61,7 @@ public class BuffBuyItemService {
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
         log.info("商品id:" + goods_id);
-        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffCreateBillRoot.class);
+        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffCreateBillHttpEntity(), BuffCreateBillRoot.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("创建订单接口调用失败");
         }
@@ -162,7 +162,6 @@ public class BuffBuyItemService {
                 //支付订单
                 PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
                 //卖家报价
-                SleepUtil.sleep(2000);
                 askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
                     log.info("商品购买完成");
@@ -230,16 +229,13 @@ public class BuffBuyItemService {
     }
 
 
+    /**
+     * 获取需要确认收货的订单号
+     */
     public void getSteamTrade() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         String url = "https://buff.163.com/api/market/steam_trade";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         System.out.println("getSteamTrade:" + responseEntity.getBody());
-        System.out.println("123123");
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {

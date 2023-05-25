@@ -108,6 +108,9 @@ public class GroundingService {
      * @param price：到手价格
      */
     private void saleItem(String assetid, String price, String amount) {
+        if (StrUtil.isEmpty(price)){
+            return;
+        }
         SleepUtil.sleep();
         Integer priceCount = null;
         if (price.startsWith("$")) {
