@@ -5,6 +5,7 @@ import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.GoodsInfoRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.IItemGoodsRepository;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -59,7 +60,7 @@ public class PullItemService {
      */
     @Transactional(rollbackFor = Exception.class)
     public Boolean pullOnePage(int pageNum) {
-        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + pageNum + "&use_suggestion=0&_=1684057330094&page_size=80";
+        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + pageNum + "&use_suggestion=0&_=1684057330094&page_size=50";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
             return false;
@@ -69,6 +70,8 @@ public class PullItemService {
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
         itemGoodsList.forEach(this::saveItem);
         log.info("拉取完，第："+ pageNum);
+        //服务器不行，让回收点缓存
+        SleepUtil.sleep(2000);
         //是否是最后一页
         if (pageNum >= productList.getData().getTotal_page()) {
             return false;
@@ -81,7 +84,7 @@ public class PullItemService {
      * 保存buff的列表信息
      * @param itemGoods
      */
-    @Async
+
     public void saveItem(ItemGoods itemGoods) {
         itemRepository.save(itemGoods);
         //推荐商品再buff售卖
