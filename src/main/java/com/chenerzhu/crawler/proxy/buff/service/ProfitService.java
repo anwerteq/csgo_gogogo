@@ -44,6 +44,7 @@ public class ProfitService {
         double interest_rate = (interest / sellBuffProfitEntity.getIn_fact_steam_price_cny() * 100);
         sellBuffProfitEntity.setInterest_rate(String.format("%.3f", interest_rate));
         sellBuffProfitEntity.setUp_date(new Date());
+        sellBuffProfitEntity.setMarket_hash_name(itemGoods.getMarket_hash_name());
         Boolean flag = false;
         if (3.0f < interest_rate) {
             //在buff售卖，利率超过3%

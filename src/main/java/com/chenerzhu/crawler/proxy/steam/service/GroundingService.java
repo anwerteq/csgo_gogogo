@@ -2,6 +2,8 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
+import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.InventoryRootBean;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
@@ -9,6 +11,7 @@ import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -17,6 +20,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -30,6 +34,8 @@ public class GroundingService {
 
     ExecutorService executorService = Executors.newFixedThreadPool(1);
 
+    @Autowired
+    SellBuffProfitRepository buffProfitRepository;
     /**
      * steam上架操作逻辑
      */
@@ -37,8 +43,13 @@ public class GroundingService {
         executorService.execute(()->{
             //获取库存
             InventoryRootBean inventoryRootBean = getSteamInventory();
+            Set<String> collect = buffProfitRepository.selectSellBuffItem().stream().map(SellBuffProfitEntity::getMarket_hash_name).collect(Collectors.toSet());
             //获取商品类的价格信息集合
             inventoryRootBean.getDescriptions().stream().forEach(description -> {
+                //售卖到buff的商品，不上架
+                if (collect.contains(description.getMarket_hash_name())){
+                    return;
+                }
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
                 priceVerview.setClassid(description.getClassid());
                 Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();

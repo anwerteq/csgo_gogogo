@@ -34,5 +34,8 @@ public class SellBuffProfitEntity {
     //利率%
     private String interest_rate;
 
+    //steam商品的唯一标识
+    private String market_hash_name;
+
     private Date up_date;
 }
