@@ -10,6 +10,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -157,9 +158,11 @@ public class BuffBuyItemService {
                 num--;
                 //创建订单
                 createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+                SleepUtil.sleep(2000);
                 //支付订单
                 PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
                 //卖家报价
+                SleepUtil.sleep(2000);
                 askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
                 if (num <= 0) {
                     log.info("商品购买完成");
