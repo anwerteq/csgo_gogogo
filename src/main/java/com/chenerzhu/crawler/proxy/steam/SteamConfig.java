@@ -41,6 +41,15 @@ public class SteamConfig {
         return steamHeader;
     }
 
+    /**
+     * 获取购买订单需要的请求头
+     */
+    public static Map<String, String> getBuyHeader() {
+        Map<String, String> steamHeader = getSteamHeader();
+        steamHeader.put("Content-Type", "application/x-www-form-urlencoded");
+        return steamHeader;
+    }
+
 }
 
 
