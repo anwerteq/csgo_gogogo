@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.steam.service;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +21,10 @@ import java.util.Map;
 @Slf4j
 public class RemovelistingService {
 
+    /**
+     * 下架几页商品（一页等于十个）
+     * @param sum
+     */
     public void unlistings(int sum){
         for (int i = 0; i < sum; i++) {
             unlisting();
@@ -41,7 +46,6 @@ public class RemovelistingService {
         Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
         //取消需要审核的商品
         parseMarkBlockList(market_content_block);
-        System.out.println("'");
     }
 
     /**

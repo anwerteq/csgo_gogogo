@@ -45,11 +45,14 @@ public class SteamController {
 
 
     /**
-     * 拉取商品的历史记录
+     * 下架商品
      */
     @RequestMapping("unlistingBlock")
     @ResponseBody
-    public void unlistingBlock() {
+    public void unlistingBlock(int sum) {
+        if (sum == 0 ){
+            sum = 1;
+        }
         removelistingService.unlistings(10);
     }
 

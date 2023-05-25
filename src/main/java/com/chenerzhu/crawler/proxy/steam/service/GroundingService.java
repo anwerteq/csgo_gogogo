@@ -66,7 +66,7 @@ public class GroundingService {
      */
     private InventoryRootBean getSteamInventory() {
         SleepUtil.sleep();
-        String url = "https://steamcommunity.com/inventory/76561199503276197/730/2?l=schinese&count=100&market=1";
+        String url = "https://steamcommunity.com/inventory/76561199503276197/730/2?l=schinese&count=40&market=1";
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取steam库存失败");

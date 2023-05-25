@@ -6,6 +6,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamItemRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamtDescriptionRepository;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -37,6 +38,12 @@ public class SteamItemService {
 
     @Autowired
     SteamtDescriptionRepository descriptionRepository;
+
+    @Autowired
+    RemovelistingService removelistingService;
+
+    @Autowired
+    GroundingService groundingService;
 
     ExecutorService executorService = Executors.newFixedThreadPool(1);
 
@@ -84,6 +91,15 @@ public class SteamItemService {
     @Async
     public void saveDescriptionRepository(AssetDescription assetDescription) {
         descriptionRepository.save(assetDescription);
+    }
+
+    /**
+     * 重新上架久卖的商品
+     */
+    public void doUpdataPlatformItem(){
+        removelistingService.unlistings(1);
+        SleepUtil.sleep(1000 * 10);
+        groundingService.productListingOperation();
     }
 
 }
