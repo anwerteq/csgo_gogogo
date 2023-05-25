@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.SteamTradeData;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.SteamTradeRoot;
+import com.chenerzhu.crawler.proxy.steam.service.SteamTradeofferService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -22,15 +23,18 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class SteamTradeService {
+public class ConfirmTradeService {
 
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    SteamTradeofferService steamTradeofferService;
+
     /**
      * 获取需要确认收货的订单号
      */
-    public void getSteamTrade() {
+    public void SteamTrade() {
         String url = "https://buff.163.com/api/market/steam_trade";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamTradeRoot steamTradeRoot = JSONObject.parseObject(responseEntity.getBody(), SteamTradeRoot.class);
@@ -41,15 +45,7 @@ public class SteamTradeService {
             return;
         }
         Set<String> tradeIds = steamTradeRoot.getData().stream().map(SteamTradeData::getTradeofferid).collect(Collectors.toSet());
-
-
-        System.out.println("getSteamTrade:" + responseEntity.getBody());
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //restTemplategetToDeliver();
+        steamTradeofferService.steamaccept(tradeIds);
 
     }
 }

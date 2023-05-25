@@ -39,6 +39,6 @@ public class SteamTradeData {
     private String tradeofferid;
     private int type;
     private String url;
-    private Date verify_code;
+    private String verify_code;
 
 }
