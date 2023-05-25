@@ -1,0 +1,36 @@
+package com.chenerzhu.crawler.proxy.steam;
+
+import lombok.Data;
+
+/**
+ * steam提交订单地址
+ */
+@Data
+public class CreatebuyorderEntity {
+    private String sessionid;
+    private int currency = 1;
+    private int appid = 730;
+    /**
+     * 商品hash名字
+     */
+    private String market_hash_name;
+
+    /**
+     * 商品总价=单价*商品数量 )($0.02 = 2)
+     */
+    private String price_total;
+    /**
+     * 商品数量
+     */
+    private int quantity = 1;
+    private String first_name = "Ke";
+    private String last_name = "Le Le";
+    private String billing_address_two = "1626  Monroe Street";
+    private String billing_country = "US";
+    private String billing_address = "1625  Monroe Street";
+    private String billing_city = "Houston";
+    private String billing_state = "AL";
+    private String billing_postal_code = "77030";
+    private String save_my_address = "1";
+
+}
