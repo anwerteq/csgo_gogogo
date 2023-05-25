@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy;
+package com.chenerzhu.crawler.proxy.task;
 
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.service.ConfirmTradeService;

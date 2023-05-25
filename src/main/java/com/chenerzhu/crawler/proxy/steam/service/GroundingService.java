@@ -46,6 +46,10 @@ public class GroundingService {
             return;
         }
         Set<String> collect = buffProfitRepository.selectSellBuffItem().stream().map(SellBuffProfitEntity::getMarket_hash_name).collect(Collectors.toSet());
+        if (collect.isEmpty()){
+            log.info("buff推荐售卖的商品数据为空，禁止上架steam");
+            return;
+        }
         //获取商品类的价格信息集合
         inventoryRootBean.getDescriptions().stream().forEach(description -> {
             //售卖到buff的商品，不上架

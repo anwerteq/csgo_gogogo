@@ -10,7 +10,11 @@ import java.util.List;
 @Repository
 public interface SellBuffProfitRepository extends JpaRepository<SellBuffProfitEntity, Long> {
 
-    @Query(value = "select * from sell_buff_profit where sell_num > 30 and sell_min_price < 50 and up_date >   CONCAT(curdate(),' 00:00:00') ORDER BY interest_rate desc", nativeQuery = true)
+    /**
+     * steam上架物品需要用来判断
+     * @return
+     */
+    @Query(value = "select * from sell_buff_profit where sell_num > 30 and sell_min_price < 50  ORDER BY interest_rate desc", nativeQuery = true)
     List<SellBuffProfitEntity> selectSellBuffItem();
 
 }
