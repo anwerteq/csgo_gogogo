@@ -53,6 +53,9 @@ public class RemovelistingService {
      * 解析已经上架的商品id集合
      */
     public void parseActiveMarketList(Element marketListingsRows) {
+        if (marketListingsRows == null){
+            log.info("获取上架信息失败");
+        }
         try {
             for (Element child : marketListingsRows.children()) {
                 String id = child.id();
@@ -63,7 +66,7 @@ public class RemovelistingService {
             }
             log.info("最早上架的十个商品，已经取消");
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
@@ -72,6 +75,9 @@ public class RemovelistingService {
      * 解析被阻塞的商品
      */
     public void parseMarkBlockList(Elements market_content_block) {
+        if (market_content_block.size() == 0){
+            return;
+        }
         Element element = market_content_block.get(0);
         for (Element child : element.children()) {
             String id = child.id();

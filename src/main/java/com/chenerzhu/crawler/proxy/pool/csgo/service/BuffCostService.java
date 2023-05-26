@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -46,6 +43,7 @@ public class BuffCostService {
      */
     public BuffCostEntity createMarkCost(BuffBuyItems buyItem) {
         BuffCostEntity buffCostEntity = new BuffCostEntity();
+        buffCostEntity.setCostId(UUID.randomUUID().toString());
         buffCostEntity.setBuff_cost(Double.valueOf(buyItem.getPrice()));
         buffCostEntity.setAssetid(Long.valueOf(buyItem.getAsset_info().getAssetid()));
         buffCostEntity.setClassid(Long.valueOf(buyItem.getAsset_info().getClassid()));

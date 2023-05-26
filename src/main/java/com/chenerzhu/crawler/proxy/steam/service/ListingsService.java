@@ -68,7 +68,7 @@ public class ListingsService {
         SteamSearchRoot steamSearchRoot = JSONObject.parseObject(rep, SteamSearchRoot.class);
         Boolean isPause = true;
         //保存steam信息
-        ExecutorUtil.pool.execute(() -> saveSteamItems(steamSearchRoot.getResults()));
+//        ExecutorUtil.pool.execute(() -> saveSteamItems(steamSearchRoot.getResults()));
         for (SteamItem steamItem : steamSearchRoot.getResults()) {
             //steam商品不在推荐的数据上
             if (!hashnameAndItemId.containsKey(steamItem.getHash_name())) {
@@ -84,6 +84,8 @@ public class ListingsService {
             for (BuffBuyItems buffBuyItems : sellOrder) {
                 //校验该订单是否购买
                 if (profitService.checkBuyItemOrder(buffBuyItems, steamItem.getSell_price())) {
+                    buffBuyItems.setName(steamItem.getName());
+                    buffBuyItems.setHash_name(steamItem.getHash_name());
                     //校验可以购买该商品的订单
                     ExecutorUtil.pool.execute(() -> buffBuyItemService.createOrderAndPayAndAsk(buffBuyItems));
                 }
@@ -91,10 +93,10 @@ public class ListingsService {
             isPause = false;
         }
         if (isPause) {
-            SleepUtil.sleep(1000);
+            SleepUtil.sleep(3000);
         }
 
-        log.info("查询的页数：" + start);
+        log.info("查询的页数：" + (start/10 + 1));
         if (start >= steamSearchRoot.getTotal_count()) {
             return false;
         }
