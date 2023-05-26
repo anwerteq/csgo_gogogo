@@ -66,11 +66,10 @@ public class ListingsService {
         String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
         String rep = HttpClientUtils.sendGet(itemUrl, SteamConfig.getSteamHeader());
         SteamSearchRoot steamSearchRoot = JSONObject.parseObject(rep, SteamSearchRoot.class);
-        SteamSearchdata steamSearchdata = steamSearchRoot.getSearchdata();
         Boolean isPause = true;
         //保存steam信息
-        ExecutorUtil.pool.execute(() -> saveSteamItems(steamSearchdata.getResults()));
-        for (SteamItem steamItem : steamSearchdata.getResults()) {
+        ExecutorUtil.pool.execute(() -> saveSteamItems(steamSearchRoot.getResults()));
+        for (SteamItem steamItem : steamSearchRoot.getResults()) {
             //steam商品不在推荐的数据上
             if (!hashnameAndItemId.containsKey(steamItem.getHash_name())) {
                 continue;
@@ -96,7 +95,7 @@ public class ListingsService {
         }
 
         log.info("查询的页数：" + start);
-        if (start >= steamSearchdata.getTotal_count()) {
+        if (start >= steamSearchRoot.getTotal_count()) {
             return false;
         }
         return true;
