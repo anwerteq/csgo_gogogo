@@ -21,6 +21,7 @@ public class SellSteamProfitEntity {
     private long item_id;
     //物品名称
     String name;
+    String hash_name;
     //buff价格购买
     private double buff_price;
 

@@ -14,6 +14,10 @@ public interface SellSteamProfitRepository extends JpaRepository<SellSteamProfit
     @Query(value = "select * from sell_steam_profit where sell_num > 100 and buff_price < 50  and buff_price > 0.1  and interest_rate < '0.73' and in_fact_sell_steam_price >=  1  and up_date >   CONCAT(curdate(),' 00:00:00') ORDER BY interest_rate ", nativeQuery = true)
     List<SellSteamProfitEntity> selectOrderAsc();
 
+
+    @Query(value = "select item_id ,hash_name from sell_steam_profit  ORDER BY interest_rate ", nativeQuery = true)
+    List<SellSteamProfitEntity> selectItemIdANdHashName();
+
 }
 
 

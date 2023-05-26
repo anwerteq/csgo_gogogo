@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
@@ -10,6 +11,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * buff利率服务
@@ -80,6 +84,7 @@ public class ProfitService {
         entity.setBuff_price(Double.valueOf(itemGoods.getSell_min_price()));
         entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());
         entity.setSell_num(itemGoods.getSell_num());
+        entity.setHash_name(itemGoods.getMarket_hash_name());
         //税后价格
         double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
                 0.85;
@@ -93,6 +98,27 @@ public class ProfitService {
         }
         return null;
     }
+
+    /**
+     * 校验buff商品是否购买
+     * @param buffBuyItems
+     * @return
+     */
+    public Boolean checkBuyItemOrder(BuffBuyItems buffBuyItems,int steamSellPrice){
+        //到手需要打的折
+        double takeTax = Double.valueOf(0.87f);
+        //汇率
+        int exchangeRate = 7;
+        //计算税后人民币的价格
+        Double afterRateRMB  = steamSellPrice *takeTax* exchangeRate;
+        Double costMoney = Double.parseDouble( buffBuyItems.getPrice());
+        //成本是税后的7.5折，可以购买
+        if (costMoney/afterRateRMB  <= 7.5){
+            return  true;
+        }
+        return false;
+    }
+
 
     /**
      * 校验购买
@@ -111,5 +137,11 @@ public class ProfitService {
            return true;
         }
         return false;
+    }
+
+    public Map<String,Long> selectItemIdANdHashName(){
+        List<SellSteamProfitEntity> list = sellSteamProfitRepository.selectItemIdANdHashName();
+        Map<String, Long> collect = list.stream().collect(Collectors.toMap(SellSteamProfitEntity::getHash_name, SellSteamProfitEntity::getItem_id));
+        return collect;
     }
 }

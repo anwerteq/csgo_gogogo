@@ -51,13 +51,13 @@ public class BuffBuyItemService {
     /**
      * 在buff购买下订单
      *
-     * @param sell_order_id：销售订单
+     * @param sellOrderId：销售订单
      * @param goods_id：商品id
      * @param price:销售价格         //allow_tradable_cooldown：是否可以否定（0：是，1：否）,cdkey_id： _:时间戳
      */
-    public void createBill(String sell_order_id, int goods_id, String price) {
+    public void createBill(String sellOrderId, int goods_id, String price) {
         //get请求
-        String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sell_order_id + "&" +
+        String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sellOrderId + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
         log.info("商品id:" + goods_id);
         ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffCreateBillHttpEntity(), BuffCreateBillRoot.class);
@@ -124,20 +124,10 @@ public class BuffBuyItemService {
         String goods_id = "";
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
-            //获取该商品售卖的列表信息
-            String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
-                    "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
-            ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffBuyRoot.class);
-            if (responseEntity.getStatusCode().value() != 200) {
-                throw new ArithmeticException("查询接口调用失败");
-            }
-            BuffBuyRoot body = responseEntity.getBody();
-            if (!"OK".equals(body.getCode())) {
-                throw new ArithmeticException("查询接口调用异常");
-            }
-            List<BuffBuyItems> items = responseEntity.getBody().getData().getItems();
+            List<BuffBuyItems> items = getSellOrder(goods_id);
             if (items.isEmpty()){
                 log.info("该商品没有售卖：{}",entity.getName());
+                continue;
             }
             BuffBuyItems  buyItems = items.get(0);
             //单件商品大于10的 跳过
@@ -153,27 +143,58 @@ public class BuffBuyItemService {
             if (!profitService.checkBuyBuffItem(entity)){
                 break;
             }
-            //创建订单
-            createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-            SleepUtil.sleep(2000);
-            //支付订单
-            PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
-            //卖家报价
-            ExecutorUtil.pool.execute(()->{
-                int sum = 4;
-                while (sum > 0){
-                    try {
-                        askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
-                        SleepUtil.sleep(300);
-                        sum = 0;
-                    }catch (Exception e){
-                        log.error("确认订单失败{}",e);
-                        sum--;
-                    }
-                }
-            });
+            createOrderAndPayAndAsk(buyItems);
             log.info("商品购买完成");
         }
+    }
+
+
+
+    /**
+     * 获取该商品售卖的列表信息
+     */
+    public List<BuffBuyItems> getSellOrder(String goods_id){
+        //获取该商品售卖的列表信息
+        String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
+                "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
+        ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffBuyRoot.class);
+        if (responseEntity.getStatusCode().value() != 200) {
+            throw new ArithmeticException("查询接口调用失败");
+        }
+        BuffBuyRoot body = responseEntity.getBody();
+        if (!"OK".equals(body.getCode())) {
+            log.error("查询buff商品售卖订单接口调用异常");
+            return new ArrayList<>();
+        }
+        List<BuffBuyItems> items = responseEntity.getBody().getData().getItems();
+        return items;
+    }
+
+
+    /**
+     * 商品下订单和支付金额和告诉卖家发货
+     * @param buyItems
+     */
+    public void createOrderAndPayAndAsk(BuffBuyItems  buyItems){
+        //创建订单
+        createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        SleepUtil.sleep(2000);
+        //支付订单
+        PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        //卖家报价
+        ExecutorUtil.pool.execute(()->{
+            int sum = 4;
+            while (sum > 0){
+                try {
+                    askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
+                    SleepUtil.sleep(300);
+                    sum = 0;
+                }catch (Exception e){
+                    log.error("确认订单失败{}",e);
+                    sum--;
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {

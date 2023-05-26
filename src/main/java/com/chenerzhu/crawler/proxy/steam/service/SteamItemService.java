@@ -33,8 +33,7 @@ public class SteamItemService {
     @Autowired
     RestTemplate restTemplate;
 
-    @Autowired
-    SteamItemRepository steamItemRepository;
+
 
     @Autowired
     SteamtDescriptionRepository descriptionRepository;
@@ -51,41 +50,14 @@ public class SteamItemService {
     public void pullItems() {
         executorService.execute(() -> {
             int page_index = 0;
-            while (pullItem(page_index)) {
-
-            }
+//            while (pullItem(page_index)) {
+//
+//            }
         });
     }
 
-    /**
-     * 拉取具体一页数据
-     *
-     * @param page_index
-     * @return
-     */
-    public boolean pullItem(int page_index) {
-        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + page_index;
-        ResponseEntity<String> responseEntity = restTemplate.exchange(itemUrl, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), String.class);
-        if (responseEntity.getStatusCode().value() == 302) {
-            return true;
-        }
-        SteamSearchdata steamSearchdata = JSONObject.parseObject(responseEntity.getBody(), SteamSearchdata.class);
-        saveSteamItems(steamSearchdata.getResults());
-        log.info("查询的页数：" + page_index);
-        if (page_index >= steamSearchdata.getTotal_count()) {
-            return false;
-        }
-        return true;
-    }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Async
-    public void saveSteamItems(List<SteamItem> steamItems) {
-        steamItems.parallelStream().forEach(steamItem -> {
-            steamItemRepository.save(steamItem);
-            saveDescriptionRepository(steamItem.getAsset_description());
-        });
-    }
+
 
     @Transactional(rollbackFor = Exception.class)
     @Async
