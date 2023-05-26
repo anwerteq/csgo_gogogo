@@ -68,7 +68,7 @@ public class SteamConfig {
     public static  String getCookieOnlyKey(String key){
         String[] split = getCookie().split(key + "=");
         String value = split[1].split(";")[0];
-        return value;
+        return value.trim();
     }
 }
 

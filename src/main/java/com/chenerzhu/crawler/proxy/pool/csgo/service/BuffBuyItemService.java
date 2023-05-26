@@ -141,7 +141,7 @@ public class BuffBuyItemService {
             }
             BuffBuyItems  buyItems = items.get(0);
             //单件商品大于10的 跳过
-            if (Double.parseDouble(buyItems.getPrice()) >= 10) {
+            if (Double.parseDouble(buyItems.getPrice()) >= 5) {
                 break;
             }
             //不支持支付宝跳过
@@ -196,12 +196,8 @@ public class BuffBuyItemService {
             //buff支付订单添加请求头
             set("Referer", referer);
         }};
-        headers1.add("Cookie", BuffConfig.buffCookie);
-        for (String one : BuffConfig.buffCookie.split(";")) {
-            if ("csrf_token".equals(one.split("=")[0].trim())) {
-                headers1.add("X-CSRFToken", one.split("=")[1].trim());
-            }
-        }
+        headers1.add("Cookie", BuffConfig.getCookie());
+        headers1.add("X-CSRFToken",BuffConfig.getCookieOnlyKey("csrf_token"));
         HashMap<String, Object> whereMap = new HashMap();
         List<String> bill_orders = new ArrayList() {{
             add(bill_orderId);// 230524T0364391346
