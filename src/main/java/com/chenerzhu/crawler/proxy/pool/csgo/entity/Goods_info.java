@@ -6,10 +6,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.entity;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 /**
  * Auto-generated: 2023-05-14 0:18:12
@@ -28,6 +25,7 @@ public class Goods_info {
     private Info info;
     @Id
     private long item_id;
+    @Column(name = "original_icon_url",length = 600)
     private String original_icon_url;
     private String steam_price;
     private String steam_price_cny;
