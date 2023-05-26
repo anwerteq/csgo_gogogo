@@ -21,6 +21,7 @@ target/
 *.ipr
 /.idea/
 /.idea/**
+/logs/
 
 ### NetBeans ###
 /nbproject/private/

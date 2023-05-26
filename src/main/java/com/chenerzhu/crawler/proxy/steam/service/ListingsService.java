@@ -6,8 +6,11 @@ import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamItemRepository;
+import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +64,9 @@ public class ListingsService {
      */
     public boolean pullItem(int start, Map<String, Long> hashnameAndItemId) {
         String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
-        ResponseEntity<String> responseEntity = restTemplate.exchange(itemUrl, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), String.class);
-        if (responseEntity.getStatusCode().value() == 302) {
-            return true;
-        }
-        SteamSearchdata steamSearchdata = JSONObject.parseObject(responseEntity.getBody(), SteamSearchdata.class);
+        String rep = HttpClientUtils.sendGet(itemUrl, SteamConfig.getSteamHeader());
+        SteamSearchRoot steamSearchRoot = JSONObject.parseObject(rep, SteamSearchRoot.class);
+        SteamSearchdata steamSearchdata = steamSearchRoot.getSearchdata();
         Boolean isPause = true;
         //保存steam信息
         ExecutorUtil.pool.execute(() -> saveSteamItems(steamSearchdata.getResults()));
