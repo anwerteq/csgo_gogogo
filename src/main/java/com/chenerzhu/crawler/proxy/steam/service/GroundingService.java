@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
+import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffCostService;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.InventoryRootBean;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
@@ -35,34 +36,65 @@ public class GroundingService {
 
     @Autowired
     SellBuffProfitRepository buffProfitRepository;
+
+    @Autowired
+    BuffCostService buffCostService;
+
     /**
      * steam上架操作逻辑
      */
     public void productListingOperation() {
         //获取库存
         InventoryRootBean inventoryRootBean = getSteamInventory();
-        if (inventoryRootBean.getDescriptions().isEmpty()){
+        if (inventoryRootBean.getDescriptions().isEmpty()) {
             log.info("未有需要上架的商品");
             return;
         }
         Set<String> collect = buffProfitRepository.selectSellBuffItem().stream().map(SellBuffProfitEntity::getMarket_hash_name).collect(Collectors.toSet());
-        if (collect.isEmpty()){
+        if (collect.isEmpty()) {
             log.info("buff推荐售卖的商品数据为空，禁止上架steam");
             return;
         }
         //获取商品类的价格信息集合
         inventoryRootBean.getDescriptions().stream().forEach(description -> {
-            //售卖到buff的商品，不上架
-            if (collect.contains(description.getMarket_hash_name())){
+            //售卖到buff的商品，不上架 old
+            if (collect.contains(description.getMarket_hash_name())) {
                 return;
             }
+            //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
             PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
             priceVerview.setClassid(description.getClassid());
             Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
-            saleItem(assets.getAssetid(), priceVerview.getLowest_price(), assets.getAmount());
-            log.info("steam商品上架完成:"+ priceVerview.getClassid());
+            if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
+                return;
+            }
+            //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
+            int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
+            //获取购买成本的最低销售金额（美分）
+            int lowCostCent = buffCostService.getLowCostCent(description.getClassid(), assets.getClassid());
+            //获取最大的销售金额
+            int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
+            //steam推荐的金额和buff售卖最低金额 选高的
+            saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
+            log.info("steam商品上架完成:" + priceVerview.getClassid());
         });
         log.info("steam全部商品上架完成");
+    }
+
+
+    /**
+     * 计算出steam的推荐税后美分
+     *
+     * @param beforeTaxPriceDollar：steam当前售卖的最低美金
+     * @return
+     */
+    public int getAfterTaxCentMoney(String beforeTaxPriceDollar) {
+        beforeTaxPriceDollar = beforeTaxPriceDollar.replace("$", "");
+        //税前美分
+        Double beforeTax = (100 * Double.parseDouble(beforeTaxPriceDollar));
+        //税后美分
+        Double afterTax = beforeTax * 0.87;
+        return afterTax.intValue();
     }
 
     /**
@@ -70,7 +102,7 @@ public class GroundingService {
      */
     private InventoryRootBean getSteamInventory() {
         SleepUtil.sleep();
-        String url = "https://steamcommunity.com/inventory/"+SteamConfig.getSteamId()+"/730/2?l=schinese&count=30&market=1";
+        String url = "https://steamcommunity.com/inventory/" + SteamConfig.getSteamId() + "/730/2?l=schinese&count=30&market=1";
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取steam库存失败");
@@ -109,48 +141,23 @@ public class GroundingService {
      * 设置商品上架价格
      *
      * @param assetid：商品类目的id
-     * @param price：到手价格
+     * @param steamAfterTaxPrice：售卖的税后美分
      */
-    private void saleItem(String assetid, String price, String amount) {
-        if (StrUtil.isEmpty(price)){
-            return;
-        }
-        SleepUtil.sleep();
-        Integer priceCount = null;
-        if (price.startsWith("$")) {
-            price = price.replace("$", "");
-            Double pre_tax = ( 100 * Double.parseDouble(price)) * 0.87 ;
-            priceCount = new BigDecimal(pre_tax).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            //税前价格
-//            double pre_tax =  100 * Double.parseDouble(price) - 1;
-//            //税后价格
-////            priceCount = new BigDecimal(pre_tax * 0.85).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-//            priceCount = Integer.parseInt(pre_tax);
-        }
-        Boolean flag = false;
-        if (priceCount == null) {
-            flag = true;
-        }
-        if (flag) {
-            throw new ArithmeticException("参数异常");
-        }
+    private void saleItem(String assetid, int steamAfterTaxPrice, String amount) {
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         String url = "https://steamcommunity.com/market/sellitem";
         Map<String, String> paramerMap = new HashMap<>();
-        for (String cookie : saleHeader.get("Cookie").split(";")) {
-            if ("sessionid".equals(cookie.split("=")[0].trim())) {
-                paramerMap.put("sessionid", cookie.split("=")[1].trim());
-                break;
-            }
-        }
+        paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         paramerMap.put("appid", "730");
         paramerMap.put("contextid", "2");
         paramerMap.put("assetid", assetid);
         paramerMap.put("amount", amount);
-        paramerMap.put("price", String.valueOf(priceCount-1));
+        paramerMap.put("beforeTaxPriceDollar", String.valueOf(steamAfterTaxPrice));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-        System.out.println("1231231");
+        if (StrUtil.isEmpty(responseStr)){
+            log.info("商品assetid-{}-上架失败",assetid);
+            return;
+        }
+        log.info("商品assetid-{}-上架成功",assetid);
     }
-
-
 }

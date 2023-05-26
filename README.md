@@ -63,3 +63,7 @@ java -jar proxy-pool-1.0.jar
 ```
 
 // https://buff.163.com/api/market/manual_plus/buyer_send_offer  :发送报价接口
+2023-05-26
+1：增加buff商品购入记录，
+2：steam上架时： 价格的判断 高于九折，用九折的价格出售
+

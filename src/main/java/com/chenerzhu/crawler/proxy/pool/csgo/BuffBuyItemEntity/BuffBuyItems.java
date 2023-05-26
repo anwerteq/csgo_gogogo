@@ -11,7 +11,7 @@ public class BuffBuyItems {
 
     private int appid;
 
-    private Object asset_info;
+    private Asset_info asset_info;
 
     private String background_image_url;
 
@@ -55,6 +55,12 @@ public class BuffBuyItems {
     private int recent_deliver_rate;
 
     private int state;
+
+
+    String name;
+    String hash_name;
+
+
 
     /**
      * 支持的支付方式

@@ -4,6 +4,7 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
+import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
@@ -46,6 +48,9 @@ public class BuffBuyItemService {
 
     @Autowired
     ProfitService profitService;
+
+    @Autowired
+    BuffCostService buffCostService;
 
 
     /**
@@ -143,6 +148,8 @@ public class BuffBuyItemService {
             if (!profitService.checkBuyBuffItem(entity)){
                 break;
             }
+            buyItems.setName(entity.getName());
+            buyItems.setHash_name(entity.getHash_name());
             createOrderAndPayAndAsk(buyItems);
             log.info("商品购买完成");
         }
@@ -178,16 +185,23 @@ public class BuffBuyItemService {
     public void createOrderAndPayAndAsk(BuffBuyItems  buyItems){
         //创建订单
         createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        //记录购买信息
+        BuffCostEntity markCost = buffCostService.createMarkCost(buyItems);
         SleepUtil.sleep(2000);
         //支付订单
         PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        //更新记录状态为支付成功
+        AtomicReference<BuffCostEntity> atomicMarkCost = new AtomicReference();
+        atomicMarkCost.set(buffCostService.updateCostStatus(markCost,2));
         //卖家报价
         ExecutorUtil.pool.execute(()->{
             int sum = 4;
             while (sum > 0){
                 try {
+                    //通知卖家发起报价
                     askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
-                    SleepUtil.sleep(300);
+                    //更新记录状态为确认收货成功
+                    buffCostService.updateCostStatus(atomicMarkCost.get(),3);
                     sum = 0;
                 }catch (Exception e){
                     log.error("确认订单失败{}",e);
