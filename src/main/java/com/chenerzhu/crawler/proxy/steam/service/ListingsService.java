@@ -63,7 +63,7 @@ public class ListingsService {
      * @return
      */
     public boolean pullItem(int start, Map<String, Long> hashnameAndItemId) {
-        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
+        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=10&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
         String rep = HttpClientUtils.sendGet(itemUrl, SteamConfig.getSteamHeader());
         SteamSearchRoot steamSearchRoot = JSONObject.parseObject(rep, SteamSearchRoot.class);
         Boolean isPause = true;

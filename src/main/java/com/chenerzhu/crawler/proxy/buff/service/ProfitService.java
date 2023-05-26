@@ -97,21 +97,23 @@ public class ProfitService {
         return null;
     }
 
+
     /**
      * 校验buff商品是否购买
-     * @param buffBuyItems
+     * @param buffBuyItems：需要购买的
+     * @param steamSellPriceDollar:单元美分
      * @return
      */
-    public Boolean checkBuyItemOrder(BuffBuyItems buffBuyItems,int steamSellPrice){
+    public Boolean checkBuyItemOrder(BuffBuyItems buffBuyItems,int steamSellPriceDollar){
         //到手需要打的折
         double takeTax = Double.valueOf(0.87f);
         //汇率
         int exchangeRate = 7;
-        //计算税后人民币的价格
-        Double afterRateRMB  = steamSellPrice *takeTax* exchangeRate;
-        Double costMoney = Double.parseDouble( buffBuyItems.getPrice());
+        //计算税后人民币的价格 f分
+        Double afterRateRMB  = steamSellPriceDollar *takeTax* exchangeRate;
+        Double costMoney = Double.parseDouble( buffBuyItems.getPrice()) * 100;
         //没啥钱，先买便宜的
-        if (costMoney > 2){
+        if (costMoney > 200){
             return false;
         }
         //成本是税后的7.5折，可以购买
