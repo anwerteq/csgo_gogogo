@@ -75,12 +75,12 @@ public class ListingsService {
                 continue;
             }
             Long itemId = hashnameAndItemId.get(steamItem.getHash_name());
-            //该商品在buff的订单
+            //商品在buff的售卖订单
             List<BuffBuyItems> sellOrder = buffBuyItemService.getSellOrder(String.valueOf(itemId));
             if (sellOrder.isEmpty()) {
                 continue;
             }
-            sellOrder = sellOrder.subList(0, Math.min(3, sellOrder.size()));
+            sellOrder = sellOrder.subList(0, Math.min(2, sellOrder.size()));
             for (BuffBuyItems buffBuyItems : sellOrder) {
                 //校验该订单是否购买
                 if (profitService.checkBuyItemOrder(buffBuyItems, steamItem.getSell_price())) {

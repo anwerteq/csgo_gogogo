@@ -31,7 +31,7 @@ public class SteamController {
     ListingsService listingsService;
 
     /**
-     * 上架商品接口
+     * steam库存商品上架市场
      */
     @RequestMapping("grounding")
     public void grounding(){
@@ -60,12 +60,11 @@ public class SteamController {
     }
 
     /**
-     * 下架商品
+     * 拉取steam市场信息
      */
     @RequestMapping("pullSteamItem")
     @ResponseBody
     public void pullSteamItem() {
-
         listingsService.pullItems();
     }
 
