@@ -119,8 +119,8 @@ public class GroundingService {
         Integer priceCount = null;
         if (price.startsWith("$")) {
             price = price.replace("$", "");
-            Double pre_tax = ( 100 * Double.parseDouble(price)  ) * 0.85 ;
-            priceCount = new BigDecimal(pre_tax).setScale(0, BigDecimal.ROUND_UP).intValue();
+            Double pre_tax = ( 100 * Double.parseDouble(price)) * 0.87 ;
+            priceCount = new BigDecimal(pre_tax).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
             //税前价格
 //            double pre_tax =  100 * Double.parseDouble(price) - 1;
 //            //税后价格
