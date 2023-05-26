@@ -120,7 +120,7 @@ public class BuffBuyItemService {
     public void buffSellOrder() {
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.selectOrderAsc();
         Collections.shuffle(select);
-        select = select.subList(0,10);
+//        select = select.subList(0,10);
         String goods_id = "";
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
@@ -164,6 +164,7 @@ public class BuffBuyItemService {
                 while (sum > 0){
                     try {
                         askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
+                        SleepUtil.sleep(300);
                         sum = 0;
                     }catch (Exception e){
                         log.error("确认订单失败{}",e);
