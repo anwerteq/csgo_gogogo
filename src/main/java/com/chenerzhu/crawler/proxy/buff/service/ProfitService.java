@@ -112,6 +112,10 @@ public class ProfitService {
         //计算税后人民币的价格
         Double afterRateRMB  = steamSellPrice *takeTax* exchangeRate;
         Double costMoney = Double.parseDouble( buffBuyItems.getPrice());
+        //没啥钱，先买便宜的
+        if (costMoney > 2){
+            return false;
+        }
         //成本是税后的7.5折，可以购买
         if (costMoney/afterRateRMB  <= 7.5){
             return  true;
