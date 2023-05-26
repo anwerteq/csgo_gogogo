@@ -119,10 +119,13 @@ public class GroundingService {
         Integer priceCount = null;
         if (price.startsWith("$")) {
             price = price.replace("$", "");
+            Double pre_tax = ( 100 * Double.parseDouble(price)  ) * 0.85 ;
+            priceCount = new BigDecimal(pre_tax).setScale(0, BigDecimal.ROUND_UP).intValue();
             //税前价格
-            double pre_tax =  100 * Double.parseDouble(price) - 1;
-            //税后价格
-            priceCount = new BigDecimal(pre_tax * 0.85).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+//            double pre_tax =  100 * Double.parseDouble(price) - 1;
+//            //税后价格
+////            priceCount = new BigDecimal(pre_tax * 0.85).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+//            priceCount = Integer.parseInt(pre_tax);
         }
         Boolean flag = false;
         if (priceCount == null) {
