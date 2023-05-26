@@ -71,7 +71,7 @@ public class GroundingService {
             //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
             int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
             //获取购买成本的最低销售金额（美分）
-            int lowCostCent = buffCostService.getLowCostCent(description.getClassid(), assets.getClassid());
+            int lowCostCent = buffCostService.getLowCostCent(assets.getAssetid(), assets.getClassid());
             //获取最大的销售金额
             int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
             //steam推荐的金额和buff售卖最低金额 选高的
@@ -152,7 +152,7 @@ public class GroundingService {
         paramerMap.put("contextid", "2");
         paramerMap.put("assetid", assetid);
         paramerMap.put("amount", amount);
-        paramerMap.put("beforeTaxPriceDollar", String.valueOf(steamAfterTaxPrice));
+        paramerMap.put("price", String.valueOf(steamAfterTaxPrice));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
         if (StrUtil.isEmpty(responseStr)){
             log.info("商品assetid-{}-上架失败",assetid);
