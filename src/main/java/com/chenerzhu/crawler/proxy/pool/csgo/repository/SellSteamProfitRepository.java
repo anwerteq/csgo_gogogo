@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface SellSteamProfitRepository extends JpaRepository<SellSteamProfitEntity, Long> {
@@ -15,8 +16,8 @@ public interface SellSteamProfitRepository extends JpaRepository<SellSteamProfit
     List<SellSteamProfitEntity> selectOrderAsc();
 
 
-    @Query(value = "select item_id ,hash_name from sell_steam_profit  ORDER BY interest_rate ", nativeQuery = true)
-    List<SellSteamProfitEntity> selectItemIdANdHashName();
+    @Query(value = " select item_id ,hash_name from sell_steam_profit  ORDER BY interest_rate ", nativeQuery = true)
+    List<Map<String,String>> selectItemIdANdHashName();
 
 }
 

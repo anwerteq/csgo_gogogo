@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -144,8 +142,12 @@ public class ProfitService {
     }
 
     public Map<String,Long> selectItemIdANdHashName(){
-        List<SellSteamProfitEntity> list = sellSteamProfitRepository.selectItemIdANdHashName();
-        Map<String, Long> collect = list.stream().collect(Collectors.toMap(SellSteamProfitEntity::getHash_name, SellSteamProfitEntity::getItem_id));
-        return collect;
+        List<Map<String, String>> maps = sellSteamProfitRepository.selectItemIdANdHashName();
+        List<SellSteamProfitEntity> list = new ArrayList<>();
+        Map<String, Long> hashNameAndItemId = new HashMap<>();
+        for (Map<String, String> map : maps) {
+            hashNameAndItemId.put(map.get("hash_name"),Long.valueOf(map.get("item_id")));
+        }
+        return hashNameAndItemId;
     }
 }
