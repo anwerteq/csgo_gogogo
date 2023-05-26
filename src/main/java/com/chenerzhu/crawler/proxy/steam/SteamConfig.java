@@ -23,9 +23,9 @@ public class SteamConfig {
         Map<String, String> headers1 = new HashMap() {{
             //steam请求头
             put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            put("Cookie", SteamConfig.STEAM_COOKIE);
+            put("Cookie", getCookie());
             put("Host", "steamcommunity.com");
-            put("Referer", "https://steamcommunity.com/profiles/76561199503276197/inventory?modal=1&market=1");
+            put("Referer", "https://steamcommunity.com/profiles/"+SteamConfig.getSteamId()+"/inventory?modal=1&market=1");
         }};
         SleepUtil.sleep(550);
         return headers1;
@@ -37,7 +37,7 @@ public class SteamConfig {
      */
     public static Map<String, String> getSaleHeader() {
         Map<String, String> steamHeader = getSteamHeader();
-        steamHeader.put("Referer", "https://steamcommunity.com/profiles/76561199503276197/inventory?modal=1&market=1");
+        steamHeader.put("Referer", "https://steamcommunity.com/profiles/"+SteamConfig.getSteamId()+"/inventory?modal=1&market=1");
         steamHeader.put("Content-Type", "application/x-www-form-urlencoded");
         return steamHeader;
     }
@@ -51,6 +51,25 @@ public class SteamConfig {
         return steamHeader;
     }
 
+    /**
+     * 获取steamId
+     */
+    public static String getSteamId(){
+        String steamLoginSecure = getCookieOnlyKey("steamLoginSecure");
+        String substring = steamLoginSecure.substring(0, 17);
+        return substring;
+    }
+    
+    public static  String getCookie(){
+        
+        return STEAM_COOKIE;
+    }
+    
+    public static  String getCookieOnlyKey(String key){
+        String[] split = getCookie().split(key + "=");
+        String value = split[1].split(";")[0];
+        return value;
+    }
 }
 
 

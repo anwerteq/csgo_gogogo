@@ -13,12 +13,12 @@ import java.io.Serializable;
  **/
 @Data
 @ToString
-@Entity
+//@Entity
 @Table(name = "authorization_key")
 public class AuthorizationKey implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JSONField(serialize = false)
     private long id;
 
