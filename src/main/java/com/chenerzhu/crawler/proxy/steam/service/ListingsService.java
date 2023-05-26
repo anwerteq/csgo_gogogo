@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
-import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
@@ -45,12 +43,12 @@ public class ListingsService {
     BuffBuyItemService buffBuyItemService;
 
 
-    public void pullItems(){
+    public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
         int start = 0;
-        int count= 10;
-        while (start < 4000){
-            pullItem(start,hashnameAndItemId);
+        int count = 10;
+        while (start < 4000) {
+            pullItem(start, hashnameAndItemId);
             start = start + count;
         }
     }
@@ -61,7 +59,7 @@ public class ListingsService {
      * @param start
      * @return
      */
-    public boolean pullItem(int start,Map<String, Long> hashnameAndItemId) {
+    public boolean pullItem(int start, Map<String, Long> hashnameAndItemId) {
         String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=100&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
         ResponseEntity<String> responseEntity = restTemplate.exchange(itemUrl, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
@@ -70,29 +68,29 @@ public class ListingsService {
         SteamSearchdata steamSearchdata = JSONObject.parseObject(responseEntity.getBody(), SteamSearchdata.class);
         Boolean isPause = true;
         //保存steam信息
-        ExecutorUtil.pool.execute(()->saveSteamItems(steamSearchdata.getResults()));
+        ExecutorUtil.pool.execute(() -> saveSteamItems(steamSearchdata.getResults()));
         for (SteamItem steamItem : steamSearchdata.getResults()) {
             //steam商品不在推荐的数据上
-            if (!hashnameAndItemId.containsKey(steamItem.getHash_name())){
+            if (!hashnameAndItemId.containsKey(steamItem.getHash_name())) {
                 continue;
             }
             Long itemId = hashnameAndItemId.get(steamItem.getHash_name());
             //该商品在buff的订单
             List<BuffBuyItems> sellOrder = buffBuyItemService.getSellOrder(String.valueOf(itemId));
-            if (sellOrder.isEmpty()){
+            if (sellOrder.isEmpty()) {
                 continue;
             }
-            sellOrder = sellOrder.subList(0,Math.min(3,sellOrder.size()));
+            sellOrder = sellOrder.subList(0, Math.min(3, sellOrder.size()));
             for (BuffBuyItems buffBuyItems : sellOrder) {
                 //校验该订单是否购买
-                if (profitService.checkBuyItemOrder(buffBuyItems,steamItem.getSell_price())){
+                if (profitService.checkBuyItemOrder(buffBuyItems, steamItem.getSell_price())) {
                     //校验可以购买该商品的订单
-                    buffBuyItemService.createOrderAndPayAndAsk(buffBuyItems);
+                    ExecutorUtil.pool.execute(() -> buffBuyItemService.createOrderAndPayAndAsk(buffBuyItems));
                 }
             }
             isPause = false;
         }
-        if (isPause){
+        if (isPause) {
             SleepUtil.sleep(1000);
         }
 
@@ -102,7 +100,6 @@ public class ListingsService {
         }
         return true;
     }
-
 
 
     @Transactional(rollbackFor = Exception.class)
