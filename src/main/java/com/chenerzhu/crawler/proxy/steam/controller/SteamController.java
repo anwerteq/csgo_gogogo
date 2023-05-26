@@ -5,6 +5,7 @@ import com.chenerzhu.crawler.proxy.steam.service.RemovelistingService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,11 +50,9 @@ public class SteamController {
      */
     @RequestMapping("unlistingBlock")
     @ResponseBody
-    public void unlistingBlock(int sum) {
-        if (sum == 0 ){
-            sum = 1;
-        }
-        removelistingService.unlistings(1);
+    public void unlistingBlock(@RequestParam(value = "sum", required = false, defaultValue = "1") int sum) {
+
+        removelistingService.unlistings(sum);
     }
 
 }
