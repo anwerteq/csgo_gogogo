@@ -89,9 +89,18 @@ public class BuffCostService {
         double buff_cost = buffCostEntity.getBuff_cost();
         //计算公式：人民币换成美金，然后除想要的利率折扣
         //如：本金56rmb,正常换美金 56/7 = 8美金 ，通过计算56/7/0.8 = 10美金
-        double lowCostDollar = buff_cost / 7 / 0.8;
+        double lowCostDollar = buff_cost / 7 / 0.78;
         //转换成美分
         int lowCostCent = Double.valueOf(lowCostDollar * 100).intValue() + 1;
         return lowCostCent;
+    }
+
+    public static void main(String[] args) {
+
+
+        double lowCostDollar = 1.71 / 7 / 0.8;
+        //转换成美分
+        int lowCostCent = Double.valueOf(lowCostDollar * 100).intValue() + 1;
+        System.out.println(lowCostCent);
     }
 }
