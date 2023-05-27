@@ -79,6 +79,7 @@ public class HttpClientUtils {
             HttpHost proxy = new HttpHost("127.0.0.1", 1080);
             DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
             httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
+//            httpClient = HttpClients.custom().build();
             if (url.toLowerCase().startsWith("https")) {
                 initSSL(httpClient, getPort(url));
             }

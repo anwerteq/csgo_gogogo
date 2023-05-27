@@ -69,6 +69,7 @@ public class GroundingService {
             if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
                 return;
             }
+            SleepUtil.sleep(1000);
             //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
             int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
             //获取购买成本的最低销售金额（美分）

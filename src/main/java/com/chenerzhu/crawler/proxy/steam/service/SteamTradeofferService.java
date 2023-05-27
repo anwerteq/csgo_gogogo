@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +25,6 @@ public class SteamTradeofferService {
      */
     public String getPartner(String tradeId) {
         String url = "https://steamcommunity.com/tradeoffer/" + tradeId;
-        Map<String, String> saleHeader = SteamConfig.getSteamHeader();
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         String[] split = resStr.split("var g_ulTradePartnerSteamID = '");
         String[] split1 = split[1].split("';");
@@ -38,6 +38,7 @@ public class SteamTradeofferService {
 
         tradeIds.stream().forEach(tradeId -> {
             String partner = getPartner(tradeId);
+            SleepUtil.sleep(2000);
             doSteamaccept(partner,tradeId);
         });
     }

@@ -57,7 +57,10 @@ public class ConfirmTradeService {
             steamTradeofferService.steamaccept(tradeIds);
             log.info("确认收货完成");
         }catch (Exception ex){
-            log.error("确认收货失败");
+            log.error("确认收货失败",ex);
+        }
+        if (tradeIds.isEmpty()){
+            return;
         }
         //steam上架商品
         groundingService.productListingOperation();

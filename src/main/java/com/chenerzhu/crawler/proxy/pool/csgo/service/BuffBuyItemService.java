@@ -204,11 +204,11 @@ public class BuffBuyItemService {
                     buffCostService.updateCostStatus(atomicMarkCost.get(),3);
                     sum = 0;
                 }catch (Exception e){
-                    log.error("确认订单失败{}",e);
+                    log.error("通知卖家发起报价,失败{}",e);
                     sum--;
                 }
             }
-            log.error("确认订单确认成功{}",atomicMarkCost.get().getName());
+            log.error("通知卖家发起报价成功{}",atomicMarkCost.get().getName());
         });
     }
 
