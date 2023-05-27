@@ -91,7 +91,7 @@ public class BuffCostService {
         //如：本金56rmb,正常换美金 56/7 = 8美金 ，通过计算56/7/0.8 = 10美金
         double lowCostDollar = buff_cost / 7 / 0.8;
         //转换成美分
-        int lowCostCent = Double.valueOf(lowCostDollar * 100).intValue();
+        int lowCostCent = Double.valueOf(lowCostDollar * 100).intValue() + 1;
         return lowCostCent;
     }
 }

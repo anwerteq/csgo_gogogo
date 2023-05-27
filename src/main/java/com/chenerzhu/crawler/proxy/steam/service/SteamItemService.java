@@ -69,7 +69,11 @@ public class SteamItemService {
      * 重新上架久卖的商品
      */
     public void doUpdataPlatformItem(){
-        removelistingService.unlistings(1);
+        try {
+            removelistingService.unlistings(1);
+        }catch (Exception e){
+            log.error("错误",e);
+        }
         SleepUtil.sleep(1000 * 10);
         groundingService.productListingOperation();
     }

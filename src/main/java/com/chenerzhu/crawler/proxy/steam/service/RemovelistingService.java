@@ -63,6 +63,7 @@ public class RemovelistingService {
                     continue;
                 }
                 removeList(id.split("_")[1]);
+                SleepUtil.sleep(100);
             }
             log.info("最早上架的十个商品，已经取消");
         } catch (Exception e) {
@@ -97,12 +98,7 @@ public class RemovelistingService {
         String url = "https://steamcommunity.com/market/removelisting/" + id;
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
-        for (String cookie : saleHeader.get("Cookie").split(";")) {
-            if ("sessionid".equals(cookie.split("=")[0].trim())) {
-                paramerMap.put("sessionid", cookie.split("=")[1].trim());
-                break;
-            }
-        }
+        paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
     }
 }

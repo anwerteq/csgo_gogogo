@@ -78,6 +78,7 @@ public class GroundingService {
             //steam推荐的金额和buff售卖最低金额 选高的
             saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
             log.info("steam商品上架完成:" + priceVerview.getClassid());
+            SleepUtil.sleep(1000);
         });
         log.info("steam全部商品上架完成");
     }
