@@ -27,21 +27,24 @@ public class BuffCostEntity {
     int is_mate;
 
 
-    long assetid;
-
-    long classid;
-
-
     /**
      * buff购买成本
      */
     double buff_cost;
 
+
+    String hash_name;
+    long assetid;
+
+    long classid;
+
+
+
     /**
      * steam销售到手金额
      */
     double returned_money;
-    String hash_name;
+
 
     /**
      * 利润金额
