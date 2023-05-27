@@ -49,9 +49,9 @@ public class ListingsService {
     public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
         int start = 0;
-        int count = 10;
-        while (start < 4000) {
-            pullItem(start, hashnameAndItemId);
+        int count = 80;
+        while (start < 8000) {
+            pullItem(start, hashnameAndItemId, count);
             start = start + count;
         }
     }
@@ -62,8 +62,10 @@ public class ListingsService {
      * @param start
      * @return
      */
-    public boolean pullItem(int start, Map<String, Long> hashnameAndItemId) {
-        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&count=10&search_descriptions=0&sort_column=popular&sort_dir=desc&norender=1&start=" + start;
+    public boolean pullItem(int start, Map<String, Long> hashnameAndItemId, int count) {
+        String paramer = "&start=" + start + "&count=" + count;
+        String itemUrl = "https://steamcommunity.com/market/search/render/?query=&search_descriptions=0&sort_column=popular" +
+                "&sort_dir=desc&norender=1" + paramer;
         String rep = HttpClientUtils.sendGet(itemUrl, SteamConfig.getSteamHeader());
         SteamSearchRoot steamSearchRoot = JSONObject.parseObject(rep, SteamSearchRoot.class);
         Boolean isPause = true;
@@ -80,7 +82,7 @@ public class ListingsService {
             if (sellOrder.isEmpty()) {
                 continue;
             }
-            sellOrder = sellOrder.subList(0, Math.min(2, sellOrder.size()));
+            sellOrder = sellOrder.subList(0, Math.min(1, sellOrder.size()));
             for (BuffBuyItems buffBuyItems : sellOrder) {
                 //校验该订单是否购买
                 if (profitService.checkBuyItemOrder(buffBuyItems, steamItem.getSell_price())) {
@@ -93,10 +95,9 @@ public class ListingsService {
             isPause = false;
         }
         if (isPause) {
-            SleepUtil.sleep(3000);
+            SleepUtil.sleep(5000);
         }
-
-        log.info("查询的页数：" + (start/10 + 1));
+        log.info("查询的页数：{},每页的条数：{};", (start / count + 1), count);
         if (start >= steamSearchRoot.getTotal_count()) {
             return false;
         }

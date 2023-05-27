@@ -47,6 +47,7 @@ public class BuffCostService {
         buffCostEntity.setBuff_cost(Double.valueOf(buyItem.getPrice()));
         buffCostEntity.setAssetid(Long.valueOf(buyItem.getAsset_info().getAssetid()));
         buffCostEntity.setClassid(Long.valueOf(buyItem.getAsset_info().getClassid()));
+        buffCostEntity.setCreate_time(new Date());
         buffCostEntity.setName(buyItem.getName());
         buffCostEntity.setHash_name(buyItem.getHash_name());
         BuffCostEntity save = buffCostRepository.save(buffCostEntity);
@@ -65,11 +66,24 @@ public class BuffCostService {
      * @param classid
      * @return
      */
-    public int getLowCostCent(String assetid, String classid) {
-        BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid), Long.valueOf(classid));
+    public int getLowCostCent(String assetid, String classid,String market_hash_name) {
+        BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid),Long.valueOf(classid),market_hash_name);
         if (ObjectUtil.isNull(buffCostEntity)) {
+            //steam的库存信息没有和buff购买信息匹配上
+            buffCostEntity = buffCostRepository.selectOne(market_hash_name);
+        }
+        if (ObjectUtil.isNull(buffCostEntity)){
             return 0;
         }
+        //没有，匹配过，进行匹配
+        if (buffCostEntity.getIs_mate() == 0){
+            buffCostEntity.setAssetid(Long.valueOf(assetid));
+            buffCostEntity.setClassid(Long.valueOf(classid));
+            buffCostEntity.setIs_mate(1);
+            buffCostRepository.save(buffCostEntity);
+        }
+
+
         //购买成本   7 *x * 0.85  = y (金额)   9/y > 0.8
         //   cost/x*7 < 0.8      cost /5.6 = x
         double buff_cost = buffCostEntity.getBuff_cost();

@@ -21,7 +21,11 @@ public class BuffCostEntity {
     private String costId;
 
     String name;
-    String hash_name;
+    /**
+     * buff购买信息是否和steam库存配置过
+     */
+    int is_mate;
+
 
     long assetid;
 
@@ -37,6 +41,7 @@ public class BuffCostEntity {
      * steam销售到手金额
      */
     double returned_money;
+    String hash_name;
 
     /**
      * 利润金额
@@ -52,11 +57,12 @@ public class BuffCostEntity {
     /**
      * 创建时间
      */
-    Date createTime;
+    Date create_time;
 
     /**
      * 更新时间
      */
-    Date updateTime;
+    Date update_time;
+
 
 }

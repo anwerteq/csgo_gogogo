@@ -208,6 +208,7 @@ public class BuffBuyItemService {
                     sum--;
                 }
             }
+            log.error("确认订单确认成功{}",atomicMarkCost.get().getName());
         });
     }
 
@@ -247,7 +248,6 @@ public class BuffBuyItemService {
         if (responseEntity1.getStatusCode().value() != 200) {
             log.error("让卖家发送报价失败");
         }
-        log.info("让卖家报价返回的数据：" + responseEntity1.getBody());
     }
 
     /**

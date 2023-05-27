@@ -24,7 +24,26 @@ public interface BuffCostRepository extends JpaRepository<BuffCostEntity, Long> 
      * @param classid
      * @return
      */
-    @Query(value = "select * from buff_cost where assetid= ?1 and classid =?2  limit 1", nativeQuery = true)
-    BuffCostEntity selectOne(long assetid, long classid);
+    @Query(value = "select * from buff_cost where assetid= ?1 limit 1", nativeQuery = true)
+    BuffCostEntity selectOne(long assetid);
 
+
+    /**
+     * 查询商品购买记录
+     * @param assetid
+     * @param classid
+     * @return
+     */
+    @Query(value = "select * from buff_cost where assetid= ?1 and classid = ?2 and hash_name = ?3 limit 1", nativeQuery = true)
+
+    BuffCostEntity selectOne(long assetid,long classid,String hashName);
+
+
+    /**
+     * 查询商品购买记录
+     * @param hashName
+     * @return
+     */
+    @Query(value = "select * from buff_cost where  hash_name = ?1 and is_mate = 0 order by create_time limit 1", nativeQuery = true)
+    BuffCostEntity selectOne(String  hashName);
 }

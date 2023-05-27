@@ -11,6 +11,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVe
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
+import com.sun.deploy.ui.UIFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class GroundingService {
             //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
             int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
             //获取购买成本的最低销售金额（美分）
-            int lowCostCent = buffCostService.getLowCostCent(assets.getAssetid(), assets.getClassid());
+            int lowCostCent = buffCostService.getLowCostCent(assets.getAssetid(), assets.getClassid(),description.getMarket_hash_name());
             //获取最大的销售金额
             int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
             //steam推荐的金额和buff售卖最低金额 选高的
@@ -91,10 +92,14 @@ public class GroundingService {
     public int getAfterTaxCentMoney(String beforeTaxPriceDollar) {
         beforeTaxPriceDollar = beforeTaxPriceDollar.replace("$", "");
         //税前美分
-        Double beforeTax = (100 * Double.parseDouble(beforeTaxPriceDollar));
+        Double beforeTax = (100 * Double.parseDouble(beforeTaxPriceDollar) -1 );
         //税后美分
-        Double afterTax = beforeTax * 0.87;
-        return afterTax.intValue();
+        Double afterTax = beforeTax * 0.8697;
+        int value = afterTax.intValue();
+        if (afterTax > value){
+            value = value +1 ;
+        }
+        return value;
     }
 
     /**
