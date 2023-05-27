@@ -44,13 +44,15 @@ public class ListingsService {
 
     @Autowired
     BuffBuyItemService buffBuyItemService;
+    static  int index = 0;
 
 
     public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
-        int start = 0;
+        int start = index;
         int count = 80;
         while (start < 8000) {
+            index = start + count;
             pullItem(start, hashnameAndItemId, count);
             start = start + count;
         }
