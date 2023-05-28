@@ -13,6 +13,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.StringEntity;
@@ -76,12 +77,12 @@ public class HttpClientUtils {
         HttpResponse httpResponse = null;
         try {
             //设置代理IP、端口
-            HttpHost proxy = new HttpHost("127.0.0.1", 1080);
+            HttpHost proxy = new HttpHost("127.0.0.1", 26501);
             DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
-//            httpClient = HttpClients.custom().build();
+//            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
+            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
             if (url.toLowerCase().startsWith("https")) {
-                initSSL(httpClient, getPort(url));
+//                initSSL(httpClient, getPort(url));
             }
 
             switch (method) {
@@ -233,6 +234,38 @@ public class HttpClientUtils {
         }
     }
 
+
+    public static SSLConnectionSocketFactory getSSL(){
+        SSLContext ctx = null;
+        try {
+            ctx = SSLContext.getInstance("SSL");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        X509TrustManager tm = new X509TrustManager() {
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @Override
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] arg0,
+                                           String arg1) throws CertificateException {
+            }
+        };
+        try {
+            ctx.init(null, new TrustManager[]{tm}, null);
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(ctx, NoopHostnameVerifier.INSTANCE);
+          return ssf;
+    }
     public static String sendGet(final String url, Map<String, String> headerMap) {
         return sendGet(url, headerMap, DEFAULT_CHARSET, DEFAULT_CHARSET);
     }

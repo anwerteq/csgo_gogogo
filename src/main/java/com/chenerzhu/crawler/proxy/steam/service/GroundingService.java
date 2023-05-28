@@ -69,7 +69,7 @@ public class GroundingService {
             if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
                 return;
             }
-            SleepUtil.sleep(1000);
+//            SleepUtil.sleep(1000);
             //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
             int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
             //获取购买成本的最低销售金额（美分）
@@ -79,7 +79,7 @@ public class GroundingService {
             //steam推荐的金额和buff售卖最低金额 选高的
             saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
             log.info("steam商品上架完成:" + priceVerview.getClassid());
-            SleepUtil.sleep(1000);
+//            SleepUtil.sleep(1000);
         });
         log.info("steam全部商品上架完成");
     }
@@ -161,7 +161,7 @@ public class GroundingService {
         paramerMap.put("amount", amount);
         paramerMap.put("price", String.valueOf(steamAfterTaxPrice));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-        if (StrUtil.isEmpty(responseStr)){
+         if (StrUtil.isEmpty(responseStr)){
             log.info("商品assetid-{}-上架失败",assetid);
             return;
         }
