@@ -11,7 +11,6 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVe
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
-import com.sun.deploy.ui.UIFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -163,6 +162,14 @@ public class GroundingService {
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
          if (StrUtil.isEmpty(responseStr)){
             log.info("商品assetid-{}-上架失败",assetid);
+            return;
+        }
+        JSONObject jsonObject = JSONObject.parseObject(responseStr);
+        String success = jsonObject.getString("success");
+        if ("false".equals(success)){
+
+            log.info("商品assetid-{}-上架失败，失败信息{}",assetid,jsonObject.getString("message"));
+
             return;
         }
         log.info("商品assetid-{}-上架成功",assetid);
