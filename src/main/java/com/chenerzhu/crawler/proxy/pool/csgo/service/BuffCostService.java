@@ -2,30 +2,15 @@ package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.buff.BuffConfig;
-import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
-import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
-import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
-import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
-import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepRoot;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffCreateBillRoot;
-import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
+import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.BuffCostRepository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -62,17 +47,18 @@ public class BuffCostService {
 
     /**
      * 获取商品最低税后美分
+     *
      * @param assetid
      * @param classid
      * @return
      */
-    public BuffCostEntity getLowCostCent(String assetid, String classid,String market_hash_name,int afterTaxCentMoney) {
-        BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid),Long.valueOf(classid),market_hash_name);
+    public BuffCostEntity getLowCostCent(String assetid, String classid, String market_hash_name, int afterTaxCentMoney) {
+        BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid), Long.valueOf(classid), market_hash_name);
         if (ObjectUtil.isNull(buffCostEntity)) {
             //steam的库存信息没有和buff购买信息匹配上
             buffCostEntity = buffCostRepository.selectOne(market_hash_name);
         }
-        if (ObjectUtil.isNull(buffCostEntity)){
+        if (ObjectUtil.isNull(buffCostEntity)) {
             return null;
         }
         //购买成本   7 *x * 0.85  = y (金额)   9/y > 0.8
@@ -87,14 +73,14 @@ public class BuffCostService {
         //获取最大的销售金额
         int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
         //没有，匹配过，进行匹配
-        if (buffCostEntity.getIs_mate() == 0){
+        if (buffCostEntity.getIs_mate() == 0) {
             buffCostEntity.setAssetid(Long.valueOf(assetid));
             buffCostEntity.setClassid(Long.valueOf(classid));
             buffCostEntity.setIs_mate(1);
-            buffCostEntity.setReturned_money(steamAfterTaxPrice);
-            buffCostEntity.setUpdate_time(new Date());
-            buffCostRepository.save(buffCostEntity);
         }
+        buffCostEntity.setReturned_money(steamAfterTaxPrice);
+        buffCostEntity.setUpdate_time(new Date());
+        buffCostRepository.save(buffCostEntity);
         return buffCostEntity;
     }
 
