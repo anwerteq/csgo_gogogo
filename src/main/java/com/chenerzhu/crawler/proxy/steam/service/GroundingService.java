@@ -2,28 +2,26 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffCostService;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Descriptions;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.InventoryRootBean;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
+import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
-import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -68,21 +66,36 @@ public class GroundingService {
             if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
                 return;
             }
-//            SleepUtil.sleep(1000);
-            //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
-            int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
-            //获取购买成本的最低销售金额（美分）
-            int lowCostCent = buffCostService.getLowCostCent(assets.getAssetid(), assets.getClassid(),description.getMarket_hash_name());
             //获取最大的销售金额
-            int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
+            int steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
             //steam推荐的金额和buff售卖最低金额 选高的
             saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
             log.info("steam商品上架完成:" + priceVerview.getClassid());
-//            SleepUtil.sleep(1000);
         });
         log.info("steam全部商品上架完成");
     }
 
+
+    /**
+     * 获取steam的销售价格
+     *
+     * @param priceVerview
+     * @param assets
+     * @param description
+     * @return
+     */
+    public int getSteamAfterTaxPrice(PriceVerviewRoot priceVerview, Assets assets, Descriptions description) {
+        //获取steam推荐的的税后金额（美分） getLowest_price:是steam推荐的税前美金
+        int afterTaxCentMoney = getAfterTaxCentMoney(priceVerview.getLowest_price());
+        //获取购买成本的最低销售金额（美分）
+        BuffCostEntity buffCostEntity = buffCostService.getLowCostCent(assets.getAssetid(), assets.getClassid()
+                , description.getMarket_hash_name(),afterTaxCentMoney);
+        //没有记录，直接使用steam推荐价格
+        if (buffCostEntity == null){
+            return afterTaxCentMoney;
+        }
+        return buffCostEntity.getReturned_money();
+    }
 
     /**
      * 计算出steam的推荐税后美分
@@ -93,15 +106,18 @@ public class GroundingService {
     public int getAfterTaxCentMoney(String beforeTaxPriceDollar) {
         beforeTaxPriceDollar = beforeTaxPriceDollar.replace("$", "");
         //税前美分
-        Double beforeTax = (100 * Double.parseDouble(beforeTaxPriceDollar) -1 );
+        Double beforeTax = (100 * Double.parseDouble(beforeTaxPriceDollar) - 1);
         //税后美分
         Double afterTax = beforeTax * 0.8697;
         int value = afterTax.intValue();
-        if (afterTax > value){
-            value = value +1 ;
+        if (afterTax > value) {
+            value = value + 1;
         }
         return value;
     }
+
+
+
 
     /**
      * 获取steam库存
@@ -160,18 +176,18 @@ public class GroundingService {
         paramerMap.put("amount", amount);
         paramerMap.put("price", String.valueOf(steamAfterTaxPrice));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-         if (StrUtil.isEmpty(responseStr)){
-            log.info("商品assetid-{}-上架失败",assetid);
+        if (StrUtil.isEmpty(responseStr)) {
+            log.info("商品assetid-{}-上架失败", assetid);
             return;
         }
         JSONObject jsonObject = JSONObject.parseObject(responseStr);
         String success = jsonObject.getString("success");
-        if ("false".equals(success)){
+        if ("false".equals(success)) {
 
-            log.info("商品assetid-{}-上架失败，失败信息{}",assetid,jsonObject.getString("message"));
+            log.info("商品assetid-{}-上架失败，失败信息{}", assetid, jsonObject.getString("message"));
 
             return;
         }
-        log.info("商品assetid-{}-上架成功",assetid);
+        log.info("商品assetid-{}-上架成功", assetid);
     }
 }

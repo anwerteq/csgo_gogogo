@@ -43,7 +43,7 @@ public class BuffCostEntity {
     /**
      * steam销售到手金额
      */
-    double returned_money;
+    int returned_money;
 
 
     /**

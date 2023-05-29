@@ -66,24 +66,15 @@ public class BuffCostService {
      * @param classid
      * @return
      */
-    public int getLowCostCent(String assetid, String classid,String market_hash_name) {
+    public BuffCostEntity getLowCostCent(String assetid, String classid,String market_hash_name,int afterTaxCentMoney) {
         BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid),Long.valueOf(classid),market_hash_name);
         if (ObjectUtil.isNull(buffCostEntity)) {
             //steam的库存信息没有和buff购买信息匹配上
             buffCostEntity = buffCostRepository.selectOne(market_hash_name);
         }
         if (ObjectUtil.isNull(buffCostEntity)){
-            return 0;
+            return null;
         }
-        //没有，匹配过，进行匹配
-        if (buffCostEntity.getIs_mate() == 0){
-            buffCostEntity.setAssetid(Long.valueOf(assetid));
-            buffCostEntity.setClassid(Long.valueOf(classid));
-            buffCostEntity.setIs_mate(1);
-            buffCostRepository.save(buffCostEntity);
-        }
-
-
         //购买成本   7 *x * 0.85  = y (金额)   9/y > 0.8
         //   cost/x*7 < 0.8      cost /5.6 = x
         double buff_cost = buffCostEntity.getBuff_cost();
@@ -92,8 +83,21 @@ public class BuffCostService {
         double lowCostDollar = buff_cost / 7 / 0.78;
         //转换成美分
         int lowCostCent = Double.valueOf(lowCostDollar * 100).intValue() + 1;
-        return lowCostCent;
+
+        //获取最大的销售金额
+        int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
+        //没有，匹配过，进行匹配
+        if (buffCostEntity.getIs_mate() == 0){
+            buffCostEntity.setAssetid(Long.valueOf(assetid));
+            buffCostEntity.setClassid(Long.valueOf(classid));
+            buffCostEntity.setIs_mate(1);
+            buffCostEntity.setReturned_money(steamAfterTaxPrice);
+            buffCostEntity.setUpdate_time(new Date());
+            buffCostRepository.save(buffCostEntity);
+        }
+        return buffCostEntity;
     }
+
 
     public static void main(String[] args) {
 
