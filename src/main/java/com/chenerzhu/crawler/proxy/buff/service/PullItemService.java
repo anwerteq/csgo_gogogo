@@ -46,11 +46,12 @@ public class PullItemService {
      * 拉取buff商品列表
      */
     public void pullItmeGoods() {
-        executorService.execute(() -> {
-            int pageIndex = 0;
-            while (pullOnePage(++pageIndex)) {
-            }
-        });
+        pullOnePage(12);
+//        executorService.execute(() -> {
+//            int pageIndex = 0;
+//            while (pullOnePage(++pageIndex)) {
+//            }
+//        });
     }
 
 
@@ -70,10 +71,11 @@ public class PullItemService {
 
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
         itemGoodsList.forEach((item)->{
-            ExecutorUtil.pool.execute(()-> saveItem(item));
+//            ExecutorUtil.pool.execute(()-> saveItem(item));
+            saveItem(item);
         });
         log.info("拉取完，第："+ pageNum);
-        SleepUtil.sleep(3000);
+        SleepUtil.sleep(1000);
         //是否是最后一页
         if (pageNum >= productList.getData().getTotal_page()) {
             return false;

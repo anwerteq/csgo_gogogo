@@ -29,18 +29,21 @@ public class SteamBuyItemService {
 
     /**
      * 提交steam订单
-     * @param price_total
+     * @param price_total：美分
      * @param market_hash_name
      */
-    public void createbuyorder(String price_total, String market_hash_name) {
+    public void createbuyorder(Double price_total, String market_hash_name) {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);
-        createbuyorderEntity.setPrice_total(price_total);
+        createbuyorderEntity.setPrice_total(String.valueOf(price_total.intValue()));
         createbuyorderEntity.setSessionid(SteamConfig.getCookieOnlyKey("sessionid"));
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
+        HashMap hashMap = JSONObject.parseObject(JSONObject.toJSONString(createbuyorderEntity), HashMap.class);
         String url = "https://steamcommunity.com/market/createbuyorder/";  // post ,x-www
-        String responseStr = HttpClientUtils.sendPostForm(url, JSONObject.toJSONString(createbuyorderEntity), saleHeader,new HashMap<>());
+        String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader,hashMap);
         saveSteamCostEntity(createbuyorderEntity);
+        System.out.println(JSONObject.toJSON(createbuyorderEntity));
+        System.out.println(JSONObject.toJSON(saleHeader));
         log.info("steam下求购订单返回的数据为："+responseStr);
     }
 
@@ -52,7 +55,7 @@ public class SteamBuyItemService {
     public void saveSteamCostEntity( CreatebuyorderEntity buyOrderEntity){
         SteamCostEntity steamCostEntity = new SteamCostEntity();
         steamCostEntity.setCostId(UUID.randomUUID().toString());
-        steamCostEntity.setSteam_cost(Double.parseDouble(buyOrderEntity.getPrice_total()));
+        steamCostEntity.setSteam_cost(Double.valueOf(buyOrderEntity.getPrice_total()));
         steamCostEntity.setHash_name(buyOrderEntity.getMarket_hash_name());
         steamCostEntity.setCreate_time(new Date());
         steamCostEntity.setBuy_status(0);

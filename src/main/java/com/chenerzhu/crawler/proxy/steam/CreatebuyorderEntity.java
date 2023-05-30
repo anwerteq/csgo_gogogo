@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 public class CreatebuyorderEntity {
     private String sessionid;
-    private int currency = 1;
-    private int appid = 730;
+    private String currency = "1";
+    private String appid = "730";
     /**
      * 商品hash名字
      */
@@ -22,7 +22,7 @@ public class CreatebuyorderEntity {
     /**
      * 商品数量
      */
-    private int quantity = 1;
+    private String quantity = "1";
     private String first_name = "Ke";
     private String last_name = "Le Le";
     private String billing_address_two = "1626  Monroe Street";
