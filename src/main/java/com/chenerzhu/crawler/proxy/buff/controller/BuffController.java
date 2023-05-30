@@ -4,6 +4,7 @@ import com.chenerzhu.crawler.proxy.buff.service.ConfirmTradeService;
 import com.chenerzhu.crawler.proxy.buff.service.PullHistoryService;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
+import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,12 +29,17 @@ public class BuffController {
     @Autowired
     ConfirmTradeService confirmTradeService;
 
+    @Autowired
+    SteamBuyItemService steamBuyItemService;
+
     /**
      * 拉取商品列表信息（拉取推荐购买和销售数据）
      */
     @RequestMapping("pullItmeGoods")
     @ResponseBody
     public void pullItem() {
+
+//        steamBuyItemService.createbuyorder(3.0,"Sticker | Overpass Diorama (Foil)");
         pullItemService.pullItmeGoods();
     }
 

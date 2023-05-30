@@ -75,7 +75,7 @@ public class PullItemService {
             saveItem(item);
         });
         log.info("拉取完，第："+ pageNum);
-        SleepUtil.sleep(1000);
+        SleepUtil.sleep(500);
         //是否是最后一页
         if (pageNum >= productList.getData().getTotal_page()) {
             return false;

@@ -34,12 +34,14 @@ public class SteamBuyItemService {
      */
     public void createbuyorder(Double price_total, String market_hash_name) {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
-        createbuyorderEntity.setMarket_hash_name(URLEncoder.encode(market_hash_name));
+        createbuyorderEntity.setMarket_hash_name(market_hash_name);
         createbuyorderEntity.setPrice_total(String.valueOf(price_total.intValue()));
         createbuyorderEntity.setSessionid(SteamConfig.getCookieOnlyKey("sessionid"));
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
+        saleHeader.put("Referer","https://steamcommunity.com/market/listings/730/" + URLEncoder.encode(market_hash_name));
         HashMap hashMap = JSONObject.parseObject(JSONObject.toJSONString(createbuyorderEntity), HashMap.class);
-        String url = "https://steamcommunity.com/market/createbuyorder/";  // post ,x-www
+        String url = "https://steamcommunity.com/market/createbuyorder";
+        // post ,x-www
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader,hashMap);
         saveSteamCostEntity(createbuyorderEntity);
         System.out.println(JSONObject.toJSON(createbuyorderEntity));
