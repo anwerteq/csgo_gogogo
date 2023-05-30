@@ -46,12 +46,12 @@ public class PullItemService {
      * 拉取buff商品列表
      */
     public void pullItmeGoods() {
-        pullOnePage(12);
-//        executorService.execute(() -> {
-//            int pageIndex = 0;
-//            while (pullOnePage(++pageIndex)) {
-//            }
-//        });
+//        pullOnePage(12);
+        executorService.execute(() -> {
+            int pageIndex = 0;
+            while (pullOnePage(++pageIndex)) {
+            }
+        });
     }
 
 

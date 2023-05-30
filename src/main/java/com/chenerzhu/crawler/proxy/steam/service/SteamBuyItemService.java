@@ -34,7 +34,7 @@ public class SteamBuyItemService {
      */
     public void createbuyorder(Double price_total, String market_hash_name) {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
-        createbuyorderEntity.setMarket_hash_name(market_hash_name);
+        createbuyorderEntity.setMarket_hash_name(URLEncoder.encode(market_hash_name));
         createbuyorderEntity.setPrice_total(String.valueOf(price_total.intValue()));
         createbuyorderEntity.setSessionid(SteamConfig.getCookieOnlyKey("sessionid"));
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
