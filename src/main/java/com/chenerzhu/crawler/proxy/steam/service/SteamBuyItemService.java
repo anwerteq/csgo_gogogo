@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.CreatebuyorderEntity;
@@ -44,9 +45,15 @@ public class SteamBuyItemService {
         String url = "https://steamcommunity.com/market/createbuyorder";
         // post ,x-www
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader,hashMap);
-        saveSteamCostEntity(createbuyorderEntity);
-        System.out.println(JSONObject.toJSON(createbuyorderEntity));
-        System.out.println(JSONObject.toJSON(saleHeader));
+        JSONObject jsonObject = JSONObject.parseObject(responseStr);
+        Object success = jsonObject.get("success");
+        if (success.toString().compareTo("1") >= 1){
+            log.info("steam下求购订单success返回的数据为："+responseStr);
+            return;
+        }
+        ExecutorUtil.pool.execute(()->{
+            saveSteamCostEntity(createbuyorderEntity);
+        });
         log.info("steam下求购订单返回的数据为："+responseStr);
     }
 

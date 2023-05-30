@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -48,8 +49,9 @@ public class PullItemService {
     public void pullItmeGoods() {
 //        pullOnePage(12);
         executorService.execute(() -> {
-            int pageIndex = 0;
-            while (pullOnePage(++pageIndex)) {
+            AtomicInteger atomicInteger = new AtomicInteger(1);
+            while (pullOnePage(atomicInteger)) {
+                atomicInteger.addAndGet(1);
             }
         });
     }
@@ -57,12 +59,12 @@ public class PullItemService {
 
     /**
      * 拉取某一页数据
-     * @param pageNum
+     * @param atomicInteger
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean pullOnePage(int pageNum) {
-        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + pageNum + "&use_suggestion=0&_=1684057330094&page_size=80";
+    public Boolean pullOnePage(AtomicInteger atomicInteger) {
+        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get() + "&use_suggestion=0&_=1684057330094&page_size=80";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
             return false;
@@ -73,9 +75,9 @@ public class PullItemService {
         itemGoodsList.forEach((item)->{
             ExecutorUtil.pool.execute(()-> saveItem(item));
         });
-        log.info("拉取完，第："+ pageNum);
+        log.info("拉取完，第："+ atomicInteger.get());
         //是否是最后一页
-        if (pageNum >= productList.getData().getTotal_page()) {
+        if (atomicInteger.get() >= productList.getData().getTotal_page()) {
             return false;
         }
         return true;
