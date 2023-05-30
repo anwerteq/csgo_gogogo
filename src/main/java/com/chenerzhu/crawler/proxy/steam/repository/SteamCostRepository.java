@@ -14,7 +14,7 @@ public interface SteamCostRepository extends JpaRepository<SteamCostEntity, Long
      * @param hashName
      * @return
      */
-    @Query(value = "select * from steam_cost where hash_name ?1 and buy_status = 0  limit 1  ", nativeQuery = true)
+    @Query(value = "select * from steam_cost where hash_name  = ?1 and buy_status = 0  limit 1  ", nativeQuery = true)
     SteamCostEntity selectByHashName(String hashName);
 
 }

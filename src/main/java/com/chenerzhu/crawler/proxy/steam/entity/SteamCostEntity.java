@@ -29,7 +29,7 @@ public class SteamCostEntity {
 
 
     /**
-     * steam购买成本
+     * steam购买成本,美分
      */
     double steam_cost;
 
