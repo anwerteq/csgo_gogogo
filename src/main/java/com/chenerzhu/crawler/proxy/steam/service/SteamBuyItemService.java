@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.CreatebuyorderEntity;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
@@ -61,6 +62,16 @@ public class SteamBuyItemService {
         steamCostEntity.setHash_name(buyOrderEntity.getMarket_hash_name());
         steamCostEntity.setCreate_time(new Date());
         steamCostEntity.setBuy_status(0);
+        steamCostRepository.save(steamCostEntity);
+    }
+
+
+    public void updateSteamCostEntity(Assets assets,SteamCostEntity steamCostEntity,String name){
+        steamCostEntity.setUpdate_time(new Date());
+        steamCostEntity.setBuy_status(1);
+        steamCostEntity.setClassid(assets.getClassid());
+        steamCostEntity.setAssetid(assets.getAssetid());
+        steamCostEntity.setName(name);
         steamCostRepository.save(steamCostEntity);
     }
 }

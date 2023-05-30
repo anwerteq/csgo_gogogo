@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.steam.service;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
@@ -40,6 +41,9 @@ public class GroundingService {
     @Autowired
     SteamCostRepository steamCostRepository;
 
+    @Autowired
+    SteamBuyItemService steamBuyItemService;
+
     /**
      * steam上架操作逻辑
      */
@@ -56,12 +60,15 @@ public class GroundingService {
             log.info("buff推荐售卖的商品数据为空，禁止上架steam");
             return;
         }
+        //提高匹配速度
+        HashMap<String,Descriptions> descriptionsHashMap = new HashMap();
+        for (Descriptions description : inventoryRootBean.getDescriptions()) {
+            descriptionsHashMap.put(description.getClassid(),description);
+        }
+
         //获取商品类的价格信息集合
         inventoryRootBean.getAssets().stream().forEach(assets -> {
-            List<Descriptions> collect1 = inventoryRootBean.getDescriptions().stream().filter(description -> assets.getClassid().equals(description.getClassid())).collect(Collectors.toList());
-            Descriptions description = collect1.get(0);
-
-
+            Descriptions description = descriptionsHashMap.get(assets.getClassid());
             //获取最大的销售金额
             int steamAfterTaxPrice = 0;
             //已经匹配过的信息
@@ -70,13 +77,12 @@ public class GroundingService {
                 //和steam购买的信息进行匹配
                 steamCostEntity = steamCostRepository.selectByHashName(description.getMarket_hash_name());
             }
+
             if (ObjectUtil.isNotNull(steamCostEntity)) {
-                steamCostEntity.setUpdate_time(new Date());
-                steamCostEntity.setBuy_status(1);
-                steamCostEntity.setClassid(assets.getClassid());
-                steamCostEntity.setAssetid(assets.getAssetid());
-                steamCostEntity.setName(description.getName());
-                steamCostRepository.save(steamCostEntity);
+                final SteamCostEntity steamCostEntity1 = steamCostEntity;
+                ExecutorUtil.pool.execute(()->{
+                    steamBuyItemService.updateSteamCostEntity( assets, steamCostEntity1, description.getName());
+                });
                 //还未到过期时间，高价挂在steam市场中
                 steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue();
 
@@ -84,7 +90,7 @@ public class GroundingService {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
                 SleepUtil.sleep(300);
-                priceVerview.setClassid(description.getClassid());
+                priceVerview.setClassid(assets.getClassid());
 
                 if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
                     return;
@@ -92,7 +98,7 @@ public class GroundingService {
                 //获取最大的销售金额
                 steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
 
-                //
+                //buff上手动购买的，提价销售
                 if (collect.contains(description.getMarket_hash_name())) {
                     steamAfterTaxPrice = Double.valueOf((steamAfterTaxPrice * 1.15)).intValue();
                 }
@@ -108,11 +114,9 @@ public class GroundingService {
 
             //steam推荐的金额和buff售卖最低金额 选高的
             saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
-            log.info("steam商品上架完成:" + description.getClassid());
+            log.info("steam商品上架完成:" + assets.getClassid());
         });
         log.info("steam全部商品上架完成");
-
-
     }
 
     /**
