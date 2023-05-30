@@ -72,6 +72,8 @@ public class GroundingService {
                 steamCostEntity.setAssetid(assets.getAssetid());
                 steamCostEntity.setName(description.getName());
                 steamCostRepository.save(steamCostEntity);
+
+                return;
             }
             //售卖到buff的商品，不上架 old
             if (collect.contains(description.getMarket_hash_name())) {

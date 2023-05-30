@@ -33,7 +33,6 @@ public class ProfitService {
     /**
      * 保存推荐在steam购买的记录
      */
-    @Async
     public void saveSellBuffProfitEntity(ItemGoods itemGoods) {
         SellBuffProfitEntity profit = new SellBuffProfitEntity();
         profit.setItem_id(itemGoods.getId());
@@ -73,7 +72,6 @@ public class ProfitService {
     /**
      * 保存在steam售卖的购买记录
      */
-    @Async
     public void saveSellSteamProfit(ItemGoods itemGoods) {
         SellSteamProfitEntity item = checkBuyBuffItem(itemGoods);
         if (item != null) {
