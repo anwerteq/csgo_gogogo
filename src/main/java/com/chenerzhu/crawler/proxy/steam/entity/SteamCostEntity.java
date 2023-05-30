@@ -1,36 +1,27 @@
-package com.chenerzhu.crawler.proxy.buff.entity;
+package com.chenerzhu.crawler.proxy.steam.entity;
 
-import lombok.Data;
-import lombok.ToString;
-
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * buff购买记录表
+ * steam商品购买统计图
  */
-@Data
-@ToString
-@Entity
-@Table(name = "buff_cost")
-public class BuffCostEntity {
+public class SteamCostEntity {
 
     @Id
     private String costId;
 
     String name;
     /**
-     * buff购买信息是否和steam库存配置过
+     * steam购买信息是否和buff销售信息挂钩
      */
     int is_mate;
 
 
     /**
-     * buff购买成本
+     * steam购买成本
      */
-    double buff_cost;
+    double steam_cost;
 
 
     String hash_name;
@@ -41,7 +32,7 @@ public class BuffCostEntity {
 
 
     /**
-     * steam销售到手金额,人民币：分
+     * buff销售到手金额,（美分）
      */
     int returned_money;
 
@@ -66,6 +57,5 @@ public class BuffCostEntity {
      * 更新时间
      */
     Date update_time;
-
 
 }

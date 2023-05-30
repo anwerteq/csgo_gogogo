@@ -78,7 +78,7 @@ public class BuffCostService {
             buffCostEntity.setClassid(Long.valueOf(classid));
             buffCostEntity.setIs_mate(1);
         }
-        buffCostEntity.setReturned_money(steamAfterTaxPrice);
+        buffCostEntity.setReturned_money(steamAfterTaxPrice * 7);
         buffCostEntity.setUpdate_time(new Date());
         buffCostRepository.save(buffCostEntity);
         return buffCostEntity;

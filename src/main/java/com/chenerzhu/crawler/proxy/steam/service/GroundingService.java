@@ -94,7 +94,7 @@ public class GroundingService {
         if (buffCostEntity == null){
             return afterTaxCentMoney;
         }
-        return buffCostEntity.getReturned_money();
+        return buffCostEntity.getReturned_money() / 7;
     }
 
     /**

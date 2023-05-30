@@ -38,11 +38,13 @@ public class ProfitService {
         ;
         //购买成本
         double profit = sellBuffProfitEntity.getSteam_price_cny() * 1.15 * 0.85;
-        sellBuffProfitEntity.setIn_fact_steam_price_cny(Double.valueOf(String.format("%.3f", profit)));
+        sellBuffProfitEntity.setIn_fact_steam_price_cny(Double.valueOf(String.format("%.3f", sellBuffProfitEntity.getSteam_price_cny())));
         sellBuffProfitEntity.setSell_min_price(Double.valueOf(itemGoods.getSell_min_price()));
         sellBuffProfitEntity.setQuick_price(Double.valueOf(itemGoods.getQuick_price()));
         sellBuffProfitEntity.setSell_num(String.valueOf(itemGoods.getSell_num()));
+        //buff售卖=steam购买
         double interest =sellBuffProfitEntity.getSell_min_price() - sellBuffProfitEntity.getIn_fact_steam_price_cny();
+        //赚的几率
         double interest_rate = (interest / sellBuffProfitEntity.getIn_fact_steam_price_cny() * 100);
         sellBuffProfitEntity.setInterest_rate(String.format("%.3f", interest_rate));
         sellBuffProfitEntity.setUp_date(new Date());
