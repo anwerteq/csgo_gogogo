@@ -57,7 +57,7 @@ public class RemovelistingService {
             log.info("获取上架信息失败");
         }
         try {
-            int length = Math.min(10,marketListingsRows.children().size());
+            int length = Math.max(10,marketListingsRows.children().size());
             for (int i = 0; i < length; i++) {
                 Element child = marketListingsRows.children().get(i);
                 String id = child.id();
@@ -87,7 +87,7 @@ public class RemovelistingService {
                 continue;
             }
             removeList(id.split("_")[1]);
-            SleepUtil.sleep(250);
+            SleepUtil.sleep(350);
         }
         log.info("被锁的商品，已经全部取消");
     }

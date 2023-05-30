@@ -57,16 +57,18 @@ public class GroundingService {
             return;
         }
         //获取商品类的价格信息集合
-        inventoryRootBean.getDescriptions().stream().forEach(description -> {
+        inventoryRootBean.getAssets().stream().forEach(assets -> {
+            List<Descriptions> collect1 = inventoryRootBean.getDescriptions().stream().filter(description -> assets.getClassid().equals(description.getClassid())).collect(Collectors.toList());
+            Descriptions description = collect1.get(0);
 
-            Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(description.getClassid())).findFirst().get();
+
             //获取最大的销售金额
             int steamAfterTaxPrice = 0;
             //已经匹配过的信息
-            SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assets.getAssetid(),assets.getClassid());
-            if (ObjectUtil.isNull(steamCostEntity)){
+            SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assets.getAssetid(), assets.getClassid());
+            if (ObjectUtil.isNull(steamCostEntity)) {
                 //和steam购买的信息进行匹配
-                steamCostEntity =  steamCostRepository.selectByHashName(description.getMarket_hash_name());
+                steamCostEntity = steamCostRepository.selectByHashName(description.getMarket_hash_name());
             }
             if (ObjectUtil.isNotNull(steamCostEntity)) {
                 steamCostEntity.setUpdate_time(new Date());
@@ -76,9 +78,9 @@ public class GroundingService {
                 steamCostEntity.setName(description.getName());
                 steamCostRepository.save(steamCostEntity);
                 //还未到过期时间，高价挂在steam市场中
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue() ;
+                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue();
 
-            }else {
+            } else {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
                 SleepUtil.sleep(300);
@@ -92,7 +94,7 @@ public class GroundingService {
 
                 //
                 if (collect.contains(description.getMarket_hash_name())) {
-                    steamAfterTaxPrice =  Double.valueOf((steamAfterTaxPrice * 1.15)).intValue() ;
+                    steamAfterTaxPrice = Double.valueOf((steamAfterTaxPrice * 1.15)).intValue();
                 }
             }
 
@@ -109,6 +111,8 @@ public class GroundingService {
             log.info("steam商品上架完成:" + description.getClassid());
         });
         log.info("steam全部商品上架完成");
+
+
     }
 
     /**
@@ -128,7 +132,6 @@ public class GroundingService {
         Date date = new Date(Integer.parseInt(year) - 1900, Integer.parseInt(month), Integer.parseInt(day), 13, 0, 0);
         return date;
     }
-
 
 
     /**
@@ -241,6 +244,6 @@ public class GroundingService {
 
             return;
         }
-        log.info("商品assetid-{}-上架成功，上架成功是否需要确认（1：是，0：否）:{}", assetid,jsonObject.getString("requires_confirmation"));
+        log.info("商品assetid-{}-上架成功，上架成功是否需要确认（1：是，0：否）:{}", assetid, jsonObject.getString("requires_confirmation"));
     }
 }
