@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -42,6 +43,7 @@ public class GroundingService {
     /**
      * steam上架操作逻辑
      */
+    @Transactional
     public void productListingOperation() {
         //获取库存
         InventoryRootBean inventoryRootBean = getSteamInventory();
@@ -56,35 +58,30 @@ public class GroundingService {
         }
         //获取商品类的价格信息集合
         inventoryRootBean.getDescriptions().stream().forEach(description -> {
+
             Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(description.getClassid())).findFirst().get();
             //获取最大的销售金额
             int steamAfterTaxPrice = 0;
-            //和steam购买的信息进行匹配
-            SteamCostEntity steamCostEntity = steamCostRepository.selectByHashName(description.getMarket_hash_name());
+            //已经匹配过的信息
+            SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assets.getAssetid(),assets.getClassid());
+            if (ObjectUtil.isNull(steamCostEntity)){
+                //和steam购买的信息进行匹配
+                steamCostEntity =  steamCostRepository.selectByHashName(description.getMarket_hash_name());
+            }
             if (ObjectUtil.isNotNull(steamCostEntity)) {
                 steamCostEntity.setUpdate_time(new Date());
                 steamCostEntity.setBuy_status(1);
-                steamCostEntity.setClassid(description.getClassid());
+                steamCostEntity.setClassid(assets.getClassid());
                 steamCostEntity.setAssetid(assets.getAssetid());
                 steamCostEntity.setName(description.getName());
                 steamCostRepository.save(steamCostEntity);
-                //获取商品的过期时间
-                Date expirationTime = getExpirationTime(description.getOwner_descriptions());
-                if (expirationTime.compareTo(new Date()) <= 0) {
-                    //上架到buff中
-
-                    return;
-                }
                 //还未到过期时间，高价挂在steam市场中
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.2)).intValue() ;
+                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue() ;
 
             }else {
-                //售卖到buff的商品，不上架 old
-                if (collect.contains(description.getMarket_hash_name())) {
-                    return;
-                }
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
+                SleepUtil.sleep(300);
                 priceVerview.setClassid(description.getClassid());
 
                 if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
@@ -92,6 +89,19 @@ public class GroundingService {
                 }
                 //获取最大的销售金额
                 steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
+
+                //
+                if (collect.contains(description.getMarket_hash_name())) {
+                    steamAfterTaxPrice =  Double.valueOf((steamAfterTaxPrice * 1.15)).intValue() ;
+                }
+            }
+
+            //长时间在steam卖不出来，放在buff中售卖 获取商品的过期时间
+            Date expirationTime = getExpirationTime(description.getOwner_descriptions());
+            if (expirationTime.compareTo(new Date()) <= 0) {
+                //上架到buff中
+
+                return;
             }
 
             //steam推荐的金额和buff售卖最低金额 选高的
@@ -167,7 +177,7 @@ public class GroundingService {
      */
     private InventoryRootBean getSteamInventory() {
         SleepUtil.sleep();
-        String url = "https://steamcommunity.com/inventory/" + SteamConfig.getSteamId() + "/730/2?l=schinese&count=100&market=1";
+        String url = "https://steamcommunity.com/inventory/" + SteamConfig.getSteamId() + "/730/2?l=schinese&count=2000&market=1";
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取steam库存失败");

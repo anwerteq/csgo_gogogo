@@ -57,13 +57,14 @@ public class RemovelistingService {
             log.info("获取上架信息失败");
         }
         try {
-            for (Element child : marketListingsRows.children()) {
+            int length = Math.min(10,marketListingsRows.children().size());
+            for (int i = 0; i < length; i++) {
+                Element child = marketListingsRows.children().get(i);
                 String id = child.id();
                 if (StrUtil.isEmpty(id)) {
                     continue;
                 }
                 removeList(id.split("_")[1]);
-                SleepUtil.sleep(100);
             }
             log.info("最早上架的十个商品，已经取消");
         } catch (Exception e) {
@@ -86,6 +87,7 @@ public class RemovelistingService {
                 continue;
             }
             removeList(id.split("_")[1]);
+            SleepUtil.sleep(250);
         }
         log.info("被锁的商品，已经全部取消");
     }
@@ -100,5 +102,7 @@ public class RemovelistingService {
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
+        SleepUtil.sleep(200);
+        log.info("需要审批的饰品下架信息：{}",responseStr);
     }
 }
