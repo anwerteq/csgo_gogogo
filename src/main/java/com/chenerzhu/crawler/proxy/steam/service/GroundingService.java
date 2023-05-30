@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
@@ -12,6 +13,8 @@ import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Invento
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
+import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
+import com.chenerzhu.crawler.proxy.steam.repository.SteamCostRepository;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +42,9 @@ public class GroundingService {
     @Autowired
     BuffCostService buffCostService;
 
+    @Autowired
+    SteamCostRepository steamCostRepository;
+
     /**
      * steam上架操作逻辑
      */
@@ -55,6 +62,17 @@ public class GroundingService {
         }
         //获取商品类的价格信息集合
         inventoryRootBean.getDescriptions().stream().forEach(description -> {
+            Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(description.getClassid())).findFirst().get();
+            //和steam购买的信息进行匹配
+            SteamCostEntity steamCostEntity = steamCostRepository.selectByHashName(description.getMarket_hash_name());
+            if (ObjectUtil.isNotNull(steamCostEntity)){
+                steamCostEntity.setUpdate_time(new Date());
+                steamCostEntity.setBuy_status(1);
+                steamCostEntity.setClassid(description.getClassid());
+                steamCostEntity.setAssetid(assets.getAssetid());
+                steamCostEntity.setName(description.getName());
+                steamCostRepository.save(steamCostEntity);
+            }
             //售卖到buff的商品，不上架 old
             if (collect.contains(description.getMarket_hash_name())) {
                 return;
@@ -62,7 +80,7 @@ public class GroundingService {
             //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
             PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
             priceVerview.setClassid(description.getClassid());
-            Assets assets = inventoryRootBean.getAssets().stream().filter(asset -> asset.getClassid().equals(priceVerview.getClassid())).findFirst().get();
+
             if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
                 return;
             }

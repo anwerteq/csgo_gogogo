@@ -1,11 +1,21 @@
 package com.chenerzhu.crawler.proxy.steam.entity;
 
+import lombok.Data;
+import lombok.ToString;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * steam商品购买统计图
  */
+
+@Data
+@ToString
+@Entity
+@Table(name = "steam_cost")
 public class SteamCostEntity {
 
     @Id
@@ -25,9 +35,9 @@ public class SteamCostEntity {
 
 
     String hash_name;
-    long assetid;
+    String assetid;
 
-    long classid;
+    String classid;
 
 
 
@@ -44,7 +54,7 @@ public class SteamCostEntity {
 
 
     /**
-     * （0）下订单，（1）支付成功 （2）确定收货成功 （3）售卖成功
+     * （0）下订单 （1）上架匹配过
      */
     Integer buy_status;
 
