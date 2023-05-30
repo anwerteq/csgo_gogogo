@@ -35,7 +35,6 @@ public class ProfitService {
         sellBuffProfitEntity.setItem_id(itemGoods.getId());
         sellBuffProfitEntity.setName(itemGoods.getName());
         sellBuffProfitEntity.setSteam_price_cny(Double.parseDouble(itemGoods.getGoods_info().getSteam_price_cny()));
-        ;
         //购买成本
         double profit = sellBuffProfitEntity.getSteam_price_cny() * 1.15 * 0.85;
         sellBuffProfitEntity.setIn_fact_steam_price_cny(Double.valueOf(String.format("%.3f", sellBuffProfitEntity.getSteam_price_cny())));

@@ -89,7 +89,7 @@ public class PullItemService {
 
     public void saveItem(ItemGoods itemGoods) {
         itemRepository.save(itemGoods);
-        //推荐商品再buff售卖
+        //推荐商品在buff售卖
         profitService.saveSellBuffProfitEntity(itemGoods);
         //推荐商品再buff购买
         profitService. saveSellSteamProfit(itemGoods);
