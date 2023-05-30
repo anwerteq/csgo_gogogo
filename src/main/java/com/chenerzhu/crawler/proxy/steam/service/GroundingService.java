@@ -112,8 +112,12 @@ public class GroundingService {
                 return;
             }
 
-            //steam推荐的金额和buff售卖最低金额 选高的
-            saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
+            try {
+                //steam推荐的金额和buff售卖最低金额 选高的
+                saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
+            }catch (Exception e){
+                log.error("上架商品失败，失败信息：{}",e);
+            }
             log.info("steam商品上架完成:" + assets.getClassid());
         });
         log.info("steam全部商品上架完成");
