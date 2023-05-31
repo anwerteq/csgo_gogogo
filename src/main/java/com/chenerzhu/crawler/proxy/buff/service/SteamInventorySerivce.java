@@ -73,7 +73,9 @@ public class SteamInventorySerivce {
             asset.setInstanceid(item.getAsset_info().getInstanceid());
             createAssets.add(asset);
         }
+        //取消上架
         cancelOrder(sell_orders);
+        //进行上架操作
         sellOrderCreate(createAssets);
 //        String url = "https://buff.163.com/market/sell_order/preview/manual_plus";//post
 //        HttpHeaders headers = BuffConfig.getHeaderMap();
