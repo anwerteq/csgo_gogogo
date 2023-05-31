@@ -76,7 +76,7 @@ public class ConfirmTradeService {
             return;
         }
         //steam上架商品
-        groundingService.productListingOperation();
+//        groundingService.productListingOperation();
         log.info("确认收货完成和上架完成");
 
     }
