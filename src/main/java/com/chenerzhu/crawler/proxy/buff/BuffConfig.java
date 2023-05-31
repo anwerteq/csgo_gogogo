@@ -92,7 +92,7 @@ public class BuffConfig {
         //线程没有绑定cooke,随机获取一个cookie
         int index = (int) (millis % size);
         Cookeis cookeis = CookiesConfig.cookeisList.get(index);
-
+        CookiesConfig.buffCookies.set(cookeis.getBuff_cookie());
         return cookeis.getBuff_cookie();
     }
 

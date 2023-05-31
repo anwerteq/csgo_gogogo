@@ -72,6 +72,7 @@ public class SteamConfig {
         int size = CookiesConfig.cookeisList.size();
         int index = (int) (millis%size);
         Cookeis cookeis = CookiesConfig.cookeisList.get(index);
+        CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
         return cookeis.getSteam_cookie();
     }
 

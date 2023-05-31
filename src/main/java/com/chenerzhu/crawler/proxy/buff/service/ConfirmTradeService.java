@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.SteamTradeData;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.SteamTradeRoot;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import com.chenerzhu.crawler.proxy.steam.service.GroundingService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamTradeofferService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +38,20 @@ public class ConfirmTradeService {
     GroundingService groundingService;
 
     /**
+     * 全部的账号去遍历确认收货
+     */
+    public void steamTradeCookies(){
+        for (Cookeis cookeis : CookiesConfig.cookeisList) {
+            CookiesConfig.buffCookies.set(cookeis.getBuff_cookie());
+            steamTrade();
+            CookiesConfig.buffCookies.set("");
+        }
+    }
+
+    /**
      * 获取需要确认收货的订单号
      */
-    public void SteamTrade() {
+    public void steamTrade() {
         String url = "https://buff.163.com/api/market/steam_trade";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamTradeRoot steamTradeRoot = JSONObject.parseObject(responseEntity.getBody(), SteamTradeRoot.class);

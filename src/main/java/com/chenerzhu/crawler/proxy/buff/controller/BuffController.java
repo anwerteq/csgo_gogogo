@@ -68,7 +68,7 @@ public class BuffController {
     @RequestMapping("getSteamTrade")
     @ResponseBody
     public void getSteamTrade() {
-        confirmTradeService.SteamTrade();
+        confirmTradeService.steamTradeCookies();
         System.out.println("接口调用，buff确认收货完成");
     }
 }

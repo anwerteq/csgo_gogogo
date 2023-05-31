@@ -53,6 +53,7 @@ public class SteamTradeofferService {
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         saleHeader.put("Referer","https://steamcommunity.com/tradeoffer/"+tradeofferid);
+
         for (String cookie : saleHeader.get("Cookie").split(";")) {
             if ("sessionid".equals(cookie.split("=")[0].trim())) {
                 paramerMap.put("sessionid", cookie.split("=")[1].trim());
