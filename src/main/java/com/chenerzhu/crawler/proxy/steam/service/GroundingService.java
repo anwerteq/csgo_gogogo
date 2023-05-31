@@ -69,6 +69,7 @@ public class GroundingService {
 
         //获取商品类的价格信息集合
         inventoryRootBean.getAssets().stream().forEach(assets -> {
+            SleepUtil.sleep(400);
             Descriptions description = descriptionsHashMap.get(assets.getClassid());
             //获取最大的销售金额
             int steamAfterTaxPrice = 0;
@@ -97,6 +98,7 @@ public class GroundingService {
                 priceVerview.setClassid(assets.getClassid());
 
                 if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
+                    priceVerview.setLowest_price(priceVerview.getMedian_price());
                     return;
                 }
                 //获取最大的销售金额

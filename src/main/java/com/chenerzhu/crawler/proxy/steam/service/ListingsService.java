@@ -48,13 +48,19 @@ public class ListingsService {
 
 
 
+    @Transactional
     public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
         int start = index;
         int count = 80;
         while (start < 8000) {
             index = start + count;
-            pullItem(start, hashnameAndItemId, count);
+            try {
+                pullItem(start, hashnameAndItemId, count);
+            }catch (Exception e){
+                log.error("pullItem:异常信息：{}",e);
+                return;
+            }
             start = start + count;
         }
     }
@@ -65,6 +71,7 @@ public class ListingsService {
      * @param start
      * @return
      */
+    @Transactional
     public boolean pullItem(int start, Map<String, Long> hashnameAndItemId, int count) {
         String paramer = "&start=" + start + "&count=" + count;
         String itemUrl = "https://steamcommunity.com/market/search/render/?query=&search_descriptions=0&sort_column=popular" +
@@ -97,6 +104,7 @@ public class ListingsService {
             }
             isPause = false;
         }
+        SleepUtil.sleep(1500);
 //        if (isPause) {
 //            SleepUtil.sleep(5000);
 //        }

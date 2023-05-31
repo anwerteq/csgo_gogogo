@@ -8,6 +8,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.repository.BuffCostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class BuffCostService {
     /**
      * 记录buff的购买商品
      */
+   @Transactional
     public BuffCostEntity createMarkCost(BuffBuyItems buyItem) {
         BuffCostEntity buffCostEntity = new BuffCostEntity();
         buffCostEntity.setCostId(UUID.randomUUID().toString());
@@ -39,6 +41,7 @@ public class BuffCostService {
         return save;
     }
 
+    @Transactional
     public BuffCostEntity updateCostStatus(BuffCostEntity buffCostEntity, int status) {
         buffCostEntity.setBuy_status(status);
         BuffCostEntity save = buffCostRepository.save(buffCostEntity);

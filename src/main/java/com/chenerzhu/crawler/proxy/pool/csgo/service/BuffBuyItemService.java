@@ -16,6 +16,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.pqc.crypto.xmss.BDS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -107,6 +108,10 @@ public class BuffBuyItemService {
         }
         log.info("buff订单支付成功,接口返回信息：{}",responseEntity1.getBody());
         String body = responseEntity1.getBody();
+        Object code = JSONObject.parseObject(body).get("code");
+        if (!"OK".equals(code.toString())){
+            log.error("buff订单支付失败,接口返回信息：{}",responseEntity1.getBody());
+        }
         PayBillRepRoot payBillRepRoot = JSONObject.parseObject(body, PayBillRepRoot.class);
         return payBillRepRoot.getData();
     }
@@ -251,7 +256,6 @@ public class BuffBuyItemService {
         }};
         whereMap.put("bill_orders", bill_orders);
         whereMap.put("game", "csgo");
-        System.out.println(JSONObject.toJSONString(whereMap));
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
         BuffConfig.syncCookie();
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, entity1, String.class);

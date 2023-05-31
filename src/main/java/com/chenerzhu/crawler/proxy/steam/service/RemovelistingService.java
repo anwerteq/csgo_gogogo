@@ -57,8 +57,10 @@ public class RemovelistingService {
             log.info("获取上架信息失败");
         }
         try {
-            int length = Math.max(10,marketListingsRows.children().size());
+            int length = Math.min(10,marketListingsRows.children().size());
             for (int i = 0; i < length; i++) {
+                SleepUtil.sleep(300);
+
                 Element child = marketListingsRows.children().get(i);
                 String id = child.id();
                 if (StrUtil.isEmpty(id)) {
@@ -102,7 +104,7 @@ public class RemovelistingService {
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-        SleepUtil.sleep(200);
+        SleepUtil.sleep(500);
         log.info("需要审批的饰品下架信息：{}",responseStr);
     }
 }
