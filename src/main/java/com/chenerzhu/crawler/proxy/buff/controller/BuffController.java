@@ -41,16 +41,6 @@ public class BuffController {
         pullItemService.pullItmeGoods();
     }
 
-
-    /**
-     * 拉取商品的历史交易价格
-     */
-    @RequestMapping("pullHistoryPrice")
-    @ResponseBody
-    public void pullHistoryPrice() {
-        pullHistoryService.pullHistoryPrice();
-    }
-
     /**
      * 购买buff中的商品
      */
@@ -61,7 +51,6 @@ public class BuffController {
         System.out.println("接口调用，购买商品完成");
     }
 
-
     /**
      * buff确认订单
      */
@@ -71,4 +60,18 @@ public class BuffController {
         confirmTradeService.steamTradeCookies();
         System.out.println("接口调用，buff确认收货完成");
     }
+
+    /**
+     * 拉取商品的历史交易价格
+     */
+    @RequestMapping("pullHistoryPrice")
+    @ResponseBody
+    public void pullHistoryPrice() {
+        pullHistoryService.pullHistoryPrice();
+    }
+
+
+
+
+
 }
