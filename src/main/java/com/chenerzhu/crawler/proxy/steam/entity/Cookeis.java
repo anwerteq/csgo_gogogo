@@ -28,4 +28,9 @@ public class Cookeis {
 
     @Column(columnDefinition = "text")
     private String steam_cookie;
+
+    /**
+     * 0：暂停使用，1：开启使用
+     */
+    private String is_top;
 }

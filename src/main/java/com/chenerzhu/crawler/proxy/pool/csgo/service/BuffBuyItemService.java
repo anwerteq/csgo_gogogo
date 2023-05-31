@@ -59,7 +59,7 @@ public class BuffBuyItemService {
      *
      * @param sellOrderId：销售订单
      * @param goods_id：商品id
-     * @param price:销售价格         //allow_tradable_cooldown：是否可以否定（0：是，1：否）,cdkey_id： _:时间戳
+     * @param price:销售价格       //allow_tradable_cooldown：是否可以否定（0：是，1：否）,cdkey_id： _:时间戳
      */
     public void createBill(String sellOrderId, int goods_id, String price) {
         //get请求
@@ -78,7 +78,6 @@ public class BuffBuyItemService {
     }
 
 
-
     /**
      * buff购买支付订单   post请求 pay_method:3(支付宝)
      * //参数： {"game":"csgo","goods_id":903832,"sell_order_id":"230521T0369835303","price":0.86,"pay_method":3,"allow_tradable_cooldown":0,"token":"","cdkey_id":""}
@@ -89,7 +88,7 @@ public class BuffBuyItemService {
             set("Referer", "https://buff.163.com/goods/903822?from=market");
         }};
         headers1.add("Cookie", BuffConfig.getCookie());
-        headers1.add("X-CSRFToken",  BuffConfig.getCookieOnlyKey("csrf_token"));
+        headers1.add("X-CSRFToken", BuffConfig.getCookieOnlyKey("csrf_token"));
         HashMap<String, Object> whereMap = new HashMap();
         whereMap.put("game", "csgo");
         whereMap.put("goods_id", goods_id);
@@ -126,11 +125,11 @@ public class BuffBuyItemService {
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
             List<BuffBuyItems> items = getSellOrder(goods_id);
-            if (items.isEmpty()){
-                log.info("该商品没有售卖：{}",entity.getName());
+            if (items.isEmpty()) {
+                log.info("该商品没有售卖：{}", entity.getName());
                 continue;
             }
-            BuffBuyItems  buyItems = items.get(0);
+            BuffBuyItems buyItems = items.get(0);
             //单件商品大于10的 跳过
             if (Double.parseDouble(buyItems.getPrice()) >= 5) {
                 break;
@@ -141,7 +140,7 @@ public class BuffBuyItemService {
             }
             //校验折扣
             entity.setBuff_price(Double.parseDouble(buyItems.getPrice()));
-            if (!profitService.checkBuyBuffItem(entity)){
+            if (!profitService.checkBuyBuffItem(entity)) {
                 break;
             }
             buyItems.setName(entity.getName());
@@ -152,11 +151,10 @@ public class BuffBuyItemService {
     }
 
 
-
     /**
      * 获取该商品售卖的列表信息
      */
-    public List<BuffBuyItems> getSellOrder(String goods_id){
+    public List<BuffBuyItems> getSellOrder(String goods_id) {
         //获取该商品售卖的列表信息
         String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
                 "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
@@ -176,9 +174,10 @@ public class BuffBuyItemService {
 
     /**
      * 商品下订单和支付金额和告诉卖家发货
+     *
      * @param buyItems
      */
-    public void createOrderAndPayAndAsk(BuffBuyItems  buyItems){
+    public void createOrderAndPayAndAsk(BuffBuyItems buyItems) {
         //创建订单
         createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
         //记录购买信息
@@ -188,33 +187,33 @@ public class BuffBuyItemService {
         PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
         //更新记录状态为支付成功
         AtomicReference<BuffCostEntity> atomicMarkCost = new AtomicReference();
-        atomicMarkCost.set(buffCostService.updateCostStatus(markCost,2));
-       final  String cookie = CookiesConfig.buffCookies.get();
+        atomicMarkCost.set(buffCostService.updateCostStatus(markCost, 2));
+        final String cookie = CookiesConfig.buffCookies.get();
         //卖家报价
-        ExecutorUtil.pool.execute(()->{
+        ExecutorUtil.pool.execute(() -> {
             CookiesConfig.buffCookies.set(cookie);
             //是否让卖家报价成功
             Boolean falg = false;
             int sum = 4;
-            while (sum > 0){
+            while (sum > 0) {
                 try {
                     //通知卖家发起报价
                     askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
                     //更新记录状态为确认收货成功
-                    buffCostService.updateCostStatus(atomicMarkCost.get(),3);
+                    buffCostService.updateCostStatus(atomicMarkCost.get(), 3);
                     sum = 0;
                     falg = true;
-                }catch (Exception e){
-                    log.error("通知卖家发起报价,失败信息：{}",e);
+                } catch (Exception e) {
+                    log.error("通知卖家发起报价,失败信息：{}", e);
                     SleepUtil.sleep(300);
                     sum--;
                 }
             }
             //重置线程绑定的buff  cookie
             CookiesConfig.buffCookies.set("");
-           if (falg){
-               log.error("通知卖家发起报价成功{}",atomicMarkCost.get().getName());
-           }
+            if (falg) {
+                log.error("通知卖家发起报价成功{}", atomicMarkCost.get().getName());
+            }
         });
     }
 
@@ -240,7 +239,7 @@ public class BuffBuyItemService {
             set("Referer", referer);
         }};
         headers1.add("Cookie", BuffConfig.getCookie());
-        headers1.add("X-CSRFToken",BuffConfig.getCookieOnlyKey("csrf_token"));
+        headers1.add("X-CSRFToken", BuffConfig.getCookieOnlyKey("csrf_token"));
         HashMap<String, Object> whereMap = new HashMap();
         List<String> bill_orders = new ArrayList() {{
             add(bill_orderId);// 230524T0364391346

@@ -96,9 +96,9 @@ public class ListingsService {
             }
             isPause = false;
         }
-        if (isPause) {
-            SleepUtil.sleep(5000);
-        }
+//        if (isPause) {
+//            SleepUtil.sleep(5000);
+//        }
         log.info("查询的页数：{},每页的条数：{};", (start / count + 1), count);
         if (start >= steamSearchRoot.getTotal_count()) {
             return false;

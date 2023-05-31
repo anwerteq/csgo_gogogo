@@ -57,6 +57,7 @@ public class ConfirmTradeService {
         SteamTradeRoot steamTradeRoot = JSONObject.parseObject(responseEntity.getBody(), SteamTradeRoot.class);
         if (!"OK".equals(steamTradeRoot.getCode())){
             log.error("获取确认订单数据失败");
+            throw  new ArithmeticException(steamTradeRoot.getCode());
         }
         if (steamTradeRoot.getData().isEmpty()){
             return;
