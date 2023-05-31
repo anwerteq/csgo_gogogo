@@ -6,6 +6,7 @@ import com.chenerzhu.crawler.proxy.steam.service.GroundingService;
 import com.chenerzhu.crawler.proxy.steam.service.ListingsService;
 import com.chenerzhu.crawler.proxy.steam.service.RemovelistingService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamItemService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/steam")
+@Slf4j
 public class SteamController {
 
     @Autowired
@@ -71,7 +73,11 @@ public class SteamController {
         List<Cookeis> cookeisList = CookiesConfig.cookeisList;
         for (Cookeis cookeis : cookeisList) {
             CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
-            listingsService.pullItems();
+            try {
+                listingsService.pullItems();
+            }catch (Exception e){
+             log.error("账号：{}，拉取steam市场信息异常：{}",cookeis.getNumber(),e);
+            }
             CookiesConfig.steamCookies.set("");
         }
     }
