@@ -10,57 +10,37 @@ package com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity;
  * @website http://www.json.cn/java2pojo/
  */
 
+import lombok.Data;
+
 /**
  * 库存商品类信息
  */
+
+@Data
 public class Assets {
 
-    private int appid;
-    private String contextid;
+    private int appid = 730;
+    private String contextid = "2";
     private String assetid;
     private String classid;
     private String instanceid;
     private String amount;
-    public void setAppid(int appid) {
-         this.appid = appid;
-     }
-     public int getAppid() {
-         return appid;
-     }
 
-    public void setContextid(String contextid) {
-         this.contextid = contextid;
-     }
-     public String getContextid() {
-         return contextid;
-     }
+    String game = "csgo";
 
-    public void setAssetid(String assetid) {
-         this.assetid = assetid;
-     }
-     public String getAssetid() {
-         return assetid;
-     }
+    Boolean has_market_min_price;
 
-    public void setClassid(String classid) {
-         this.classid = classid;
-     }
-     public String getClassid() {
-         return classid;
-     }
+    String goods_id;
 
-    public void setInstanceid(String instanceid) {
-         this.instanceid = instanceid;
-     }
-     public String getInstanceid() {
-         return instanceid;
-     }
+    String market_hash_name;
 
-    public void setAmount(String amount) {
-         this.amount = amount;
-     }
-     public String getAmount() {
-         return amount;
-     }
+    /**
+     * 收入
+     */
+    String income;
+
+    String price;
+
+    String cdkey_id;
 
 }

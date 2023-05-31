@@ -93,4 +93,8 @@ public class Items
 
     private int updated_at;
 
+    String market_hash_name;
+
+    String sell_min_price;
+
 }
