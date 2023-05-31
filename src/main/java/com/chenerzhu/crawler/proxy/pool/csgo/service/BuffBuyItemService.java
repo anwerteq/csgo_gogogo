@@ -6,6 +6,7 @@ import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepRoot;
@@ -87,13 +88,8 @@ public class BuffBuyItemService {
             //buff支付订单添加请求头
             set("Referer", "https://buff.163.com/goods/903822?from=market");
         }};
-        headers1.add("Cookie", BuffConfig.buffCookie);
-        for (String one : BuffConfig.buffCookie.split(";")) {
-            if ("csrf_token".equals(one.split("=")[0].trim())) {
-                headers1.add("X-CSRFToken", one.split("=")[1].trim());
-            }
-        }
-
+        headers1.add("Cookie", BuffConfig.getCookie());
+        headers1.add("X-CSRFToken",  BuffConfig.getCookieOnlyKey("csrf_token"));
         HashMap<String, Object> whereMap = new HashMap();
         whereMap.put("game", "csgo");
         whereMap.put("goods_id", goods_id);
@@ -193,8 +189,12 @@ public class BuffBuyItemService {
         //更新记录状态为支付成功
         AtomicReference<BuffCostEntity> atomicMarkCost = new AtomicReference();
         atomicMarkCost.set(buffCostService.updateCostStatus(markCost,2));
+       final  String cookie = CookiesConfig.buffCookies.get();
         //卖家报价
         ExecutorUtil.pool.execute(()->{
+            CookiesConfig.buffCookies.set(cookie);
+            //是否让卖家报价成功
+            Boolean falg = false;
             int sum = 4;
             while (sum > 0){
                 try {
@@ -203,12 +203,18 @@ public class BuffBuyItemService {
                     //更新记录状态为确认收货成功
                     buffCostService.updateCostStatus(atomicMarkCost.get(),3);
                     sum = 0;
+                    falg = true;
                 }catch (Exception e){
-                    log.error("通知卖家发起报价,失败{}",e);
+                    log.error("通知卖家发起报价,失败信息：{}",e);
+                    SleepUtil.sleep(300);
                     sum--;
                 }
             }
-            log.error("通知卖家发起报价成功{}",atomicMarkCost.get().getName());
+            //重置线程绑定的buff  cookie
+            CookiesConfig.buffCookies.set("");
+           if (falg){
+               log.error("通知卖家发起报价成功{}",atomicMarkCost.get().getName());
+           }
         });
     }
 

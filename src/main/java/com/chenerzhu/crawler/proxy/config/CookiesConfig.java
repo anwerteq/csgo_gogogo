@@ -17,7 +17,14 @@ import java.util.List;
 public class CookiesConfig  implements ApplicationRunner {
 
 
+    /**
+     * buff cookies
+     */
     public static ThreadLocal<String> buffCookies = new ThreadLocal<>();
+
+    /**
+     * steam cookies
+     */
     public static ThreadLocal<String> steamCookies = new ThreadLocal<>();
     @Autowired
     CookeisRepository cookeisRepository;
