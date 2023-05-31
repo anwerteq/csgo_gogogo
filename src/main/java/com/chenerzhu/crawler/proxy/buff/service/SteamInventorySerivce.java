@@ -18,6 +18,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,7 @@ public class SteamInventorySerivce {
             asset.setPrice(item.getSell_min_price());
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(income.toString());
+            asset.setInstanceid(item.getAsset_info().getInstanceid());
             assets.add(asset);
         }
         sellOrderCreate(assets);
@@ -76,14 +78,24 @@ public class SteamInventorySerivce {
 
     public void sellOrderCreate(List<Assets> assets){
         HttpHeaders headers = BuffConfig.getHeaderMap();
+        headers = new HttpHeaders();
         headers.add("X-Csrftoken", BuffConfig.getCookieOnlyKey("csrf_token"));
         headers.add("Referer", "https://buff.163.com/market/steam_inventory?game=csgo");
         headers.add("Origin", "https://buff.163.com");
+        headers.add("Cookie",BuffConfig.getCookie());
         ManualPlusRoot manualPlusRoot = new ManualPlusRoot();
         manualPlusRoot.setAssets(assets);
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(manualPlusRoot, headers);
+        System.out.println(JSONObject.toJSONString(manualPlusRoot));
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(JSONObject.parseObject(JSONObject.toJSONString(manualPlusRoot), HashMap.class), headers);
         String url = "https://buff.163.com/api/market/sell_order/create/manual_plus";
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-        log.info("1111");
+        if (responseEntity1.getStatusCode().value() != 200){
+            //获取失败
+        }
+        JSONObject jsonObject = JSONObject.parseObject(responseEntity1.getBody());
+        if (!jsonObject.getString("code").equals("OK")){
+            //接口返回不成功
+        }
+        log.info("buff上架成功");
     }
 }
