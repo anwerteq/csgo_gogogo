@@ -79,12 +79,15 @@ public class GroundingService {
             }
 
             if (ObjectUtil.isNotNull(steamCostEntity)) {
+                //还未到过期时间，高价挂在steam市场中
+                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue();
+                //存在在steam售卖的情况
+                steamCostEntity.setReturned_money(steamAfterTaxPrice);
                 final SteamCostEntity steamCostEntity1 = steamCostEntity;
                 ExecutorUtil.pool.execute(()->{
                     steamBuyItemService.updateSteamCostEntity( assets, steamCostEntity1, description.getName());
                 });
-                //还未到过期时间，高价挂在steam市场中
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue();
+
 
             } else {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
