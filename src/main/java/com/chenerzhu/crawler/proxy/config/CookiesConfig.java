@@ -37,5 +37,6 @@ public class CookiesConfig  implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         cookeisList = cookeisRepository.findAll();
+        log.info("账号的cookie信息，加载完成，一共{}个账号",cookeisList.size());
     }
 }

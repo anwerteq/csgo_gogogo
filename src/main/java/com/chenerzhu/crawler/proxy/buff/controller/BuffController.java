@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.buff.controller;
 import com.chenerzhu.crawler.proxy.buff.service.ConfirmTradeService;
 import com.chenerzhu.crawler.proxy.buff.service.PullHistoryService;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
+import com.chenerzhu.crawler.proxy.buff.service.SteamInventorySerivce;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class BuffController {
     @Autowired
     SteamBuyItemService steamBuyItemService;
 
+    @Autowired
+    SteamInventorySerivce steamInventorySerivce;
+
     /**
      * 拉取商品列表信息（拉取推荐购买和销售数据）
      */
@@ -59,6 +63,17 @@ public class BuffController {
     public void getSteamTrade() {
         confirmTradeService.steamTradeCookies();
         System.out.println("接口调用，buff确认收货完成");
+    }
+
+
+    /**
+     * buff自动上架
+     */
+    @RequestMapping("steamInventory")
+    @ResponseBody
+    public void steamInventory() {
+        steamInventorySerivce.steamInventory();
+        System.out.println("接口调用，buff自动上架完成");
     }
 
     /**
