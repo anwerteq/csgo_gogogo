@@ -1,5 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam;
 
+import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 
 import java.util.HashMap;
@@ -61,7 +63,10 @@ public class SteamConfig {
     }
 
     public static  String getCookie(){
-
+        String cookies = CookiesConfig.steamCookies.get();
+        if (StrUtil.isNotEmpty(cookies)){
+            return cookies;
+        }
         return STEAM_COOKIE;
     }
 
