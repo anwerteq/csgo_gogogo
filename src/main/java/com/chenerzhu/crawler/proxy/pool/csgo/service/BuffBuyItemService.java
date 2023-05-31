@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.pool.csgo.service;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
@@ -104,7 +105,7 @@ public class BuffBuyItemService {
         if (responseEntity1.getStatusCode().value() != 200) {
             throw new ArithmeticException("支付接口调用失败");
         }
-        log.info("buff订单支付成功");
+        log.info("buff订单支付成功,接口返回信息：{}",responseEntity1.getBody());
         String body = responseEntity1.getBody();
         PayBillRepRoot payBillRepRoot = JSONObject.parseObject(body, PayBillRepRoot.class);
         return payBillRepRoot.getData();
@@ -162,6 +163,7 @@ public class BuffBuyItemService {
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("查询接口调用失败");
         }
+        SleepUtil.sleep(300);
         BuffBuyRoot body = responseEntity.getBody();
         if (!"OK".equals(body.getCode())) {
             log.error("查询buff商品售卖订单接口调用异常");
@@ -185,6 +187,9 @@ public class BuffBuyItemService {
         SleepUtil.sleep(2000);
         //支付订单
         PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        if (ObjectUtil.isNull(payBillRepData)){
+            return;
+        }
         //更新记录状态为支付成功
         AtomicReference<BuffCostEntity> atomicMarkCost = new AtomicReference();
         atomicMarkCost.set(buffCostService.updateCostStatus(markCost, 2));
@@ -205,14 +210,14 @@ public class BuffBuyItemService {
                     falg = true;
                 } catch (Exception e) {
                     log.error("通知卖家发起报价,失败信息：{}", e);
-                    SleepUtil.sleep(300);
+                    SleepUtil.sleep(2000);
                     sum--;
                 }
             }
             //重置线程绑定的buff  cookie
             CookiesConfig.buffCookies.set("");
             if (falg) {
-                log.error("通知卖家发起报价成功{}", atomicMarkCost.get().getName());
+                log.info("通知卖家发起报价成功:{}", atomicMarkCost.get().getName());
             }
         });
     }
@@ -253,6 +258,7 @@ public class BuffBuyItemService {
         if (responseEntity1.getStatusCode().value() != 200) {
             log.error("让卖家发送报价失败");
         }
+        log.info("通知卖家发货接口返回的数据：{}",responseEntity1.getBody());
     }
 
     /**

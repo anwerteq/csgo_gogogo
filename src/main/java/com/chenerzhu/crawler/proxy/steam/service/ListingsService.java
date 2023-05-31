@@ -47,6 +47,7 @@ public class ListingsService {
     static  int index = 0;
 
 
+
     public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
         int start = index;
@@ -84,7 +85,7 @@ public class ListingsService {
             if (sellOrder.isEmpty()) {
                 continue;
             }
-            sellOrder = sellOrder.subList(0, Math.min(1, sellOrder.size()));
+            sellOrder = sellOrder.subList(0, Math.min(3, sellOrder.size()));
             for (BuffBuyItems buffBuyItems : sellOrder) {
                 //校验该订单是否购买
                 if (profitService.checkBuyItemOrder(buffBuyItems, steamItem.getSell_price())) {
