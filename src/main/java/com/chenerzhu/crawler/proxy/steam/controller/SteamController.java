@@ -44,7 +44,11 @@ public class SteamController {
         List<Cookeis> cookeisList = CookiesConfig.cookeisList;
         for (Cookeis cookeis : cookeisList) {
             CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
-            groundingService.productListingOperation();
+            try {
+                groundingService.productListingOperation();
+            }catch (Exception e){
+                log.error("账号：{}，拉取steam市场信息异常：{}",cookeis.getNumber(),e);
+            }
             CookiesConfig.steamCookies.set("");
         }
     }
@@ -70,16 +74,7 @@ public class SteamController {
     @RequestMapping("pullSteamItem")
     @ResponseBody
     public void pullSteamItem() {
-        List<Cookeis> cookeisList = CookiesConfig.cookeisList;
-        for (Cookeis cookeis : cookeisList) {
-            CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
-            try {
-                listingsService.pullItems();
-            }catch (Exception e){
-             log.error("账号：{}，拉取steam市场信息异常：{}",cookeis.getNumber(),e);
-            }
-            CookiesConfig.steamCookies.set("");
-        }
+        listingsService.pullItems();
     }
 
 

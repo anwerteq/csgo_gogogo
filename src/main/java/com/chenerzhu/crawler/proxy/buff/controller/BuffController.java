@@ -38,8 +38,6 @@ public class BuffController {
     @RequestMapping("pullItmeGoods")
     @ResponseBody
     public void pullItem() {
-
-//        steamBuyItemService.createbuyorder(3.0,"Sticker | Overpass Diorama (Foil)");
         pullItemService.pullItmeGoods();
     }
 

@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.steam;
 
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 
 import java.util.HashMap;
@@ -67,7 +68,11 @@ public class SteamConfig {
         if (StrUtil.isNotEmpty(cookies)){
             return cookies;
         }
-        return STEAM_COOKIE;
+        long millis = System.currentTimeMillis();
+        int size = CookiesConfig.cookeisList.size();
+        int index = (int) (millis%size);
+        Cookeis cookeis = CookiesConfig.cookeisList.get(index);
+        return cookeis.getSteam_cookie();
     }
 
     public static  String getCookieOnlyKey(String key){
