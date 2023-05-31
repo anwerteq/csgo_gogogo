@@ -58,12 +58,13 @@ public class ProfitService {
             sellBuffProfitRepository.save(profit);
         }
 
-        if (interest_rate > 3 && Integer.parseInt(profit.getSell_num()) > 30 && profit.getSell_min_price() < 50) {
+        if (interest_rate > 10 && Integer.parseInt(profit.getSell_num()) > 30 && profit.getSell_min_price() < 50) {
             //去steam下订单
             if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
                 return;
             }
-            steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100, profit.getMarket_hash_name());
+            //求购价，去下订单
+            steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 * 0.90, profit.getMarket_hash_name());
         }
 
     }
@@ -123,12 +124,12 @@ public class ProfitService {
         Double afterRateRMB = steamSellPriceDollar * takeTax * exchangeRate;
         Double costMoney = Double.parseDouble(buffBuyItems.getPrice()) * 100;
         //没啥钱，先买便宜的   成本在5毛 以下 和2快以上的都不买
-        boolean isflag = costMoney < 50 || costMoney > 200;
+        boolean isflag = costMoney < 50 || costMoney > 500;
         if (isflag) {
             return false;
         }
         //成本是税后的7.5折，可以购买
-        if (costMoney / afterRateRMB <= 7.5) {
+        if (costMoney / afterRateRMB <= 7.3) {
             return true;
         }
         return false;

@@ -22,7 +22,7 @@ public class CreatebuyorderEntity {
     /**
      * 商品数量
      */
-    private String quantity = "1";
+    private String quantity = "3";
     private String first_name = "Ke";
     private String last_name = "Le Le";
     private String billing_address_two = "1626  Monroe Street";
