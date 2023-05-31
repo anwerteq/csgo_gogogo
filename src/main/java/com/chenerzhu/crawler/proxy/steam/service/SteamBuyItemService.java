@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * steam购买商品逻辑
@@ -73,6 +71,12 @@ public class SteamBuyItemService {
     }
 
 
+    /**
+     * steam上架，更新team购买商品的记录
+     * @param assets
+     * @param steamCostEntity
+     * @param name
+     */
     public void updateSteamCostEntity(Assets assets,SteamCostEntity steamCostEntity,String name){
         steamCostEntity.setUpdate_time(new Date());
         steamCostEntity.setBuy_status(1);
@@ -80,5 +84,26 @@ public class SteamBuyItemService {
         steamCostEntity.setAssetid(assets.getAssetid());
         steamCostEntity.setName(name);
         steamCostRepository.save(steamCostEntity);
+    }
+
+
+    /**
+     * 在buff上架的物品，进行销售价格登记
+     * @param createAssets
+     */
+    public void afterTopBuffUpdateCost(List<Assets> createAssets){
+
+        List<SteamCostEntity> steamCostEntityList = new ArrayList<>();
+        for (Assets assets : createAssets) {
+            SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assets.getAssetid(), assets.getClassid());
+            if (ObjectUtil.isNull(steamCostEntity)){
+                continue;
+            }
+            steamCostEntity.setReturned_money(Integer.parseInt(assets.getIncome()) * 100 /7);
+            steamCostEntity.setUpdate_time(new Date());
+            steamCostEntity.setBuy_status(2);
+            steamCostEntityList.add(steamCostEntity);
+        }
+        steamCostRepository.saveAll(steamCostEntityList);
     }
 }

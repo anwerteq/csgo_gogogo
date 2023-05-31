@@ -4,10 +4,12 @@ package com.chenerzhu.crawler.proxy.buff.service;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.ManualPlusRoot;
 import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.SteamInventoryRoot;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
+import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -32,6 +34,9 @@ public class SteamInventorySerivce {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    SteamBuyItemService steamBuyItemService;
 
 
     /**
@@ -77,14 +82,7 @@ public class SteamInventorySerivce {
         cancelOrder(sell_orders);
         //进行上架操作
         sellOrderCreate(createAssets);
-//        String url = "https://buff.163.com/market/sell_order/preview/manual_plus";//post
-//        HttpHeaders headers = BuffConfig.getHeaderMap();
-//        headers.add("X-Csrftoken",  BuffConfig.getCookieOnlyKey("csrf_token"));
-//        headers.add("Referer",  "https://buff.163.com/market/steam_inventory?game=csgo");
-//        headers.add("Origin",  "https://buff.163.com");
-//        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(new ManualPlusRoot(), headers);
-//        ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-//        ManualPlusRoot manualPlusRoot = new ManualPlusRoot();
+        ExecutorUtil.pool.execute(()->steamBuyItemService.afterTopBuffUpdateCost(createAssets));
     }
 
 

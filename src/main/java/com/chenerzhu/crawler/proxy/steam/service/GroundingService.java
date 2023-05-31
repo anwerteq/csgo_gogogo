@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -107,6 +108,9 @@ public class GroundingService {
                 }
             }
 
+            if (CollectionUtil.isEmpty(description.getOwner_descriptions())){
+                return;
+            }
             //长时间在steam卖不出来，放在buff中售卖 获取商品的过期时间
             Date expirationTime = getExpirationTime(description.getOwner_descriptions());
             if (expirationTime.compareTo(new Date()) <= 0) {

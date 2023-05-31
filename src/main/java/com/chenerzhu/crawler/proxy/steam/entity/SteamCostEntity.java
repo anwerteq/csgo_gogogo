@@ -54,7 +54,7 @@ public class SteamCostEntity {
 
 
     /**
-     * （0）下订单 （1）上架匹配过
+     * （0）下订单 （1）steam上架匹配过 （2）buff上架匹配过
      */
     Integer buy_status;
 
