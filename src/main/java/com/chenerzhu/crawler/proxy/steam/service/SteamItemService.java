@@ -59,7 +59,7 @@ public class SteamItemService {
 
 
 
-    @Transactional(rollbackFor = Exception.class)
+    
     @Async
     public void saveDescriptionRepository(AssetDescription assetDescription) {
         descriptionRepository.save(assetDescription);

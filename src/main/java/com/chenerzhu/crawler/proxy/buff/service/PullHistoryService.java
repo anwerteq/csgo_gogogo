@@ -93,8 +93,7 @@ public class PullHistoryService {
      * @param responseEntity
      * @param itemId
      */
-    @Transactional(rollbackFor = Exception.class)
-    @Async
+    
     public void saveBuffHistory2(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
         List<List<String>> price_historys = historyPriceRep.getData().getPrice_history();
@@ -119,7 +118,7 @@ public class PullHistoryService {
      * @param responseEntity
      * @param itemId
      */
-    @Transactional(rollbackFor = Exception.class)
+    
     @Async
     public void saveBuffHistory1(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
@@ -142,7 +141,7 @@ public class PullHistoryService {
      * @param responseEntity
      * @param itemId
      */
-    @Transactional(rollbackFor = Exception.class)
+    
     @Async
     public void saveSteamHistory(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();

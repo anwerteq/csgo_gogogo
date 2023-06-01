@@ -37,7 +37,7 @@ public interface IProxyIpRepository extends JpaRepository<ProxyIp, Long> {
             "useTime=:useTime," +
             " validateCount=:validateCount where id=:id")
     @Modifying
-    @Transactional
+ 
     Integer update(@Param("available") boolean available,
                       @Param("availableCount") Integer availableCount,
                       @Param("availableRate") double availableRate,

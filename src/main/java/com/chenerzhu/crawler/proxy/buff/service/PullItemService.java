@@ -62,7 +62,7 @@ public class PullItemService {
      * @param atomicInteger
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
+    
     public Boolean pullOnePage(AtomicInteger atomicInteger) {
         String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get() + "&use_suggestion=0&_=1684057330094&page_size=80";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);

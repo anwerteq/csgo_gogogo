@@ -48,7 +48,7 @@ public class ListingsService {
 
 
 
-    @Transactional
+ 
     public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
         int start = index;
@@ -71,7 +71,7 @@ public class ListingsService {
      * @param start
      * @return
      */
-    @Transactional
+ 
     public boolean pullItem(int start, Map<String, Long> hashnameAndItemId, int count) {
         String paramer = "&start=" + start + "&count=" + count;
         String itemUrl = "https://steamcommunity.com/market/search/render/?query=&search_descriptions=0&sort_column=popular" +
@@ -116,7 +116,7 @@ public class ListingsService {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
+    
     @Async
     public void saveSteamItems(List<SteamItem> steamItems) {
         steamItems.parallelStream().forEach(steamItem -> {

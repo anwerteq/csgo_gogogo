@@ -31,7 +31,7 @@ public class ProxyIpServiceImpl implements IProxyIpService {
     private EntityManager entityManager;
 
 
-    @Transactional(rollbackFor = Exception.class)
+    
     @Override
     public ProxyIp save(ProxyIp proxyIp) {
         return proxyIpRepository.save(proxyIp);
@@ -57,13 +57,13 @@ public class ProxyIpServiceImpl implements IProxyIpService {
         return proxyIpRepository.countProxyIpsByAvailableIsTrueOrValidateCountIsBeforeOrValidateCountIsAfterAndAvailableRateIsAfter(validateCountBefore,validateCountAfter, availableRate);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    
     @Override
     public List<ProxyIp> saveAll(List<ProxyIp> proxyIpList){
         return proxyIpRepository.saveAll(proxyIpList);
     }
 
-    /*@Transactional(rollbackFor = Exception.class)*/
+    /**/
     @Override
     public void batchUpdate(List<ProxyIp> proxyIpList) {
         for(int i = 0; i < proxyIpList.size(); i++) {

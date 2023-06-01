@@ -28,7 +28,7 @@ public class BuffCostService {
     /**
      * 记录buff的购买商品
      */
-   @Transactional
+
     public BuffCostEntity createMarkCost(BuffBuyItems buyItem) {
         BuffCostEntity buffCostEntity = new BuffCostEntity();
         buffCostEntity.setCostId(UUID.randomUUID().toString());
@@ -42,7 +42,7 @@ public class BuffCostService {
         return save;
     }
 
-    @Transactional
+ 
     public BuffCostEntity updateCostStatus(BuffCostEntity buffCostEntity, int status) {
         buffCostEntity.setBuy_status(status);
         BuffCostEntity save = buffCostRepository.save(buffCostEntity);
