@@ -58,7 +58,7 @@ public class BuffCostService {
      * @return
      */
     public BuffCostEntity getLowCostCent(String assetid, String classid, String market_hash_name, int afterTaxCentMoney) {
-        BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid), Long.valueOf(classid), market_hash_name);
+        BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(assetid), Long.valueOf(classid));
         if (ObjectUtil.isNull(buffCostEntity)) {
             //steam的库存信息没有和buff购买信息匹配上
             buffCostEntity = buffCostRepository.selectOne(market_hash_name);
@@ -85,6 +85,7 @@ public class BuffCostService {
         }
         buffCostEntity.setReturned_money(steamAfterTaxPrice * 7);
         buffCostEntity.setUpdate_time(new Date());
+        buffCostEntity.setHash_name(market_hash_name);
         buffCostRepository.save(buffCostEntity);
         return buffCostEntity;
     }
@@ -100,6 +101,7 @@ public class BuffCostService {
                 //这条记录生成过
                 continue;
             }
+            costEntity.setBuy_status(2);
             costEntity.setCostId(UUID.randomUUID().toString());
             buffCostRepository.save(costEntity);
         }
