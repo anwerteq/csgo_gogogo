@@ -2,10 +2,7 @@ package com.chenerzhu.crawler.proxy.steam.controller;
 
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
-import com.chenerzhu.crawler.proxy.steam.service.GroundingService;
-import com.chenerzhu.crawler.proxy.steam.service.ListingsService;
-import com.chenerzhu.crawler.proxy.steam.service.RemovelistingService;
-import com.chenerzhu.crawler.proxy.steam.service.SteamItemService;
+import com.chenerzhu.crawler.proxy.steam.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +33,8 @@ public class SteamController {
     @Autowired
     ListingsService listingsService;
 
+    @Autowired
+    SteamMyhistoryService steamMyhistoryService;
     /**
      * steam库存商品上架市场
      */
@@ -81,10 +80,10 @@ public class SteamController {
     /**
      * 拉取商品的历史记录
      */
-    @RequestMapping("pullSteamItems")
+    @RequestMapping("marketMyhistory")
     @ResponseBody
     public void pullSteamItems() {
-        steamItemService.pullItems();
+        steamMyhistoryService.marketMyhistory(0);
     }
 
 
