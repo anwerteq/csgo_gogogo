@@ -70,9 +70,13 @@ public class SteamInventorySerivce {
             Assets asset = new Assets();
             asset.setAssetid(item.getAsset_info().getAssetid());
             asset.setClassid(item.getAsset_info().getClassid());
+            //获取steam购买需要的最低销售价
+            Double buySteamPrice = steamBuyItemService.getBuySteamPrice(asset.getAssetid(), asset.getClassid());
+            //获取buff在销售的最低价格
+            Double sellMinPrice = Double.valueOf(item.getSell_min_price());
             asset.setGoods_id(String.valueOf(item.getGoods_id()));
             asset.setMarket_hash_name(item.getMarket_hash_name());
-            asset.setPrice(item.getSell_min_price());
+            asset.setPrice(Double.valueOf(Math.max(buySteamPrice,sellMinPrice)).toString());
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(income.toString());
             asset.setInstanceid(item.getAsset_info().getInstanceid());

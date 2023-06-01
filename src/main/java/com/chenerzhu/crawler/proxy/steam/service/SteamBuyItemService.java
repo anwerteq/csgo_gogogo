@@ -110,4 +110,21 @@ public class SteamBuyItemService {
         }
         steamCostRepository.saveAll(steamCostEntityList);
     }
+
+
+    /**
+     * 返回人民币单位：元
+     * @param assid
+     * @param classId
+     * @return
+     */
+    public Double getBuySteamPrice(String assid,String classId){
+        SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assid, classId);
+        if (ObjectUtil.isNull(steamCostEntity)){
+            return 0.0;
+        }
+        double steamCost_RMB =  steamCostEntity.getSteam_cost() * 7 /100;
+        return steamCost_RMB * 1.1;
+
+    }
 }
