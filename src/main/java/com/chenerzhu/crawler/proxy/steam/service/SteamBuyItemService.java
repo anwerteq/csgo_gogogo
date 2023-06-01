@@ -63,13 +63,18 @@ public class SteamBuyItemService {
      * @param buyOrderEntity
      */
     public void saveSteamCostEntity(CreatebuyorderEntity buyOrderEntity) {
-        SteamCostEntity steamCostEntity = new SteamCostEntity();
-        steamCostEntity.setCostId(UUID.randomUUID().toString());
-        steamCostEntity.setSteam_cost(Double.valueOf(buyOrderEntity.getPrice_total()));
-        steamCostEntity.setHash_name(buyOrderEntity.getMarket_hash_name());
-        steamCostEntity.setCreate_time(new Date());
-        steamCostEntity.setBuy_status(0);
-        steamCostRepository.save(steamCostEntity);
+        ArrayList<SteamCostEntity> arrayList = new ArrayList();
+        int quantity = Integer.parseInt(buyOrderEntity.getQuantity());
+        for (int i = 0; i < quantity; i++) {
+            SteamCostEntity steamCostEntity = new SteamCostEntity();
+            steamCostEntity.setCostId(UUID.randomUUID().toString());
+            steamCostEntity.setSteam_cost(Double.valueOf(buyOrderEntity.getPrice_total()));
+            steamCostEntity.setHash_name(buyOrderEntity.getMarket_hash_name());
+            steamCostEntity.setCreate_time(new Date());
+            steamCostEntity.setBuy_status(0);
+            arrayList.add(steamCostEntity);
+        }
+        steamCostRepository.saveAll(arrayList);
     }
 
 
