@@ -123,8 +123,8 @@ public class ProfitService {
         //计算税后人民币的价格 f分
         Double afterRateRMB = steamSellPriceDollar * takeTax * exchangeRate;
         Double costMoney = Double.parseDouble(buffBuyItems.getPrice()) * 100;
-        //没啥钱，先买便宜的   成本在5毛 以下 和2快以上的都不买
-        boolean isflag = costMoney < 50 || costMoney > 500;
+        //没啥钱，先买便宜的   成本在1元以下 和5快以上的都不买
+        boolean isflag = costMoney < 100 || costMoney > 500;
         if (isflag) {
             return false;
         }
