@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -42,7 +43,7 @@ public class BuffCostService {
         return save;
     }
 
- 
+
     public BuffCostEntity updateCostStatus(BuffCostEntity buffCostEntity, int status) {
         buffCostEntity.setBuy_status(status);
         BuffCostEntity save = buffCostRepository.save(buffCostEntity);
@@ -86,6 +87,22 @@ public class BuffCostService {
         buffCostEntity.setUpdate_time(new Date());
         buffCostRepository.save(buffCostEntity);
         return buffCostEntity;
+    }
+
+    /**
+     * 根据订单获取的数据去更新buff的购买记录
+     * @param arrayList
+     */
+    public void byOrderHistorySave(List<BuffCostEntity> arrayList){
+        for (BuffCostEntity costEntity : arrayList) {
+            int i = buffCostRepository.exitClassAndAssetid(costEntity.getAssetid(), costEntity.getClassid());
+            if (i > 0){
+                //这条记录生成过
+                continue;
+            }
+            costEntity.setCostId(UUID.randomUUID().toString());
+            buffCostRepository.save(costEntity);
+        }
     }
 
 

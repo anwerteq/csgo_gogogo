@@ -1,9 +1,6 @@
 package com.chenerzhu.crawler.proxy.buff.controller;
 
-import com.chenerzhu.crawler.proxy.buff.service.ConfirmTradeService;
-import com.chenerzhu.crawler.proxy.buff.service.PullHistoryService;
-import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
-import com.chenerzhu.crawler.proxy.buff.service.SteamInventorySerivce;
+import com.chenerzhu.crawler.proxy.buff.service.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,9 @@ public class BuffController {
 
     @Autowired
     SteamInventorySerivce steamInventorySerivce;
+
+    @Autowired
+    OrderHistoryService orderHistoryService;
 
     /**
      * 拉取商品列表信息（拉取推荐购买和销售数据）
@@ -85,6 +85,16 @@ public class BuffController {
         pullHistoryService.pullHistoryPrice();
     }
 
+
+
+    /**
+     * 拉取商品的历史交易价格
+     */
+    @RequestMapping("pullOrderHistorys")
+    @ResponseBody
+    public void pullOrderHistorys() {
+        orderHistoryService.pullOrderHistory();
+    }
 
 
 
