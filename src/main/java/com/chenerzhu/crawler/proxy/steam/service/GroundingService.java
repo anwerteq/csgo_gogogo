@@ -215,7 +215,7 @@ public class GroundingService {
      * @return
      */
     private PriceVerviewRoot getPriceVerview(String market_hash_name) {
-        SleepUtil.sleep();
+        SleepUtil.sleep(2000);
         String url = null;
         try {
             url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode(market_hash_name, "UTF-8");
