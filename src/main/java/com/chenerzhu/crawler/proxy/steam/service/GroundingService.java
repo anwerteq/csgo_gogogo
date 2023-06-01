@@ -95,6 +95,9 @@ public class GroundingService {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
                 SleepUtil.sleep(300);
+                if (priceVerview == null){
+                    return;
+                }
                 priceVerview.setClassid(assets.getClassid());
 
                 if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
@@ -225,7 +228,7 @@ public class GroundingService {
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取参数的参考价格失败");
-            throw new ArithmeticException("获取参数的参考价格失败");
+           return null;
         }
         PriceVerviewRoot priceVerviewRoot = JSONObject.parseObject(resStr, PriceVerviewRoot.class);
         return priceVerviewRoot;
