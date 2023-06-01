@@ -61,9 +61,9 @@ public class GroundingService {
             return;
         }
         //提高匹配速度
-        HashMap<String,Descriptions> descriptionsHashMap = new HashMap();
+        HashMap<String, Descriptions> descriptionsHashMap = new HashMap();
         for (Descriptions description : inventoryRootBean.getDescriptions()) {
-            descriptionsHashMap.put(description.getClassid(),description);
+            descriptionsHashMap.put(description.getClassid(), description);
         }
 
         //获取商品类的价格信息集合
@@ -84,12 +84,12 @@ public class GroundingService {
                 steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
                 //存在在steam售卖的情况
                 steamCostEntity.setReturned_money(steamAfterTaxPrice);
-                steamBuyItemService.updateSteamCostEntity( assets, steamCostEntity, description.getName());
+                steamBuyItemService.updateSteamCostEntity(assets, steamCostEntity, description.getName());
             } else {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
                 SleepUtil.sleep(300);
-                if (priceVerview == null){
+                if (priceVerview == null) {
                     return;
                 }
                 priceVerview.setClassid(assets.getClassid());
@@ -98,12 +98,15 @@ public class GroundingService {
                 }
                 //获取最大的销售金额
                 steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
-                if (0 == steamAfterTaxPrice){
+                if (0 == steamAfterTaxPrice) {
                     //必须保证售卖的商品在buff_cost表里面存在（不然会出现亏损的情况）
+                    log.info("商品名称【{}】，在buff_cost表中没有数据", description.getName());
                     return;
                 }
             }
-            if (CollectionUtil.isEmpty(description.getOwner_descriptions())){
+            if (CollectionUtil.isEmpty(description.getOwner_descriptions())) {
+                //需要更换新的cookie
+                log.error("获取不到过期时间,需要更换cookie");
                 return;
             }
             //长时间在steam卖不出来，放在buff中售卖 获取商品的过期时间
@@ -115,8 +118,8 @@ public class GroundingService {
             try {
                 //steam推荐的金额和buff售卖最低金额 选高的
                 saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
-            }catch (Exception e){
-                log.error("上架商品失败，失败信息：{}",e);
+            } catch (Exception e) {
+                log.error("上架商品失败，失败信息：{}", e);
             }
             log.info("steam商品上架完成:" + assets.getClassid());
         });
@@ -216,7 +219,7 @@ public class GroundingService {
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         if (StrUtil.isEmpty(resStr)) {
             log.error("获取参数的参考价格失败");
-           return null;
+            return null;
         }
         PriceVerviewRoot priceVerviewRoot = JSONObject.parseObject(resStr, PriceVerviewRoot.class);
         return priceVerviewRoot;
