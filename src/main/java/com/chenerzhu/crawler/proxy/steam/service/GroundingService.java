@@ -84,10 +84,7 @@ public class GroundingService {
                 steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
                 //存在在steam售卖的情况
                 steamCostEntity.setReturned_money(steamAfterTaxPrice);
-                final SteamCostEntity steamCostEntity1 = steamCostEntity;
-                ExecutorUtil.pool.execute(()->{
-                    steamBuyItemService.updateSteamCostEntity( assets, steamCostEntity1, description.getName());
-                });
+                steamBuyItemService.updateSteamCostEntity( assets, steamCostEntity, description.getName());
             } else {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());

@@ -52,14 +52,14 @@ public class Init implements ApplicationRunner {
         }, 300, 300, TimeUnit.SECONDS);
 
         //定时重新上架steam上旧的商品
-        ExecutorUtil.pool.scheduleWithFixedDelay(() -> {
-            try {
-                steamItemService.doUpdataPlatformItem();
-            }catch (Exception e){
-                log.error("商品重新上架异常：",e);
-
-            }
-        }, 1, 60 * 20, TimeUnit.SECONDS);
+//        ExecutorUtil.pool.scheduleWithFixedDelay(() -> {
+//            try {
+//                steamItemService.doUpdataPlatformItem();
+//            }catch (Exception e){
+//                log.error("商品重新上架异常：",e);
+//
+//            }
+//        }, 1, 60 * 20, TimeUnit.SECONDS);
 
 //        //定时拉取steam列表数据,从buff下单
 //        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
@@ -72,12 +72,12 @@ public class Init implements ApplicationRunner {
 
 
         //        //定时从steam拉取商品数据,从steam下单
-        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
-            try {
-             pullItemService.pullItmeGoods(true);
-            }catch (Exception e){
-                log.error("定时拉取steam数据异常：",e);
-            }
-        }, 10 , 60 * 30, TimeUnit.SECONDS);
+//        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
+//            try {
+//             pullItemService.pullItmeGoods(true);
+//            }catch (Exception e){
+//                log.error("定时拉取steam数据异常：",e);
+//            }
+//        }, 10 , 60 * 30, TimeUnit.SECONDS);
     }
 }

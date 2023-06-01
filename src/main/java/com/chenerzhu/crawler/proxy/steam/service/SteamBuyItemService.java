@@ -80,7 +80,7 @@ public class SteamBuyItemService {
      * @param steamCostEntity
      * @param name
      */
-    public void updateSteamCostEntity(Assets assets, SteamCostEntity steamCostEntity, String name) {
+    public void  updateSteamCostEntity(Assets assets, SteamCostEntity steamCostEntity, String name) {
         steamCostEntity.setUpdate_time(new Date());
         steamCostEntity.setBuy_status(1);
         steamCostEntity.setClassid(assets.getClassid());
