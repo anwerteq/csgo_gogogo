@@ -101,7 +101,6 @@ public class SteamInventorySerivce {
         headers.add("Cookie", BuffConfig.getCookie());
         ManualPlusRoot manualPlusRoot = new ManualPlusRoot();
         manualPlusRoot.setAssets(assets);
-        System.out.println(JSONObject.toJSONString(manualPlusRoot));
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(JSONObject.parseObject(JSONObject.toJSONString(manualPlusRoot), HashMap.class), headers);
         String url = "https://buff.163.com/api/market/sell_order/create/manual_plus";
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);

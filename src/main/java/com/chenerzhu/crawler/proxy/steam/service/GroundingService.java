@@ -82,7 +82,7 @@ public class GroundingService {
 
             if (ObjectUtil.isNotNull(steamCostEntity)) {
                 //还未到过期时间，高价挂在steam市场中
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.15)).intValue();
+                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
                 //存在在steam售卖的情况
                 steamCostEntity.setReturned_money(steamAfterTaxPrice);
                 final SteamCostEntity steamCostEntity1 = steamCostEntity;
