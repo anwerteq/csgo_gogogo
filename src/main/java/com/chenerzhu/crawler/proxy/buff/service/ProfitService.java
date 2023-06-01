@@ -124,7 +124,7 @@ public class ProfitService {
         Double afterRateRMB = steamSellPriceDollar * takeTax * exchangeRate;
         Double costMoney = Double.parseDouble(buffBuyItems.getPrice()) * 100;
         //没啥钱，先买便宜的   成本在1元以下 和5快以上的都不买
-        boolean isflag = costMoney < 100 || costMoney > 500;
+        boolean isflag = costMoney < 80 || costMoney > 500;
         if (isflag) {
             return false;
         }
