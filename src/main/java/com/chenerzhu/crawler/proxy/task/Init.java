@@ -78,6 +78,6 @@ public class Init implements ApplicationRunner {
             }catch (Exception e){
                 log.error("定时拉取steam数据异常：",e);
             }
-        }, 60 *5 , 6000 * 30, TimeUnit.SECONDS);
+        }, 10 , 60 * 30, TimeUnit.SECONDS);
     }
 }
