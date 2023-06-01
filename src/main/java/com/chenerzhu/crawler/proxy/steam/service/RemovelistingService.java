@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +48,7 @@ public class RemovelistingService {
         parseActiveMarketList(marketListingsRows);
         Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
         //取消需要审核的商品
-        parseMarkBlockList(market_content_block);
+//        parseMarkBlockList(market_content_block);
     }
 
     /**
@@ -104,6 +106,7 @@ public class RemovelistingService {
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
+        ArrayList arrayList = JSONObject.parseObject(responseStr, ArrayList.class);
         SleepUtil.sleep(500);
         log.info("需要审批的饰品下架信息：{}",responseStr);
     }
