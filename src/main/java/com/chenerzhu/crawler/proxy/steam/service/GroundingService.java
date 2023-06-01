@@ -48,7 +48,6 @@ public class GroundingService {
     /**
      * steam上架操作逻辑
      */
-    @Transactional
     public void productListingOperation() {
         //获取库存
         InventoryRootBean inventoryRootBean = getSteamInventory();
@@ -89,8 +88,6 @@ public class GroundingService {
                 ExecutorUtil.pool.execute(()->{
                     steamBuyItemService.updateSteamCostEntity( assets, steamCostEntity1, description.getName());
                 });
-
-
             } else {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                 PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
@@ -99,20 +96,17 @@ public class GroundingService {
                     return;
                 }
                 priceVerview.setClassid(assets.getClassid());
-
                 if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
                     priceVerview.setLowest_price(priceVerview.getMedian_price());
                     return;
                 }
                 //获取最大的销售金额
                 steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
-
                 //buff上手动购买的，提价销售
                 if (collect.contains(description.getMarket_hash_name())) {
                     steamAfterTaxPrice = Double.valueOf((steamAfterTaxPrice * 1.15)).intValue();
                 }
             }
-
             if (CollectionUtil.isEmpty(description.getOwner_descriptions())){
                 return;
             }
@@ -120,10 +114,8 @@ public class GroundingService {
             Date expirationTime = getExpirationTime(description.getOwner_descriptions());
             if (expirationTime.compareTo(new Date()) <= 0) {
                 //上架到buff中
-
                 return;
             }
-
             try {
                 //steam推荐的金额和buff售卖最低金额 选高的
                 saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());

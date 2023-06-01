@@ -57,16 +57,15 @@ public class Init implements ApplicationRunner {
             }
         }, 1, 60 * 20, TimeUnit.SECONDS);
 
-        //定时拉取steam列表数据,从buff下单
-        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
-            try {
-                listingsService.pullItems();
-            }catch (Exception e){
-                log.error("定时拉取steam数据异常：",e);
-            }
-        }, 60 *5 , 60 * 30, TimeUnit.SECONDS);
-        //定时从buff上购买商品
-//        ExecutorUtil.pool.scheduleWithFixedDelay(() -> buffBuyItemService.buffSellOrder(), 3000, 3600, TimeUnit.SECONDS);
+//        //定时拉取steam列表数据,从buff下单
+//        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
+//            try {
+//                listingsService.pullItems();
+//            }catch (Exception e){
+//                log.error("定时拉取steam数据异常：",e);
+//            }
+//        }, 60 *5 , 60 * 30, TimeUnit.SECONDS);
+
 
     }
 }
