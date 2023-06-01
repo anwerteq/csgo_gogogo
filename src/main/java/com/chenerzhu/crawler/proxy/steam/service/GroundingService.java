@@ -97,14 +97,13 @@ public class GroundingService {
                 }
                 priceVerview.setClassid(assets.getClassid());
                 if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
-                    priceVerview.setLowest_price(priceVerview.getMedian_price());
                     return;
                 }
                 //获取最大的销售金额
                 steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
-                //buff上手动购买的，提价销售
-                if (collect.contains(description.getMarket_hash_name())) {
-                    steamAfterTaxPrice = Double.valueOf((steamAfterTaxPrice * 1.15)).intValue();
+                if (0 == steamAfterTaxPrice){
+                    //必须保证售卖的商品在buff_cost表里面存在（不然会出现亏损的情况）
+                    return;
                 }
             }
             if (CollectionUtil.isEmpty(description.getOwner_descriptions())){
@@ -162,7 +161,7 @@ public class GroundingService {
                 , description.getMarket_hash_name(), afterTaxCentMoney);
         //没有记录，直接使用steam推荐价格
         if (buffCostEntity == null) {
-            return afterTaxCentMoney;
+            return 0;
         }
         return buffCostEntity.getReturned_money() / 7;
     }
