@@ -42,7 +42,7 @@ public class BuffController {
     @RequestMapping("pullItmeGoods")
     @ResponseBody
     public void pullItem() {
-        pullItemService.pullItmeGoods();
+        pullItemService.pullItmeGoods(false);
     }
 
     /**

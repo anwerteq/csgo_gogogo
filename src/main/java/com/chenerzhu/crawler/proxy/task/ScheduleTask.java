@@ -24,7 +24,7 @@ public class ScheduleTask {
     @Scheduled(cron = "0 0 */6 * * ?") // 每3个小时触发一次
     private void configureTasks() {
         log.info("开始定时任务拉取buff数据");
-        pullItemService.pullItmeGoods();
+        pullItemService.pullItmeGoods(false);
         log.info("定时任务拉取buff数据结束");
     }
 }

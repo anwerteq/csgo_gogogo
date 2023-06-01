@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.task;
 
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.service.ConfirmTradeService;
+import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.service.ListingsService;
@@ -30,6 +31,9 @@ public class Init implements ApplicationRunner {
 
     @Autowired
     CookiesConfig cookiesConfig;
+
+    @Autowired
+    PullItemService pullItemService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -67,5 +71,13 @@ public class Init implements ApplicationRunner {
 //        }, 60 *5 , 60 * 30, TimeUnit.SECONDS);
 
 
+        //        //定时从steam拉取商品数据,从steam下单
+        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
+            try {
+             pullItemService.pullItmeGoods(true);
+            }catch (Exception e){
+                log.error("定时拉取steam数据异常：",e);
+            }
+        }, 60 *5 , 6000 * 30, TimeUnit.SECONDS);
     }
 }

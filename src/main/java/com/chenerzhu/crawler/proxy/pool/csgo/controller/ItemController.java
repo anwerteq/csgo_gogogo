@@ -37,15 +37,6 @@ public class ItemController extends BaseController {
     @Autowired
     PullHistoryService pullHistoryService;
 
-    /**
-     * 拉取商品简要信息
-     */
-    @RequestMapping("pullItmeGoods")
-    @ResponseBody
-    public void pullItem() {
-        pullItemService.pullItmeGoods();
-    }
-
 
     /**
      * 拉取商品的历史交易价格

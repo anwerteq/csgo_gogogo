@@ -45,12 +45,13 @@ public class PullItemService {
 
     /**
      * 拉取buff商品列表
+     * @param isBuy：trueL：steam购买，false不购买
      */
-    public void pullItmeGoods() {
+    public void pullItmeGoods(Boolean isBuy) {
 //        pullOnePage(12);
         executorService.execute(() -> {
             AtomicInteger atomicInteger = new AtomicInteger(1);
-            while (pullOnePage(atomicInteger)) {
+            while (pullOnePage(atomicInteger,isBuy)) {
                 atomicInteger.addAndGet(1);
             }
         });
@@ -63,7 +64,7 @@ public class PullItemService {
      * @return
      */
     
-    public Boolean pullOnePage(AtomicInteger atomicInteger) {
+    public Boolean pullOnePage(AtomicInteger atomicInteger,Boolean isBuy) {
         String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get() + "&use_suggestion=0&_=1684057330094&page_size=80";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
@@ -73,7 +74,7 @@ public class PullItemService {
 
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
         itemGoodsList.forEach((item)->{
-            ExecutorUtil.pool.execute(()-> saveItem(item));
+            ExecutorUtil.pool.execute(()-> saveItem(item,isBuy));
         });
         log.info("拉取完，第："+ atomicInteger.get());
         //是否是最后一页
@@ -89,10 +90,10 @@ public class PullItemService {
      * @param itemGoods
      */
 
-    public void saveItem(ItemGoods itemGoods) {
+    public void saveItem(ItemGoods itemGoods,Boolean isBuy) {
         itemRepository.save(itemGoods);
         //推荐商品在buff售卖
-        profitService.saveSellBuffProfitEntity(itemGoods);
+        profitService.saveSellBuffProfitEntity(itemGoods,isBuy);
         //推荐商品再buff购买
         profitService. saveSellSteamProfit(itemGoods);
         //保存buff商品信息

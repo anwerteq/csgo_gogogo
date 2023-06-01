@@ -32,8 +32,9 @@ public class ProfitService {
 
     /**
      * 保存推荐在steam购买的记录
+     * falg:true 购买，false:不购买
      */
-    public void saveSellBuffProfitEntity(ItemGoods itemGoods) {
+    public void saveSellBuffProfitEntity(ItemGoods itemGoods,Boolean isBuy) {
         SellBuffProfitEntity profit = new SellBuffProfitEntity();
         profit.setItem_id(itemGoods.getId());
         profit.setName(itemGoods.getName());
@@ -58,6 +59,9 @@ public class ProfitService {
             sellBuffProfitRepository.save(profit);
         }
 
+        if (!isBuy){
+            return;
+        }
         if (interest_rate > 10 && Integer.parseInt(profit.getSell_num()) > 30 && profit.getSell_min_price() < 50) {
             //去steam下订单
             if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
