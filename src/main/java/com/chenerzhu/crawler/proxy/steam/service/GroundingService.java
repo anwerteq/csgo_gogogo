@@ -116,6 +116,9 @@ public class GroundingService {
                 log.error("获取不到过期时间,需要更换cookie");
                 return;
             }
+            if (steamAfterTaxPrice == 0){
+                return;
+            }
             //长时间在steam卖不出来，放在buff中售卖 获取商品的过期时间
             Date expirationTime = getExpirationTime(description.getOwner_descriptions());
             if (expirationTime.compareTo(new Date()) <= 0) {
