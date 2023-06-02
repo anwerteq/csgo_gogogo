@@ -25,7 +25,16 @@ public interface SteamCostRepository extends JpaRepository<SteamCostEntity, Long
      * @param hashName
      * @return
      */
-    @Query(value = "select * from steam_cost where assetid = ?1 and classid = ?2  and buy_status = 1 limit 1  ", nativeQuery = true)
+    @Query(value = "select * from steam_cost where assetid = ?1 and classid = ?2   limit 1  ", nativeQuery = true)
     SteamCostEntity selectByAssetId(String assetid,String classid);
 
+
+
+    /**
+     * 查询下订单产生的信息
+     * @param
+     * @return
+     */
+    @Query(value = "select * from steam_cost where assetid = ?1 and classid = ?2   limit 1  ", nativeQuery = true)
+    SteamCostEntity selectByAssetIdNotBuyStatus(String assetid,String classid);
 }

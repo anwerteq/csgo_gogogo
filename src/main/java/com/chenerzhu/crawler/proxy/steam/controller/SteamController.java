@@ -80,10 +80,10 @@ public class SteamController {
     /**
      * 拉取商品的历史记录
      */
-    @RequestMapping("marketMyhistory")
+    @RequestMapping("marketMyhistorys")
     @ResponseBody
     public void pullSteamItems() {
-        steamMyhistoryService.marketMyhistory(0);
+        steamMyhistoryService.marketMyhistorys();
     }
 
 
