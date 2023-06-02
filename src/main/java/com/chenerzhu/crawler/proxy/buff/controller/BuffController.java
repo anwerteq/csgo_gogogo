@@ -88,7 +88,7 @@ public class BuffController {
 
 
     /**
-     * 拉取商品的历史交易价格
+     * 拉取商品的历史订单
      */
     @RequestMapping("pullOrderHistorys")
     @ResponseBody

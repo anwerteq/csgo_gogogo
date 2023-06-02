@@ -30,6 +30,13 @@
         </filter>
     </appender>
 
+<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"  />-->
+<!--    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG"  />-->
+<!--    <logger name="org.hibernate.SQL" level="DEBUG" />-->
+<!--    <logger name="org.hibernate.type" level="info" />-->
+<!--    <logger name="org.hibernate.engine.spi.QueryParameters" level="DEBUG" />-->
+<!--    <logger name="org.hibernate.engine.query.spi.HQLQueryPlan" level="DEBUG" />-->
+
     <!-- 按照每天生成输出日志文件 -->
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>

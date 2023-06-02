@@ -66,6 +66,7 @@ public class GroundingService {
             descriptionsHashMap.put(description.getClassid(), description);
         }
 
+        Collections.shuffle(inventoryRootBean.getAssets());
         //获取商品类的价格信息集合
         inventoryRootBean.getAssets().stream().forEach(assets -> {
             SleepUtil.sleep(400);

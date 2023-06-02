@@ -63,6 +63,11 @@ public class BuffCostService {
             //steam的库存信息没有和buff购买信息匹配上
             buffCostEntity = buffCostRepository.selectOne(market_hash_name);
         }
+        Boolean flag =false;
+        if (ObjectUtil.isNull(buffCostEntity)) {
+            buffCostEntity = buffCostRepository.selectOneNotMate(market_hash_name);
+            flag = true;
+        }
         if (ObjectUtil.isNull(buffCostEntity)) {
             return null;
         }
@@ -86,6 +91,10 @@ public class BuffCostService {
         buffCostEntity.setReturned_money(steamAfterTaxPrice * 7);
         buffCostEntity.setUpdate_time(new Date());
         buffCostEntity.setHash_name(market_hash_name);
+        if (flag){
+            //没有找到匹配的数据，用相同产品的最大价格去计算
+            return buffCostEntity;
+        }
         buffCostRepository.save(buffCostEntity);
         return buffCostEntity;
     }

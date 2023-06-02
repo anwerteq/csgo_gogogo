@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.buff.service;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffCostService;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,7 +29,9 @@ public class OrderHistoryService {
 
     public void pullOrderHistory(){
         int num = 0;
-        while (++num < 200){
+        while (num < 400){
+            num = num +1;
+            log.info("buff拉取，第{}页",num);
             pullOrderHistory(num);
         }
     }
@@ -77,6 +80,7 @@ public class OrderHistoryService {
             buffCostEntity.setBuff_cost(Double.valueOf(priceRmb));
             arrayList.add(buffCostEntity);
         }
+        SleepUtil.sleep(1500);
         buffCostService.byOrderHistorySave(arrayList);
     }
 }

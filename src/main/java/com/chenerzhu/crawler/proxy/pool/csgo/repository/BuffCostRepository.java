@@ -46,4 +46,7 @@ public interface BuffCostRepository extends JpaRepository<BuffCostEntity, Long> 
      */
     @Query(value = "select * from buff_cost where  hash_name = ?1 and is_mate = 0 order by create_time limit 1", nativeQuery = true)
     BuffCostEntity selectOne(String  hashName);
+
+    @Query(value = " select * from buff_cost where  hash_name = ?1  order by buff_cost desc  limit 1", nativeQuery = true)
+    BuffCostEntity selectOneNotMate(String  hashName);
 }
