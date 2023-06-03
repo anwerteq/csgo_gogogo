@@ -51,7 +51,7 @@ public class ProfitService {
         profit.setUp_date(new Date());
         profit.setMarket_hash_name(itemGoods.getMarket_hash_name());
         Boolean flag = false;
-        if (3.0f < interest_rate) {
+        if (5.0f < interest_rate) {
             //在buff售卖，利率超过3%
             flag = true;
         }
@@ -62,7 +62,7 @@ public class ProfitService {
         if (!isBuy){
             return;
         }
-        if (interest_rate > 10 && Integer.parseInt(profit.getSell_num()) > 30 && profit.getSell_min_price() < 50) {
+        if (interest_rate > 3 && Integer.parseInt(profit.getSell_num()) > 30 && profit.getSell_min_price() < 100) {
             //去steam下订单
             if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
                 return;

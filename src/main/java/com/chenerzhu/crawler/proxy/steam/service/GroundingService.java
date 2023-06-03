@@ -55,11 +55,6 @@ public class GroundingService {
             log.info("未有需要上架的商品");
             return;
         }
-        Set<String> collect = buffProfitRepository.selectSellBuffItem().stream().map(SellBuffProfitEntity::getMarket_hash_name).collect(Collectors.toSet());
-        if (collect.isEmpty()) {
-            log.info("buff推荐售卖的商品数据为空，禁止上架steam");
-            return;
-        }
         //提高匹配速度
         HashMap<String, Descriptions> descriptionsHashMap = new HashMap();
         for (Descriptions description : inventoryRootBean.getDescriptions()) {
@@ -89,7 +84,10 @@ public class GroundingService {
             }
             if (ObjectUtil.isNull(steamCostEntity)){
                 steamCostEntity = steamCostRepository.selectByHashNameNotStatus(description.getMarket_hash_name());
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.2)).intValue();
+                if (ObjectUtil.isNotNull(steamCostEntity)){
+                    steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
+
+                }
             }
 
             if (ObjectUtil.isNull(steamCostEntity)) {
