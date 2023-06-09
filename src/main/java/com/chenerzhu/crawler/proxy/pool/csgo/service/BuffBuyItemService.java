@@ -204,6 +204,7 @@ public class BuffBuyItemService {
                     //校验折扣
                     entity.setBuff_price(Double.parseDouble(buyItems.getPrice()));
                     if (!profitService.checkBuyBuffItem(entity)) {
+                        isContinue = false;
                         break;
                     }
                     buyItems.setName(entity.getName());
