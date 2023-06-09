@@ -154,7 +154,8 @@ public class ProfitService {
         double buff_price = entity.getBuff_price();
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
         entity.setUp_date(new Date());
-        if (0.78 >= buff_price / in_fact_price) {
+        double in_fact = buff_price / in_fact_price;
+        if (0.785 >= in_fact) {
             return true;
         }
         return false;

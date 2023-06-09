@@ -75,9 +75,10 @@ public class PullItemService {
         ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
 
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
-        itemGoodsList.forEach((item)->{
-            ExecutorUtil.pool.execute(()-> saveItem(item,isBuy));
-        });
+        itemGoodsList.parallelStream().forEach(item -> saveItem(item,isBuy));
+//        itemGoodsList.forEach((item)->{
+//            ExecutorUtil.pool.execute(()-> saveItem(item,isBuy));
+//        });
         log.info("拉取完，第："+ atomicInteger.get());
         //是否是最后一页
         if (atomicInteger.get() >= productList.getData().getTotal_page()) {

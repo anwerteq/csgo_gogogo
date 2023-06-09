@@ -78,6 +78,7 @@ public class BuffBuyItemService {
         }
         BuffCreateBillRoot body = responseEntity.getBody();
         if (!"OK".equals(body.getCode())) {
+           log.error("创建订单异常，异常信息为：{}",JSONObject.toJSONString(body));
             throw new ArithmeticException("创建订单异常");
         }
         log.info("buff订单创建成功");
@@ -166,6 +167,7 @@ public class BuffBuyItemService {
     public void buyHotItem(){
         //更新下热门商品
         pullItemService.pullOnePage(new AtomicInteger(1),false);
+//        pullItemService.pullOnePage(new AtomicInteger(2),false);
         List<Long> objects = new ArrayList<>();
         objects.add(Long.valueOf(857515));//蛇噬武器箱
         objects.add(Long.valueOf(779175));//棱彩2号武器箱
@@ -184,6 +186,7 @@ public class BuffBuyItemService {
         objects.add(Long.valueOf(38148));//“光谱 2 号武器箱
 
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.findAllById(objects);
+
         String goods_id = "";
         for (SellSteamProfitEntity entity : select) {
             goods_id = String.valueOf(entity.getItem_id());
@@ -210,12 +213,12 @@ public class BuffBuyItemService {
                     buyItems.setName(entity.getName());
                     buyItems.setHash_name(entity.getHash_name());
                     createOrderAndPayAndAsk1(buyItems);
+                    log.info("购买的商品名称；{}，价格：{}",buyItems.getName(),buyItems.getPrice());
                 }
             }
 
-            log.info("商品购买完成");
         }
-
+        SleepUtil.sleep(60 * 1000);
     }
 
     public List<BuffBuyItems> getSellOrder(String goods_id,int num) {
