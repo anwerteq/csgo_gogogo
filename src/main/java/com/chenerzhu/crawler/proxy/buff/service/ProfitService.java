@@ -151,10 +151,10 @@ public class ProfitService {
         double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
                 0.85;
         //buff购买价格
-        double buff_price = entity.getBuff_price() * 1.025;
+        double buff_price = entity.getBuff_price();
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
         entity.setUp_date(new Date());
-        if (0.80 > buff_price / in_fact_price) {
+        if (0.78 >= buff_price / in_fact_price) {
             return true;
         }
         return false;

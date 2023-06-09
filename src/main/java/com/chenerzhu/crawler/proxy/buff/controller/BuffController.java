@@ -55,6 +55,16 @@ public class BuffController {
         System.out.println("接口调用，购买商品完成");
     }
 
+
+    /**
+     * 购买buff中热门产品
+     */
+    @RequestMapping("buyHotItem")
+    @ResponseBody
+    public void buyHotItem() {
+        buffBuyItemService.buyHotItem();
+        System.out.println("接口调用，购买商品完成");
+    }
     /**
      * buff确认订单
      */

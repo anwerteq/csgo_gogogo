@@ -7,6 +7,7 @@ import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
+import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.buyentity.PayBillRepData;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -55,6 +57,8 @@ public class BuffBuyItemService {
     @Autowired
     BuffCostService buffCostService;
 
+    @Autowired
+    PullItemService pullItemService;
 
     /**
      * 在buff购买下订单
@@ -160,19 +164,63 @@ public class BuffBuyItemService {
      * 购买热卖商品
      */
     public void buyHotItem(){
+        //更新下热门商品
+        pullItemService.pullOnePage(new AtomicInteger(1),false);
         List<Long> objects = new ArrayList<>();
-        objects.add(779175L);
+        objects.add(Long.valueOf(857515));//蛇噬武器箱
+        objects.add(Long.valueOf(779175));//棱彩2号武器箱
+        objects.add(Long.valueOf(781534));//裂空武器箱
+        objects.add(Long.valueOf(45237));//命悬一线武器箱
+        objects.add(Long.valueOf(900464));//反冲武器箱
+        objects.add(Long.valueOf(921379));//变革武器箱
+        objects.add(Long.valueOf(779175));//棱彩2号武器箱
+        objects.add(Long.valueOf(763236));//“头号特训”武器箱
+        objects.add(Long.valueOf(769121));//棱彩武器箱
+        objects.add(Long.valueOf(773524));//反恐精英20周年武器箱
+        objects.add(Long.valueOf(35895));//“野火大行动”武器箱
+        objects.add(Long.valueOf(36354));//“左轮武器箱
+        objects.add(Long.valueOf(921379));//“变革武器箱
+        objects.add(Long.valueOf(886606));//“梦魇武器箱
+        objects.add(Long.valueOf(38148));//“光谱 2 号武器箱
+
         List<SellSteamProfitEntity> select = sellSteamProfitRepository.findAllById(objects);
+        String goods_id = "";
+        for (SellSteamProfitEntity entity : select) {
+            goods_id = String.valueOf(entity.getItem_id());
+            //可以买多页
+            Boolean isContinue= true;
+            int num = 1;
+            while (isContinue){
+                List<BuffBuyItems> items = getSellOrder(goods_id,num++);
+                if (items.isEmpty()) {
+                    log.info("该商品没有售卖：{}", entity.getName());
+                    continue;
+                }
+                for (BuffBuyItems buyItems : items) {
+                    //不支持支付宝跳过
+                    if (!buyItems.getSupported_pay_methods().contains(3)) {
+                        continue;
+                    }
+                    //校验折扣
+                    entity.setBuff_price(Double.parseDouble(buyItems.getPrice()));
+                    if (!profitService.checkBuyBuffItem(entity)) {
+                        break;
+                    }
+                    buyItems.setName(entity.getName());
+                    buyItems.setHash_name(entity.getHash_name());
+                    createOrderAndPayAndAsk1(buyItems);
+                }
+            }
+
+            log.info("商品购买完成");
+        }
+
     }
 
-
-    /**
-     * 获取该商品售卖的列表信息
-     */
-    public List<BuffBuyItems> getSellOrder(String goods_id) {
+    public List<BuffBuyItems> getSellOrder(String goods_id,int num) {
         //获取该商品售卖的列表信息
         String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id + "" +
-                "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + 1;
+                "&sort_by=default&mode=&allow_tradable_cooldown=1&_=" + System.currentTimeMillis() + "&page_num= " + num;
         ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffBuyRoot.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("查询接口调用失败");
@@ -185,6 +233,13 @@ public class BuffBuyItemService {
         }
         List<BuffBuyItems> items = responseEntity.getBody().getData().getItems();
         return items;
+    }
+
+    /**
+     * 获取该商品售卖的列表信息
+     */
+    public List<BuffBuyItems> getSellOrder(String goods_id) {
+        return getSellOrder(goods_id,1);
     }
 
 
@@ -232,6 +287,49 @@ public class BuffBuyItemService {
             CookiesConfig.buffCookies.set("");
             if (falg) {
                 log.info("通知卖家发起报价成功:{}", atomicMarkCost.get().getName());
+            }
+        });
+    }
+
+
+    /**
+     * 商品下订单和支付金额和告诉卖家发货
+     *
+     * @param buyItems
+     */
+    public void createOrderAndPayAndAsk1(BuffBuyItems buyItems) {
+        //创建订单
+        createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        //支付订单
+        PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        if (ObjectUtil.isNull(payBillRepData)){
+            return;
+        }
+
+        final String cookie = CookiesConfig.buffCookies.get();
+        //卖家报价
+        ExecutorUtil.pool.execute(() -> {
+            CookiesConfig.buffCookies.set(cookie);
+            //是否让卖家报价成功
+            Boolean falg = false;
+            int sum = 4;
+            while (sum > 0) {
+                try {
+                    //通知卖家发起报价
+                    askSellerToSendOffer(payBillRepData.getId(), String.valueOf(buyItems.getGoods_id()));
+
+                    sum = 0;
+                    falg = true;
+                } catch (Exception e) {
+                    log.error("通知卖家发起报价,失败信息：{}", e);
+                    SleepUtil.sleep(2000);
+                    sum--;
+                }
+            }
+            //重置线程绑定的buff  cookie
+            CookiesConfig.buffCookies.set("");
+            if (falg) {
+                log.info("通知卖家发起报价成功:{}", buyItems.getName());
             }
         });
     }
