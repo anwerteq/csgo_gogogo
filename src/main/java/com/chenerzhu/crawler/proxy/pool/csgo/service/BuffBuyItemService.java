@@ -72,11 +72,12 @@ public class BuffBuyItemService {
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sellOrderId + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
         log.info("商品id:" + goods_id);
-        ResponseEntity<BuffCreateBillRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffCreateBillHttpEntity(), BuffCreateBillRoot.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffCreateBillHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() != 200) {
             throw new ArithmeticException("创建订单接口调用失败");
         }
-        BuffCreateBillRoot body = responseEntity.getBody();
+        log.info("buff下订单接口，返回的数据为：{}",responseEntity.getBody());
+        BuffCreateBillRoot body = JSONObject.parseObject(responseEntity.getBody(),BuffCreateBillRoot.class);
         if (!"OK".equals(body.getCode())) {
            log.error("创建订单异常，异常信息为：{}",JSONObject.toJSONString(body));
             throw new ArithmeticException("创建订单异常");
