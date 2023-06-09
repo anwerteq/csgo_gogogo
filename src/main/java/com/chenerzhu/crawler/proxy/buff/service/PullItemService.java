@@ -63,9 +63,11 @@ public class PullItemService {
      * @param atomicInteger
      * @return
      */
-    
+
     public Boolean pullOnePage(AtomicInteger atomicInteger,Boolean isBuy) {
-        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get() + "&use_suggestion=0&_=1684057330094&page_size=80";
+        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get()
+        + "&use_suggestion=0&_=1684057330094&page_size=80&min_price=2&sort_by=sell_num.desc";
+
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
             return false;

@@ -156,6 +156,15 @@ public class BuffBuyItemService {
         }
     }
 
+    /**
+     * 购买热卖商品
+     */
+    public void buyHotItem(){
+        List<Long> objects = new ArrayList<>();
+        objects.add(779175L);
+        List<SellSteamProfitEntity> select = sellSteamProfitRepository.findAllById(objects);
+    }
+
 
     /**
      * 获取该商品售卖的列表信息
