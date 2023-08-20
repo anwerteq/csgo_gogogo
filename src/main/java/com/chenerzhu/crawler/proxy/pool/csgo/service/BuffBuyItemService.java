@@ -67,7 +67,7 @@ public class BuffBuyItemService {
      * @param goods_id：商品id
      * @param price:销售价格       //allow_tradable_cooldown：是否可以否定（0：是，1：否）,cdkey_id： _:时间戳
      */
-    public void createBill(String sellOrderId, int goods_id, String price) {
+    public Object createBill(String sellOrderId, int goods_id, String price) {
         //get请求
         String url = "https://buff.163.com/api/market/goods/buy/preview?game=csgo&sell_order_id=" + sellOrderId + "&" +
                 "goods_id=" + goods_id + "&price=" + price + "&allow_tradable_cooldown=0&cdkey_id=&_=" + System.currentTimeMillis();
@@ -79,10 +79,16 @@ public class BuffBuyItemService {
         log.info("buff下订单接口，返回的数据为：{}",responseEntity.getBody());
         BuffCreateBillRoot body = JSONObject.parseObject(responseEntity.getBody(),BuffCreateBillRoot.class);
         if (!"OK".equals(body.getCode())) {
-           log.error("创建订单异常，异常信息为：{}",JSONObject.toJSONString(body));
+            String errMessage = JSONObject.toJSONString(body);
+            log.error("创建订单异常，异常信息为：{}",errMessage);
+            if ("SellOrder Has Successed".equals(body.getCode())){
+                return null;
+            }
+
             throw new ArithmeticException("创建订单异常");
         }
         log.info("buff订单创建成功");
+        return new Object();
     }
 
 
@@ -122,7 +128,7 @@ public class BuffBuyItemService {
         return payBillRepRoot.getData();
     }
 
-    public void buffBuyItems() {
+    public void  buffBuyItems() {
         ExecutorUtil.pool.execute(this::buffSellOrder);
     }
 
@@ -167,7 +173,7 @@ public class BuffBuyItemService {
      */
     public void buyHotItem(){
         //更新下热门商品
-        pullItemService.pullOnePage(new AtomicInteger(1),false);
+        pullItemService.pullOnePage(new AtomicInteger(1),false,"");
 //        pullItemService.pullOnePage(new AtomicInteger(2),false);
         List<Long> objects = new ArrayList<>();
         objects.add(Long.valueOf(857515));//蛇噬武器箱
@@ -190,6 +196,7 @@ public class BuffBuyItemService {
 
         String goods_id = "";
         for (SellSteamProfitEntity entity : select) {
+            log.info("开始{}的订单下单",entity.getName());
             goods_id = String.valueOf(entity.getItem_id());
             //可以买多页
             Boolean isContinue= true;
@@ -219,7 +226,7 @@ public class BuffBuyItemService {
             }
 
         }
-        SleepUtil.sleep(60 * 1000);
+        SleepUtil.sleep(10 * 1000);
     }
 
     public List<BuffBuyItems> getSellOrder(String goods_id,int num) {
@@ -303,8 +310,10 @@ public class BuffBuyItemService {
      * @param buyItems
      */
     public void createOrderAndPayAndAsk1(BuffBuyItems buyItems) {
-        //创建订单
-        createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
+        //创建订单 ,为空为被别人买走了
+        if (createBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice()) == null){
+            return;
+        }
         //支付订单
         PayBillRepData payBillRepData = payBill(buyItems.getId(), buyItems.getGoods_id(), buyItems.getPrice());
         if (ObjectUtil.isNull(payBillRepData)){

@@ -1,8 +1,10 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
+import com.chenerzhu.crawler.proxy.buff.enumtype.CategoryGroupEnum;
 import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.GoodsInfoRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.IItemGoodsRepository;
@@ -50,10 +52,14 @@ public class PullItemService {
     public void pullItmeGoods(Boolean isBuy) {
 //        pullOnePage(12);
         executorService.execute(() -> {
-            AtomicInteger atomicInteger = new AtomicInteger(1);
-            while (pullOnePage(atomicInteger,isBuy)) {
-                atomicInteger.addAndGet(1);
+            List<String> types = CategoryGroupEnum.getTypes();
+            for (String category_group : types) {
+                AtomicInteger atomicInteger = new AtomicInteger(1);
+                while (pullOnePage(atomicInteger,isBuy,category_group)) {
+                    atomicInteger.addAndGet(1);
+                }
             }
+
         });
     }
 
@@ -61,12 +67,17 @@ public class PullItemService {
     /**
      * 拉取某一页数据
      * @param atomicInteger
+     * @param isBuy
+     * @param category_group :装备分类参数
      * @return
      */
 
-    public Boolean pullOnePage(AtomicInteger atomicInteger,Boolean isBuy) {
+    public Boolean pullOnePage(AtomicInteger atomicInteger,Boolean isBuy,String category_group) {
         String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get()
-        + "&use_suggestion=0&_=1684057330094&page_size=80&min_price=2&sort_by=sell_num.desc";
+        + "&use_suggestion=0&_=1684057330094&page_size=80&max_price=50&sort_by=sell_num.desc";
+        if (StrUtil.isNotEmpty(category_group)){
+            url1 = url1 + "&category_group=" + category_group;
+        }
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {

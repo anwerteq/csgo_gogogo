@@ -45,13 +45,13 @@ public class ProfitService {
         profit.setSell_num(String.valueOf(itemGoods.getSell_num()));
         //buff售卖=steam购买
         double interest = profit.getSell_min_price() - profit.getIn_fact_steam_price_cny();
-        //赚的几率
-        double interest_rate = (interest / profit.getIn_fact_steam_price_cny() * 100);
+        //几折
+        double interest_rate = (profit.getSell_min_price() / profit.getIn_fact_steam_price_cny() * 100);
         profit.setInterest_rate(String.format("%.3f", interest_rate));
         profit.setUp_date(new Date());
         profit.setMarket_hash_name(itemGoods.getMarket_hash_name());
         Boolean flag = false;
-        if (5.0f < interest_rate) {
+        if ( 0.98 < interest_rate) {
             //在buff售卖，利率超过3%
             flag = true;
         }
@@ -62,13 +62,13 @@ public class ProfitService {
         if (!isBuy){
             return;
         }
-        if (interest_rate > 3 && Integer.parseInt(profit.getSell_num()) > 30 && profit.getSell_min_price() < 100) {
+        if (interest_rate > 3 && Integer.parseInt(profit.getSell_num()) > 100 && profit.getSell_min_price() < 50) {
             //去steam下订单
             if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
                 return;
             }
             //求购价，去下订单
-            steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 * 0.90, profit.getMarket_hash_name());
+            steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 , profit.getMarket_hash_name());
         }
 
     }
@@ -155,7 +155,7 @@ public class ProfitService {
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
         entity.setUp_date(new Date());
         double in_fact = buff_price / in_fact_price;
-        if (0.785 >= in_fact) {
+        if (0.78 >= in_fact) {
             return true;
         }
         return false;

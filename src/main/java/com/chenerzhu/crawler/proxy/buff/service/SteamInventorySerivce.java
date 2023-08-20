@@ -109,11 +109,13 @@ public class SteamInventorySerivce {
         String url = "https://buff.163.com/api/market/sell_order/create/manual_plus";
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
         if (responseEntity1.getStatusCode().value() != 200) {
+            log.error("获取buff中可出售的商品失败，失败信息为：{}",responseEntity1.getBody());
             //获取失败
         }
         JSONObject jsonObject = JSONObject.parseObject(responseEntity1.getBody());
         if (!jsonObject.getString("code").equals("OK")) {
             //接口返回不成功
+            log.error("获取buff中可出售的商品接口响应错误，错误信息为：{}",responseEntity1.getBody());
         }
         log.info("buff上架成功");
     }

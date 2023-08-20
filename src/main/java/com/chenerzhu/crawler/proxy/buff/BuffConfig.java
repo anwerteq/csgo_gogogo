@@ -3,6 +3,8 @@ package com.chenerzhu.crawler.proxy.buff;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
@@ -13,10 +15,13 @@ import java.util.Map;
 /**
  * buff配置类
  */
+@Configuration
 public class BuffConfig {
 
-//   public static String buffCookie = "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; timing_user_id=time_7Ix5JzrCca; Device-Id=eNsnpKlEE3KrEa39TVdI; hb_MA-BFF5-63705950A31C_source=www.toolchest.cn; Locale-Supported=zh-Hans; game=csgo; NTES_YD_SESS=DwGdCZQslIqXc_BUzYRZMDwpglEqY_2x_Sa4Mwvk33OlybvYyrnuZzIQS6gHcVK8TAuInk.aRGSheLXkBsSAuXky_BIOJVm6OOMsd79v.45mlcx.mYTa_vSichTRITRN5DnYpqg13Zp2pbKLry871RErKzXUe3jO0.Ghrnudedj1qvL47s79oGSS.GAjCGI6x4P0ufr2fkdoThzy5OmvdtdYRHF_D9OsA0_4_G17UM20c; S_INFO=1684997545|0|0&60##|15989173318; P_INFO=15989173318|1684997545|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0|null|15989173318; remember_me=U1103827335|PnqjzOe33iWb1qUdDK4WSwDYtGtUxq4L; session=1-Ufp9uuj_-cXLTtOqwLgfo3CrM8X1DWcpmI52_RQv5w-F2030407391; csrf_token=IjM1NTQ2NjNjNGU3MTJmMGY3ZmRiZDE4MmNlN2FlMmU2ZDU5MzljOTEi.F1CYnQ.XQwUvX2soKZJ14IOz6O0R4GkO5Y";
-//   public static String buffCookie = "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; timing_user_id=time_7Ix5JzrCca; Device-Id=eNsnpKlEE3KrEa39TVdI; hb_MA-BFF5-63705950A31C_source=www.toolchest.cn; Locale-Supported=zh-Hans; steam_info_to_bind=; NTES_YD_SESS=i6bTV5EItjQfh87VzTvs7lMy1TJ3aT9w74wKcikD_QthIBoZIK0.mFKVhX8UAN_15OXZg3geXpsYKpLm83txxI7uUZALX_6AQjXiqIJP9q70I9TFZg1w74rl4j24z9Seq6oZtfexHJFZoPROa5.ezbOojxY8wjgvMnTEezfJlAY0F2E9aoA17ouxT8DAHY2ZjpPYfybFcMTqEDHvU0P2r8QPwjxgIakz55xRTdvtLMD7q; S_INFO=1685008009|0|0&60##|15347971344; P_INFO=15347971344|1685008009|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0|null|15347971344; remember_me=U1103739664|7hypK40okvjmBjF0tcrHyhfez1CK8u4Z; session=1-aNM6cFaeaukV6zdVlJKhcJrWJMV_2dOHkj364J1eA74L2030511176; game=csgo; csrf_token=IjVlZDYyMTI1OGNmNTM3YjllZDRjMTA0MTM3M2ZjZmJmNjMyNDVhODci.F1IBWw.67UXHsmHWDhV8A7h9jqVpBW9afE";
+
+    @Value("buff_session")
+   public static String buffCookie = "_ntes_nnid=d9c42eaaee06546264904dce6ec2e618,1666248870670; _ntes_nuid=d9c42eaaee06546264904dce6ec2e618; __bid_n=184ddc62be224e2b824207; FPTOKEN=uy78EK2vFv2hziG1KX096cYrjbZuafzi6bDDytRNfnFArd5i+wqpdIOtJfhh+jjcQLpEEgLiwEmaxCeuVoqPZmN30wQfin89xYCpI6Bzj+G6ksg+CEWonmX1HPWt2H1eefaXTOBeX4MZ72DuWgYRFqEnuV3Gn2yrAuSZrRUJEabMTCm+VpWXuaV1Wgy25HYsssOW83ZvyijT0zKOv0H9ogQMOUU9KgFnaszby+LD+5oVFtCue4AFFIEPAPyPAaX0Z5FG5rLZJFR2DTuEJ265U4omGkx0I/FCH9hgDt48yrCx4RqpTZGMn7Fa3lavStNpMg1Jqzx4CLHHJxhrGhnSSGBdpTwBRND6dXeyBmNxLsk6quJqYDVyDIJUcaenhWrWc2Qb5gcovmFeRmez/9zlyQ==|avZCqYu3/fhWFXjSqhEypRvMOncZqeOLUIyHDUos96g=|10|33d785e611a48a89009352dd7deb5a6c; timing_user_id=time_7Ix5JzrCca; Device-Id=eNsnpKlEE3KrEa39TVdI; hb_MA-BFF5-63705950A31C_source=www.toolchest.cn; Locale-Supported=zh-Hans; game=csgo; NTES_YD_SESS=DwGdCZQslIqXc_BUzYRZMDwpglEqY_2x_Sa4Mwvk33OlybvYyrnuZzIQS6gHcVK8TAuInk.aRGSheLXkBsSAuXky_BIOJVm6OOMsd79v.45mlcx.mYTa_vSichTRITRN5DnYpqg13Zp2pbKLry871RErKzXUe3jO0.Ghrnudedj1qvL47s79oGSS.GAjCGI6x4P0ufr2fkdoThzy5OmvdtdYRHF_D9OsA0_4_G17UM20c; S_INFO=1684997545|0|0&60##|15989173318; P_INFO=15989173318|1684997545|1|netease_buff|00&99|null&null&null#shh&null#10#0|&0|null|15989173318; remember_me=U1103827335|PnqjzOe33iWb1qUdDK4WSwDYtGtUxq4L; session=1-Ufp9uuj_-cXLTtOqwLgfo3CrM8X1DWcpmI52_RQv5w-F2030407391; csrf_token=IjM1NTQ2NjNjNGU3MTJmMGY3ZmRiZDE4MmNlN2FlMmU2ZDU5MzljOTEi.F1CYnQ.XQwUvX2soKZJ14IOz6O0R4GkO5Y";
+
 
     public  static Map<String, String> map = new HashMap() {
         {
@@ -73,18 +78,17 @@ public class BuffConfig {
      * 控制整个项目使用cookie的频率
      */
     public static void syncCookie() {
-        synchronized ("12345678909876") {
-            try {
-                double random = Math.random() * 2000;
-                int shleepTime = (int) (random) + 2500;
-                Thread.sleep(shleepTime);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     public static String getCookie(){
+        if(true){
+            return buffCookie;
+        }
         String cookie = CookiesConfig.buffCookies.get();
         if (StrUtil.isNotEmpty(cookie)){
             return cookie;

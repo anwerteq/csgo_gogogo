@@ -38,18 +38,18 @@ public class Init implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 //        //定时确认收货
-        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
-            try {
-                confirmTradeService.steamTradeCookies();
-            }catch (Exception e){
-                log.error("定时确认收货异常：",e);
-            }
-        }, 1, 180, TimeUnit.SECONDS);
-
-        //定时获取最新的cookie
-        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
-            cookiesConfig.refreshCookie();
-        }, 300, 300, TimeUnit.SECONDS);
+//        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
+//            try {
+//                confirmTradeService.steamTradeCookies();
+//            }catch (Exception e){
+//                log.error("定时确认收货异常：",e);
+//            }
+//        }, 1, 180, TimeUnit.SECONDS);
+//
+//        //定时获取最新的cookie
+//        ExecutorUtil.pool.scheduleWithFixedDelay(() ->{
+//            cookiesConfig.refreshCookie();
+//        }, 300, 300, TimeUnit.SECONDS);
 
         //定时重新上架steam上旧的商品
 //        ExecutorUtil.pool.scheduleWithFixedDelay(() -> {
