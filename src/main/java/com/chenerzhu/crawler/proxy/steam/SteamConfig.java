@@ -5,6 +5,8 @@ import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
@@ -14,10 +16,16 @@ import java.util.Map;
  * steam需要的配置类
  */
 @Configuration
-public class SteamConfig {
+public class SteamConfig implements ApplicationRunner {
 
-    @Value("steam_session")
+    @Value("${steam_session}")
     public static String STEAM_COOKIE = "";
+
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+
+    }
 
 
     /**
@@ -83,6 +91,8 @@ public class SteamConfig {
         String value = split[1].split(";")[0];
         return value.trim();
     }
+
+
 }
 
 

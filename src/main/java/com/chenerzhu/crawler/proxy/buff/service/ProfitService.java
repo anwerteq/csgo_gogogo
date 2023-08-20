@@ -8,6 +8,7 @@ import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.*;
  * buff利率服务
  */
 @Service
+@Slf4j
 public class ProfitService {
     @Autowired
 
@@ -34,7 +36,7 @@ public class ProfitService {
      * 保存推荐在steam购买的记录
      * falg:true 购买，false:不购买
      */
-    public void saveSellBuffProfitEntity(ItemGoods itemGoods,Boolean isBuy) {
+    public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
         SellBuffProfitEntity profit = new SellBuffProfitEntity();
         profit.setItem_id(itemGoods.getId());
         profit.setName(itemGoods.getName());
@@ -46,12 +48,12 @@ public class ProfitService {
         //buff售卖=steam购买
         double interest = profit.getSell_min_price() - profit.getIn_fact_steam_price_cny();
         //几折
-        double interest_rate = (profit.getSell_min_price() / profit.getIn_fact_steam_price_cny() * 100);
+        double interest_rate = (profit.getSell_min_price() / (profit.getIn_fact_steam_price_cny()));
         profit.setInterest_rate(String.format("%.3f", interest_rate));
         profit.setUp_date(new Date());
         profit.setMarket_hash_name(itemGoods.getMarket_hash_name());
         Boolean flag = false;
-        if ( 0.98 < interest_rate) {
+        if (0.98 < interest_rate) {
             //在buff售卖，利率超过3%
             flag = true;
         }
@@ -59,16 +61,20 @@ public class ProfitService {
             sellBuffProfitRepository.save(profit);
         }
 
-        if (!isBuy){
-            return;
-        }
-        if (interest_rate > 3 && Integer.parseInt(profit.getSell_num()) > 100 && profit.getSell_min_price() < 50) {
+//        if (!isBuy) {
+//            return;
+//        }
+        if (flag && Integer.parseInt(profit.getSell_num()) > 100 && profit.getSell_min_price() < 50) {
             //去steam下订单
             if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
                 return;
             }
-            //求购价，去下订单
-            steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 , profit.getMarket_hash_name());
+            try {
+                //求购价，去下订单
+                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 , profit.getMarket_hash_name());
+            }catch (Exception e){
+                log.error("steam下订单信息："+e.getMessage());
+            }
         }
 
     }
