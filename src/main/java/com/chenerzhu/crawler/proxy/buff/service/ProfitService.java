@@ -10,7 +10,6 @@ import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepositor
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -37,6 +36,41 @@ public class ProfitService {
      * falg:true 购买，false:不购买
      */
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
+        Double min_price = Double.valueOf(itemGoods.getSell_min_price());
+        Double steam_price_cny = Double.valueOf(itemGoods.getGoods_info().getSteam_price_cny());
+        int sell_num = itemGoods.getBuy_num();
+        if (min_price > steam_price_cny * 0.95) {
+            int quantity = 30;
+            if (sell_num < 10) {
+                return;
+            } else if (sell_num < 50) {
+                quantity = 3;
+            } else if (sell_num < 100) {
+                quantity = 5;
+            } else if (sell_num < 120) {
+                quantity = 6;
+            } else if (sell_num < 180) {
+                quantity = 9;
+            } else if (sell_num < 280) {
+                quantity = 10;
+            } else if (sell_num < 500) {
+                quantity = 15;
+            } else if (sell_num < 1000) {
+                quantity = 22;
+            }
+
+            try {
+                //求购价，去下订单
+                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100, itemGoods.getMarket_hash_name(), quantity);
+            } catch (Exception e) {
+                log.error("steam下订单信息：" + e.getMessage());
+            }
+        }
+
+
+        if (true) {
+            return;
+        }
         SellBuffProfitEntity profit = new SellBuffProfitEntity();
         profit.setItem_id(itemGoods.getId());
         profit.setName(itemGoods.getName());
@@ -69,12 +103,7 @@ public class ProfitService {
             if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
                 return;
             }
-            try {
-                //求购价，去下订单
-                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 , profit.getMarket_hash_name());
-            }catch (Exception e){
-                log.error("steam下订单信息："+e.getMessage());
-            }
+
         }
 
     }

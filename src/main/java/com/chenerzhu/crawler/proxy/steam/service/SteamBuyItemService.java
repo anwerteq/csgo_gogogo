@@ -39,9 +39,10 @@ public class SteamBuyItemService {
      * @param price_total：美分
      * @param market_hash_name
      */
-    public void createbuyorder(Double price_total, String market_hash_name) {
+    public void createbuyorder(Double price_total, String market_hash_name,int quantity) {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);
+        createbuyorderEntity.setQuantity(String.valueOf(quantity));
         createbuyorderEntity.setPrice_total(String.valueOf(price_total.intValue() * Integer.parseInt(createbuyorderEntity.getQuantity())));
         createbuyorderEntity.setSessionid(SteamConfig.getCookieOnlyKey("sessionid"));
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
@@ -56,9 +57,9 @@ public class SteamBuyItemService {
             log.info("steam下求购订单success返回的数据为：" + responseStr);
             return;
         }
-        ExecutorUtil.pool.execute(() -> {
-            saveSteamCostEntity(createbuyorderEntity);
-        });
+//        ExecutorUtil.pool.execute(() -> {
+//            saveSteamCostEntity(createbuyorderEntity);
+//        });
         log.info("steam下求购订单返回的数据为：" + responseStr);
     }
 

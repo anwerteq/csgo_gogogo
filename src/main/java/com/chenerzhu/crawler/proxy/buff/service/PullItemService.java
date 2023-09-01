@@ -18,10 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 /**
@@ -52,7 +55,9 @@ public class PullItemService {
     public void pullItmeGoods(Boolean isBuy) {
 //        pullOnePage(12);
         executorService.execute(() -> {
-            List<String> types = CategoryGroupEnum.getTypes();
+
+             String [] ass= new String[] {"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
+            List<String> types  = Arrays.stream(ass).collect(Collectors.toList());;
             for (String category_group : types) {
                 AtomicInteger atomicInteger = new AtomicInteger(1);
                 while (pullOnePage(atomicInteger,isBuy,category_group)) {
@@ -87,9 +92,9 @@ public class PullItemService {
 
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
         itemGoodsList.parallelStream().forEach(item -> saveItem(item,isBuy));
-//        itemGoodsList.forEach((item)->{
-//            ExecutorUtil.pool.execute(()-> saveItem(item,isBuy));
-//        });
+        itemGoodsList.forEach((item)->{
+            ExecutorUtil.pool.execute(()-> saveItem(item,isBuy));
+        });
         log.info("拉取完，第："+ atomicInteger.get());
         //是否是最后一页
         if (atomicInteger.get() >= productList.getData().getTotal_page()) {
@@ -105,16 +110,16 @@ public class PullItemService {
      */
 
     public void saveItem(ItemGoods itemGoods,Boolean isBuy) {
-        itemRepository.save(itemGoods);
+//        itemRepository.save(itemGoods);
         //推荐商品在buff售卖
         profitService.saveSellBuffProfitEntity(itemGoods,isBuy);
         //推荐商品再buff购买
-        profitService. saveSellSteamProfit(itemGoods);
-        //保存buff商品信息
-        Goods_info goods_info = itemGoods.getGoods_info();
-        goods_info.setItem_id(itemGoods.getId());
-        goodsInfoRepository.save(goods_info);
-        Tags tags = goods_info.getInfo().getTags();
+//        profitService. saveSellSteamProfit(itemGoods);
+//        //保存buff商品信息
+//        Goods_info goods_info = itemGoods.getGoods_info();
+//        goods_info.setItem_id(itemGoods.getId());
+//        goodsInfoRepository.save(goods_info);
+//        Tags tags = goods_info.getInfo().getTags();
        // tagService.saveTags(tags, itemGoods.getId());
     }
 
