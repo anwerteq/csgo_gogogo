@@ -36,6 +36,12 @@ public class ProfitService {
      * falg:true 购买，false:不购买
      */
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
+        if (Double.parseDouble(itemGoods.getSell_min_price()) > 200) {
+            return;
+        }
+        if (Double.parseDouble(itemGoods.getSell_min_price()) < 2) {
+            return;
+        }
         Double min_price = Double.valueOf(itemGoods.getSell_min_price());
         Double steam_price_cny = Double.valueOf(itemGoods.getGoods_info().getSteam_price_cny());
         int sell_num = itemGoods.getBuy_num();
@@ -60,10 +66,12 @@ public class ProfitService {
             }
 
             try {
+
                 //求购价，去下订单
                 steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100, itemGoods.getMarket_hash_name(), quantity);
+
             } catch (Exception e) {
-                log.error("steam下订单信息：" + e.getMessage());
+                log.error("steam下订单信息：" , e);
             }
         }
 

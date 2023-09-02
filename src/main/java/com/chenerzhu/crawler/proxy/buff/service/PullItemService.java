@@ -60,8 +60,12 @@ public class PullItemService {
             List<String> types  = Arrays.stream(ass).collect(Collectors.toList());;
             for (String category_group : types) {
                 AtomicInteger atomicInteger = new AtomicInteger(1);
-                while (pullOnePage(atomicInteger,isBuy,category_group)) {
-                    atomicInteger.addAndGet(1);
+                try{
+                    while (pullOnePage(atomicInteger,isBuy,category_group)) {
+                        atomicInteger.addAndGet(1);
+                    }
+                }catch (Exception e){
+                    log.error("异常",e);
                 }
             }
 
@@ -79,9 +83,14 @@ public class PullItemService {
 
     public Boolean pullOnePage(AtomicInteger atomicInteger,Boolean isBuy,String category_group) {
         String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get()
-        + "&use_suggestion=0&_=1684057330094&page_size=80&max_price=50&sort_by=sell_num.desc";
+        + "&use_suggestion=0&_=1684057330094&page_size=80&max_price=100";//&sort_by=sell_num.des
         if (StrUtil.isNotEmpty(category_group)){
             url1 = url1 + "&category_group=" + category_group;
+        }
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
@@ -91,9 +100,9 @@ public class PullItemService {
         ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
 
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
-        itemGoodsList.parallelStream().forEach(item -> saveItem(item,isBuy));
+//        itemGoodsList.parallelStream().forEach(item -> saveItem(item,isBuy));
         itemGoodsList.forEach((item)->{
-            ExecutorUtil.pool.execute(()-> saveItem(item,isBuy));
+            saveItem(item,isBuy);
         });
         log.info("拉取完，第："+ atomicInteger.get());
         //是否是最后一页

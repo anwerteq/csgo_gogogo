@@ -77,10 +77,11 @@ public class HttpClientUtils {
         HttpResponse httpResponse = null;
         try {
             //设置代理IP、端口
-            HttpHost proxy = new HttpHost("127.0.0.1", 26501);
+            HttpHost proxy = new HttpHost("127.0.0.1", 7890);
             DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 //            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
             httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
+//            httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).build();
             if (url.toLowerCase().startsWith("https")) {
 //                initSSL(httpClient, getPort(url));
             }

@@ -44,9 +44,9 @@ public class CookiesConfig  implements ApplicationRunner {
      * 刷新cookie
      */
     public  void refreshCookie(){
-        List<Cookeis> all = cookeisRepository.findAll();
-        List<Cookeis> notStop = all.stream().filter(cookeis -> "1".equals(cookeis.getIs_top())).collect(Collectors.toList());
-        cookeisList = notStop;
-        log.info("账号的cookie信息，加载完成，一共{}个账号",cookeisList.size());
+//        List<Cookeis> all = cookeisRepository.findAll();
+//        List<Cookeis> notStop = all.stream().filter(cookeis -> "1".equals(cookeis.getIs_top())).collect(Collectors.toList());
+//        cookeisList = notStop;
+//        log.info("账号的cookie信息，加载完成，一共{}个账号",cookeisList.size());
     }
 }

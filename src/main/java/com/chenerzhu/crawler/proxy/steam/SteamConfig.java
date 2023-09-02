@@ -18,8 +18,8 @@ import java.util.Map;
 @Configuration
 public class SteamConfig implements ApplicationRunner {
 
-    @Value("${steam_session}")
-    public static String STEAM_COOKIE = "";
+//    @Value("${steam_session}")
+    public static String STEAM_COOKIE ="sessionid=7afa95111f56a1e74f9bff11; timezoneOffset=28800,0; steamCountry=JP%7C2c36e975c20851bfeb1318f2a983dc1f; steamLoginSecure=76561199503276197%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQyNF8yMzE4MTQwMl9CQjhBMSIsICJzdWIiOiAiNzY1NjExOTk1MDMyNzYxOTciLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY5MzYzODIwMiwgIm5iZiI6IDE2ODQ5MTEzMzgsICJpYXQiOiAxNjkzNTUxMzM4LCAianRpIjogIjBEMjZfMjMxODE0MDNfODg3NUQiLCAib2F0IjogMTY5MzU1MTMzNywgInJ0X2V4cCI6IDE3MTE3Mzg4OTUsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxMDMuMTUyLjIyMC4xOTgiLCAiaXBfY29uZmlybWVyIjogIjEyMi4xMC4xMjcuODUiIH0.84WgCUpJ9zOE4CvpeS9Qc77i063VwDFAH66udm_DkAZqo4GLwCTbQHJdHjRG3FYW5COI4AeHlt4fGy7NR1HpCw; browserid=2774834751537502196; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1693551341%7D; strInventoryLastContext=730_2" ;
 
 
     @Override
