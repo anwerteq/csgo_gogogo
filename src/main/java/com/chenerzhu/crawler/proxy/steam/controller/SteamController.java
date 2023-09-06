@@ -40,6 +40,8 @@ public class SteamController {
      */
     @RequestMapping("grounding")
     public void grounding(){
+
+        groundingService.productListingOperation();
         List<Cookeis> cookeisList = CookiesConfig.cookeisList;
         for (Cookeis cookeis : cookeisList) {
             CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());

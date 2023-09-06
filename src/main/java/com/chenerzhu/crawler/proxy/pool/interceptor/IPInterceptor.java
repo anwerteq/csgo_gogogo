@@ -30,13 +30,14 @@ public class IPInterceptor implements HandlerInterceptor{
         //过滤ip,若用户在白名单内，则放行
         String ipAddress= IPUtils.getRealIP(request);
         log.info("USER IP ADDRESS IS => {}",ipAddress);
+        if (true){
+            return true;
+        }
         if(!StringUtils.isNotBlank(ipAddress)) {
             return false;
         }
 
-        if (true){
-            return true;
-        }
+
 
         // 等于 本地IP 直接放行
         if("127.0.0.1".equals(ipAddress) || "localhost".equals(ipAddress)){

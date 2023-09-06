@@ -64,8 +64,29 @@ public class GroundingService {
         Collections.shuffle(inventoryRootBean.getAssets());
         //获取商品类的价格信息集合
         inventoryRootBean.getAssets().stream().forEach(assets -> {
-            SleepUtil.sleep(400);
             Descriptions description = descriptionsHashMap.get(assets.getClassid());
+//获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
+            PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
+
+            try {
+                String  lowest_price = priceVerview.getLowest_price().replace("$","");
+                //steam推荐的金额和buff售卖最低金额 选高的
+                saleItem(assets.getAssetid(), Double.valueOf(Double.valueOf(lowest_price) * 1.4 *100).intValue(), assets.getAmount());
+            } catch (Exception e) {
+                log.error("上架商品失败，失败信息：{}", e);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            }
+            log.info("steam商品上架完成:" + assets.getClassid());
+
+            if (true) {
+                return;
+            }
+            SleepUtil.sleep(400);
+
             //获取最大的销售金额
             int steamAfterTaxPrice = 0;
             //已经匹配过的信息
@@ -77,22 +98,28 @@ public class GroundingService {
 
             if (ObjectUtil.isNotNull(steamCostEntity)) {
                 //还未到过期时间，高价挂在steam市场中
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
+                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 10)).intValue();
                 //存在在steam售卖的情况
                 steamCostEntity.setReturned_money(steamAfterTaxPrice);
-                steamBuyItemService.updateSteamCostEntity(assets, steamCostEntity, description.getName());
+//                steamBuyItemService.updateSteamCostEntity(assets, steamCostEntity, description.getName());
             }
-            if (ObjectUtil.isNull(steamCostEntity)){
+
+
+            if (true) {
+                return;
+            }
+            if (ObjectUtil.isNull(steamCostEntity)) {
                 steamCostEntity = steamCostRepository.selectByHashNameNotStatus(description.getMarket_hash_name());
-                if (ObjectUtil.isNotNull(steamCostEntity)){
+                if (ObjectUtil.isNotNull(steamCostEntity)) {
                     steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
 
                 }
             }
 
+
             if (ObjectUtil.isNull(steamCostEntity)) {
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-                PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
+                 priceVerview = getPriceVerview(description.getMarket_hash_name());
                 SleepUtil.sleep(300);
                 if (priceVerview == null) {
                     return;
@@ -114,7 +141,7 @@ public class GroundingService {
                 log.error("获取不到过期时间,需要更换cookie");
                 return;
             }
-            if (steamAfterTaxPrice == 0){
+            if (steamAfterTaxPrice == 0) {
                 return;
             }
             //长时间在steam卖不出来，放在buff中售卖 获取商品的过期时间
@@ -217,8 +244,12 @@ public class GroundingService {
      * @return
      */
     private PriceVerviewRoot getPriceVerview(String market_hash_name) {
-        SleepUtil.sleep(2000);
         String url = null;
+        try {
+            Thread.sleep(700);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode(market_hash_name, "UTF-8");
         } catch (UnsupportedEncodingException e) {
