@@ -68,7 +68,7 @@ public class ProfitService {
             try {
 
                 //求购价，去下订单
-                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100, itemGoods.getMarket_hash_name(), quantity);
+                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 * 0.95, itemGoods.getMarket_hash_name(), quantity);
 
             } catch (Exception e) {
                 log.error("steam下订单信息：" , e);

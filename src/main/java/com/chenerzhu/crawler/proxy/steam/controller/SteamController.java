@@ -61,10 +61,11 @@ public class SteamController {
     @RequestMapping("unlistingBlock")
     @ResponseBody
     public void unlistingBlock(@RequestParam(value = "sum", required = false, defaultValue = "1") int sum) {
+        removelistingService.unlistings(sum);
         List<Cookeis> cookeisList = CookiesConfig.cookeisList;
         for (Cookeis cookeis : cookeisList) {
             CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
-            removelistingService.unlistings(sum);
+
             CookiesConfig.steamCookies.set("");
         }
     }

@@ -31,6 +31,11 @@ public class RemovelistingService {
     public void unlistings(int sum) {
         for (int i = 0; i < sum; i++) {
             unlisting();
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -65,6 +65,9 @@ public class GroundingService {
         //获取商品类的价格信息集合
         inventoryRootBean.getAssets().stream().forEach(assets -> {
             Descriptions description = descriptionsHashMap.get(assets.getClassid());
+            if (1 == description.getTradable()){
+                return;
+            }
 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
             PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
 
