@@ -3,7 +3,7 @@ package com.chenerzhu.crawler.proxy.csgo.util;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.csgo.entity.ProductList;
-import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

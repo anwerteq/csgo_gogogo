@@ -1,13 +1,8 @@
-package com.chenerzhu.crawler.proxy.pool.util;
-
-import sun.net.www.protocol.https.Handler;
+package com.chenerzhu.crawler.proxy.util;
 
 import javax.net.ssl.*;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -153,8 +148,8 @@ public class HttpsUtils {
     }
 
     private static class MyTrustManager implements X509TrustManager {
-        private X509TrustManager defaultTrustManager;
-        private X509TrustManager localTrustManager;
+        private final X509TrustManager defaultTrustManager;
+        private final X509TrustManager localTrustManager;
 
         public MyTrustManager(X509TrustManager localTrustManager) throws NoSuchAlgorithmException, KeyStoreException {
             TrustManagerFactory var4 = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());

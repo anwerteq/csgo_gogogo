@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.util;
+package com.chenerzhu.crawler.proxy.util;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.util;
+package com.chenerzhu.crawler.proxy.util;
 
 
 import lombok.extern.slf4j.Slf4j;

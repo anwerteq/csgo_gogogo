@@ -1,24 +1,18 @@
-package com.chenerzhu.crawler.proxy.pool.util; /**
+package com.chenerzhu.crawler.proxy.util; /**
  * @Description: 用于进行Https请求的HttpClient
  * @author: jackromer
  * @version: 1.0, Jan 24, 2019
  */
-
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import javax.net.ssl.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 @SuppressWarnings("deprecation")
 public class SSLClient extends DefaultHttpClient {

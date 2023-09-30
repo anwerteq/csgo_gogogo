@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.pool.config;
+package com.chenerzhu.crawler.proxy.config;
 
 
 import org.springframework.context.annotation.Bean;
