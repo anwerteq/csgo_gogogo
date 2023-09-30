@@ -50,7 +50,7 @@ public class HttpClientUtils implements ApplicationRunner {
 
     @Value("${proxyIp}")
     private String proxyIp;
-    private static String staticProxyIp;
+    public static String staticProxyIp = "127.0.0.1:7890";
     private static final String DEFAULT_CHARSET = "UTF-8";
     private static RequestConfig reqConf = null;
     private static StandardHttpRequestRetryHandler standardHandler = null;
