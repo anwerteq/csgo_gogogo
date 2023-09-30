@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.buff;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,6 +19,7 @@ import java.util.Map;
  * buff配置类
  */
 @Configuration
+@Slf4j
 public class BuffConfig implements ApplicationRunner {
 
 
@@ -29,6 +31,7 @@ public class BuffConfig implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         buffCookieStatic = buffCookie ;
+        log.info("buff 加载的cookie数据为："+ buffCookieStatic);
     }
 
 

@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,15 +17,18 @@ import java.util.Map;
  * steam需要的配置类
  */
 @Configuration
+@Slf4j
 public class SteamConfig implements ApplicationRunner {
 
-//    @Value("${steam_session}")
-    public static String STEAM_COOKIE ="browserid=2756820353045594770; timezoneOffset=28800,0; strInventoryLastContext=730_2; sessionid=6037b3992d333d4584da4bfc; webTradeEligibility=%7B%22allowed%22%3A1%2C%22allowed_at_time%22%3A0%2C%22steamguard_required_days%22%3A15%2C%22new_device_cooldown_days%22%3A0%2C%22time_checked%22%3A1694012255%7D; steamCountry=CN%7Cbce92f89b560fb52ef004658776ef747; steamLoginSecure=76561199503276197%7C%7CeyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MEQxOF8yMzE4MTQyQl9FNUQ1MSIsICJzdWIiOiAiNzY1NjExOTk1MDMyNzYxOTciLCAiYXVkIjogWyAid2ViIiBdLCAiZXhwIjogMTY5NDI3NjA2NCwgIm5iZiI6IDE2ODU1NDkwMjcsICJpYXQiOiAxNjk0MTg5MDI3LCAianRpIjogIjBEMjZfMjMyMkFFQ0RfQ0Q1QTIiLCAib2F0IjogMTY5MzYyODk3MywgInJ0X2V4cCI6IDE3MTE5Njc2ODksICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICIxMzkuMjI3LjEzLjE1IiwgImlwX2NvbmZpcm1lciI6ICIxMzkuMjI3LjEzLjE1IiB9.iJrf6_vJy2nzjEgsGEmsBBf2cTlI2ECYwg0zusVbHTqsjJV7xVy7TbXg0ZqRVRA-p8DS1w7ib4aVSSaytV62BA" ;
 
+    public static String STEAM_COOKIE;
 
+    @Value("${steam_session}")
+    public  String STEAM_COOKIE1;
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        STEAM_COOKIE=STEAM_COOKIE1;
+        log.info("steam加载的cookie数据为："+ STEAM_COOKIE);
     }
 
 

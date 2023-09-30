@@ -98,7 +98,10 @@ public class PullItemService {
             return false;
         }
         ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
-
+        if ("Login Required".equals(productList.getCode())){
+            log.error("buff的coookie过期，请在配置文件修改buff的cookie信息");
+            throw new ArithmeticException("");
+        }
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
 //        itemGoodsList.parallelStream().forEach(item -> saveItem(item,isBuy));
         itemGoodsList.forEach((item)->{

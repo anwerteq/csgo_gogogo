@@ -25,12 +25,17 @@ import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -42,10 +47,27 @@ import java.util.*;
  * @create 2018-08-11 11:25
  **/
 @Slf4j
-public class HttpClientUtils {
+@Component
+public class HttpClientUtils implements ApplicationRunner {
+
+    @Value("${proxyIp}")
+    private String proxyIp;
+    private static String staticProxyIp;
     private static final String DEFAULT_CHARSET = "UTF-8";
     private static RequestConfig reqConf = null;
     private static StandardHttpRequestRetryHandler standardHandler = null;
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        staticProxyIp= proxyIp;
+
+        log.info("开始测试代理是否可以访问steam");
+        log.info("代理ip为："+ proxyIp);
+        String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
+        String reponse = sendGet(url, new HashMap<>());
+
+        log.info("代理IP可以成功访问steam,测试接口返回的数据为：" + reponse);
+    }
 
     static {
         reqConf = RequestConfig.custom()
@@ -77,7 +99,9 @@ public class HttpClientUtils {
         HttpResponse httpResponse = null;
         try {
             //设置代理IP、端口
-            HttpHost proxy = new HttpHost("127.0.0.1", 10801);
+
+
+            HttpHost proxy = new HttpHost(staticProxyIp.split(":")[0], Integer.parseInt(staticProxyIp.split(":")[1]));
             DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 //            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
             httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
@@ -319,4 +343,6 @@ public class HttpClientUtils {
         String result = HttpClientUtils.sendGet("https://www.baidu.com", null);
         System.out.println(result);
     }
+
+
 }
