@@ -1,21 +1,20 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPriceHistory1;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.BuffPriceHistory2;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.HistoryPriceRep;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.SteamPriceHistory;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.BuffPriceHistory1Repository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.BuffPriceHistory2Repository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.IItemGoodsRepository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.SteamPriceHistoryRepository;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffPriceHistory1;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffPriceHistory2;
+import com.chenerzhu.crawler.proxy.csgo.entity.HistoryPriceRep;
+import com.chenerzhu.crawler.proxy.csgo.entity.SteamPriceHistory;
+import com.chenerzhu.crawler.proxy.csgo.repository.BuffPriceHistory1Repository;
+import com.chenerzhu.crawler.proxy.csgo.repository.BuffPriceHistory2Repository;
+import com.chenerzhu.crawler.proxy.csgo.repository.IItemGoodsRepository;
+import com.chenerzhu.crawler.proxy.csgo.repository.SteamPriceHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ public class PullHistoryService {
      * @param responseEntity
      * @param itemId
      */
-    
+
     public void saveBuffHistory2(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
         List<List<String>> price_historys = historyPriceRep.getData().getPrice_history();
@@ -118,7 +117,7 @@ public class PullHistoryService {
      * @param responseEntity
      * @param itemId
      */
-    
+
     @Async
     public void saveBuffHistory1(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();
@@ -141,7 +140,7 @@ public class PullHistoryService {
      * @param responseEntity
      * @param itemId
      */
-    
+
     @Async
     public void saveSteamHistory(ResponseEntity<HistoryPriceRep> responseEntity, long itemId) {
         HistoryPriceRep historyPriceRep = responseEntity.getBody();

@@ -2,7 +2,7 @@ package com.chenerzhu.crawler.proxy.buff.service;
 
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
-import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffCostService;
+import com.chenerzhu.crawler.proxy.csgo.service.BuffCostService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

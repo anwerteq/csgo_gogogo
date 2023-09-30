@@ -1,10 +1,9 @@
 package com.chenerzhu.crawler.proxy.task;
 
-import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.service.ConfirmTradeService;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
+import com.chenerzhu.crawler.proxy.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.service.ListingsService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamItemService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j

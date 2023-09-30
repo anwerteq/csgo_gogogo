@@ -1,7 +1,7 @@
 package com.chenerzhu.crawler.proxy.buff.controller;
 
 import com.chenerzhu.crawler.proxy.buff.service.*;
-import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
+import com.chenerzhu.crawler.proxy.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

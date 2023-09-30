@@ -1,12 +1,12 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
 import cn.hutool.core.util.StrUtil;
-import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.ItemGoods;
-import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellBuffProfitEntity;
-import com.chenerzhu.crawler.proxy.pool.csgo.profitentity.SellSteamProfitEntity;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellBuffProfitRepository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.SellSteamProfitRepository;
+import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
+import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
+import com.chenerzhu.crawler.proxy.csgo.profitentity.SellBuffProfitEntity;
+import com.chenerzhu.crawler.proxy.csgo.profitentity.SellSteamProfitEntity;
+import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
+import com.chenerzhu.crawler.proxy.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,10 +176,7 @@ public class ProfitService {
             return false;
         }
         //成本是税后的7.5折，可以购买
-        if (costMoney / afterRateRMB <= 7.3) {
-            return true;
-        }
-        return false;
+        return costMoney / afterRateRMB <= 7.3;
     }
 
 
@@ -198,10 +195,7 @@ public class ProfitService {
         entity.setInterest_rate(String.format("%.3f", buff_price / in_fact_price));
         entity.setUp_date(new Date());
         double in_fact = buff_price / in_fact_price;
-        if (0.78 >= in_fact) {
-            return true;
-        }
-        return false;
+        return 0.78 >= in_fact;
     }
 
     public Map<String, Long> selectItemIdANdHashName() {

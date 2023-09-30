@@ -2,9 +2,9 @@ package com.chenerzhu.crawler.proxy.buff.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.Tag;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.Tags;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.TagRepository;
+import com.chenerzhu.crawler.proxy.csgo.entity.Tag;
+import com.chenerzhu.crawler.proxy.csgo.entity.Tags;
+import com.chenerzhu.crawler.proxy.csgo.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

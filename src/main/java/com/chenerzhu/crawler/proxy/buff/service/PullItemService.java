@@ -3,21 +3,16 @@ package com.chenerzhu.crawler.proxy.buff.service;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
-import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
-import com.chenerzhu.crawler.proxy.buff.enumtype.CategoryGroupEnum;
-import com.chenerzhu.crawler.proxy.pool.csgo.entity.*;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.GoodsInfoRepository;
-import com.chenerzhu.crawler.proxy.pool.csgo.repository.IItemGoodsRepository;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
+import com.chenerzhu.crawler.proxy.csgo.entity.ProductList;
+import com.chenerzhu.crawler.proxy.csgo.repository.GoodsInfoRepository;
+import com.chenerzhu.crawler.proxy.csgo.repository.IItemGoodsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,8 +51,8 @@ public class PullItemService {
 //        pullOnePage(12);
         executorService.execute(() -> {
 
-             String [] ass= new String[] {"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
-            List<String> types  = Arrays.stream(ass).collect(Collectors.toList());;
+            String[] ass = new String[]{"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
+            List<String> types = Arrays.stream(ass).collect(Collectors.toList());
             for (String category_group : types) {
                 AtomicInteger atomicInteger = new AtomicInteger(1);
                 try{
@@ -109,10 +104,7 @@ public class PullItemService {
         });
         log.info("拉取完，第："+ atomicInteger.get());
         //是否是最后一页
-        if (atomicInteger.get() >= productList.getData().getTotal_page()) {
-            return false;
-        }
-        return true;
+        return atomicInteger.get() < productList.getData().getTotal_page();
     }
 
 

@@ -1,8 +1,8 @@
 /**
-  * Copyright 2023 json.cn 
-  */
+ * Copyright 2023 json.cn
+ */
 package com.chenerzhu.crawler.proxy.buff.entity.steamInventory;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.InventoryEntity.Assets;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
 import lombok.Data;
 
 import java.util.ArrayList;

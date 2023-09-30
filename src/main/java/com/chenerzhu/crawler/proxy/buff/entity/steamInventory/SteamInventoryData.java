@@ -1,9 +1,9 @@
 /**
-  * Copyright 2023 json.cn 
-  */
+ * Copyright 2023 json.cn
+ */
 package com.chenerzhu.crawler.proxy.buff.entity.steamInventory;
 import com.chenerzhu.crawler.proxy.buff.entity.steamtradeentity.Goods_infos;
-import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.Items;
+import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 
 import java.util.List;
 

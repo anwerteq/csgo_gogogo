@@ -1,24 +1,14 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
-import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.AssetDescription;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamItemRepository;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamtDescriptionRepository;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.AssetDescription;
+import com.chenerzhu.crawler.proxy.csgo.steamrepostory.SteamtDescriptionRepository;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -57,9 +47,6 @@ public class SteamItemService {
     }
 
 
-
-
-    
     @Async
     public void saveDescriptionRepository(AssetDescription assetDescription) {
         descriptionRepository.save(assetDescription);

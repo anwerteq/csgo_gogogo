@@ -3,24 +3,18 @@ package com.chenerzhu.crawler.proxy.steam.service;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
-import com.chenerzhu.crawler.proxy.pool.csgo.BuffBuyItemEntity.BuffBuyItems;
-import com.chenerzhu.crawler.proxy.pool.csgo.service.BuffBuyItemService;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamItem;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchRoot;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamentity.SteamSearchdata;
-import com.chenerzhu.crawler.proxy.pool.csgo.steamrepostory.SteamItemRepository;
+import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
+import com.chenerzhu.crawler.proxy.csgo.service.BuffBuyItemService;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.SteamItem;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.SteamSearchRoot;
+import com.chenerzhu.crawler.proxy.csgo.steamrepostory.SteamItemRepository;
 import com.chenerzhu.crawler.proxy.pool.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -48,7 +42,7 @@ public class ListingsService {
 
 
 
- 
+
     public void pullItems() {
         Map<String, Long> hashnameAndItemId = profitService.selectItemIdANdHashName();
         int start = index;
@@ -71,7 +65,7 @@ public class ListingsService {
      * @param start
      * @return
      */
- 
+
     public boolean pullItem(int start, Map<String, Long> hashnameAndItemId, int count) {
         String paramer = "&start=" + start + "&count=" + count;
         String itemUrl = "https://steamcommunity.com/market/search/render/?query=&search_descriptions=0&sort_column=popular" +
@@ -109,14 +103,10 @@ public class ListingsService {
 //            SleepUtil.sleep(5000);
 //        }
         log.info("查询的页数：{},每页的条数：{};", (start / count + 1), count);
-        if (start >= steamSearchRoot.getTotal_count()) {
-            return false;
-        }
-        return true;
+        return start < steamSearchRoot.getTotal_count();
     }
 
 
-    
     @Async
     public void saveSteamItems(List<SteamItem> steamItems) {
         steamItems.parallelStream().forEach(steamItem -> {
