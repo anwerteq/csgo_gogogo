@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.security.auth.login.LoginException;
@@ -123,6 +124,10 @@ public class SteamLoginUtil {
             data.put("donotcache", Long.toString(TimeUtil.getTimeStamp() * 1000L));
             res = Http.request("https://steamcommunity.com/login/dologin/", "POST", data, cookies.toString(), true,
                     "https://steamcommunity.com/login/home/?goto=", false);
+            if (429 == res.getCode()) {
+                log.info("因访问steam太频繁，[" + steamUserDate.getAccount_name() + "]尝试重新登录");
+                SleepUtil.sleep(3000);
+            }
             final String loginResponse1 = String.valueOf(res.getResponse());
 
             DoLoginResultBean doLoginResult1 = JSONObject.parseObject(loginResponse1, DoLoginResultBean.class);
