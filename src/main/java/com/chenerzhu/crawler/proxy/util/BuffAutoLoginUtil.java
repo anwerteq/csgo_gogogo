@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy;
+package com.chenerzhu.crawler.proxy.util;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -6,20 +6,24 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-public class AutoLoginExample {
+@Component
+public class BuffAutoLoginUtil {
     public static void main(String[] args) {
+        login("15347971344", "QingLiu98!");
+    }
+
+
+    public static String login(String username, String password) {
         String url = "https://buff.163.com/";
-        String username = "15347971344";
-        String password = "QingLiu98!";
         // 设置 ChromeDriver 的路径
         String projectPath = System.getProperty("user.dir");
         String edgeDriverPath = projectPath + "/src/main/resources/edgedriver_win64/msedgedriver.exe";
+//        String edgeDriverPath = "resources/edgedriver_win64/msedgedriver.exe";
         System.setProperty("webdriver.edge.driver", edgeDriverPath);
-
+        String cookie = "";
         try {
             // 使用Desktop类打开默认浏览器
 //            Desktop.getDesktop().browse(new URI(url));
@@ -30,10 +34,6 @@ public class AutoLoginExample {
             // 创建 ChromeDriver 实例
             WebDriver driver = new EdgeDriver();
             driver.get(url);
-
-            WebDriverWait wait = new WebDriverWait(driver, 10);
-            WebElement navElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".nav_entries>ul>li")));
-
 
             WebElement element = driver.findElement(By.cssSelector(".nav_entries>ul>li"));
             element.click();
@@ -55,9 +55,9 @@ public class AutoLoginExample {
             login.click();
             Thread.sleep(2900);
             WebDriver.Options manage = driver.manage();
-            String cookie = String.valueOf(manage.getCookieNamed("session"));
+            cookie = String.valueOf(manage.getCookieNamed("session"));
             if (StrUtil.isEmpty(cookie)) {
-                log.info(username + "获取cookie失败，请检查密码是否正确");
+                log.error(username + "获取cookie失败，请检查密码是否正确");
             }
             // 等待登录完成，可以根据页面元素的变化或者跳转来判断登录是否成功
 
@@ -66,5 +66,6 @@ public class AutoLoginExample {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return cookie;
     }
 }
