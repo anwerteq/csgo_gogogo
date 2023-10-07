@@ -20,6 +20,7 @@ public class SteamUserDate {
     private int status;
     private String device_id;
     private boolean fully_enrolled;
+    private String apikey;
     private Session Session = new Session();
 
 }

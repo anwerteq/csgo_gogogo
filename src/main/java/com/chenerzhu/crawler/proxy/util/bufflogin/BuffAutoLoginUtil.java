@@ -2,7 +2,6 @@ package com.chenerzhu.crawler.proxy.util.bufflogin;
 
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
-import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -10,8 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,21 +16,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-public class BuffAutoLoginUtil implements ApplicationRunner {
+public class BuffAutoLoginUtil {
 
     @Autowired
     RestTemplate restTemplate;
-
-    @Autowired
-    private BuffAccountInfoConfig buffAccountInfoConfig;
-
-    public static void main(String[] args) {
-
-
-        String login = login("15347971344", "QingLiu98!");
-
-    }
-
 
     public static String login(String username, String password) {
         String url = "https://buff.163.com/";
@@ -44,7 +30,6 @@ public class BuffAutoLoginUtil implements ApplicationRunner {
         System.setProperty("webdriver.edge.driver", edgeDriverPath);
         String cookie = "";
         try {
-
             // 创建 ChromeDriver 实例
             WebDriver driver = new EdgeDriver();
             driver.get(url);
@@ -76,31 +61,11 @@ public class BuffAutoLoginUtil implements ApplicationRunner {
             // 等待登录完成，可以根据页面元素的变化或者跳转来判断登录是否成功
 
             // 关闭浏览器
-            driver.quit();
+//            driver.quit();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return cookie;
-    }
-
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        for (String acountData : buffAccountInfoConfig.getAccount_information()) {
-            BuffUserData buffUserData = new BuffUserData();
-            String acount = acountData.split("-")[0];
-            String pwd = acountData.split("-")[1];
-            int count = 0;
-            String cookie = "";
-            while (StrUtil.isEmpty(cookie) && count < 3) {
-                cookie = login(acount, pwd);
-                buffUserData.setCookie(cookie);
-                if (StrUtil.isEmpty(cookie)) {
-                    continue;
-                }
-                String steamId = getSteamId(cookie);
-                System.out.println("123123");
-            }
-        }
     }
 
 
@@ -117,7 +82,6 @@ public class BuffAutoLoginUtil implements ApplicationRunner {
         String body = responseEntity.getBody();
         String body1 = body.split("\"steamid\": ")[1];
         String steamId = body1.split("}, \"")[0];
-        System.out.println("123123");
         return steamId;
     }
 }

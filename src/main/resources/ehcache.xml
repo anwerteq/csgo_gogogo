@@ -1,0 +1,16 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd">
+    <diskStore path="./"/>
+
+    <cache name="myCache"
+           maxEntriesLocalHeap="10000"
+           eternal="true"
+           timeToIdleSeconds="30000"
+           timeToLiveSeconds="60000"
+           diskSpoolBufferSizeMB="30"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU"
+           statistics="true">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+</ehcache>

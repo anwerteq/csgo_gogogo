@@ -3,12 +3,11 @@ package com.chenerzhu.crawler.proxy.util.steamlogin;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.security.auth.login.LoginException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,34 +15,44 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * steam登录的工具类
+ */
 @Slf4j
+@Component
 public class SteamLoginUtil {
+    @Autowired
+    Http http;
+
+
     public static void main(String[] args) {
         String folderPath = "D:\\csgo文件（不能删除）\\SDA-1.0.13\\maFiles";
 
         readFilesInFolder(folderPath);
     }
 
-    public static void readFilesInFolder(String folderPath) {
-
-        List<SteamUserDate> arrayList = new ArrayList();
+    /**
+     * 登录账号
+     *
+     * @param folderPath
+     * @return
+     */
+    public static List<SteamUserDate> readFilesInFolder(String folderPath) {
+        List<SteamUserDate> steamUserDates = new ArrayList();
         File folder = new File(folderPath);
-
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles();
-
             if (files != null) {
                 for (File file : files) {
                     if (file.isFile() && file.getName().contains(".maFile") && file.getName().contains("-")) {
-                        arrayList.add(readJsonFromFile(file));
+                        steamUserDates.add(readJsonFromFile(file));
                     } else if (file.isDirectory()) {
-                        readFilesInFolder(file.getAbsolutePath());
+                        steamUserDates.addAll(readFilesInFolder(file.getAbsolutePath()));
                     }
                 }
             }
-        } else {
-            System.out.println("Invalid folder path");
         }
+        return steamUserDates;
     }
 
     public static SteamUserDate readJsonFromFile(File file) {
@@ -59,7 +68,7 @@ public class SteamLoginUtil {
             SteamUserDate steamUserDate = JSONObject.parseObject(jsonString, SteamUserDate.class);
             String password = file.getName().split("-")[1].split("\\.")[0];
             steamUserDate.setUserPsw(password);
-            login(steamUserDate);
+//            login(steamUserDate);
             // 在这里对 jsonObject 进行你需要的处理
             System.out.println(JSONObject.parseObject(jsonString));
             return steamUserDate;
@@ -70,7 +79,13 @@ public class SteamLoginUtil {
     }
 
 
-    public static boolean login(SteamUserDate steamUserDate) {
+    /**
+     * 获取cookie信息
+     *
+     * @param steamUserDate
+     * @return
+     */
+    public StringBuilder login(SteamUserDate steamUserDate) {
         String userName = steamUserDate.getAccount_name();
         Http Http = new Http();
         StringBuilder cookies = new StringBuilder();
@@ -122,18 +137,21 @@ public class SteamLoginUtil {
             data.put("rsatimestamp", time);
             data.put("remember_login", "true");
             data.put("donotcache", Long.toString(TimeUtil.getTimeStamp() * 1000L));
+            SleepUtil.sleep(700);
             res = Http.request("https://steamcommunity.com/login/dologin/", "POST", data, cookies.toString(), true,
                     "https://steamcommunity.com/login/home/?goto=", false);
             if (429 == res.getCode()) {
-                log.info("因访问steam太频繁，[" + steamUserDate.getAccount_name() + "]尝试重新登录");
+                log.error("因访问steam太频繁，[" + steamUserDate.getAccount_name() + "]尝试重新登录");
                 SleepUtil.sleep(3000);
             }
+
             final String loginResponse1 = String.valueOf(res.getResponse());
 
             DoLoginResultBean doLoginResult1 = JSONObject.parseObject(loginResponse1, DoLoginResultBean.class);
 
             if (!doLoginResult1.isRequires_twofactor()) {
-
+                log.error("steam账号登录失败，失败原因是该ip访问steam次数太多，需要点进图片验证才能登陆，" +
+                        "本软件目前不支持。临时解决方法：更换访问steam的ip，或者过一会(10分钟)试试");
                 throw new LoginException(doLoginResult1.getMessage());
             }
             data.clear();
@@ -153,7 +171,6 @@ public class SteamLoginUtil {
             }
             log.info("验证码自动输入中...");
             data = new HashMap<>();
-
             // 第二次获取Rsa公钥 second get key
             rsa = new RSA(rsaKey.getPublickey_mod(), rsaKey.getPublickey_exp());
             time = URLEncoder.encode(rsaKey.getTimestamp(), "UTF-8");
@@ -177,7 +194,7 @@ public class SteamLoginUtil {
             DoLoginResultBean doLoginResult2 = JSONObject.parseObject(loginResponse2, DoLoginResultBean.class);
             if (!doLoginResult2.isLogin_complete()) {
                 log.error("登录失败:" + loginResponse2);
-                return false;
+                return new StringBuilder();
             }
             res = Http.request("https://steamcommunity.com/market/eligibilitycheck/?goto=%2Fid%2Fcsgo%2Ftradeoffers%2F",
                     "GET", null, cookies.toString(), true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
@@ -189,9 +206,32 @@ public class SteamLoginUtil {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("登录失败:" + e.getMessage());
-            return false;
+            return new StringBuilder();
+        }
+        return cookies;
+    }
+
+
+    /**
+     * 校验cookie是否过期
+     *
+     * @param cookie
+     * @return true:是，false:否
+     */
+    public Boolean checkCookieExpired(String cookie) {
+
+        try {
+            String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name="
+                    + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
+            HttpBean httpBean = http.request(url,
+                    "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
+            if (httpBean.getResponse().contains("true")) {
+                return false;
+            }
+//            log.info("代理IP可以成功访问steam,测试接口返回的数据为：" );
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return true;
-
     }
 }

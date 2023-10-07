@@ -9,5 +9,9 @@ public class BuffUserData {
 
     private String steamId;
 
+    private String acount;
+
+    private String pwd;
+
 
 }
