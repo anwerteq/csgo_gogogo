@@ -99,9 +99,7 @@ public class BuffConfig implements ApplicationRunner {
     }
 
     public static String getCookie(){
-        if(true){
-            return buffCookieStatic;
-        }
+
         String cookie = CookiesConfig.buffCookies.get();
         if (StrUtil.isNotEmpty(cookie)){
             return cookie;
