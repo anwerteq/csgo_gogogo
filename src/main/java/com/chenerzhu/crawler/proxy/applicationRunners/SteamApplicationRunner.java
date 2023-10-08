@@ -4,10 +4,7 @@ package com.chenerzhu.crawler.proxy.applicationRunners;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.cache.SteamCacheService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.util.steamlogin.Http;
-import com.chenerzhu.crawler.proxy.util.steamlogin.HttpBean;
-import com.chenerzhu.crawler.proxy.util.steamlogin.SteamLoginUtil;
-import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
+import com.chenerzhu.crawler.proxy.util.steamlogin.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +22,24 @@ import java.util.List;
 @Slf4j
 @Component
 public class SteamApplicationRunner implements ApplicationRunner {
+
     public static List<SteamUserDate> steamUserDates = new ArrayList<>();
+
+    public static ThreadLocal<SteamUserDate> steamUserDateTL = new ThreadLocal<>();
+
+
+    public static void setThreadLocalSteamId(String steamId) {
+        for (SteamUserDate steamUserDate : steamUserDates) {
+            Session session = steamUserDate.getSession();
+            if (steamId.equals(session.getSteamID())) {
+                steamUserDateTL.set(steamUserDate);
+                CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
+                return;
+            }
+        }
+        log.error("该系统未加载steamId:{}账号信息，请检查sda路径", steamId);
+    }
+
     @Autowired
     Http http;
     @Autowired
@@ -39,8 +53,8 @@ public class SteamApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<SteamUserDate> steamUserDates = SteamLoginUtil.readFilesInFolder(sdaPath);
-        for (SteamUserDate steamDate : steamUserDates) {
+        List<SteamUserDate> steamUserDatesInit = SteamLoginUtil.readFilesInFolder(sdaPath);
+        for (SteamUserDate steamDate : steamUserDatesInit) {
             String account_name = steamDate.getAccount_name();
             //从缓存中获取cookie
             StringBuilder cookieSb = steamCacheService.getCookie(account_name);
@@ -53,11 +67,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
             }
             //缓存cookie
             steamCacheService.addCookie(account_name, cookieSb);
-
-
-            Object cookieSb1 = steamCacheService.getCookie(account_name);
             steamDate.setCookies(cookieSb);
-
             //获取apikey
             String apikey = steamCacheService.getApikey(account_name);
             if (StrUtil.isEmpty(apikey)) {
@@ -66,7 +76,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
             }
             steamDate.setApikey(apikey);
         }
-        steamUserDates.addAll(steamUserDates);
+        steamUserDates.addAll(steamUserDatesInit);
     }
 
 
@@ -78,7 +88,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
      */
     public String getApikey(String account, String cookie) {
         String url = "https://steamcommunity.com/dev/apikey";
-        CookiesConfig.buffCookies.set(cookie);
+        CookiesConfig.steamCookies.set(cookie);
         HttpBean httpBean = http.request(url,
                 "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
         String response = httpBean.getResponse();

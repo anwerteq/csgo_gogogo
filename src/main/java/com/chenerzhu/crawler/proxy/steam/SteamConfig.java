@@ -3,7 +3,6 @@ package com.chenerzhu.crawler.proxy.steam;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -40,10 +39,10 @@ public class SteamConfig implements ApplicationRunner {
     public static Map<String, String> getSteamHeader() {
         Map<String, String> headers1 = new HashMap() {{
             //steam请求头
-            put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+//            put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
             put("Cookie", getCookie());
             put("Host", "steamcommunity.com");
-            put("Referer", "https://steamcommunity.com/profiles/"+SteamConfig.getSteamId()+"/inventory?modal=1&market=1");
+//            put("Referer", "https://steamcommunity.com/profiles/"+SteamConfig.getSteamId()+"/inventory?modal=1&market=1");
         }};
         return headers1;
     }
@@ -78,7 +77,7 @@ public class SteamConfig implements ApplicationRunner {
     }
 
     public static  String getCookie(){
-        String cookies = STEAM_COOKIE;
+        String cookies = CookiesConfig.steamCookies.get();
         if (StrUtil.isNotEmpty(cookies)){
             return cookies;
         }

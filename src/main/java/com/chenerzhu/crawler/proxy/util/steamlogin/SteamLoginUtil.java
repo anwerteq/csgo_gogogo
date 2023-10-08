@@ -70,7 +70,7 @@ public class SteamLoginUtil {
             steamUserDate.setUserPsw(password);
 //            login(steamUserDate);
             // 在这里对 jsonObject 进行你需要的处理
-            System.out.println(JSONObject.parseObject(jsonString));
+//            System.out.println(JSONObject.parseObject(jsonString));
             return steamUserDate;
         } catch (IOException e) {
             e.printStackTrace();

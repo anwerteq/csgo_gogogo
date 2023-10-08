@@ -101,9 +101,11 @@ public class ConfirmUtil {
             mac.init(signingKey);
             byte[] hashedData = mac.doFinal(array);
 
+            String s = new String(hashedData);
             String encodedData = Base64.encodeBase64String(hashedData);
-            //String hash = URLEncoder.encode(encodedData, "UTF8");
-            return encodedData.replace("+", "%2B").replace("=", "%3D");
+//            String hash = URLEncoder.encode(encodedData, "UTF8");
+//            return encodedData.replace("+", "%2B").replace("=", "%3D");
+            return encodedData;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -129,7 +131,8 @@ public class ConfirmUtil {
             String conId = sb.toString();
             String realConId = conId.substring(0, 8) + "-" + conId.substring(8, 12) + "-" +
                     conId.substring(12, 16) + "-" + conId.substring(16, 20) + "-" + conId.substring(20, 32);
-            String deviceId = "android%3";
+//            String deviceId = "android%3";
+            String deviceId = "android:";
             deviceId += realConId;
             return deviceId;
         } catch (NoSuchAlgorithmException e) {
@@ -138,4 +141,6 @@ public class ConfirmUtil {
             return "";
         }
     }
+
+
 }

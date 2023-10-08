@@ -55,41 +55,7 @@ public class HttpClientUtils implements ApplicationRunner {
     private static RequestConfig reqConf = null;
     private static StandardHttpRequestRetryHandler standardHandler = null;
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        staticProxyIp= proxyIp;
-
-        log.info("开始测试代理是否可以访问steam");
-        log.info("代理ip为："+ proxyIp);
-        String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
-        String reponse = sendGet(url, new HashMap<>());
-
-        log.info("代理IP可以成功访问steam,测试接口返回的数据为：" + reponse);
-    }
-
-    static {
-        reqConf = RequestConfig.custom()
-                .setSocketTimeout(60000)
-                .setConnectTimeout(60000)
-                .setConnectionRequestTimeout(60000)
-                .setRedirectsEnabled(true)
-                .setMaxRedirects(2)
-                .build();
-        standardHandler = new StandardHttpRequestRetryHandler(3, true);
-    }
-
-    public static void requestConfig() {
-        reqConf = RequestConfig.custom()
-                .setSocketTimeout(5000)
-                .setConnectTimeout(5000)
-                .setConnectionRequestTimeout(2000)
-                .setRedirectsEnabled(false)
-                .setMaxRedirects(0)
-                .build();
-        standardHandler = new StandardHttpRequestRetryHandler(3, true);
-    }
-
-    public static String send(final String url, String content, Map<String, String> headerMap, Map<String, String> formParamMap, String contentCharset, String resultCharset, HttpMethod method) {
+    public static String send(String url, String content, Map<String, String> headerMap, Map<String, String> formParamMap, String contentCharset, String resultCharset, HttpMethod method) {
         if (StringUtils.isEmpty(contentCharset)) {
             contentCharset = DEFAULT_CHARSET;
         }
@@ -110,6 +76,14 @@ public class HttpClientUtils implements ApplicationRunner {
 
             switch (method) {
                 case GET:
+                    if (formParamMap != null && !formParamMap.isEmpty() && !url.contains("?")) {
+                        if (!url.endsWith("?")) {
+                            url = url + "?";
+                        }
+                        for (Map.Entry<String, String> entry : formParamMap.entrySet()) {
+                            url = url + entry.getKey() + "=" + java.net.URLEncoder.encode(entry.getValue(), "UTF-8") + "&";
+                        }
+                    }
                     HttpGet httpGet = new HttpGet(url);
                     httpGet.setConfig(reqConf);
                     addHeader(httpGet, headerMap);
@@ -179,6 +153,60 @@ public class HttpClientUtils implements ApplicationRunner {
             }
         }
         return null;
+    }
+
+    static {
+        reqConf = RequestConfig.custom()
+                .setSocketTimeout(60000)
+                .setConnectTimeout(60000)
+                .setConnectionRequestTimeout(60000)
+                .setRedirectsEnabled(true)
+                .setMaxRedirects(2)
+                .build();
+        standardHandler = new StandardHttpRequestRetryHandler(3, true);
+    }
+
+    public static void requestConfig() {
+        reqConf = RequestConfig.custom()
+                .setSocketTimeout(5000)
+                .setConnectTimeout(5000)
+                .setConnectionRequestTimeout(2000)
+                .setRedirectsEnabled(false)
+                .setMaxRedirects(0)
+                .build();
+        standardHandler = new StandardHttpRequestRetryHandler(3, true);
+    }
+
+    public static SSLConnectionSocketFactory getSSL() {
+        SSLContext ctx = null;
+        try {
+            ctx = SSLContext.getInstance("SSL");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        X509TrustManager tm = new X509TrustManager() {
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @Override
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] arg0,
+                                           String arg1) throws CertificateException {
+            }
+        };
+        try {
+            ctx.init(null, new TrustManager[]{tm}, null);
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(ctx, NoopHostnameVerifier.INSTANCE);
+        return ssf;
     }
 
     /**
@@ -257,44 +285,28 @@ public class HttpClientUtils implements ApplicationRunner {
         }
     }
 
-
-    public static SSLConnectionSocketFactory getSSL(){
-        SSLContext ctx = null;
-        try {
-            ctx = SSLContext.getInstance("SSL");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        X509TrustManager tm = new X509TrustManager() {
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-
-            @Override
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] arg0,
-                                           String arg1) throws CertificateException {
-            }
-        };
-        try {
-            ctx.init(null, new TrustManager[]{tm}, null);
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-        SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(ctx, NoopHostnameVerifier.INSTANCE);
-          return ssf;
+    public static String sendGet(final String url, Map<String, String> headerMap, Map<String, String> paramMap) {
+        return send(url, "", headerMap, paramMap, DEFAULT_CHARSET, DEFAULT_CHARSET, HttpMethod.GET);
     }
+
     public static String sendGet(final String url, Map<String, String> headerMap) {
         return sendGet(url, headerMap, DEFAULT_CHARSET, DEFAULT_CHARSET);
     }
 
     public static String sendGet(final String url, Map<String, String> headerMap, String contentCharset, String resultCharset) {
         return send(url, "", headerMap, null, contentCharset, resultCharset, HttpMethod.GET);
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        staticProxyIp = proxyIp;
+
+        log.info("开始测试代理是否可以访问steam");
+        log.info("代理ip为：" + proxyIp);
+        String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
+        String reponse = sendGet(url, new HashMap<>());
+
+        log.info("代理IP可以成功访问steam,测试接口返回的数据为：" + reponse);
     }
 
     public static String sendPost(final String url, String content, Map<String, String> headerMap) {

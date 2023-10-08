@@ -26,17 +26,3 @@ public class SteamUserDate {
 }
 
 
-/**
- * Auto-generated: 2023-10-01 3:1:5
- *
- * @author bejson.com (i@bejson.com)
- * @website http://www.bejson.com/java2pojo/
- */
-@Data
-class Session {
-
-    private long SteamID;
-    private String AccessToken;
-    private String RefreshToken;
-    private String SessionID;
-}

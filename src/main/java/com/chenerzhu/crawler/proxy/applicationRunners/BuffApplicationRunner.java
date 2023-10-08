@@ -22,6 +22,10 @@ import java.util.List;
 public class BuffApplicationRunner implements ApplicationRunner {
 
     public static List<BuffUserData> buffUserDataList = new ArrayList<>();
+
+    public static ThreadLocal<BuffUserData> buffUserDataThreadLocal = new ThreadLocal<>();
+
+
     @Autowired
     BuffAutoLoginUtil buffAutoLoginUtil;
 
@@ -32,7 +36,6 @@ public class BuffApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
         for (String acountData : buffAccountInfoConfig.getAccount_information()) {
             BuffUserData buffUserData = new BuffUserData();
             String acount = acountData.split("-")[0];

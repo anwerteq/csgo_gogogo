@@ -28,10 +28,11 @@ public class BuffAutoLoginUtil {
         String edgeDriverPath = projectPath + "/src/main/resources/edgedriver_win64/msedgedriver.exe";
 //        String edgeDriverPath = "resources/edgedriver_win64/msedgedriver.exe";
         System.setProperty("webdriver.edge.driver", edgeDriverPath);
+        WebDriver driver = new EdgeDriver();
         String cookie = "";
         try {
             // 创建 ChromeDriver 实例
-            WebDriver driver = new EdgeDriver();
+
             driver.get(url);
 
             WebElement element = driver.findElement(By.cssSelector(".nav_entries>ul>li"));
@@ -59,11 +60,17 @@ public class BuffAutoLoginUtil {
                 log.error(username + "获取cookie失败，请检查密码是否正确");
             }
             // 等待登录完成，可以根据页面元素的变化或者跳转来判断登录是否成功
-
             // 关闭浏览器
 //            driver.quit();
         } catch (Exception e) {
+            log.error("buff获取cookie失败，失败信息为：", e);
             e.printStackTrace();
+            return "";
+        } finally {
+            //没有获取到cookie关闭浏览器
+            if ("null".equals(cookie) || StrUtil.isEmpty(cookie)) {
+                driver.quit();
+            }
         }
         return cookie;
     }
@@ -76,6 +83,7 @@ public class BuffAutoLoginUtil {
      * @return
      */
     public String getSteamId(String cookie) {
+
         String url = "https://buff.163.com/user-center/profile";
         CookiesConfig.buffCookies.set(cookie);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);

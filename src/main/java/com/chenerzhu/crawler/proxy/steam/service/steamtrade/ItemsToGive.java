@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.buff.service.deliverOrder;
+package com.chenerzhu.crawler.proxy.steam.service.steamtrade;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,23 +6,24 @@ import lombok.Data;
 import java.util.StringJoiner;
 
 /**
- * Auto-generated: 2023-10-07 22:49:32
+ * Auto-generated: 2023-10-08 15:18:45
  *
  * @author www.ecjson.com
  * @website http://www.ecjson.com/json2java/
  */
+
 @Data
-public class ItemsToTrade {
+public class ItemsToGive {
 
     private String appid;
+    private String contextid;
     private String assetid;
     private String classid;
-    private String contextid;
-    @JsonProperty("goods_id")
-    private String goodsId;
     private String instanceid;
-
-    private String tradeofferid;
+    private String amount;
+    private boolean missing;
+    @JsonProperty("est_usd")
+    private String estUsd;
 
 
     /**

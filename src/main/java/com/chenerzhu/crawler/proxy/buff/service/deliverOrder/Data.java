@@ -2,7 +2,6 @@ package com.chenerzhu.crawler.proxy.buff.service.deliverOrder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,6 +10,7 @@ import java.util.List;
  * @author www.ecjson.com
  * @website http://www.ecjson.com/json2java/
  */
+@lombok.Data
 public class Data {
 
     private int appid;
@@ -51,198 +51,6 @@ public class Data {
     private int type;
     private String url;
     @JsonProperty("verify_code")
-    private Date verifyCode;
-
-    public int getAppid() {
-        return appid;
-    }
-
-    public void setAppid(int appid) {
-        this.appid = appid;
-    }
-
-    public int getBotAge() {
-        return botAge;
-    }
-
-    public void setBotAge(int botAge) {
-        this.botAge = botAge;
-    }
-
-    public String getBotAgeIcon() {
-        return botAgeIcon;
-    }
-
-    public void setBotAgeIcon(String botAgeIcon) {
-        this.botAgeIcon = botAgeIcon;
-    }
-
-    public String getBotAvatar() {
-        return botAvatar;
-    }
-
-    public void setBotAvatar(String botAvatar) {
-        this.botAvatar = botAvatar;
-    }
-
-    public String getBotExtraInfo() {
-        return botExtraInfo;
-    }
-
-    public void setBotExtraInfo(String botExtraInfo) {
-        this.botExtraInfo = botExtraInfo;
-    }
-
-    public int getBotLevel() {
-        return botLevel;
-    }
-
-    public void setBotLevel(int botLevel) {
-        this.botLevel = botLevel;
-    }
-
-    public String getBotLevelBackgroundColor() {
-        return botLevelBackgroundColor;
-    }
-
-    public void setBotLevelBackgroundColor(String botLevelBackgroundColor) {
-        this.botLevelBackgroundColor = botLevelBackgroundColor;
-    }
-
-    public String getBotLevelBackgroundImage() {
-        return botLevelBackgroundImage;
-    }
-
-    public void setBotLevelBackgroundImage(String botLevelBackgroundImage) {
-        this.botLevelBackgroundImage = botLevelBackgroundImage;
-    }
-
-    public String getBotName() {
-        return botName;
-    }
-
-    public void setBotName(String botName) {
-        this.botName = botName;
-    }
-
-    public int getBotSteamCreatedAt() {
-        return botSteamCreatedAt;
-    }
-
-    public void setBotSteamCreatedAt(int botSteamCreatedAt) {
-        this.botSteamCreatedAt = botSteamCreatedAt;
-    }
-
-    public int getCreateCountUp() {
-        return createCountUp;
-    }
-
-    public void setCreateCountUp(int createCountUp) {
-        this.createCountUp = createCountUp;
-    }
-
-    public int getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(int createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getGame() {
-        return game;
-    }
-
-    public void setGame(String game) {
-        this.game = game;
-    }
-
-    public GoodsInfos getGoodsInfos() {
-        return goodsInfos;
-    }
-
-    public void setGoodsInfos(GoodsInfos goodsInfos) {
-        this.goodsInfos = goodsInfos;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<ItemsToTrade> getItemsToTrade() {
-        return itemsToTrade;
-    }
-
-    public void setItemsToTrade(List<ItemsToTrade> itemsToTrade) {
-        this.itemsToTrade = itemsToTrade;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTraceUrl() {
-        return traceUrl;
-    }
-
-    public void setTraceUrl(String traceUrl) {
-        this.traceUrl = traceUrl;
-    }
-
-    public String getTradeofferid() {
-        return tradeofferid;
-    }
-
-    public void setTradeofferid(String tradeofferid) {
-        this.tradeofferid = tradeofferid;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Date getVerifyCode() {
-        return verifyCode;
-    }
-
-    public void setVerifyCode(Date verifyCode) {
-        this.verifyCode = verifyCode;
-    }
+    private String verifyCode;
 
 }
