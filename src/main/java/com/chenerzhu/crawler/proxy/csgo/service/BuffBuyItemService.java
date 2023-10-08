@@ -353,7 +353,7 @@ public class BuffBuyItemService {
         arrayList.add("4");
         arrayList.add("5");
         Collections.shuffle(arrayList);
-        System.out.println("123123");
+
     }
 
     /**
@@ -396,7 +396,7 @@ public class BuffBuyItemService {
 //   // https://buff.163.com/api/market/goods/recommendation
             }
             System.out.println("responseEntity:" + responseEntity);
-            System.out.println("123123");
+
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -449,7 +449,7 @@ public class BuffBuyItemService {
 
         }
 
-        System.out.println("123123");
+
     }
 
 }

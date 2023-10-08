@@ -63,7 +63,7 @@ public class SteamTradeofferService {
                 sendConfirmation(conf);
             }
         }
-        System.out.println("123123");
+
     }
 
 
@@ -84,7 +84,7 @@ public class SteamTradeofferService {
         String resStr = HttpClientUtils.sendGet(url, steamHeader, confirmationParams);
         Map map = JSONObject.parseObject(resStr, Map.class);
         log.info("确认操作，steam返回的数据为：{}", resStr);
-        System.out.println("123123");
+
     }
 
 
@@ -172,7 +172,7 @@ public class SteamTradeofferService {
         String url = "https://steamcommunity.com/mobileconf/getlist";
         String responseStr = HttpClientUtils.sendGet(url, saleHeader, confirmationParams);
         GetlistResponse getlistResponse = JSONObject.parseObject(responseStr, GetlistResponse.class);
-        System.out.println("123123");
+
         return getlistResponse.getConf();
     }
 
@@ -193,7 +193,7 @@ public class SteamTradeofferService {
         String eleId = detailsConfData.getHtml().split("<div class=\"tradeoffer\" id=\"")[1].split("\"")[0];
         String id = eleId.split("_")[1];
 //        detailsConfData.getHtml().split("")
-        System.out.println("123123");
+
         return id;
     }
 

@@ -48,7 +48,7 @@ public class SteamInventorySerivce {
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
         manualPlus(steamInventoryRoot.getData().getItems());
-        System.out.println("123123");
+
     }
 
 
