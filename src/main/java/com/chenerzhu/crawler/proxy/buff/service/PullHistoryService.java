@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffPriceHistory1;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffPriceHistory2;
@@ -18,9 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -43,8 +47,14 @@ public class PullHistoryService {
     @Autowired
     SteamPriceHistoryRepository historyRepository;
 
-    public void pullHistoryPrice(){
-        executorService.execute(this::doPullHistoryPrice);
+    public static void main(String[] args) {
+        // 获取当前日期
+        String currentDate = DateUtil.today();
+        System.out.println("Current Date: " + currentDate);
+
+        // 获取前20天的日期
+        String before20Days = String.valueOf(DateUtil.offsetDay(new Date(), -20).getTime());
+        System.out.println("Before 20 Days: " + before20Days);
     }
 
     /**
@@ -86,6 +96,34 @@ public class PullHistoryService {
 
     }
 
+    public void pullHistoryPrice() {
+        executorService.execute(this::doPullHistoryPrice);
+    }
+
+    /**
+     * 获取itemId近20天中位数
+     *
+     * @return
+     */
+    public Double get20dayMedianPrice(String itemId, int day) {
+        String buffHistoryUrl2 = "https://buff.163.com/api/market/goods/price_history/buff?game=csgo&currency=CNY" +
+                "&buff_price_type=2&_=" + System.currentTimeMillis() + "&days=" + day + "&goods_id=" + itemId;
+        ResponseEntity<HistoryPriceRep> responseEntity = restTemplate.exchange(buffHistoryUrl2, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), HistoryPriceRep.class);
+        if (200 != responseEntity.getStatusCode().value()) {
+            return 0.0;
+        }
+        HistoryPriceRep historyPriceRep = responseEntity.getBody();
+        List<List<String>> price_historys = historyPriceRep.getData().getPrice_history();
+        //前20天的时间戳
+        long beforeDate = DateUtil.offsetDay(new Date(), -day).getTime();
+        List<List<String>> before20ddayHistorys = price_historys.stream()
+                .filter(price_history -> beforeDate < Long.valueOf(price_history.get(0))).collect(Collectors.toList());
+        List<String> sellListPrices = before20ddayHistorys.stream().map(history -> history.get(1)).collect(Collectors.toList());
+        Collections.sort(sellListPrices);
+        String medianPrice = sellListPrices.get(Integer.valueOf(sellListPrices.size() / 2));
+        return Double.valueOf(medianPrice);
+    }
+
     /**
      * buff在售最低
      *
@@ -108,7 +146,6 @@ public class PullHistoryService {
         }
         buffPriceHistory2List.parallelStream().forEach(history2 -> history2Repository.save(history2));
     }
-
 
 
     /**
@@ -134,6 +171,7 @@ public class PullHistoryService {
         }
         buffPriceHistory1List.parallelStream().forEach(buffPriceHistory1 -> history1Repository.save(buffPriceHistory1));
     }
+
     /**
      * steam价格走势
      *
@@ -157,9 +195,6 @@ public class PullHistoryService {
         }
         steamPriceHistories.parallelStream().forEach(steamPriceHistory -> historyRepository.save(steamPriceHistory));
     }
-
-
-
 
 
 }

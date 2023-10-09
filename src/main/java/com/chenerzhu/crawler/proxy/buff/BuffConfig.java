@@ -1,9 +1,9 @@
 package com.chenerzhu.crawler.proxy.buff;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -88,6 +88,13 @@ public class BuffConfig implements ApplicationRunner {
         return entity1;
     }
 
+    public static HttpEntity<MultiValueMap<String, String>> changeBuffHttpEntity(Map<String, Object> whereMap) {
+        HttpHeaders headers1 = new HttpHeaders();
+        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
+        syncCookie();
+        return entity1;
+    }
+
     /**
      * 控制整个项目使用cookie的频率
      */
@@ -99,10 +106,17 @@ public class BuffConfig implements ApplicationRunner {
         }
     }
 
-    public static String getCookie(){
+    public static String getCookie() {
         String cookie = CookiesConfig.buffCookies.get();
-        if (StrUtil.isNotEmpty(cookie)){
+        if (StrUtil.isNotEmpty(cookie)) {
             return cookie;
+        }
+        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        if (ObjectUtil.isNotNull(buffUserData)) {
+            cookie = buffUserData.getCookie();
+            if (StrUtil.isNotEmpty(cookie)) {
+                return cookie;
+            }
         }
         cookie = BuffApplicationRunner.buffUserDataList.get(0).getCookie();
         return cookie;

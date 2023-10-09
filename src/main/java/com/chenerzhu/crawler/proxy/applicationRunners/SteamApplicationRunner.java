@@ -28,6 +28,11 @@ public class SteamApplicationRunner implements ApplicationRunner {
     public static ThreadLocal<SteamUserDate> steamUserDateTL = new ThreadLocal<>();
 
 
+    /**
+     * 通过steamid设置steam信息
+     *
+     * @param steamId
+     */
     public static void setThreadLocalSteamId(String steamId) {
         for (SteamUserDate steamUserDate : steamUserDates) {
             Session session = steamUserDate.getSession();

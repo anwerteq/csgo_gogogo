@@ -18,7 +18,7 @@ import java.util.Date;
 public class SellSteamProfitEntity {
 
     @Id
-    private long item_id;
+    private String item_id;
     //物品名称
     String name;
     String hash_name;

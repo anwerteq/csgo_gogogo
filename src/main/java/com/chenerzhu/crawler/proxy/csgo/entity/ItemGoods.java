@@ -22,7 +22,7 @@ public class ItemGoods {
 
     private static final long serialVersionUID = 1L;
     @Id
-    private long id;
+    private String id;
 
     @Column(name = "appid")
     private int appid;

@@ -63,8 +63,6 @@ public class HttpClientUtils implements ApplicationRunner {
         HttpResponse httpResponse = null;
         try {
             //设置代理IP、端口
-
-
             HttpHost proxy = new HttpHost(staticProxyIp.split(":")[0], Integer.parseInt(staticProxyIp.split(":")[1]));
             DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 //            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
@@ -73,7 +71,6 @@ public class HttpClientUtils implements ApplicationRunner {
             if (url.toLowerCase().startsWith("https")) {
 //                initSSL(httpClient, getPort(url));
             }
-
             switch (method) {
                 case GET:
                     if (formParamMap != null && !formParamMap.isEmpty() && !url.contains("?")) {
@@ -139,11 +136,6 @@ public class HttpClientUtils implements ApplicationRunner {
         } catch (IOException e) {
             log.error("Network error", e);
         } finally {
-            try {
-                log.info(EntityUtils.toString(httpResponse.getEntity(), resultCharset));
-            } catch (IOException e) {
-                log.info(e.getMessage());
-            }
             try {
                 if (httpClient != null) {
                     httpClient.close();

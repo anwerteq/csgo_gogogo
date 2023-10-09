@@ -1,6 +1,5 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
@@ -8,6 +7,7 @@ import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.csgo.entity.ProductList;
 import com.chenerzhu.crawler.proxy.csgo.repository.GoodsInfoRepository;
 import com.chenerzhu.crawler.proxy.csgo.repository.IItemGoodsRepository;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class PullItemService {
-    ExecutorService executorService = Executors.newFixedThreadPool(1);
+    public static ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     @Autowired
     RestTemplate restTemplate;
@@ -46,27 +46,43 @@ public class PullItemService {
 
     /**
      * 拉取buff商品列表
+     *
      * @param isBuy：trueL：steam购买，false不购买
      */
     public void pullItmeGoods(Boolean isBuy) {
-//        pullOnePage(12);
         executorService.execute(() -> {
-
-            AtomicInteger atomicInteger = new AtomicInteger(1);
-            try{
-                while (pullOnePage(atomicInteger,isBuy,"")) {
-                    atomicInteger.addAndGet(1);
-                }
-            }catch (Exception e){
-                log.error("异常",e);
-            }
             String[] ass = new String[]{"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
             List<String> types = Arrays.stream(ass).collect(Collectors.toList());
             for (String category_group : types) {
-
+                AtomicInteger atomicInteger = new AtomicInteger(1);
+                try {
+                    while (pullOnePage(atomicInteger, isBuy, category_group)) {
+                        atomicInteger.addAndGet(1);
+                    }
+                } catch (Exception e) {
+                    log.error("异常", e);
+                }
             }
 
         });
+    }
+
+    /**
+     * 拉取商品进行求购
+     */
+    public void pullItmeGoods() {
+        String[] ass = new String[]{"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
+        List<String> types = Arrays.stream(ass).collect(Collectors.toList());
+        for (String category_group : types) {
+            AtomicInteger atomicInteger = new AtomicInteger(1);
+            try {
+                while (pullOnePage(atomicInteger, false, category_group)) {
+                    atomicInteger.addAndGet(1);
+                }
+            } catch (Exception e) {
+                log.error("异常", e);
+            }
+        }
     }
 
 
@@ -84,23 +100,17 @@ public class PullItemService {
         if (StrUtil.isNotEmpty(category_group)){
             url1 = url1 + "&category_group=" + category_group;
         }
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        SleepUtil.sleep(5000);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
             return false;
         }
         ProductList productList = JSONObject.parseObject(responseEntity.getBody(), ProductList.class);
         if ("Login Required".equals(productList.getCode())){
-            log.error("buff的coookie过期，请在配置文件修改buff的cookie信息");
+            log.error("buff的coookie过期，请重启脚本");
             throw new ArithmeticException("");
         }
         List<ItemGoods> itemGoodsList = productList.getData().getItems();
-//        itemGoodsList.parallelStream().forEach(item -> saveItem(item,isBuy));
         itemGoodsList.forEach((item)->{
             saveItem(item,isBuy);
         });
@@ -117,12 +127,9 @@ public class PullItemService {
 
     public void saveItem(ItemGoods itemGoods,Boolean isBuy) {
 
-        try{
-            ItemGoods byMarketHashName = itemRepository.findByMarketHashName(itemGoods.getMarketHashName());
-            if (ObjectUtil.isNotNull(byMarketHashName) && StrUtil.isNotEmpty(byMarketHashName.getNameId())){
-                return;
-            }
-            String nameId = profitService.getListsDetail(itemGoods.getMarketHashName());
+        try {
+
+            String nameId = profitService.getItemNameId(itemGoods.getMarketHashName());
             itemGoods.setNameId(nameId);
             itemRepository.save(itemGoods);
         }catch (Exception e){
@@ -130,7 +137,7 @@ public class PullItemService {
         }
 
         //推荐商品在buff售卖
-//        profitService.saveSellBuffProfitEntity(itemGoods,isBuy);
+        profitService.saveSellBuffProfitEntity(itemGoods,isBuy);
         //推荐商品再buff购买
 //        profitService. saveSellSteamProfit(itemGoods);
 //        //保存buff商品信息

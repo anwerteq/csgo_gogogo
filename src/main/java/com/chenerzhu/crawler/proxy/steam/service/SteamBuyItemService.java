@@ -39,7 +39,8 @@ public class SteamBuyItemService {
      * @param market_hash_name
      */
     public void createbuyorder(Double price_total, String market_hash_name,int quantity) {
-        SleepUtil.sleep(15000);
+        SleepUtil.sleep(3000);
+        quantity = 1;
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);
         createbuyorderEntity.setQuantity(String.valueOf(quantity));
@@ -57,9 +58,6 @@ public class SteamBuyItemService {
             log.info("steam下求购订单success返回的数据为：" + responseStr);
             return;
         }
-//        ExecutorUtil.pool.execute(() -> {
-//            saveSteamCostEntity(createbuyorderEntity);
-//        });
         log.info("steam下求购订单返回的数据为：" + responseStr);
     }
 
