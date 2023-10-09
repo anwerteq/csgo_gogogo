@@ -118,11 +118,11 @@ public class PullItemService {
     public void saveItem(ItemGoods itemGoods,Boolean isBuy) {
 
         try{
-            ItemGoods byMarketHashName = itemRepository.findByMarketHashName(itemGoods.getMarket_hash_name());
+            ItemGoods byMarketHashName = itemRepository.findByMarketHashName(itemGoods.getMarketHashName());
             if (ObjectUtil.isNotNull(byMarketHashName) && StrUtil.isNotEmpty(byMarketHashName.getNameId())){
                 return;
             }
-            String nameId = profitService.getListsDetail(itemGoods.getMarket_hash_name());
+            String nameId = profitService.getListsDetail(itemGoods.getMarketHashName());
             itemGoods.setNameId(nameId);
             itemRepository.save(itemGoods);
         }catch (Exception e){

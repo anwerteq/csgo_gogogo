@@ -46,7 +46,7 @@ public class ItemGoods {
     @Column(name = "has_buff_price_history")
     private boolean has_buff_price_history;
     @Column(name = "market_hash_name")
-    private String market_hash_name;
+    private String marketHashName;
     @Column(name = "market_min_price")
     private String market_min_price;
     @Column(name = "name")

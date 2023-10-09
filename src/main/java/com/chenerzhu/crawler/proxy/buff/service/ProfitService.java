@@ -98,7 +98,7 @@ public class ProfitService {
         double interest_rate = (profit.getSell_min_price() / (profit.getIn_fact_steam_price_cny()));
         profit.setInterest_rate(String.format("%.3f", interest_rate));
         profit.setUp_date(new Date());
-        profit.setMarket_hash_name(itemGoods.getMarket_hash_name());
+        profit.setMarket_hash_name(itemGoods.getMarketHashName());
         Boolean flag = false;
         if (0.98 < interest_rate) {
             //在buff售卖，利率超过3%
@@ -171,7 +171,7 @@ public class ProfitService {
         entity.setBuff_price(Double.valueOf(itemGoods.getSell_min_price()));
         entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());
         entity.setSell_num(itemGoods.getSell_num());
-        entity.setHash_name(itemGoods.getMarket_hash_name());
+        entity.setHash_name(itemGoods.getMarketHashName());
         //税后价格
         double in_fact_price = Double.parseDouble(entity.getSell_steam_price()) *
                 0.85;
