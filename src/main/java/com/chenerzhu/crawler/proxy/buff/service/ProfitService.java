@@ -1,17 +1,22 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.csgo.profitentity.SellBuffProfitEntity;
 import com.chenerzhu.crawler.proxy.csgo.profitentity.SellSteamProfitEntity;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellSteamProfitRepository;
+import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
+import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -68,7 +73,7 @@ public class ProfitService {
             try {
 
                 //求购价，去下订单
-                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 * 0.95, itemGoods.getMarket_hash_name(), quantity);
+//                steamBuyItemService.createbuyorder(Double.parseDouble(itemGoods.getGoods_info().getSteam_price()) * 100 * 0.95, itemGoods.getMarket_hash_name(), quantity);
 
             } catch (Exception e) {
                 log.error("steam下订单信息：" , e);
@@ -116,6 +121,33 @@ public class ProfitService {
 
     }
 
+
+    /**
+     * 获取steam订单信息
+     * @param hashName
+     */
+    public String getListsDetail(String hashName){
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        String hashNameUrl = URLUtil.encode(hashName, "UTF-8").replace("+", "%20");
+        String url = "https://steamcommunity.com/market/listings/730/" + hashNameUrl;
+        Map<String, String> saleHeader = SteamConfig.getSteamHeader();
+        String responseStr = HttpClientUtils.sendGet(url, saleHeader);
+        String itemNameId =  responseStr.split("Market_LoadOrderSpread\\( ")[1].split("\\)")[0];
+        System.out.println("123123");
+        return itemNameId;
+    }
+
+    public static void main(String[] args) {
+        try {
+            System.out.println(URLEncoder.encode("M4A4 | Neo-Noir (Field-Tested)", "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 保存在steam售卖的购买记录

@@ -27,6 +27,7 @@ public class BuffAutoLoginUtil {
         String projectPath = System.getProperty("user.dir");
         String edgeDriverPath = projectPath + "/src/main/resources/edgedriver_win64/msedgedriver.exe";
 //        String edgeDriverPath = "resources/edgedriver_win64/msedgedriver.exe";
+        log.info("Edge支持版本为：117.0.2045.60，请将Edge浏览器升级为最新版本，或使用最新脚本");
         System.setProperty("webdriver.edge.driver", edgeDriverPath);
         WebDriver driver = new EdgeDriver();
         String cookie = "";

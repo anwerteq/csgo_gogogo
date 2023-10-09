@@ -66,4 +66,8 @@ public class ItemGoods {
     @Column(name = "transacted_num")
     private int transacted_num;
 
+
+    //临时字段
+    private String nameId;
+
 }

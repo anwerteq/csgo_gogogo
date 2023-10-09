@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam;
 
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import lombok.extern.slf4j.Slf4j;
@@ -81,12 +82,8 @@ public class SteamConfig implements ApplicationRunner {
         if (StrUtil.isNotEmpty(cookies)){
             return cookies;
         }
-        long millis = System.currentTimeMillis();
-        int size = CookiesConfig.cookeisList.size();
-        int index = (int) (millis%size);
-        Cookeis cookeis = CookiesConfig.cookeisList.get(index);
-        CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
-        return cookeis.getSteam_cookie();
+        cookies = SteamApplicationRunner.steamUserDates.get(0).getCookies().toString();
+        return cookies;
     }
 
     public static  String getCookieOnlyKey(String key){

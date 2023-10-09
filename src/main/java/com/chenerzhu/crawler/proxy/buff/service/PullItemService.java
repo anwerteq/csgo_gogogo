@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
@@ -51,17 +52,18 @@ public class PullItemService {
 //        pullOnePage(12);
         executorService.execute(() -> {
 
+            AtomicInteger atomicInteger = new AtomicInteger(1);
+            try{
+                while (pullOnePage(atomicInteger,isBuy,"")) {
+                    atomicInteger.addAndGet(1);
+                }
+            }catch (Exception e){
+                log.error("异常",e);
+            }
             String[] ass = new String[]{"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
             List<String> types = Arrays.stream(ass).collect(Collectors.toList());
             for (String category_group : types) {
-                AtomicInteger atomicInteger = new AtomicInteger(1);
-                try{
-                    while (pullOnePage(atomicInteger,isBuy,category_group)) {
-                        atomicInteger.addAndGet(1);
-                    }
-                }catch (Exception e){
-                    log.error("异常",e);
-                }
+
             }
 
         });
@@ -114,9 +116,21 @@ public class PullItemService {
      */
 
     public void saveItem(ItemGoods itemGoods,Boolean isBuy) {
-//        itemRepository.save(itemGoods);
+
+        try{
+            ItemGoods byMarketHashName = itemRepository.findByMarketHashName(itemGoods.getMarket_hash_name());
+            if (ObjectUtil.isNotNull(byMarketHashName) && StrUtil.isNotEmpty(byMarketHashName.getNameId())){
+                return;
+            }
+            String nameId = profitService.getListsDetail(itemGoods.getMarket_hash_name());
+            itemGoods.setNameId(nameId);
+            itemRepository.save(itemGoods);
+        }catch (Exception e){
+            log.info("错误",e);
+        }
+
         //推荐商品在buff售卖
-        profitService.saveSellBuffProfitEntity(itemGoods,isBuy);
+//        profitService.saveSellBuffProfitEntity(itemGoods,isBuy);
         //推荐商品再buff购买
 //        profitService. saveSellSteamProfit(itemGoods);
 //        //保存buff商品信息

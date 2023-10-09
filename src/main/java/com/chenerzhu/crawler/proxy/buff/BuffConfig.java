@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.buff;
 
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import lombok.extern.slf4j.Slf4j;
@@ -99,18 +100,12 @@ public class BuffConfig implements ApplicationRunner {
     }
 
     public static String getCookie(){
-
         String cookie = CookiesConfig.buffCookies.get();
         if (StrUtil.isNotEmpty(cookie)){
             return cookie;
         }
-        long millis = System.currentTimeMillis();
-        int size = CookiesConfig.cookeisList.size();
-        //线程没有绑定cooke,随机获取一个cookie
-        int index = (int) (millis % size);
-        Cookeis cookeis = CookiesConfig.cookeisList.get(index);
-        CookiesConfig.buffCookies.set(cookeis.getBuff_cookie());
-        return cookeis.getBuff_cookie();
+        cookie = BuffApplicationRunner.buffUserDataList.get(0).getCookie();
+        return cookie;
     }
 
     /**

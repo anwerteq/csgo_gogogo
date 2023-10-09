@@ -13,4 +13,7 @@ public interface IItemGoodsRepository extends JpaRepository<ItemGoods, Long> {
     @Query(value = "select id from item_goods", nativeQuery = true)
     List<Long> findAllId();
 
+
+    ItemGoods findByMarketHashName(String market_hash_name);
+
 }
