@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.applicationRunners;
 
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
+import com.chenerzhu.crawler.proxy.buff.service.NoticeService;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
@@ -11,29 +12,30 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * 自动接收buff的报价和steam确认报价
+ */
 @Slf4j
 @Component
-public class SteamautoBuyRunner implements ApplicationRunner {
+public class BuffAutoTraderRunner implements ApplicationRunner {
 
     @Autowired
-    PullItemService pullItemService;
-
-    @Value("${auto_sale}")
-    private Boolean auto_sale;
+    NoticeService noticeService;
+    @Value("${auto_trader}")
+    private Boolean auto_trader;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (!auto_sale) {
+        if (!auto_trader) {
             return;
         }
         PullItemService.executorService.execute(() -> {
-            log.info("30s后开始steam求购商品");
+            log.info("30s后开始buff自动收货");
             SleepUtil.sleep(30000);
             for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
                 BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
                 CookiesConfig.buffCookies.set(buffUserData.getCookie());
-                pullItemService.pullItmeGoods();
+                noticeService.steamTrade();
             }
         });
     }

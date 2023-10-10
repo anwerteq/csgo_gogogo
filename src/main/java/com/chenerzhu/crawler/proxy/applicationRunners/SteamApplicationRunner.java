@@ -33,16 +33,20 @@ public class SteamApplicationRunner implements ApplicationRunner {
      *
      * @param steamId
      */
-    public static void setThreadLocalSteamId(String steamId) {
+    public static boolean setThreadLocalSteamId(String steamId) {
         for (SteamUserDate steamUserDate : steamUserDates) {
             Session session = steamUserDate.getSession();
             if (steamId.equals(session.getSteamID())) {
                 steamUserDateTL.set(steamUserDate);
                 CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
-                return;
+                return true;
             }
         }
         log.error("该系统未加载steamId:{}账号信息，请检查sda路径", steamId);
+        log.info("随机设置一个steam账号进行操作");
+        int index = Math.toIntExact(System.currentTimeMillis() % steamUserDates.size());
+        CookiesConfig.steamCookies.set(steamUserDates.get(index).getCookies().toString());
+        return false;
     }
 
     @Autowired
