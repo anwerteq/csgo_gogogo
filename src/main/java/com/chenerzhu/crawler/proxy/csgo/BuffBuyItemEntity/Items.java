@@ -2,6 +2,8 @@ package com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity;
 
 import lombok.Data;
 
+import java.util.StringJoiner;
+
 @Data
 public class Items
 {
@@ -96,5 +98,18 @@ public class Items
     String market_hash_name;
 
     String sell_min_price;
+
+    /**
+     * 获取饰品的唯一值
+     *
+     * @return
+     */
+    public String getAssetidClassidInstanceid() {
+        StringJoiner sj = new StringJoiner("-");
+        sj.add(asset_info.getAssetid());
+        sj.add(asset_info.getClassid());
+        sj.add(asset_info.getInstanceid());
+        return sj.toString();
+    }
 
 }

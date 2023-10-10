@@ -12,6 +12,8 @@ package com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity;
 
 import lombok.Data;
 
+import java.util.StringJoiner;
+
 /**
  * 库存商品类信息
  */
@@ -42,5 +44,19 @@ public class Assets {
     String price;
 
     String cdkey_id;
+
+
+    /**
+     * 获取饰品的唯一值
+     *
+     * @return
+     */
+    public String getAssetidClassidInstanceid() {
+        StringJoiner sj = new StringJoiner("-");
+        sj.add(assetid);
+        sj.add(classid);
+        sj.add(instanceid);
+        return sj.toString();
+    }
 
 }
