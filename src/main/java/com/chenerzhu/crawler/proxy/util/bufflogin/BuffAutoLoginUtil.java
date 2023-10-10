@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.util.bufflogin;
 
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.ProxyPoolApplication;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URL;
+
 @Slf4j
 @Component
 public class BuffAutoLoginUtil {
@@ -24,10 +27,9 @@ public class BuffAutoLoginUtil {
     public static String login(String username, String password) {
         String url = "https://buff.163.com/";
         // 设置 ChromeDriver 的路径
-        String projectPath = System.getProperty("user.dir");
-        String edgeDriverPath = projectPath + "/src/main/resources/edgedriver_win64/msedgedriver.exe";
-//        String edgeDriverPath = "resources/edgedriver_win64/msedgedriver.exe";
-        log.info("Edge支持版本为：117.0.2045.60，请将Edge浏览器升级为最新版本，或使用最新脚本");
+//        String projectPath = System.getProperty("user.dir") + "/src/main/resources/";
+        String edgeDriverPath = getResource();
+        log.info("edgeDriverPath:{}", edgeDriverPath);
         System.setProperty("webdriver.edge.driver", edgeDriverPath);
         WebDriver driver = new EdgeDriver();
         String cookie = "";
@@ -74,6 +76,30 @@ public class BuffAutoLoginUtil {
             }
         }
         return cookie;
+    }
+
+    /**
+     * 获取resource的路径
+     *
+     * @return
+     */
+    public static String getResource() {
+        // 获取资源的URL
+        URL resourceUrl = ProxyPoolApplication.class.getClassLoader().getResource("edgedriver_win64/msedgedriver.exe");
+        // 获取资源的绝对路径
+        String resourcePath = resourceUrl.getPath().replaceFirst("file:/", "");
+        log.debug("jarPath11111111:{}", resourcePath);
+        resourcePath = resourcePath.split("/proxy-pool-2.0.jar")[0];
+        log.debug("jarPath11111122:{}", resourcePath);
+        String uri = "/edgedriver_win64/msedgedriver.exe";
+        if (!resourcePath.contains(uri)) {
+            resourcePath = resourcePath + uri;
+        }
+        return resourcePath;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getResource());
     }
 
 
