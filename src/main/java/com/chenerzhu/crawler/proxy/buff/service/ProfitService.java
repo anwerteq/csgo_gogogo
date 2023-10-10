@@ -20,6 +20,7 @@ import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -32,8 +33,11 @@ import java.util.*;
 @Service
 @Slf4j
 public class ProfitService {
-    @Autowired
 
+    @Value(("${sales_ratio}"))
+    private Double salesRatio;
+
+    @Autowired
     SellBuffProfitRepository sellBuffProfitRepository;
 
     @Autowired
@@ -53,10 +57,7 @@ public class ProfitService {
      * falg:true 购买，false:不购买
      */
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
-        if (Double.parseDouble(itemGoods.getSell_min_price()) > 200) {
-            return;
-        }
-        if (Double.parseDouble(itemGoods.getSell_min_price()) < 2) {
+        if (Double.parseDouble(itemGoods.getSell_min_price()) > 50) {
             return;
         }
         int quantity = getQuantity(itemGoods);
@@ -129,8 +130,7 @@ public class ProfitService {
         int quantity = 0;
         Double min_price = Double.valueOf(itemGoods.getSell_min_price());
         Double steam_price_cny = Double.valueOf(itemGoods.getGoods_info().getSteam_price_cny());
-//        if (min_price < steam_price_cny * 0.85) {
-        if (min_price < steam_price_cny * 0.5) {
+        if (min_price < steam_price_cny * salesRatio) {
             return 0;
         }
         int sell_num = itemGoods.getBuy_num();
