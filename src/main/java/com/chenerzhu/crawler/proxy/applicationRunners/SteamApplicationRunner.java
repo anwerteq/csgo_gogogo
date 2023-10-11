@@ -92,7 +92,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
             log.info("成功加载steam账号，steamId:{}",steamUserDate.getSession().getSteamID());
         }
         if (steamUserDatesInit.isEmpty()){
-            log.error("为找到有效sda文件，请检查sda路径，正在关闭脚本");
+            log.error("为找到有效sda文件，请检查sda路径(sda路径不能包含中文)，正在关闭脚本");
             SleepUtil.sleep(5000);
             System.exit(1);
         }
