@@ -144,7 +144,7 @@ public class ProfitService implements ApplicationRunner {
             log.info("商品：{}，比例为：{}，不符合求购要求", itemGoods.getName(), buySalesRatio);
             return 0;
         }
-        int sell_num = itemGoods.getBuy_num();
+        int sell_num = itemGoods.getSell_num();
         if (sell_num < 10) {
             return 0;
         } else if (sell_num < 50) {

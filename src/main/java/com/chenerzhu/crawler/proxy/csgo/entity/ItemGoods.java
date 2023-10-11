@@ -56,7 +56,7 @@ public class ItemGoods {
     @Column(name = "sell_min_price")
     private String sell_min_price;
     @Column(name = "sell_num")
-    private long sell_num;
+    private int sell_num;
     @Column(name = "sell_reference_price")
     private String sell_reference_price;
     @Column(name = "short_name")
