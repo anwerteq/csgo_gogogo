@@ -4,6 +4,7 @@ package com.chenerzhu.crawler.proxy.applicationRunners;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.cache.SteamCacheService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,14 @@ public class SteamApplicationRunner implements ApplicationRunner {
                 steamCacheService.addApikey(account_name, apikey);
             }
             steamDate.setApikey(apikey);
+        }
+        for (SteamUserDate steamUserDate : steamUserDatesInit) {
+            log.info("成功加载steam账号，steamId:{}",steamUserDate.getSession().getSteamID());
+        }
+        if (steamUserDatesInit.isEmpty()){
+            log.error("为找到有效sda文件，请检查sda路径，正在关闭脚本");
+            SleepUtil.sleep(5000);
+            System.exit(1);
         }
         steamUserDates.addAll(steamUserDatesInit);
     }
