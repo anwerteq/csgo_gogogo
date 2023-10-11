@@ -25,10 +25,10 @@ public class SteamLoginUtil {
     Http http;
 
 
-    public static void main(String[] args) {
-        String folderPath = "D:\\csgo文件（不能删除）\\SDA-1.0.13\\maFiles";
-
-        readFilesInFolder(folderPath);
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name="
+                + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
+        System.out.println(url);
     }
 
     /**
@@ -116,8 +116,9 @@ public class SteamLoginUtil {
 
             // 第一次验证 first validate
             if (null == rsaKey || !rsaKey.isSuccess()) {
-                log.error(rsaResponse1);
-                throw new LoginException("get rsa_key1 error");
+                log.error("获取Steam的ras_key失败，可能是代理ip访问steam过多，请切换节点 get rsa_key1 error:{}，正在退出脚本", rsaResponse1);
+                SleepUtil.sleep(5000);
+                System.exit(1);
             }
             // 第一次获取Rsa公钥 first get key
             RSA rsa = new RSA(rsaKey.getPublickey_mod(), rsaKey.getPublickey_exp());
@@ -219,19 +220,21 @@ public class SteamLoginUtil {
      * @return true:是，false:否
      */
     public Boolean checkCookieExpired(String cookie) {
+        log.info("steam的cookie开始测试 代理ip: {}", cookie);
 
         try {
             String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name="
                     + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
             HttpBean httpBean = http.request(url,
                     "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
+            log.info("代理IP访问steam,测试接口返回的数据为：{}", httpBean.getResponse());
             if (httpBean.getResponse().contains("true")) {
                 return false;
             }
-//            log.info("代理IP可以成功访问steam,测试接口返回的数据为：" );
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("通过代理ip访问steam失败，请检查 proxyIp 的配置，正在关闭程序");
             SleepUtil.sleep(5000);
             System.exit(1);
