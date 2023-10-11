@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class PullItemService {
-    public static ExecutorService executorService = Executors.newFixedThreadPool(5);
+    public static ExecutorService executorService = Executors.newFixedThreadPool(15);
 
     @Autowired
     RestTemplate restTemplate;

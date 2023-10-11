@@ -88,9 +88,12 @@ public class BuffConfig implements ApplicationRunner {
         return entity1;
     }
 
-    public static HttpEntity<MultiValueMap<String, String>> changeBuffHttpEntity(Map<String, Object> whereMap) {
+    public static HttpEntity<MultiValueMap<String, String>> changeBuffHttpEntity(Map<String, String> headers) {
         HttpHeaders headers1 = new HttpHeaders();
-        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(whereMap, headers1);
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            headers1.set(entry.getKey(), entry.getValue());
+        }
+        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(new HashMap<>(), headers1);
         syncCookie();
         return entity1;
     }
@@ -99,11 +102,11 @@ public class BuffConfig implements ApplicationRunner {
      * 控制整个项目使用cookie的频率
      */
     public static void syncCookie() {
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(6000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static String getCookie() {

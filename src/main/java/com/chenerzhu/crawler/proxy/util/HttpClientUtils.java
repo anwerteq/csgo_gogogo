@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.util;
 
 import com.chenerzhu.crawler.proxy.common.HttpMethod;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -130,6 +131,11 @@ public class HttpClientUtils implements ApplicationRunner {
                     resultCharset = DEFAULT_CHARSET;
                 }
                 return EntityUtils.toString(entity, resultCharset);
+            }
+            if (httpResponse.getStatusLine().getStatusCode() == 429) {
+                log.info("代理ip访问steam频繁，可以通过切换clash节点，避免访问频繁");
+                log.info("因访问steam频繁,进行睡眠60s，此提示过多,就一定要切换clash的节点");
+                SleepUtil.sleep(60 * 1000);
             }
         } catch (ClientProtocolException e) {
             log.error("Protocol error", e);

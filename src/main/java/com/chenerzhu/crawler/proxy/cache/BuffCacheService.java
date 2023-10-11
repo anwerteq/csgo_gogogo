@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 
@@ -56,7 +58,13 @@ public class BuffCacheService {
      * @return
      */
     public String getCookieDetail(String cookie) {
-        String url = "https://buff.163.com/api/market/goods?game=csgo&page_num=1&use_suggestion=0&_=1696863430757&page_size=40";
+        String url = "https://buff.163.com/api/market/sell_order/on_sale?page_num=1&sort_by=updated.asc" +
+                "&mode=2%2C5&game=csgo&appid=730&page_size=30&min_price=" + 9999;
+        Map<String, Object> headerMap = new HashMap<>();
+        headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) \"\n" +
+                "                      \"Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.27");
+
+//        String url = "https://buff.163.com/api/market/goods?game=csgo&page_num=1&use_suggestion=0&_=1696863430757&page_size=40";
         CookiesConfig.buffCookies.set(cookie);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         List<String> cookies = responseEntity.getHeaders().get("set-cookie");
@@ -64,7 +72,6 @@ public class BuffCacheService {
         for (String value : cookies) {
             sj.add(value);
         }
-
         String cookieDetail = sj.toString();
         return cookieDetail;
     }
