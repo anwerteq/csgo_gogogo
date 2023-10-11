@@ -122,7 +122,7 @@ public class HttpClientUtils implements ApplicationRunner {
                     httpResponse = httpClient.execute(httpPatch);
                     break;
             }
-            log.info("request url：" + url + "; response status：" + httpResponse.getStatusLine());
+//            log.info("request url：" + url + "; response status：" + httpResponse.getStatusLine());
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 BufferedHttpEntity entity = new BufferedHttpEntity(httpResponse.getEntity());
                 //获取响应内容

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!-- 其他日志配置 -->
+
+    <!--    是否在控制台输出执行sql-->
+    <logger name="org.hibernate.SQL" level="OFF"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="OFF"/>
     <!--自定义spring文件中的参数-->
     <springProperty scope="context" name="project_name" source="spring.application.name" defaultValue="none"/>
     <springProperty scope="context" name="env" source="env" defaultValue="dev"/>

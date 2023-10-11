@@ -82,7 +82,6 @@ public class SteamMyhistoryService {
         SleepUtil.sleep(3000);
         sellCost.forEach(steamBuyItemService::saveForsellPrice);
         buyCost.forEach(steamBuyItemService::saveForCostPrice);
-        log.info("123123");
     }
 
     /**

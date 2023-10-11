@@ -17,6 +17,7 @@ import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,10 @@ public class ProfitService implements ApplicationRunner {
      * falg:true 购买，false:不购买
      */
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
-        if (Double.parseDouble(itemGoods.getSell_min_price()) > 50) {
+        String marketName = itemGoods.getName();
+        int priceWhere = 50;
+        if (Double.parseDouble(itemGoods.getSell_min_price()) > priceWhere) {
+            log.info("商品：{}，价格为：{}元，不符合小于：{}元,求购要求", marketName, itemGoods.getSell_min_price(), priceWhere);
             return;
         }
         int quantity = getQuantity(itemGoods);
@@ -67,10 +71,11 @@ public class ProfitService implements ApplicationRunner {
             return;
         }
         //获取最近几天的中位数
-        Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 30);
+        Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 15);
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
         if (Double.valueOf(sell_min_price) > dayMedianPrice) {
+            log.info("商品：{}，价格为：{}，15天中位数为：{},不符合求购要求", marketName, sell_min_price, dayMedianPrice);
             return;
         }
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
@@ -79,8 +84,10 @@ public class ProfitService implements ApplicationRunner {
         Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 10)) * 100;
         try {
             //求购价，去下订单
+            log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total, quantity);
             steamBuyItemService.createbuyorder(price_total, itemGoods.getMarketHashName(), quantity);
-
+            log.info("商品：{}，求购结束", marketName);
+            SleepUtil.sleep(5000);
         } catch (Exception e) {
             log.error("steam下订单信息：", e);
         }
@@ -132,7 +139,9 @@ public class ProfitService implements ApplicationRunner {
         int quantity = 0;
         Double min_price = Double.valueOf(itemGoods.getSell_min_price());
         Double steam_price_cny = Double.valueOf(itemGoods.getGoods_info().getSteam_price_cny());
-        if (min_price < steam_price_cny * salesRatio) {
+        Double buySalesRatio = min_price / steam_price_cny;
+        if (buySalesRatio < salesRatio) {
+            log.info("商品：{}，比例为：{}，不符合求购要求", itemGoods.getName(), buySalesRatio);
             return 0;
         }
         int sell_num = itemGoods.getBuy_num();
@@ -195,7 +204,6 @@ public class ProfitService implements ApplicationRunner {
         Map<String, String> saleHeader = SteamConfig.getSteamHeader();
         String responseStr = HttpClientUtils.sendGet(url, saleHeader);
         String itemNameId = responseStr.split("Market_LoadOrderSpread\\( ")[1].split("\\)")[0];
-        System.out.println("123123");
         return itemNameId;
     }
 
@@ -315,6 +323,5 @@ public class ProfitService implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("123123");
     }
 }

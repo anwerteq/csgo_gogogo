@@ -9,7 +9,6 @@ import com.chenerzhu.crawler.proxy.steam.CreatebuyorderEntity;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
 import com.chenerzhu.crawler.proxy.steam.repository.SteamCostRepository;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ public class SteamBuyItemService {
      * @param market_hash_name
      */
     public void createbuyorder(Double price_total, String market_hash_name,int quantity) {
-        SleepUtil.sleep(3000);
         quantity = 1;
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);

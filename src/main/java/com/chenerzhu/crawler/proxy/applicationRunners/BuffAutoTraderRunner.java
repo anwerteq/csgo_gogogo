@@ -4,7 +4,6 @@ import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.buff.service.NoticeService;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +31,7 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
             return;
         }
         PullItemService.executorService.execute(() -> {
-            log.info("30s后开始buff自动收货");
-            SleepUtil.sleep(30000);
+            log.info("开始buff自动收货");
             for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
                 BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
                 CookiesConfig.buffCookies.set(buffUserData.getCookie());
