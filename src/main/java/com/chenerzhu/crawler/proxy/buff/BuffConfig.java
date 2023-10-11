@@ -71,14 +71,20 @@ public class BuffConfig implements ApplicationRunner {
      * 获取请求头参数
      * @return
      */
-    public static HttpHeaders getHeaderMap(){
+    public static HttpHeaders getHeaderMap() {
         HttpHeaders headers1 = new HttpHeaders();
         Map<String, String> headerMap = map;
-        headerMap.put("Cookie",getCookie());
+        headerMap.put("Cookie", getCookie());
         for (Map.Entry<String, String> entry : headerMap.entrySet()) {
             headers1.set(entry.getKey(), entry.getValue());
         }
         return headers1;
+    }
+
+    public static Map<String, String> getHeaderMap1() {
+        Map<String, String> headerMap = map;
+        headerMap.put("Cookie", getCookie());
+        return headerMap;
     }
 
     public static HttpEntity<MultiValueMap<String, String>> getBuffHttpEntity(Map<String, Object> whereMap) {

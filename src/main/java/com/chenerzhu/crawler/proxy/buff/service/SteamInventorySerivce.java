@@ -16,6 +16,7 @@ import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -156,11 +157,8 @@ public class SteamInventorySerivce {
     public void getOnSale(int count) {
         String url = "https://buff.163.com/api/market/sell_order/on_sale?page_num=1&sort_by=updated.asc" +
                 "&mode=2%2C5&game=csgo&appid=730&page_size=30&min_price=" + priceMax;
-        Map<String, String> headers = new HashMap<>();
-        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.60");
-        headers.put("Host", "buff.163.com");
-        headers.put("Cookie", BuffConfig.getCookie());
-        headers.put("Cookie", "Device-Id=ufTSRwNsP0mpIQbSWwU0; client_id=Gqp9ld7LQkTpkMemaSW5_g; csrf_token=ImJlZGUxOGZkMTRhNTQyYTdmZTFmYTMwZjA4ZDI2NjI1ZjU2ODMwMTYi.GAhWpw.Cq1F1i2whDwpUDymuw0krp56wF4; session=1-G-N1tOHCjPuPHAo4DvmH7ddanXfB_MUSRGkGfr-EsP7c2030511176");
+        String responseStr = HttpClientUtils.sendGet(url, BuffConfig.getHeaderMap1());
+
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(new HashMap<>()), String.class);
         JSONObject jsonObject = JSONObject.parseObject(responseEntity.getBody());
         Object code = jsonObject.get("code");
