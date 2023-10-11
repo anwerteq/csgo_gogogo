@@ -231,6 +231,10 @@ public class SteamLoginUtil {
 //            log.info("代理IP可以成功访问steam,测试接口返回的数据为：" );
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+        }catch (Exception e){
+            log.error("通过代理ip访问steam失败，请检查 proxyIp 的配置，正在关闭程序");
+            SleepUtil.sleep(5000);
+            System.exit(1);
         }
         return true;
     }
