@@ -63,7 +63,7 @@ public class SteamInventorySerivce {
     /**
      * 自动上架逻辑
      */
-    public void autoSale() {
+    public long autoSale() {
         List<Items> items = steamInventory();
         //建立 assetid-classid-instanceid：paintwear的关系
         Map<String, String> keyAndPaintwear = items.stream().collect(Collectors.toMap(Items::getAssetidClassidInstanceid, item -> item.getAsset_info().getPaintwear()));
@@ -73,7 +73,7 @@ public class SteamInventorySerivce {
             if (StrUtil.isNotEmpty(asset.getPrice())) {
                 continue;
             }
-            if (count > 10) {
+            if (count > 20) {
 //            if (count > 2) {
                 assets.remove(asset);
                 continue;
@@ -94,6 +94,8 @@ public class SteamInventorySerivce {
         sellOrderCreate(assets);
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         log.info("buff账号:{},一共上架商品数量为:{}", buffUserData.getAcount(), assets.size());
+        long count1 = assets.stream().filter(assets1 -> priceMax.equals(assets1.getPrice())).count();
+        return count1;
     }
 
 
