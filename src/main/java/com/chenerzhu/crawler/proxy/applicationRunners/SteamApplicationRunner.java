@@ -71,7 +71,19 @@ public class SteamApplicationRunner implements ApplicationRunner {
             //从缓存中获取cookie
             StringBuilder cookieSb = steamCacheService.getCookie(account_name);
             if (StrUtil.isEmpty(cookieSb.toString())) {
-                cookieSb = steamLoginUtil.login(steamDate);
+                int count = 0;
+                while (count++ < 3) {
+                    try {
+                        cookieSb = steamLoginUtil.login(steamDate);
+                    } catch (Exception e) {
+                        log.info("steam账号:{}，第：{}次尝试失败,睡眠10s,进行下一次尝试", steamDate.getAccount_name(), count);
+                    }
+                }
+                if (count >= 3) {
+                    log.info("steam账号:{}，尝试{}次后，还是登录失败,请切换clash节点后，再重启脚本，关闭脚本中", steamDate.getAccount_name(), count);
+                    SleepUtil.sleep(10000);
+                    System.exit(1);
+                }
             }
             //校验cookie是否过期
             if (steamLoginUtil.checkCookieExpired(cookieSb.toString())) {
@@ -87,11 +99,12 @@ public class SteamApplicationRunner implements ApplicationRunner {
                 steamCacheService.addApikey(account_name, apikey);
             }
             steamDate.setApikey(apikey);
+            SleepUtil.sleep(10 * 1000);
         }
         for (SteamUserDate steamUserDate : steamUserDatesInit) {
-            log.info("成功加载steam账号，steamId:{}",steamUserDate.getSession().getSteamID());
+            log.info("成功加载steam账号，steamId:{}", steamUserDate.getSession().getSteamID());
         }
-        if (steamUserDatesInit.isEmpty()){
+        if (steamUserDatesInit.isEmpty()) {
             log.error("为找到有效sda文件，请检查sda路径(sda路径不能包含中文)，正在关闭脚本");
             SleepUtil.sleep(5000);
             System.exit(1);
