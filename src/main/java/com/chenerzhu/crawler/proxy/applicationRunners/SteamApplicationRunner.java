@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Order(2)
+@Order(1)
 public class SteamApplicationRunner implements ApplicationRunner {
 
     public static List<SteamUserDate> steamUserDates = new ArrayList<>();
@@ -67,6 +67,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         List<SteamUserDate> steamUserDatesInit = SteamLoginUtil.readFilesInFolder(sdaPath);
         for (SteamUserDate steamDate : steamUserDatesInit) {
+            SleepUtil.sleep(10000);
             String account_name = steamDate.getAccount_name();
             //从缓存中获取cookie
             StringBuilder cookieSb = steamCacheService.getCookie(account_name);
@@ -76,6 +77,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
                     try {
                         cookieSb = steamLoginUtil.login(steamDate);
                     } catch (Exception e) {
+                        SleepUtil.sleep(20000);
                         log.info("steam账号:{}，第：{}次尝试失败,睡眠10s,进行下一次尝试", steamDate.getAccount_name(), count);
                     }
                 }
