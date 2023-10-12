@@ -77,6 +77,7 @@ public class SteamTradeofferService {
      * @param conf
      */
     private void sendConfirmation(Conf conf) {
+        SleepUtil.sleep(6000);
         String tag = "allow";
         Map<String, String> confirmationParams = createConfirmationParams(tag);
         confirmationParams.put("op", tag);
