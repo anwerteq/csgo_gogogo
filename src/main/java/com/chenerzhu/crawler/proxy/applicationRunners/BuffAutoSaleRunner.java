@@ -4,6 +4,7 @@ import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.buff.service.SteamInventorySerivce;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +49,8 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
                     }
                     log.info("buff账号：{}上架饰品完成", buffUserData.getAcount());
                 }
+                log.info("buff账号全部上架完成，睡眠30分钟");
+                SleepUtil.sleep(30 * 60 * 1000);
             }
         });
     }
