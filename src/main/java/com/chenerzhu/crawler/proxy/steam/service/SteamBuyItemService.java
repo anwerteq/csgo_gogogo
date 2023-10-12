@@ -56,7 +56,7 @@ public class SteamBuyItemService {
             return;
         }
         if ("1".equals(success1.toString())) {
-            log.info("商品:{},发起steam求购成功" + name);
+            log.info("商品:{},发起steam求购成功", name);
         } else {
             log.info("商品:{},发送求购订单失败,steam返回的信息为:{}" + name, jsonObject1);
         }
@@ -91,7 +91,7 @@ public class SteamBuyItemService {
      * @param steamCostEntity
      * @param name
      */
-    public void  updateSteamCostEntity(Assets assets, SteamCostEntity steamCostEntity, String name) {
+    public void updateSteamCostEntity(Assets assets, SteamCostEntity steamCostEntity, String name) {
         steamCostEntity.setUpdate_time(new Date());
         steamCostEntity.setBuy_status(1);
         steamCostEntity.setClassid(assets.getClassid());
@@ -125,16 +125,17 @@ public class SteamBuyItemService {
 
     /**
      * 返回人民币单位：元
+     *
      * @param assid
      * @param classId
      * @return
      */
-    public Double getBuySteamPrice(String assid,String classId){
+    public Double getBuySteamPrice(String assid, String classId) {
         SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assid, classId);
-        if (ObjectUtil.isNull(steamCostEntity)){
+        if (ObjectUtil.isNull(steamCostEntity)) {
             return 0.0;
         }
-        double steamCost_RMB =  steamCostEntity.getSteam_cost() * 7 /100;
+        double steamCost_RMB = steamCostEntity.getSteam_cost() * 7 / 100;
         return steamCost_RMB * 1.1;
 
     }
@@ -142,11 +143,11 @@ public class SteamBuyItemService {
     /**
      * 更新销售金额
      */
-    public void saveForsellPrice(SteamCostEntity costEntity){
+    public void saveForsellPrice(SteamCostEntity costEntity) {
 
         SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(costEntity.getAssetid(), costEntity.getClassid());
         //steam求购到，又售卖出去的
-        if (ObjectUtil.isNotNull(steamCostEntity)){
+        if (ObjectUtil.isNotNull(steamCostEntity)) {
             //更新销售金额
             steamCostEntity.setReturned_money(costEntity.getReturned_money());
             steamCostRepository.save(steamCostEntity);
@@ -154,7 +155,7 @@ public class SteamBuyItemService {
         }
         //steam_cost没有查询到 从buff中查询
         BuffCostEntity buffCostEntity = buffCostRepository.selectOne(Long.valueOf(costEntity.getAssetid()), Long.valueOf(costEntity.getClassid()));
-        if (ObjectUtil.isNotNull(buffCostEntity)){
+        if (ObjectUtil.isNotNull(buffCostEntity)) {
             buffCostEntity.setReturned_money(costEntity.getReturned_money() * 7);
             buffCostEntity.setIs_mate(1);
             buffCostEntity.setBuy_status(3);
@@ -169,16 +170,16 @@ public class SteamBuyItemService {
     /**
      * 更新购买金额（从历史记录里面获获取steam求购到的订单信息）
      */
-    public void saveForCostPrice(SteamCostEntity costEntity){
+    public void saveForCostPrice(SteamCostEntity costEntity) {
         SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetIdNotBuyStatus(costEntity.getAssetid(), costEntity.getClassid());
         //steam求购的时候，保存了信息
-        if (ObjectUtil.isNotNull(steamCostEntity)){
+        if (ObjectUtil.isNotNull(steamCostEntity)) {
             //更新在steam购买时记录的信息
             steamCostEntity.setSteam_cost(costEntity.getSteam_cost());
             steamCostEntity.setCreate_time(new Date());
             steamCostEntity.setUpdate_time(new Date());
             steamCostRepository.save(steamCostEntity);
-        }else {
+        } else {
             //steam下订单的时候没有记录
             costEntity.setCostId(UUID.randomUUID().toString());
             costEntity.setCreate_time(new Date());

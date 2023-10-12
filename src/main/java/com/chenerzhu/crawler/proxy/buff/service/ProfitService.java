@@ -63,7 +63,7 @@ public class ProfitService implements ApplicationRunner {
         String marketName = itemGoods.getName();
         int priceWhere = 50;
         if (Double.parseDouble(itemGoods.getSell_min_price()) > priceWhere) {
-            log.info("商品：{}，价格为：{}元，不符合小于：{}元,求购要求", marketName, itemGoods.getSell_min_price(), priceWhere);
+            log.info("商品：{}，价格为：{}元，不符合小于：{}元求购要求", marketName, itemGoods.getSell_min_price(), priceWhere);
             return;
         }
         int quantity = getQuantity(itemGoods);
@@ -75,23 +75,22 @@ public class ProfitService implements ApplicationRunner {
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
         if (Double.valueOf(sell_min_price) > dayMedianPrice) {
-            log.info("商品：{}，价格为：{}，15天中位数为：{},不符合求购要求", marketName, sell_min_price, dayMedianPrice);
+            log.info("商品：{}，价格为：{}元，15天中位数为：{}元,不符合求购要求", marketName, sell_min_price, dayMedianPrice);
             return;
         }
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         SteamApplicationRunner.setThreadLocalSteamId(buffUserData.getSteamId());
-        //steam的求购价
-        Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 10)) * 100;
         try {
+            //steam的求购价
+            Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 10)) * 100;
             //求购价，去下订单
             log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total.intValue(), quantity);
             steamBuyItemService.createbuyorder(price_total.intValue(), itemGoods.getMarketHashName(), quantity, itemGoods.getName());
             log.info("商品：{}，求购结束", marketName);
-            SleepUtil.sleep(5000);
         } catch (Exception e) {
             log.error("steam下订单异常信息：", e);
         }
-
+        SleepUtil.sleep(5000);
         if (true) {
             return;
         }
@@ -178,13 +177,23 @@ public class ProfitService implements ApplicationRunner {
         String responseStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         ItemOrdershistogram ordershistogram = JSONObject.parseObject(responseStr, ItemOrdershistogram.class);
         List<List<String>> buyOrderGraph = ordershistogram.getBuyOrderGraph();
-        for (List<String> list : buyOrderGraph) {
-            count = count - Integer.parseInt(list.get(1));
-            if (count < 0) {
+        int saleCount = 0;
+        for (int i = 0; i < buyOrderGraph.size(); i++) {
+            List<String> list = buyOrderGraph.get(i);
+            //求购数量
+            saleCount = saleCount + Integer.parseInt(list.get(1));
+            //求购价格
+            String salePrice = list.get(0);
+            //第一行求购数量大于count 加价求购
+            if (i == 0 && saleCount > count) {
+                Double salePricef = Double.valueOf(salePrice) + 0.01;
+                return String.valueOf(salePricef);
+            }
+            if (saleCount > count) {
                 return list.get(0);
             }
         }
-        return "";
+        return "0";
     }
 
 
