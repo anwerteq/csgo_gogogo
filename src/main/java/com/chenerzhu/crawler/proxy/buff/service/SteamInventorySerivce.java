@@ -65,6 +65,11 @@ public class SteamInventorySerivce {
      */
     public long autoSale() {
         List<Items> items = steamInventory();
+        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        if (items.isEmpty()) {
+            log.info("buff账号:{},库存中没有可上架饰品", buffUserData.getAcount());
+            return 0;
+        }
         //建立 assetid-classid-instanceid：paintwear的关系
         Map<String, String> keyAndPaintwear = items.stream().collect(Collectors.toMap(Items::getAssetidClassidInstanceid, item -> item.getAsset_info().getPaintwear()));
         List<Assets> assets = changeAssets(items);
@@ -74,7 +79,6 @@ public class SteamInventorySerivce {
                 continue;
             }
             if (count > 20) {
-//            if (count > 2) {
                 assets.remove(asset);
                 continue;
             }
@@ -86,14 +90,13 @@ public class SteamInventorySerivce {
             }
             String sellPrice = getSellPrice(asset.getGoods_id(), paintwear);
             asset.setPrice(sellPrice);
-//            asset.setPrice("49.69");
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(String.valueOf(income));
             count++;
         }
         sellOrderCreate(assets);
-        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
-        log.info("buff账号:{},一共上架商品数量为:{}", buffUserData.getAcount(), assets.size());
+        log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
+        SleepUtil.sleep(30 * 1000);
         long count1 = assets.stream().filter(assets1 -> priceMax.equals(assets1.getPrice())).count();
         return count1;
     }

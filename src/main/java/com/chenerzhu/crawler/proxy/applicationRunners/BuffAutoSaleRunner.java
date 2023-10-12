@@ -34,31 +34,35 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
             return;
         }
         List<BuffUserData> buffUserDataList = BuffApplicationRunner.buffUserDataList;
-        for (BuffUserData buffUserData : buffUserDataList) {
-            PullItemService.executorService.execute(() -> {
-                BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
-                CookiesConfig.buffCookies.set(buffUserData.getCookie());
-                autoSale(buffUserData);
-            });
-        }
+        PullItemService.executorService.execute(() -> {
+            while (true) {
+                for (BuffUserData buffUserData : buffUserDataList) {
+                    BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
+                    CookiesConfig.buffCookies.set(buffUserData.getCookie());
+                    log.info("buff账号：{}开始上架饰品", buffUserData.getAcount());
+                    try {
+                        autoSale(buffUserData);
+                    } catch (Exception e) {
+                        log.info("buff账号：{}上架饰品发生异常:{},切换下一个账号", buffUserData.getAcount(), e);
+                        continue;
+                    }
+                    log.info("buff账号：{}上架饰品完成", buffUserData.getAcount());
+                }
+            }
+        });
     }
 
     public void autoSale(BuffUserData buffUserData) {
-        while (true) {
-            log.info("buff账号:{},开始自动上架", buffUserData.getAcount());
-            try {
-                //上架商品
-                long l = steamInventorySerivce.autoSale();
-                if (l != 0) {
-                    //下架没有磨损度的商品
-                    steamInventorySerivce.downOnSale();
-                }
-
-            } catch (Exception e) {
-                log.info("buff账号:{},自动上架异常", buffUserData.getAcount(), e);
+        try {
+            //上架商品
+            long l = steamInventorySerivce.autoSale();
+            if (l != 0) {
+                //下架没有磨损度的商品
+                steamInventorySerivce.downOnSale();
             }
-            log.info("buff账号:{},开始睡眠30s，避免ip频繁访问", buffUserData.getAcount());
-//            SleepUtil.sleep(30 * 1000);
+
+        } catch (Exception e) {
+            log.info("buff账号:{},自动上架异常", buffUserData.getAcount(), e);
         }
     }
 }
