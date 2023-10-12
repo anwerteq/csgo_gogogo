@@ -81,6 +81,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
                 SteamUserDate steamUserDate = steamUserDatesInit.get(i);
                 while (true) {
                     try {
+                        SleepUtil.sleep(60 * 1000);
                         steamUserDates.add(loginSteamUserDate(steamUserDate));
                     } catch (Exception e) {
                         log.info("steam账号，steamId:{}登录失败，睡眠后继续登录", steamUserDate.getAccount_name());
@@ -104,6 +105,9 @@ public class SteamApplicationRunner implements ApplicationRunner {
                 } catch (Exception e) {
                     log.info("steam账号:{}，第：{}次尝试失败,睡眠10s,进行下一次尝试", steamDate.getAccount_name(), count);
                     SleepUtil.sleep(60000);
+                }
+                if (StrUtil.isNotEmpty(cookieSb.toString())) {
+                    break;
                 }
             }
             if (count >= 3) {
