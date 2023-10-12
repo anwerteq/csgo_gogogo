@@ -144,24 +144,24 @@ public class ProfitService implements ApplicationRunner {
             return 0;
         }
         int sell_num = itemGoods.getSell_num();
-        if (sell_num < 10) {
+        if (sell_num < 300) {
             return 0;
-        } else if (sell_num < 50) {
-            quantity = 3;
-        } else if (sell_num < 100) {
-            quantity = 5;
-        } else if (sell_num < 120) {
-            quantity = 6;
-        } else if (sell_num < 180) {
-            quantity = 9;
-        } else if (sell_num < 280) {
-            quantity = 10;
+        } else if (sell_num < 400) {
+            quantity = 8;
         } else if (sell_num < 500) {
+            quantity = 10;
+        } else if (sell_num < 600) {
+            quantity = 12;
+        } else if (sell_num < 700) {
             quantity = 15;
+        } else if (sell_num < 800) {
+            quantity = 17;
+        } else if (sell_num < 900) {
+            quantity = 19;
         } else if (sell_num < 1000) {
             quantity = 22;
         } else {
-            quantity = 30;
+            quantity = 25;
         }
         return quantity;
     }

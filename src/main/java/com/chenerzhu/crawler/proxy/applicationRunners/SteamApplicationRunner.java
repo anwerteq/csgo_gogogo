@@ -87,6 +87,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
                         log.info("steam账号，steamId:{}登录失败，睡眠后继续登录", steamUserDate.getAccount_name());
                         SleepUtil.sleep(60 * 1000);
                     }
+                    break;
                 }
             }
         });
