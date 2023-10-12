@@ -37,6 +37,7 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
                 PullItemService.executorService.execute(() -> {
                     BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
                     CookiesConfig.buffCookies.set(buffUserData.getCookie());
+                    log.info("buff账号:{},开始自动收货,", buffUserData.getAcount());
                     while (true) {
                         noticeService.steamTrade();
                         SleepUtil.sleep(10 * 60 * 1000);

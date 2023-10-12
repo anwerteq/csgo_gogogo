@@ -39,6 +39,11 @@ public class BuffApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        if (buffAccountInfoConfig.getAccount_information().isEmpty()) {
+            log.error("未加载到buff账号，请检查[buff.account_information]配置,退出脚本中");
+            SleepUtil.sleep(5000);
+            System.exit(1);
+        }
         for (String acountData : buffAccountInfoConfig.getAccount_information()) {
             BuffUserData buffUserData = new BuffUserData();
             String acount = acountData.split("-")[0];
@@ -47,7 +52,7 @@ public class BuffApplicationRunner implements ApplicationRunner {
             buffUserData.setPwd(pwd);
             int count = 0;
             String cookie = "";
-            while (StrUtil.isEmpty(cookie) && count < 3) {
+            while (StrUtil.isEmpty(cookie) && count++ < 3) {
                 cookie = buffCacheService.getCookie(acount, buffUserData);
                 //获取steamid
                 String steamId = buffCacheService.getSteamId(acount, cookie);
@@ -58,11 +63,6 @@ public class BuffApplicationRunner implements ApplicationRunner {
         }
         for (BuffUserData buffUserData : buffUserDataList) {
             log.info("加载buff账号：{}成功",buffUserData.getAcount());
-        }
-        if(buffUserDataList.isEmpty()){
-            log.error("未加载到buff账号，请检查[buff.account_information]配置,退出脚本中");
-            SleepUtil.sleep(5000);
-            System.exit(1);
         }
     }
 }

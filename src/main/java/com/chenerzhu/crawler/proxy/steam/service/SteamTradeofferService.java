@@ -30,7 +30,11 @@ public class SteamTradeofferService {
      * @param orderTradeofferidMap:订单信息
      */
     public void trader(String steamId, Map<String, List<ItemsToTrade>> orderTradeofferidMap) {
-        SteamApplicationRunner.setThreadLocalSteamId(steamId);
+        boolean flag = SteamApplicationRunner.setThreadLocalSteamId(steamId);
+        if (!flag) {
+            log.info("buff账号{}，未加载对应steam账号");
+            return;
+        }
         //可确认id集合
         Set<String> confirmTradeSet = new HashSet<>();
         for (Map.Entry<String, List<ItemsToTrade>> entry : orderTradeofferidMap.entrySet()) {

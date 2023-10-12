@@ -40,9 +40,6 @@ public class NoticeService {
      * 获取buff的相关通知信息
      */
     public JsonsRootBean steamTrade() {
-        for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
-            BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
-        }
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         String url = "https://buff.163.com/api/message/notification";
         CookiesConfig.buffCookies.set(buffUserData.getCookie());
