@@ -112,11 +112,15 @@ public class SteamApplicationRunner implements ApplicationRunner {
         HttpBean httpBean = http.request(url,
                 "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
         String response = httpBean.getResponse();
-        if (!response.contains("Key: ")) {
+        if (!response.contains("Key: ") && !response.contains("密钥: ")) {
             log.error("{}:获取交易apikye失败，请访问[ https://steamcommunity.com/dev/apikey ] 检查是否有 apikey链接", account);
             System.exit(0);
         }
-        String apikey = response.split("Key: ")[1].split("</p>")[0];
+        String[] arr = response.split("Key: ");
+        if (arr.length == 1) {
+            arr = response.split("密钥: ");
+        }
+        String apikey = arr[1].split("</p>")[0];
         log.info("{}:获取交易apikye为{}", account, apikey);
         return apikey;
     }

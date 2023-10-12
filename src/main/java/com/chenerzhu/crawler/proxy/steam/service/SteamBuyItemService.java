@@ -37,12 +37,11 @@ public class SteamBuyItemService {
      * @param price_total：美分
      * @param market_hash_name
      */
-    public void createbuyorder(Double price_total, String market_hash_name,int quantity) {
-        quantity = 1;
+    public void createbuyorder(int price_total, String market_hash_name, int quantity) {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);
         createbuyorderEntity.setQuantity(String.valueOf(quantity));
-        createbuyorderEntity.setPrice_total(String.valueOf(price_total.intValue() * Integer.parseInt(createbuyorderEntity.getQuantity())));
+        createbuyorderEntity.setPrice_total(String.valueOf(price_total * Integer.parseInt(createbuyorderEntity.getQuantity())));
         createbuyorderEntity.setSessionid(SteamConfig.getCookieOnlyKey("sessionid"));
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
         saleHeader.put("Referer", "https://steamcommunity.com/market/listings/730/" + URLEncoder.encode(market_hash_name));

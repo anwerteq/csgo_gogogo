@@ -84,12 +84,12 @@ public class ProfitService implements ApplicationRunner {
         Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 10)) * 100;
         try {
             //求购价，去下订单
-            log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total, quantity);
-            steamBuyItemService.createbuyorder(price_total, itemGoods.getMarketHashName(), quantity);
+            log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total.intValue(), quantity);
+            steamBuyItemService.createbuyorder(price_total.intValue(), itemGoods.getMarketHashName(), quantity);
             log.info("商品：{}，求购结束", marketName);
             SleepUtil.sleep(5000);
         } catch (Exception e) {
-            log.error("steam下订单信息：", e);
+            log.error("steam下订单异常信息：", e);
         }
 
         if (true) {
