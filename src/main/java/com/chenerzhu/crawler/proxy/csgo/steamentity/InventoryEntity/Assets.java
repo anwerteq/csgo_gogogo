@@ -12,6 +12,7 @@ package com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity;
 
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.util.StringJoiner;
 
 /**
@@ -51,7 +52,9 @@ public class Assets {
      *
      * @return
      */
-    public String getAssetidClassidInstanceid() {
+
+    @Transient
+    public String assetidClassidInstanceid() {
         StringJoiner sj = new StringJoiner("-");
         sj.add(assetid);
         sj.add(classid);

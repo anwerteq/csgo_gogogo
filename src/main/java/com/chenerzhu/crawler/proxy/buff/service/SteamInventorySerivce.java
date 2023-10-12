@@ -1,14 +1,15 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.ManualPlusRoot;
 import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.SteamInventoryRoot;
-import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyData;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyRoot;
@@ -27,10 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -47,7 +45,7 @@ public class SteamInventorySerivce {
     @Autowired
     SteamBuyItemService steamBuyItemService;
 
-    public static String priceMax = "9999";
+    public static String priceMax = "49.69";
 
 
     /**
@@ -75,19 +73,20 @@ public class SteamInventorySerivce {
             if (StrUtil.isNotEmpty(asset.getPrice())) {
                 continue;
             }
-            //            if (count > 10){
-            if (count > 2) {
+            if (count > 10) {
+//            if (count > 2) {
                 assets.remove(asset);
                 continue;
             }
             //有磨损度的饰品
-            String paintwear = keyAndPaintwear.getOrDefault(asset.getAssetidClassidInstanceid(), "");
+            String paintwear = keyAndPaintwear.getOrDefault(asset.assetidClassidInstanceid(), "");
             if (StrUtil.isEmpty(paintwear)) {
                 //以防万一
                 assets.remove(asset);
             }
             String sellPrice = getSellPrice(asset.getGoods_id(), paintwear);
             asset.setPrice(sellPrice);
+//            asset.setPrice("49.69");
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(String.valueOf(income));
             count++;
@@ -152,37 +151,42 @@ public class SteamInventorySerivce {
     }
 
     /**
-     * 获取在售商品信息
+     * 获取在售商品信息订单id集合
      */
-    public void getOnSale(int count) {
+    public Set<String> getOnSale(int count) {
         String url = "https://buff.163.com/api/market/sell_order/on_sale?page_num=1&sort_by=updated.asc" +
-                "&mode=2%2C5&game=csgo&appid=730&page_size=30&min_price=" + priceMax;
+                "&mode=2%2C5&game=csgo&appid=730&page_size=30&min_price=" + priceMax + "&max_price=" + priceMax;
         String responseStr = HttpClientUtils.sendGet(url, BuffConfig.getHeaderMap1());
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(new HashMap<>()), String.class);
-        JSONObject jsonObject = JSONObject.parseObject(responseEntity.getBody());
-        Object code = jsonObject.get("code");
-        if ("Login Required".equals(code)) {
-            List<String> list = responseEntity.getHeaders().get("set-cookie");
-            String join = String.join(";", list);
-            String cookie = BuffConfig.getCookie() + ";" + join;
-            CookiesConfig.buffCookies.set(cookie);
-            getOnSale(count++);
-            return;
+        JSONObject jsonObject = JSONObject.parseObject(responseStr);
+        Object codeObj = jsonObject.get("code");
+        if (ObjectUtil.isNull(codeObj) || !"OK".equals(codeObj.toString())) {
+            BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+            log.error("buff账号:{},获取库存信息异常：{}", buffUserData.getAcount(), jsonObject);
         }
-        if (count > 2) {
-            log.error("buff账号:{},获取在售商品信息失败", "1");
+        JSONObject data = jsonObject.getJSONObject("data");
+        JSONArray items = data.getJSONArray("items");
+        Set<String> idSet = new HashSet();
+        for (Object item : items) {
+            JSONObject jobj = (JSONObject) item;
+            Object id = jobj.get("id");
+            if (ObjectUtil.isNotNull(id)) {
+                idSet.add(id.toString());
+            }
         }
-
-
-        log.info("123123");
+        return idSet;
     }
 
     /**
      * 下架在售商品
      */
     public void downOnSale() {
-        getOnSale(0);
+        Set<String> onSale = getOnSale(0);
+        if (onSale.isEmpty()) {
+            return;
+        }
+        onSale = onSale.stream().limit(Long.valueOf("50")).collect(Collectors.toSet());
+        //取消上架
+        cancelOrder(onSale);
     }
 
     /**
@@ -244,12 +248,12 @@ public class SteamInventorySerivce {
         if (responseEntity1.getStatusCode().value() != 200) {
             log.error("获取buff中可出售的商品失败，失败信息为：{}", responseEntity1.getBody());
             return;
-            //获取失败
         }
         JSONObject jsonObject = JSONObject.parseObject(responseEntity1.getBody());
         if (!jsonObject.getString("code").equals("OK")) {
             //接口返回不成功
             log.error("获取buff中可出售的商品接口响应错误，错误信息为：{}", responseEntity1.getBody());
+            return;
         }
         log.info("buff上架成功");
     }
@@ -258,7 +262,7 @@ public class SteamInventorySerivce {
     /**
      * buff上架的商品取消上架
      */
-    public void cancelOrder(List<String> sell_orders) {
+    public void cancelOrder(Collection<String> sell_orders) {
         String url = "https://buff.163.com/api/market/sell_order/cancel";
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Csrftoken", BuffConfig.getCookieOnlyKey("csrf_token"));
@@ -269,7 +273,6 @@ public class SteamInventorySerivce {
         Map<String, Object> para = new HashMap();
         para.put("game", "csgo");
         para.put("sell_orders", sell_orders);
-
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(para, headers);
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
         if (responseEntity1.getStatusCode().value() != 200) {
