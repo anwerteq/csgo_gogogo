@@ -37,7 +37,7 @@ public class SteamBuyItemService {
      * @param price_total：美分
      * @param market_hash_name
      */
-    public void createbuyorder(int price_total, String market_hash_name, int quantity) {
+    public void createbuyorder(int price_total, String market_hash_name, int quantity, String name) {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);
         createbuyorderEntity.setQuantity(String.valueOf(quantity));
@@ -49,13 +49,17 @@ public class SteamBuyItemService {
         String url = "https://steamcommunity.com/market/createbuyorder";
         // post ,x-www
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, hashMap);
-        JSONObject jsonObject = JSONObject.parseObject(responseStr);
-        Object success = jsonObject.get("success");
-        if (success.toString().compareTo("1") >= 1) {
-            log.info("steam下求购订单success返回的数据为：" + responseStr);
+        JSONObject jsonObject1 = JSONObject.parseObject(responseStr);
+        Object success1 = jsonObject1.get("success");
+        if (ObjectUtil.isNull(success1)) {
+            log.error("商品:{},发送求购steam请求失败,steam返回的异常信息为:{}", name, jsonObject1);
             return;
         }
-        log.info("steam下求购订单返回的数据为：" + responseStr);
+        if ("1".equals(success1.toString())) {
+            log.info("商品:{},发起steam求购成功" + name);
+        } else {
+            log.info("商品:{},发送求购订单失败,steam返回的信息为:{}" + name, jsonObject1);
+        }
     }
 
 

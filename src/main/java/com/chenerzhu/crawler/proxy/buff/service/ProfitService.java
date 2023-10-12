@@ -85,7 +85,7 @@ public class ProfitService implements ApplicationRunner {
         try {
             //求购价，去下订单
             log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total.intValue(), quantity);
-            steamBuyItemService.createbuyorder(price_total.intValue(), itemGoods.getMarketHashName(), quantity);
+            steamBuyItemService.createbuyorder(price_total.intValue(), itemGoods.getMarketHashName(), quantity, itemGoods.getName());
             log.info("商品：{}，求购结束", marketName);
             SleepUtil.sleep(5000);
         } catch (Exception e) {
