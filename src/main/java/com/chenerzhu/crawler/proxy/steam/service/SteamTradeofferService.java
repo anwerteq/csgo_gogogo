@@ -98,6 +98,7 @@ public class SteamTradeofferService {
      * @param tradeId
      */
     public SteamTradeOfferData getTradeOffer(String tradeId) {
+        SleepUtil.sleep(5000);
         SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
         CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
         String apikey = steamUserDate.getApikey();
@@ -108,7 +109,6 @@ public class SteamTradeofferService {
         }};
         String resStr = HttpClientUtils.sendGet(url, headers);
         SteamTradeOfferData steamTradeOfferData = JSONObject.parseObject(resStr, SteamTradeOfferData.class);
-        log.info("1223123");
         return steamTradeOfferData;
     }
 
@@ -144,6 +144,7 @@ public class SteamTradeofferService {
      * @param partner
      */
     public TradeofferAcceptData doTradeofferAccept(String partner, String tradeofferid) {
+        SleepUtil.sleep(3000);
         String url = "https://steamcommunity.com/tradeoffer/" + tradeofferid + "/accept";
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
