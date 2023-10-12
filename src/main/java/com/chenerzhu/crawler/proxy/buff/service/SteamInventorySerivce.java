@@ -63,12 +63,12 @@ public class SteamInventorySerivce {
     /**
      * 自动上架逻辑
      */
-    public long autoSale() {
+    public Boolean autoSale() {
         List<Items> items = steamInventory();
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         if (items.isEmpty()) {
             log.info("buff账号:{},库存中没有可上架饰品", buffUserData.getAcount());
-            return 0;
+            return false;
         }
         //建立 assetid-classid-instanceid：paintwear的关系
         Map<String, String> keyAndPaintwear = items.stream().collect(Collectors.toMap(Items::getAssetidClassidInstanceid, item -> item.getAsset_info().getPaintwear()));
@@ -94,11 +94,17 @@ public class SteamInventorySerivce {
             asset.setIncome(String.valueOf(income));
             count++;
         }
-        sellOrderCreate(assets);
+        Boolean gotoUp = false;
+        gotoUp = sellOrderCreate(assets);
         log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
         SleepUtil.sleep(30 * 1000);
         long count1 = assets.stream().filter(assets1 -> priceMax.equals(assets1.getPrice())).count();
-        return count1;
+        if (count1 != 0) {
+            //下架没有磨损度的商品
+            downOnSale();
+            gotoUp = true;
+        }
+        return gotoUp;
     }
 
 
@@ -227,7 +233,7 @@ public class SteamInventorySerivce {
         //取消上架
         cancelOrder(sell_orders);
         //进行上架操作
-        sellOrderCreate(createAssets);
+//        sellOrderCreate(createAssets);
     }
 
 
@@ -237,9 +243,9 @@ public class SteamInventorySerivce {
      * @param assets
      */
 
-    public void sellOrderCreate(List<Assets> assets) {
-        HttpHeaders headers = BuffConfig.getHeaderMap();
-        headers = new HttpHeaders();
+    public Boolean sellOrderCreate(List<Assets> assets) {
+        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        HttpHeaders headers = new HttpHeaders();
         headers.add("X-Csrftoken", BuffConfig.getCookieOnlyKey("csrf_token"));
         headers.add("Referer", "https://buff.163.com/market/steam_inventory?game=csgo");
         headers.add("Origin", "https://buff.163.com");
@@ -251,16 +257,33 @@ public class SteamInventorySerivce {
         String url = "https://buff.163.com/api/market/sell_order/create/manual_plus";
         ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
         if (responseEntity1.getStatusCode().value() != 200) {
-            log.error("获取buff中可出售的商品失败，失败信息为：{}", responseEntity1.getBody());
-            return;
+            log.error("buff账号:{},获取可出售的商品失败，失败信息为：{}", buffUserData.getAcount(), responseEntity1.getBody());
+            return true;
         }
         JSONObject jsonObject = JSONObject.parseObject(responseEntity1.getBody());
-        if (!jsonObject.getString("code").equals("OK")) {
+        if (!"OK".equals(jsonObject.getString("code"))) {
             //接口返回不成功
-            log.error("获取buff中可出售的商品接口响应错误，错误信息为：{}", responseEntity1.getBody());
-            return;
+            log.error("buff账号:{},获取buff中可出售的商品接口响应错误，错误信息为：{}", buffUserData.getAcount(), responseEntity1.getBody());
+            return true;
+        }
+        JSONObject data = jsonObject.getJSONObject("data");
+        if (ObjectUtil.isNull(data)) {
+            log.error("buff账号:{},获取buff中可出售的商品数据错误，错误信息为：{}", buffUserData.getAcount(), responseEntity1.getBody());
+            return true;
+        }
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            Object value = entry.getValue();
+            if (value.toString().contains("你已达到上架数量上限")) {
+                log.error("buff账号:{},货架已满给，切换下一个账号", buffUserData.getAcount());
+                return false;
+            } else if (value.toString().contains("Ok")) {
+            } else {
+
+            }
+            int a = 0;
         }
         log.info("buff上架成功");
+        return true;
     }
 
 

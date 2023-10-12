@@ -55,12 +55,9 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
     public void autoSale(BuffUserData buffUserData) {
         try {
             //上架商品
-            long l = steamInventorySerivce.autoSale();
-            if (l != 0) {
-                //下架没有磨损度的商品
-                steamInventorySerivce.downOnSale();
-            }
+            while (steamInventorySerivce.autoSale()) {
 
+            }
         } catch (Exception e) {
             log.info("buff账号:{},自动上架异常", buffUserData.getAcount(), e);
         }

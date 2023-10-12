@@ -1,6 +1,5 @@
 package com.chenerzhu.crawler.proxy;
 
-import com.chenerzhu.crawler.proxy.buff.service.NoticeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +22,5 @@ public class ProxyPoolApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
-        NoticeService bean = run.getBean(NoticeService.class);
-        bean.steamTrade();
     }
 }
