@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.applicationRunners;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.cache.SteamCacheService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
@@ -66,52 +67,66 @@ public class SteamApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<SteamUserDate> steamUserDatesInit = SteamLoginUtil.readFilesInFolder(sdaPath);
-        for (SteamUserDate steamDate : steamUserDatesInit) {
-            SleepUtil.sleep(10000);
-            String account_name = steamDate.getAccount_name();
-            //从缓存中获取cookie
-            StringBuilder cookieSb = steamCacheService.getCookie(account_name);
-            if (StrUtil.isEmpty(cookieSb.toString())) {
-                int count = 0;
-                while (count++ < 3) {
-                    try {
-                        cookieSb = steamLoginUtil.login(steamDate);
-                    } catch (Exception e) {
-                        SleepUtil.sleep(20000);
-                        log.info("steam账号:{}，第：{}次尝试失败,睡眠10s,进行下一次尝试", steamDate.getAccount_name(), count);
-                    }
-                }
-                if (count >= 3) {
-                    log.info("steam账号:{}，尝试{}次后，还是登录失败,请切换clash节点后，再重启脚本，关闭脚本中", steamDate.getAccount_name(), count);
-                    SleepUtil.sleep(10000);
-                    System.exit(1);
-                }
-            }
-            //校验cookie是否过期
-            if (steamLoginUtil.checkCookieExpired(cookieSb.toString())) {
-                steamCacheService.removeCookie(account_name);
-            }
-            //缓存cookie
-            steamCacheService.addCookie(account_name, cookieSb);
-            steamDate.setCookies(cookieSb);
-            //获取apikey
-            String apikey = steamCacheService.getApikey(account_name);
-            if (StrUtil.isEmpty(apikey)) {
-                apikey = getApikey(account_name, steamDate.getCookies().toString());
-                steamCacheService.addApikey(account_name, apikey);
-            }
-            steamDate.setApikey(apikey);
-            SleepUtil.sleep(10 * 1000);
-        }
-        for (SteamUserDate steamUserDate : steamUserDatesInit) {
-            log.info("成功加载steam账号，steamId:{}", steamUserDate.getSession().getSteamID());
-        }
         if (steamUserDatesInit.isEmpty()) {
             log.error("为找到有效sda文件，请检查sda路径(sda路径不能包含中文)，正在关闭脚本");
             SleepUtil.sleep(5000);
             System.exit(1);
         }
-        steamUserDates.addAll(steamUserDatesInit);
+        log.info("开始登录steam账号");
+        SteamUserDate steamUserDate1 = steamUserDatesInit.get(0);
+        steamUserDates.add(loginSteamUserDate(steamUserDate1));
+
+        PullItemService.executorService.execute(() -> {
+            for (int i = 1; i < steamUserDatesInit.size(); i++) {
+                SteamUserDate steamUserDate = steamUserDatesInit.get(i);
+                while (true) {
+                    try {
+                        steamUserDates.add(loginSteamUserDate(steamUserDate));
+                    } catch (Exception e) {
+                        log.info("steam账号，steamId:{}登录失败，睡眠后继续登录", steamUserDate.getAccount_name());
+                        SleepUtil.sleep(60 * 1000);
+                    }
+                }
+            }
+        });
+
+    }
+
+    public SteamUserDate loginSteamUserDate(SteamUserDate steamDate) {
+        String account_name = steamDate.getAccount_name();
+        //从缓存中获取cookie
+        StringBuilder cookieSb = steamCacheService.getCookie(account_name);
+        if (StrUtil.isEmpty(cookieSb.toString())) {
+            int count = 0;
+            while (count++ < 5) {
+                try {
+                    cookieSb = steamLoginUtil.login(steamDate);
+                } catch (Exception e) {
+                    log.info("steam账号:{}，第：{}次尝试失败,睡眠10s,进行下一次尝试", steamDate.getAccount_name(), count);
+                    SleepUtil.sleep(60000);
+                }
+            }
+            if (count >= 3) {
+                log.info("steam账号:{}，尝试{}次后，还是登录失败,请切换clash节点", steamDate.getAccount_name(), count);
+                SleepUtil.sleep(10000);
+            }
+        }
+        //校验cookie是否过期
+        if (steamLoginUtil.checkCookieExpired(cookieSb.toString())) {
+            steamCacheService.removeCookie(account_name);
+        }
+        //缓存cookie
+        steamCacheService.addCookie(account_name, cookieSb);
+        steamDate.setCookies(cookieSb);
+        //获取apikey
+        String apikey = steamCacheService.getApikey(account_name);
+        if (StrUtil.isEmpty(apikey)) {
+            apikey = getApikey(account_name, steamDate.getCookies().toString());
+            steamCacheService.addApikey(account_name, apikey);
+        }
+        steamDate.setApikey(apikey);
+        log.info("成功加载steam账号，steamId:{}", steamDate.getSession().getSteamID());
+        return steamDate;
     }
 
 

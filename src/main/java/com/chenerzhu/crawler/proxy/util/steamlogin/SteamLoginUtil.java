@@ -153,7 +153,7 @@ public class SteamLoginUtil {
             if (!doLoginResult1.isRequires_twofactor()) {
                 log.error("steam账号登录失败，失败原因是该ip访问steam次数太多，需要点进图片验证才能登陆，" +
                         "本软件目前不支持。临时解决方法：更换访问steam的ip，或者过一会(10分钟)试试");
-                throw new LoginException(doLoginResult1.getMessage());
+                throw new Exception(doLoginResult1.getMessage());
             }
             data.clear();
             data.put("username", userName);
