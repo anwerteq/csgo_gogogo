@@ -8,6 +8,7 @@ import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.buff.service.itemordershistogram.ItemOrdershistogram;
+import com.chenerzhu.crawler.proxy.common.GameCommet;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.csgo.profitentity.SellBuffProfitEntity;
@@ -61,7 +62,7 @@ public class ProfitService implements ApplicationRunner {
      */
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
         String marketName = itemGoods.getName();
-        int priceWhere = 50;
+        int priceWhere = 30;
         if (Double.parseDouble(itemGoods.getSell_min_price()) > priceWhere) {
             log.info("商品：{}，价格为：{}元，不符合小于：{}元求购要求", marketName, itemGoods.getSell_min_price(), priceWhere);
             return;
@@ -135,7 +136,7 @@ public class ProfitService implements ApplicationRunner {
      * @return
      */
     public int getQuantity(ItemGoods itemGoods) {
-        int quantity = 0;
+
         Double min_price = Double.valueOf(itemGoods.getSell_min_price());
         Double steam_price_cny = Double.valueOf(itemGoods.getGoods_info().getSteam_price_cny());
         Double buySalesRatio = min_price / steam_price_cny;
@@ -144,25 +145,7 @@ public class ProfitService implements ApplicationRunner {
             return 0;
         }
         int sell_num = itemGoods.getSell_num();
-        if (sell_num < 300) {
-            return 0;
-        } else if (sell_num < 400) {
-            quantity = 8;
-        } else if (sell_num < 500) {
-            quantity = 10;
-        } else if (sell_num < 600) {
-            quantity = 12;
-        } else if (sell_num < 700) {
-            quantity = 15;
-        } else if (sell_num < 800) {
-            quantity = 17;
-        } else if (sell_num < 900) {
-            quantity = 19;
-        } else if (sell_num < 1000) {
-            quantity = 22;
-        } else {
-            quantity = 25;
-        }
+        int quantity = GameCommet.getQuantity(sell_num);
         return quantity;
     }
 

@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.buff.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.common.GameCommet;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffPriceHistory1;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffPriceHistory2;
 import com.chenerzhu.crawler.proxy.csgo.entity.HistoryPriceRep;
@@ -106,7 +107,7 @@ public class PullHistoryService {
      * @return
      */
     public Double get20dayMedianPrice(String itemId, int day) {
-        String buffHistoryUrl2 = "https://buff.163.com/api/market/goods/price_history/buff?game=csgo&currency=CNY" +
+        String buffHistoryUrl2 = "https://buff.163.com/api/market/goods/price_history/buff?game=" + GameCommet.getGame() + "&currency=CNY" +
                 "&buff_price_type=2&_=" + System.currentTimeMillis() + "&days=" + day + "&goods_id=" + itemId;
         ResponseEntity<HistoryPriceRep> responseEntity = restTemplate.exchange(buffHistoryUrl2, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), HistoryPriceRep.class);
         if (200 != responseEntity.getStatusCode().value()) {

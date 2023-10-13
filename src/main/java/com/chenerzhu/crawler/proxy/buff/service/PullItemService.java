@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.buff.service;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.common.GameCommet;
 import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.csgo.entity.ProductList;
 import com.chenerzhu.crawler.proxy.csgo.repository.GoodsInfoRepository;
@@ -71,23 +72,33 @@ public class PullItemService {
      * 拉取商品进行求购
      */
     public void pullItmeGoods() {
-        String[] ass = new String[]{"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
-        List<String> types = Arrays.stream(ass).collect(Collectors.toList());
-        for (String category_group : types) {
-            AtomicInteger atomicInteger = new AtomicInteger(1);
-            try {
-                while (pullOnePage(atomicInteger, false, category_group)) {
-                    atomicInteger.addAndGet(1);
-                }
-            } catch (Exception e) {
-                log.error("异常", e);
+        if ("csgo".equals(GameCommet.getGame())) {
+            String[] ass = new String[]{"smg", "hands", "rifle", "pistol", "shotgun", "machinegun"};
+            List<String> types = Arrays.stream(ass).collect(Collectors.toList());
+            for (String category_group : types) {
+                pullItmeGoods(category_group);
             }
+        } else {
+            pullItmeGoods("");
+        }
+
+    }
+
+    public void pullItmeGoods(String category_group) {
+        AtomicInteger atomicInteger = new AtomicInteger(1);
+        try {
+            while (pullOnePage(atomicInteger, false, category_group)) {
+                atomicInteger.addAndGet(1);
+            }
+        } catch (Exception e) {
+            log.error("异常", e);
         }
     }
 
 
     /**
      * 拉取某一页数据
+     *
      * @param atomicInteger
      * @param isBuy
      * @param category_group :装备分类参数
@@ -95,9 +106,9 @@ public class PullItemService {
      */
 
     public Boolean pullOnePage(AtomicInteger atomicInteger,Boolean isBuy,String category_group) {
-        String url1 = "https://buff.163.com/api/market/goods?game=csgo&page_num=" + atomicInteger.get()
-        + "&use_suggestion=0&_=1684057330094&page_size=80&max_price=100";//&sort_by=sell_num.des
-        if (StrUtil.isNotEmpty(category_group)){
+        String url1 = "https://buff.163.com/api/market/goods?game=" + GameCommet.getGame() + "&page_num=" + atomicInteger.get()
+                + "&use_suggestion=0&_=1684057330094&page_size=80&max_price=50";//&sort_by=sell_num.des
+        if (StrUtil.isNotEmpty(category_group)) {
             url1 = url1 + "&category_group=" + category_group;
         }
         SleepUtil.sleep(5000);
