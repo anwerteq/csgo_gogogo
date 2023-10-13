@@ -62,7 +62,7 @@ public class ProfitService implements ApplicationRunner {
      */
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
         String marketName = itemGoods.getName();
-        int priceWhere = 30;
+        int priceWhere = GameCommet.getPriceWhere();
         if (Double.parseDouble(itemGoods.getSell_min_price()) > priceWhere) {
             log.info("商品：{}，价格为：{}元，不符合小于：{}元求购要求", marketName, itemGoods.getSell_min_price(), priceWhere);
             return;

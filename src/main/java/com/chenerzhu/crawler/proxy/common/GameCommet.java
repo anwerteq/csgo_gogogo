@@ -88,4 +88,19 @@ public class GameCommet {
         }
         return 0;
     }
+
+    /**
+     * 获取条件金额
+     *
+     * @return
+     */
+    public static int getPriceWhere() {
+        String game = getGame();
+        if ("csgo".equals(game)) {
+            return 30;
+        } else if ("dota2".equals(game)) {
+            return 50;
+        }
+        return 30;
+    }
 }
