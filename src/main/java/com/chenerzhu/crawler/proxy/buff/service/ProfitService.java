@@ -192,7 +192,7 @@ public class ProfitService implements ApplicationRunner {
             throw new RuntimeException(e);
         }
         String hashNameUrl = URLUtil.encode(hashName, "UTF-8").replace("+", "%20");
-        String url = "https://steamcommunity.com/market/listings/730/" + hashNameUrl;
+        String url = "https://steamcommunity.com/market/listings/" + GameCommet.getGameId() + "/" + hashNameUrl;
         Map<String, String> saleHeader = SteamConfig.getSteamHeader();
         String responseStr = HttpClientUtils.sendGet(url, saleHeader);
         String itemNameId = responseStr.split("Market_LoadOrderSpread\\( ")[1].split("\\)")[0];

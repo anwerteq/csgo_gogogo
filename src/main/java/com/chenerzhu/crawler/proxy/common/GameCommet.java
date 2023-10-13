@@ -1,10 +1,11 @@
 package com.chenerzhu.crawler.proxy.common;
 
 
+import cn.hutool.core.util.StrUtil;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 游戏类别
@@ -12,10 +13,11 @@ import java.util.List;
 @Configuration
 public class GameCommet {
 
-    public static List<String> gameList = new ArrayList() {{
-        add("csgo");
-        add("data2");
+    public static Map<String, String> gameMap = new HashMap() {{
+        put("csgo", "730");
+        put("dota2", "570");
     }};
+
     private static String auto_sale;
 
     public static Boolean check(String game) {
@@ -30,10 +32,24 @@ public class GameCommet {
      * @return
      */
     public static String getGame() {
-        if (gameList.contains(auto_sale)) {
+        if (gameMap.containsKey(auto_sale)) {
             return auto_sale;
         }
         return "csgo";
+    }
+
+
+    /**
+     * 获取游戏类别
+     *
+     * @return
+     */
+    public static String getGameId() {
+        String value = gameMap.getOrDefault(auto_sale, "");
+        if (StrUtil.isNotEmpty(value)) {
+            return value;
+        }
+        return "730";
     }
 
     public static int getCsgoSum(int sell_num) {
