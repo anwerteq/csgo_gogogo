@@ -80,7 +80,7 @@ public class GameCommet {
         String game = getGame();
         if ("csgo".equals(game)) {
             return getCsgoSum(sell_num);
-        } else if ("data2".equals(game)) {
+        } else if ("dota2".equals(game)) {
             return 5;
         }
         return 0;
