@@ -81,6 +81,9 @@ public class GameCommet {
         if ("csgo".equals(game)) {
             return getCsgoSum(sell_num);
         } else if ("dota2".equals(game)) {
+            if (sell_num < 300) {
+                return 0;
+            }
             return 5;
         }
         return 0;
