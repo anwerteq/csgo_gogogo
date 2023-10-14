@@ -75,7 +75,8 @@ public class ProfitService implements ApplicationRunner {
         Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 15);
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
-        if (Double.valueOf(sell_min_price) > dayMedianPrice) {
+        Double sell_min_priceD = Double.valueOf(sell_min_price);
+        if (sell_min_priceD > dayMedianPrice) {
             log.info("商品：{}，价格为：{}元，15天中位数为：{}元,不符合求购要求", marketName, sell_min_price, dayMedianPrice);
             return;
         }
@@ -83,7 +84,14 @@ public class ProfitService implements ApplicationRunner {
         SteamApplicationRunner.setThreadLocalSteamId(buffUserData.getSteamId());
         try {
             //steam的求购价
-            Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 10)) * 100;
+            Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 8)) * 100;
+            //steam的求购价 rmb
+            Double price_totalRmb = price_total * 7.3;
+            Double buySalesRatio = sell_min_priceD * 100 / price_totalRmb;
+            if (buySalesRatio < salesRatio) {
+                log.info("商品：{}，比例为：{}，不符合求购要求:{}", itemGoods.getName(), buySalesRatio, salesRatio);
+                return;
+            }
             //求购价，去下订单
             log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total.intValue(), quantity);
             steamBuyItemService.createbuyorder(price_total.intValue(), itemGoods.getMarketHashName(), quantity, itemGoods.getName());
@@ -140,8 +148,8 @@ public class ProfitService implements ApplicationRunner {
         Double min_price = Double.valueOf(itemGoods.getSell_min_price());
         Double steam_price_cny = Double.valueOf(itemGoods.getGoods_info().getSteam_price_cny());
         Double buySalesRatio = min_price / steam_price_cny;
-        if (buySalesRatio < salesRatio) {
-            log.info("商品：{}，比例为：{}，不符合求购要求", itemGoods.getName(), buySalesRatio);
+        if (buySalesRatio < salesRatio - 0.2) {
+            log.info("商品：{}，比例为：{}，不符合[buff在售价/steam在售价]：{}求购要求", itemGoods.getName(), buySalesRatio, salesRatio - 0.2);
             return 0;
         }
         int sell_num = itemGoods.getSell_num();

@@ -1,11 +1,13 @@
 package com.chenerzhu.crawler.proxy.steam;
 
 import lombok.Data;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * steam提交订单地址
  */
 @Data
+@Configuration
 public class CreatebuyorderEntity {
     private String sessionid;
     private String currency = "1";

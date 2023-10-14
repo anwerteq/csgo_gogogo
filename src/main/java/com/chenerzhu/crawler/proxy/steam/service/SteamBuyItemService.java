@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.steam.service;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.common.GameCommet;
 import com.chenerzhu.crawler.proxy.csgo.repository.BuffCostRepository;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.steam.CreatebuyorderEntity;
@@ -41,10 +42,11 @@ public class SteamBuyItemService {
         CreatebuyorderEntity createbuyorderEntity = new CreatebuyorderEntity();
         createbuyorderEntity.setMarket_hash_name(market_hash_name);
         createbuyorderEntity.setQuantity(String.valueOf(quantity));
+        createbuyorderEntity.setAppid(GameCommet.getGameId());
         createbuyorderEntity.setPrice_total(String.valueOf(price_total * Integer.parseInt(createbuyorderEntity.getQuantity())));
         createbuyorderEntity.setSessionid(SteamConfig.getCookieOnlyKey("sessionid"));
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
-        saleHeader.put("Referer", "https://steamcommunity.com/market/listings/730/" + URLEncoder.encode(market_hash_name));
+        saleHeader.put("Referer", "https://steamcommunity.com/market/listings/" + GameCommet.getGameId() + "/" + URLEncoder.encode(market_hash_name));
         HashMap hashMap = JSONObject.parseObject(JSONObject.toJSONString(createbuyorderEntity), HashMap.class);
         String url = "https://steamcommunity.com/market/createbuyorder";
         // post ,x-www
