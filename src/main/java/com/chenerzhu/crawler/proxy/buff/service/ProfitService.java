@@ -206,6 +206,8 @@ public class ProfitService implements ApplicationRunner {
         String itemNameId = "";
         try {
             itemNameId = responseStr.split("Market_LoadOrderSpread\\(")[1].split("\\)")[0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.info("获取饰品：{}求购数据失败,失败原因：此货物不在steam市场", hashName);
         } catch (Exception e) {
             log.info("获取饰品：{}求购数据异常信息：{}", hashName, e);
         }
