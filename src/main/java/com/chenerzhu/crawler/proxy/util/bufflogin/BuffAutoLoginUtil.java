@@ -40,7 +40,7 @@ public class BuffAutoLoginUtil {
 
             WebElement element = driver.findElement(By.cssSelector(".nav_entries>ul>li"));
             element.click();
-            Thread.sleep(4000);
+            Thread.sleep(10000);
             WebDriver driver1 = driver;
             driver1.findElement(By.cssSelector("#agree-checkbox > span > i")).click();
             try {
@@ -56,7 +56,7 @@ public class BuffAutoLoginUtil {
             phoneEl.sendKeys(username);//手机号
             passwordEl.sendKeys(password);//密码
             login.click();
-            Thread.sleep(2900);
+            Thread.sleep(5900);
             WebDriver.Options manage = driver.manage();
             cookie = String.valueOf(manage.getCookieNamed("session"));
             if (StrUtil.isEmpty(cookie)) {
