@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
+import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
@@ -146,10 +147,14 @@ public class Http implements Serializable {
         CloseableHttpClient httpClient = null;
         try {
             proxyIp = HttpClientUtils.staticProxyIp;
-            HttpHost proxy = new HttpHost(proxyIp.split(":")[0], Integer.parseInt(proxyIp.split(":")[1]));
-            DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-//            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
-            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
+            if (StrUtil.isNotEmpty(proxyIp)) {
+                //设置代理IP、端口
+                HttpHost proxy = new HttpHost(proxyIp.split(":")[0], Integer.parseInt(proxyIp.split(":")[1]));
+                DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+                httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
+            } else {
+                httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).build();
+            }
 
 
             if (methodType.equalsIgnoreCase(HttpUtil.METHOD_GET)) {
