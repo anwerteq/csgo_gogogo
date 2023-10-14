@@ -197,9 +197,9 @@ public class ProfitService implements ApplicationRunner {
         String responseStr = HttpClientUtils.sendGet(url, saleHeader);
         String itemNameId = "";
         try {
-            itemNameId = responseStr.split("Market_LoadOrderSpread\\( ")[1].split("\\)")[0];
+            itemNameId = responseStr.split("Market_LoadOrderSpread\\(")[1].split("\\)")[0];
         } catch (Exception e) {
-            log.info("获取饰品：{}求购数据异常信息：{}", e);
+            log.info("获取饰品：{}求购数据异常信息：{}", hashName, e);
         }
         return itemNameId.trim();
     }
