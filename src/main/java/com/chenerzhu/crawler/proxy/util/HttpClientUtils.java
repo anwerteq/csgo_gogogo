@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.util;
 
+import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.common.HttpMethod;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -47,6 +49,7 @@ import java.util.*;
  **/
 @Slf4j
 @Component
+@Order(1)
 public class HttpClientUtils implements ApplicationRunner {
 
     @Value("${proxyIp}")
@@ -63,12 +66,16 @@ public class HttpClientUtils implements ApplicationRunner {
         CloseableHttpClient httpClient = null;
         HttpResponse httpResponse = null;
         try {
-            //设置代理IP、端口
-            HttpHost proxy = new HttpHost(staticProxyIp.split(":")[0], Integer.parseInt(staticProxyIp.split(":")[1]));
-            DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+            if (StrUtil.isNotEmpty(staticProxyIp)) {
+                //设置代理IP、端口
+                HttpHost proxy = new HttpHost(staticProxyIp.split(":")[0], Integer.parseInt(staticProxyIp.split(":")[1]));
+                DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 //            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
-            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
-//            httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).build();
+                httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
+            } else {
+                httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).build();
+            }
+
             if (url.toLowerCase().startsWith("https")) {
 //                initSSL(httpClient, getPort(url));
             }
@@ -297,10 +304,15 @@ public class HttpClientUtils implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        staticProxyIp = proxyIp;
-
         log.info("开始测试代理是否可以访问steam");
-        log.info("代理ip为：" + proxyIp);
+        if (StrUtil.isEmpty(proxyIp)) {
+            staticProxyIp = "";
+            log.info("代理ip:host代理");
+        } else {
+            staticProxyIp = proxyIp;
+            log.info("代理ip为：" + proxyIp);
+        }
+
         String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
         String reponse = sendGet(url, new HashMap<>());
 

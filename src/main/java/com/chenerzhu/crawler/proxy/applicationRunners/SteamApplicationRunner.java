@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Order(1)
+@Order(2)
 public class SteamApplicationRunner implements ApplicationRunner {
 
     public static List<SteamUserDate> steamUserDates = new ArrayList<>();

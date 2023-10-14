@@ -60,7 +60,7 @@ public class SteamBuyItemService {
         if ("1".equals(success1.toString())) {
             log.info("商品:{},发起steam求购成功", name);
         } else {
-            log.info("商品:{},发送求购订单失败,steam返回的信息为:{}" + name, jsonObject1);
+            log.info("商品:{},发送求购订单失败,steam返回的信息为:{}", name, jsonObject1);
         }
     }
 
