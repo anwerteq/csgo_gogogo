@@ -100,7 +100,7 @@ public class ParsingEmailUtil {
             log.warn("是否已读：{}" , isSeen(msg));
             log.warn("邮件优先级：{}" , getPriority(msg));
             log.warn("是否需要回执：{}" , isReplySign(msg));
-            log.warn("邮件大小：{}" , msg.getSize() * 1024 + "kb");
+//            log.warn("邮件大小：{}" , msg.getSize() * 1024 + "kb");
             boolean isContainerAttachment = isContainAttachment(msg);
             log.warn("是否包含附件：{}" ,isContainerAttachment);
             if (isContainerAttachment) {
