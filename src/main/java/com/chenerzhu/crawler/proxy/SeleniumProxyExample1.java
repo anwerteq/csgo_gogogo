@@ -32,100 +32,162 @@ public class SeleniumProxyExample1 {
 
         // 初始化EdgeDriver，并传入EdgeOptions对象
         String edgeDriverPath = BuffAutoLoginUtil.getResource();
-        System.setProperty("webdriver.edge.driver", edgeDriverPath);
+//        System.setProperty("webdriver.edge.driver", edgeDriverPath);
+        System.setProperty("webdriver.edge.driver", "C:\\Users\\Administrator\\Desktop\\csgo-coding\\edgedriver_win64\\msedgedriver1.exe");
         WebDriver driver = new EdgeDriver(options);
 //        // 最小化浏览器窗口
 //        Dimension minSize = new Dimension(0, 0); // 设置为 0x0 大小
 //        Point minPosition = new Point(-2000, 0); // 设置到屏幕外
 //        driver.manage().window().setSize(minSize);
 //        driver.manage().window().setPosition(minPosition);
-        String email = "admin@qingliu.love";
-        driver.get("https://store.steampowered.com/join");
 
-        WebDriverWait waitemail = new WebDriverWait(driver, 10);
-        WebElement emailEle = waitemail.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div/input")));
-        emailEle.sendKeys(email);
-        WebElement email2 = driver.findElement(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div/input"));
-        email2.sendKeys(email);
-        // 使用JavaScript执行点击事件
-        driver.findElement(By.cssSelector("#i_agree_check")).click();
-        // 等待 iframe 元素加载
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[title='reCAPTCHA']")));
-        // /html/body/div[2]/div[3]/div[1]/div/div/span/div[1]
-        String reloadsStr = iframe.getAttribute("src");
-        //验证码唯一值
-        String k = reloadsStr.split("k=")[1].split("&")[0];
+        try{
+            String email = "admin1@qingliu.love";
+            driver.get("https://store.steampowered.com/join");
 
-        //获取captchagid数据
-        WebElement captchagidEle = driver.findElement(By.id("captchagid"));
-        String captchagid = captchagidEle.getAttribute("value");
+            WebDriverWait waitemail = new WebDriverWait(driver, 10);
+            WebElement emailEle = waitemail.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div/input")));
+            emailEle.sendKeys(email);
+            WebElement email2 = driver.findElement(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div/input"));
+            email2.sendKeys(email);
+            // 使用JavaScript执行点击事件
+            driver.findElement(By.cssSelector("#i_agree_check")).click();
+            // 等待 iframe 元素加载
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[title='reCAPTCHA']")));
+            // /html/body/div[2]/div[3]/div[1]/div/div/span/div[1]
+            String reloadsStr = iframe.getAttribute("src");
+            //验证码唯一值
+            String k = reloadsStr.split("k=")[1].split("&")[0];
 
-
-        // 查找id为"error_display"的元素
-        WebElement errorElement = driver.findElement(By.id("error_display"));
-
-        // 获取元素的文本内容
-        String errorText = errorElement.getText();
-        if (StrUtil.isNotEmpty(errorText)) {
-            System.out.println("此次注册认为是机器人");
-            return;
-        }
-
-//        //点击图像人机窗口
-//
-//        WebElement iframeEle = driver.findElement(By.tagName("iframe"));
-//        driver.switchTo().frame(iframeEle);
-//
-//        // 在iframe中查找元素并获取数据
-//        WebElement element = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[1]/div/div/span/div[1]"));
-//        element.click();
-//
-//        WebElement iframeEle1 = driver.findElement(By.tagName("iframe"));
-//        driver.switchTo().frame(iframeEle1);
-//        // 查找并点击元素
-//        WebElement audioFrequencyEle1 = driver.findElement(By.cssSelector("body > div:nth-child(2) > div:nth-child(4)"));
-//        audioFrequencyEle1.click();
-//
-//        //音频
-//        WebElement audioFrequencyEle = driver.findElement(By.xpath("/html/body/div/div/div[3]/div[2]/div[1]/div[1]/div[2]/button"));
-//        audioFrequencyEle.click();
-//        // 切换回默认的上下文
-//        driver.switchTo().defaultContent();
+            //获取captchagid数据
+            WebElement captchagidEle = driver.findElement(By.id("captchagid"));
+            String captchagid = captchagidEle.getAttribute("value");
 
 
+            // 查找id为"error_display"的元素
+            WebElement errorElement = driver.findElement(By.id("error_display"));
 
-        WebElement init_idEle = driver.findElement(By.id("init_id"));
-        String init_id = init_idEle.getAttribute("value");
-        System.out.println("123123");
-        Set<Cookie> cookies = driver.manage().getCookies();
+            // 获取元素的文本内容
+            String errorText = errorElement.getText();
+            if (StrUtil.isNotEmpty(errorText)) {
+                System.out.println("此次注册认为是机器人");
+                return;
+            }
 
-        String captcha_text = Recaptchav2Util.checkRecaptchav2(k);
-//        String captcha_text = "";
+            // 校验页面
+            WebDriverWait graphicalEleWait = new WebDriverWait(driver, 10);
+            By iframeLocator = By.cssSelector("iframe[title='reCAPTCHA']");
+            WebElement graphicalEle = graphicalEleWait.until(ExpectedConditions.presenceOfElementLocated(iframeLocator));
+            // 切换到iframe
+            driver.switchTo().frame(graphicalEle);
+            // 人机验证按钮 验证标签
+            WebDriverWait labelEleWait = new WebDriverWait(driver, 10);
+            WebElement labelEle = labelEleWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div[3]/div[1]/div/div/span/div[1]")));
+            labelEle.click();
+            driver.switchTo().defaultContent();
 
-        //
+
+            //获取验证iframe 查找包含特定标题的iframe
+            WebElement auditEleIframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[title='reCAPTCHA 验证将于 2 分钟后过期']")));
+            // 切换到iframe
+            driver.switchTo().frame(auditEleIframe);
+            WebDriverWait auditEleWait = new WebDriverWait(driver, 10);
+            WebElement auditEle = auditEleWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div[3]/div[2]/div[1]/div[1]/div[2]/button")));
+            auditEle.click();
+            //下载音频按钮
+            WebElement downdAuditEle = auditEleWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div[7]/a")));
+            String downUrl = downdAuditEle.getAttribute("href");
+            String base64 = ImageToBase64Converter.convertToBase64(downUrl);
+            String text = Recaptchav2Util.getText(base64);
+            //输入听的数据
+            WebElement inputField = driver.findElement(By.id("audio-response"));
+
+            // 向输入框发送文本
+            inputField.sendKeys(text);
+
+
+            //
+            WebElement recaptchaVerifyButtonELe = driver.findElement(By.id("recaptcha-verify-button"));
+            recaptchaVerifyButtonELe.click();
+
+            ///html/body/div/div/div[6]/input
+            driver.switchTo().defaultContent();
+
+            //完成按钮
+            WebElement continueEle = driver.findElement(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[6]/div[2]/button/span"));
+            continueEle.click();
+
+            Pop3EmailClientUtil.registerUrl(email);
+
+            int count = 0;
+            while (count++ < 10){
+                SleepUtil.sleep(2000);
+                try {
+                    driver.findElement(By.className("title_text"));
+                    // 元素存在
+                    System.out.println("元素存在");
+                } catch (NoSuchElementException e) {
+                    // 元素不存在
+                    System.out.println("元素不存在");
+                    break;
+                }
+            }
+            //第二个页面 创建账号
+            WebDriverWait waiteName = new WebDriverWait(driver, 10);
+            //账号名称
+            WebElement nameEle = waiteName.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input")));
+
+            WebElement passwordEle = driver.findElement(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input"));
+            // /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[4]/div[1]/input
+            WebElement passwordEle2 = driver.findElement(By.id("reenter_password"));
+
+            String name = randomString();
+            System.out.println("注册的账号为：" + name);
+            String password = randomString();
+            System.out.println("注册的密码为：" + password);
+            nameEle.sendKeys(name);
+            passwordEle.sendKeys(password);
+            passwordEle2.sendKeys(password);
+            //点击完成
+            WebElement complateEle = driver.findElement(By.id("createAccountButton"));
+            complateEle.click();
+
+            if (true){
+                return;
+            }
+            WebElement init_idEle = driver.findElement(By.id("init_id"));
+            String init_id = init_idEle.getAttribute("value");
+            System.out.println("123123");
+            Set<Cookie> cookies = driver.manage().getCookies();
+
+//        String captcha_text = Recaptchav2Util.checkRecaptchav2(k);
+            String captcha_text = "";
+
+            //
 
 //        // 设置g-recaptcha-response字段的值
 //        String script = "document.querySelector(\"#g-recaptcha-response\").textContent  = '" + captcha_text + "';";
 //        ((JavascriptExecutor) driver).executeScript(script);
 
 
-        // 查找包含特定标题的iframe
-        WebElement reCAPTCHAEle = driver.findElement(By.cssSelector("iframe[title='reCAPTCHA 验证将于 2 分钟后过期']"));
+            // 查找包含特定标题的iframe
+            WebElement reCAPTCHAEle = driver.findElement(By.cssSelector("iframe[title='reCAPTCHA 验证将于 2 分钟后过期']"));
 
-        // 切换到iframe
-        driver.switchTo().frame(reCAPTCHAEle);
+            // 切换到iframe
+            driver.switchTo().frame(reCAPTCHAEle);
 
-        // 获取iframe中的文本内容
-        WebElement inputReCAPTCHAEle = driver.findElement(By.xpath("/html/body/input"));
-        //设置token
-        ((JavascriptExecutor) driver).executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);",
-                inputReCAPTCHAEle, "value", captcha_text);
+            // 获取iframe中的文本内容
+            WebElement inputReCAPTCHAEle = driver.findElement(By.xpath("/html/body/input"));
+            //设置token
+            ((JavascriptExecutor) driver).executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);",
+                    inputReCAPTCHAEle, "value", captcha_text);
 //        inputReCAPTCHAEle
 //
-        // 切换回默认的上下文
-        driver.switchTo().defaultContent();
+            // 切换回默认的上下文
+            driver.switchTo().defaultContent();
 
 //        // 使用JavaScript设置元素值
 //        String xpath = "/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[5]/div/div[1]/div/div/textarea";
@@ -139,45 +201,35 @@ public class SeleniumProxyExample1 {
 
 
 //
-//        //完成按钮
-        WebElement complateEle = driver.findElement(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[6]/div[2]/button/span"));
-        complateEle.click();
-        String cookie = "";
-        for (Cookie cookieTe : cookies) {
-            cookie = cookie + cookieTe.toString();
+
+            String cookie = "";
+            for (Cookie cookieTe : cookies) {
+                cookie = cookie + cookieTe.toString();
+            }
+
+            ajaxverifyemail(email, captchagid, captcha_text, init_id, cookie);
+
+
+
+
+
+            // 账号 ： /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input
+            // 密码   /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input
+            // 密码2   /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[4]/div[1]/input
+            // 完成    /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[5]/div/button
+
+            SleepUtil.sleep(20000);
+            // 执行你的自动化测试代码
+            // ...
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            // 关闭浏览器
+            driver.quit();
         }
 
-        ajaxverifyemail(email, captchagid, captcha_text, init_id, cookie);
-        Pop3EmailClientUtil.registerUrl();
-
-        //第二个页面 创建账号
-        WebDriverWait waiteName = new WebDriverWait(driver, 10);
-        //账号名称
-        WebElement nameEle = waiteName.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input")));
-
-        WebElement passwordEle = driver.findElement(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input"));
-        WebElement passwordEle2 = driver.findElement(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[4]/div[1]/input"));
-        String name = randomString();
-        System.out.println("注册的账号为：" + name);
-        String password = randomString();
-        System.out.println("注册的密码为：" + password);
-        nameEle.sendKeys(name);
-        passwordEle.sendKeys(password);
-        passwordEle2.sendKeys(password);
 
 
-        // 账号 ： /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input
-        // 密码   /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input
-        // 密码2   /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[4]/div[1]/input
-        // 完成    /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[5]/div/button
-
-        SleepUtil.sleep(20000);
-        // 执行你的自动化测试代码
-        // ...
-
-        // 关闭浏览器
-        driver.quit();
     }
 
     /**
@@ -230,4 +282,7 @@ public class SeleniumProxyExample1 {
 
         return "";
     }
+
+
+
 }

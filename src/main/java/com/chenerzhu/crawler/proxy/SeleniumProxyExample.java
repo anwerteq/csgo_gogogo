@@ -148,7 +148,7 @@ public class SeleniumProxyExample {
         }
 
         ajaxverifyemail(email, captchagid, captcha_text, init_id, cookie);
-        Pop3EmailClientUtil.registerUrl();
+        Pop3EmailClientUtil.registerUrl(email);
 
         //第二个页面 创建账号
         WebDriverWait waiteName = new WebDriverWait(driver, 10);

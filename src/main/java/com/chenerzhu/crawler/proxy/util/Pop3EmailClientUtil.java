@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.util;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
@@ -18,8 +19,12 @@ import java.util.regex.Pattern;
 public class Pop3EmailClientUtil {
 
 
-    public static void registerUrl() {
-        getMessage("admin@qingliu.love", "123456789");
+    public static void main(String[] args) {
+        registerUrl("12");
+    }
+    public static void registerUrl(String username) {
+        SleepUtil.sleep(5000);
+        getMessage(username, "123456789");
     }
 
     public static void getMessage(String username, String password) {
@@ -27,7 +32,7 @@ public class Pop3EmailClientUtil {
         String steamRegisterUrl = getSteamRegisterUrl(username, password);
         //发送注册链接
         if (StrUtil.isNotEmpty(steamRegisterUrl)) {
-            String reponse = HttpClientUtils.sendGet(steamRegisterUrl, new HashMap<>());
+
             System.out.println("123123");
         }
 
@@ -63,12 +68,12 @@ public class Pop3EmailClientUtil {
             for (Message message : messages) {
 
                 Date sentDate = message.getSentDate();
-                Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -3).toInstant());
+                Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -2).toInstant());
                 if (sentDate.compareTo(expirationDate) > 0) {
                     String textFromMessage = getTextFromMessage(message);
                     System.out.println("Text: " + textFromMessage);
                     steamRegisterUrl = getSteamRegisterUrl(textFromMessage).trim();
-                    break;
+                    String reponse = HttpClientUtils.sendGet(steamRegisterUrl, new HashMap<>());
                 }
 //                // 处理邮件内容
 //                String subject = message.getSubject();

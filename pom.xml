@@ -203,14 +203,14 @@
 			</plugin>
 		</plugins>
 
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>edgedriver_win64/msedgedriver.exe</include> <!-- 包含要复制的文件 -->
-				</includes>
-			</resource>
-		</resources>
+<!--		<resources>-->
+<!--			<resource>-->
+<!--				<directory>src/main/resources</directory>-->
+<!--				<includes>-->
+<!--					<include>edgedriver_win64/msedgedriver.exe</include> &lt;!&ndash; 包含要复制的文件 &ndash;&gt;-->
+<!--				</includes>-->
+<!--			</resource>-->
+<!--		</resources>-->
 	</build>
 
 

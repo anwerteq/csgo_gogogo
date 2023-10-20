@@ -6,6 +6,7 @@ import com.chenerzhu.crawler.proxy.util.RecaptchaUtil.Recaptchav2Root;
 import com.chenerzhu.crawler.proxy.util.RecaptchaUtil.Task;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Recaptchav2Util {
 
@@ -17,26 +18,42 @@ public class Recaptchav2Util {
         String url = "https://api.2captcha.com/createTask";
         String tastRes = HttpClientUtils.sendPost(url, JSONObject.toJSONString(recaptchav2Root), new HashMap<>());
         String taskId = JSONObject.parseObject(tastRes).getString("taskId");
-        int count = 0;
-        while (count++ < 8) {
-            SleepUtil.sleep(7000);
-            String res = getRes(taskId);
+        String res = getRes(taskId);
+        return res;
+    }
 
-            if ("CAPCHA_NOT_READY".equals(res)){
-                System.out.println("createTask是否准备：" + res);
-                continue;
-            }
-            String captcha_text = res.split("\\|")[1];
-            return captcha_text;
-        }
-        return "";
+    public static  String getText(String Base64){
+        String url = "https://2captcha.com/in.php?sandbox=1";
+        Map<String, String> whereMap = new HashMap<>();
+        whereMap.put("key","f7a920a4720b17f65b77c325d6c0f0f7");
+        whereMap.put("method","audio");
+        whereMap.put("body",Base64);
+        whereMap.put("lang","en");
+        whereMap.put("json","1");
+        String tastRes = HttpClientUtils.sendPost(url, JSONObject.toJSONString(whereMap), new HashMap<>());
+        String taskId = JSONObject.parseObject(tastRes).getString("request");
+        String res = getRes(taskId);
+        return res;
     }
 
 
     public static String getRes(String id) {
         String url = "https://2captcha.com/res.php?key=f7a920a4720b17f65b77c325d6c0f0f7" +
                 "&action=get&sandbox=1&id=" + id;
-        String reponses = HttpClientUtils.sendGet(url, new HashMap<>());
+        int count = 0;
+        String reponses = "";
+        while (count++ < 8) {
+            SleepUtil.sleep(7000);
+            reponses = HttpClientUtils.sendGet(url, new HashMap<>());
+            if ("CAPCHA_NOT_READY".equals(reponses)){
+                System.out.println("createTask是否准备：" + reponses);
+                continue;
+            }
+            String captcha_text = reponses.split("\\|")[1];
+            return captcha_text;
+        }
+
+
         return reponses;
     }
 }
