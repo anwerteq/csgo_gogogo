@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public class SeleniumProxyExample {
+public class SeleniumProxyExample1 {
     public static void main(String[] args) {
         // 设置代理服务器
         String proxyAddress = "127.0.0.1";
