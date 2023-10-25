@@ -42,7 +42,7 @@ public class SeleniumProxyExample1 {
 //        driver.manage().window().setPosition(minPosition);
 
         try{
-            String email = "admin1@qingliu.love";
+            String email = "admin4@qingliu.love";
             driver.get("https://store.steampowered.com/join");
 
             WebDriverWait waitemail = new WebDriverWait(driver, 10);
@@ -155,6 +155,7 @@ public class SeleniumProxyExample1 {
             WebElement complateEle = driver.findElement(By.id("createAccountButton"));
             complateEle.click();
 
+            SleepUtil.sleep(20000);
             if (true){
                 return;
             }

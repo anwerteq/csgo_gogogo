@@ -3,10 +3,10 @@ package com.chenerzhu.crawler.proxy.util;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.FlagTerm;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
@@ -20,10 +20,11 @@ public class Pop3EmailClientUtil {
 
 
     public static void main(String[] args) {
-        registerUrl("12");
+        registerUrl("admin@qingliu.love");
     }
+
     public static void registerUrl(String username) {
-        SleepUtil.sleep(5000);
+//        SleepUtil.sleep(10000);
         getMessage(username, "123456789");
     }
 
@@ -61,20 +62,36 @@ public class Pop3EmailClientUtil {
 
             // 打开收件箱
             Folder inbox = store.getFolder("INBOX");
-            inbox.open(Folder.READ_ONLY);
+            inbox.open(Folder.READ_WRITE);
 
-            // 获取收件箱中的邮件
-            Message[] messages = inbox.getMessages();
+            // 设置搜索条件，筛选未读邮件
+            Flags seen = new Flags(Flags.Flag.SEEN);
+            FlagTerm unseenFlagTerm = new FlagTerm(seen, false);
+            // 获取收件箱中的邮件数量
+            int totalMessages = inbox.getMessageCount();
+            // 根据搜索条件获取未读邮件
+            Message[] messages = inbox.getMessages( totalMessages - 4 + 1,totalMessages);
             for (Message message : messages) {
 
                 Date sentDate = message.getSentDate();
-                Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -2).toInstant());
-                if (sentDate.compareTo(expirationDate) > 0) {
+                Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -4).toInstant());
+                String subject = message.getSubject();
+                if (sentDate.compareTo(expirationDate) > 0 && "新 Steam 帐户电子邮件验证".equals(subject)) {
                     String textFromMessage = getTextFromMessage(message);
                     System.out.println("Text: " + textFromMessage);
                     steamRegisterUrl = getSteamRegisterUrl(textFromMessage).trim();
                     String reponse = HttpClientUtils.sendGet(steamRegisterUrl, new HashMap<>());
+                    message.setFlag(Flags.Flag.DELETED, true);
                 }
+                if (sentDate.compareTo(expirationDate) < 0) {
+                    // 标记邮件为已删除
+//                    message.setFlag(Flags.Flag.DELETED, true);
+                    // 将邮件标记为已读
+                    message.setFlag(Flags.Flag.SEEN, true);
+                }
+
+
+
 //                // 处理邮件内容
 //                String subject = message.getSubject();
 //                String from = message.getFrom()[0].toString();
@@ -82,7 +99,9 @@ public class Pop3EmailClientUtil {
 //                System.out.println("From: " + from);
             }
             // 关闭连接
-            inbox.close(false);
+            inbox.close(true);
+            // 立即删除标记为删除的邮件
+//            inbox.expunge();
             store.close();
         } catch (Exception e) {
             e.printStackTrace();
