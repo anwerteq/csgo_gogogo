@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -67,6 +70,13 @@ public class ItemGoodsService {
         }
 
         log.info("魔寻："+ JSONObject.toJSONString(objects));
+
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("output.txt"))) {
+            bufferedWriter.write(JSONObject.toJSONString(objects)); // 将字符串写入文件
+            System.out.println("字符串已成功写入文件。");
+        } catch (IOException e) {
+            System.out.println("写入文件时出现错误：" + e.getMessage());
+        }
         return new ArrayList<>();
     }
 

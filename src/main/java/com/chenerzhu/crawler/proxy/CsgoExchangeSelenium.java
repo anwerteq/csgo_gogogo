@@ -62,8 +62,17 @@ public class CsgoExchangeSelenium {
             WebElement steamSsoLoginButtonEle = steamSsoLoginButtonWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[1]/div[7]/div[4]/div/div[2]/div[2]/div/form/input[5]")));
             steamSsoLoginButtonEle.click();
 
+            SleepUtil.sleep(2* 1000);
 
+            Set<Cookie> cookies1 = driver.manage().getCookies();
 
+            for (Cookie cookie : cookies1) {
+                String name = cookie.getName();
+                String value = cookie.getValue();
+                String domain = cookie.getDomain();
+                // 其他可用的方法：getPath(), getExpiry(), isSecure(), etc.
+                System.out.println("Cookie: " + name + "=" + value + "; Domain=" + domain);
+            }
 
             WebDriverWait waitemail = new WebDriverWait(driver, 10);
             WebElement emailEle = waitemail.until(ExpectedConditions

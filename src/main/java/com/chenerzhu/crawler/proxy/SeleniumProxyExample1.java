@@ -18,7 +18,14 @@ import java.util.Random;
 import java.util.Set;
 
 public class SeleniumProxyExample1 {
+
     public static void main(String[] args) {
+        for (int i = 0; i < 100; i++) {
+
+        }
+    }
+
+    public static void main1(int count1) {
         // 设置代理服务器
         String proxyAddress = "127.0.0.1";
         int proxyPort = 7890;
@@ -42,7 +49,8 @@ public class SeleniumProxyExample1 {
 //        driver.manage().window().setPosition(minPosition);
 
         try{
-            String email = "admin4@qingliu.love";
+//            String email = "admin4@qingliu.love";
+            String email = "admin"+count1+"@qingliu.love";
             driver.get("https://store.steampowered.com/join");
 
             WebDriverWait waitemail = new WebDriverWait(driver, 10);
@@ -154,7 +162,9 @@ public class SeleniumProxyExample1 {
             //点击完成
             WebElement complateEle = driver.findElement(By.id("createAccountButton"));
             complateEle.click();
-
+            String value = name +" , " + password;
+            System.out.println("注册的账号："+value);
+            FileUtil.writeNumber(value);
             SleepUtil.sleep(20000);
             if (true){
                 return;
