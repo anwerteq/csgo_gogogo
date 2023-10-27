@@ -20,7 +20,7 @@ import java.util.Set;
 public class SeleniumProxyExample1 {
 
     public static void main(String[] args) {
-        for (int i = 11; i < 100; i++) {
+        for (int i = 13; i < 100; i++) {
             System.out.println("i的值为："+i);
             main1(i);
         }
@@ -54,7 +54,7 @@ public class SeleniumProxyExample1 {
             String email = "admin"+count1+"@qingliu.love";
             driver.get("https://store.steampowered.com/join");
 
-            WebDriverWait waitemail = new WebDriverWait(driver, 10);
+            WebDriverWait waitemail = new WebDriverWait(driver, 35);
             WebElement emailEle = waitemail.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div/input")));
             emailEle.sendKeys(email);
@@ -63,7 +63,7 @@ public class SeleniumProxyExample1 {
             // 使用JavaScript执行点击事件
             driver.findElement(By.cssSelector("#i_agree_check")).click();
             // 等待 iframe 元素加载
-            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebDriverWait wait = new WebDriverWait(driver, 35);
             WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[title='reCAPTCHA']")));
             // /html/body/div[2]/div[3]/div[1]/div/div/span/div[1]
             String reloadsStr = iframe.getAttribute("src");
@@ -86,13 +86,13 @@ public class SeleniumProxyExample1 {
             }
 
             // 校验页面
-            WebDriverWait graphicalEleWait = new WebDriverWait(driver, 10);
+            WebDriverWait graphicalEleWait = new WebDriverWait(driver, 35);
             By iframeLocator = By.cssSelector("iframe[title='reCAPTCHA']");
             WebElement graphicalEle = graphicalEleWait.until(ExpectedConditions.presenceOfElementLocated(iframeLocator));
             // 切换到iframe
             driver.switchTo().frame(graphicalEle);
             // 人机验证按钮 验证标签
-            WebDriverWait labelEleWait = new WebDriverWait(driver, 10);
+            WebDriverWait labelEleWait = new WebDriverWait(driver, 35);
             WebElement labelEle = labelEleWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div[3]/div[1]/div/div/span/div[1]")));
             labelEle.click();
             driver.switchTo().defaultContent();
@@ -102,7 +102,7 @@ public class SeleniumProxyExample1 {
             WebElement auditEleIframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[title='reCAPTCHA 验证将于 2 分钟后过期']")));
             // 切换到iframe
             driver.switchTo().frame(auditEleIframe);
-            WebDriverWait auditEleWait = new WebDriverWait(driver, 10);
+            WebDriverWait auditEleWait = new WebDriverWait(driver, 35);
             WebElement auditEle = auditEleWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/div/div[3]/div[2]/div[1]/div[1]/div[2]/button")));
             auditEle.click();
             //下载音频按钮
@@ -147,7 +147,7 @@ public class SeleniumProxyExample1 {
             Pop3EmailClientUtil.registerUrl(email);
 
             int count = 0;
-            while (count++ < 10){
+            while (count++ < 100){
                 SleepUtil.sleep(2000);
                 try {
                     WebElement titleText = driver.findElement(By.className("title_text"));
@@ -166,18 +166,23 @@ public class SeleniumProxyExample1 {
                     .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input")));
 
 
-            WebElement passwordEle = waiteName.until(ExpectedConditions
+            WebDriverWait passwordElewaiteName = new WebDriverWait(driver, 300 * 000);
+
+            WebElement passwordEle = passwordElewaiteName.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input")));
 
+            WebDriverWait passwordEle2waiteName = new WebDriverWait(driver, 300 * 000);
 
-            WebElement passwordEle2 = waiteName.until(ExpectedConditions
+            WebElement passwordEle2 = passwordEle2waiteName.until(ExpectedConditions
                     .presenceOfElementLocated(By.id("reenter_password")));
             String name = randomString();
             System.out.println("注册的账号为：" + name);
             String password = randomString();
             System.out.println("注册的密码为：" + password);
             nameEle.sendKeys(name);
+            SleepUtil.sleep(400);
             passwordEle.sendKeys(password);
+            SleepUtil.sleep(500);
             passwordEle2.sendKeys(password);
             //点击完成
 
@@ -186,9 +191,13 @@ public class SeleniumProxyExample1 {
                     .presenceOfElementLocated(By.id("createAccountButton")));
            try{
                complateEle.click();
+               SleepUtil.sleep(500);
                complateEle.click();
+               SleepUtil.sleep(200);
                complateEle.click();
+               SleepUtil.sleep(700);
                complateEle.click();
+               SleepUtil.sleep(130);
                complateEle.click();
            }catch (Exception e){
                System.out.println("异常");
