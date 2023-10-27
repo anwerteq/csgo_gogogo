@@ -79,6 +79,7 @@ public class Pop3EmailClientUtil {
                 Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -3).toInstant());
                 String subject = message.getSubject();
                 if (sentDate.compareTo(expirationDate) > 0 && "新 Steam 帐户电子邮件验证".equals(subject)) {
+                    SleepUtil.sleep(3 * 1000);
                     String textFromMessage = getTextFromMessage(message);
                     System.out.println("Text: " + textFromMessage);
                     steamRegisterUrl = getSteamRegisterUrl(textFromMessage).trim();

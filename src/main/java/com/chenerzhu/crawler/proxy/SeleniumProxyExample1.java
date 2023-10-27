@@ -20,7 +20,7 @@ import java.util.Set;
 public class SeleniumProxyExample1 {
 
     public static void main(String[] args) {
-        for (int i = 9; i < 100; i++) {
+        for (int i = 11; i < 100; i++) {
             System.out.println("i的值为："+i);
             main1(i);
         }
@@ -160,7 +160,7 @@ public class SeleniumProxyExample1 {
                 }
             }
             //第二个页面 创建账号
-            WebDriverWait waiteName = new WebDriverWait(driver, 15000);
+            WebDriverWait waiteName = new WebDriverWait(driver, 300 * 000);
             //账号名称
             WebElement nameEle = waiteName.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input")));
