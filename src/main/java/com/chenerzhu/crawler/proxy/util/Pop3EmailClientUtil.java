@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.util;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
@@ -25,7 +26,7 @@ public class Pop3EmailClientUtil {
 
     public static void registerUrl(String username) {
         username = "admin@qingliu.love";
-//        SleepUtil.sleep(10000);
+        SleepUtil.sleep(5000);
         getMessage(username, "123456789");
     }
 

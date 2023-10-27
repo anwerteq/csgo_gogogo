@@ -20,7 +20,7 @@ import java.util.Set;
 public class SeleniumProxyExample1 {
 
     public static void main(String[] args) {
-        for (int i = 7; i < 100; i++) {
+        for (int i = 9; i < 100; i++) {
             System.out.println("i的值为："+i);
             main1(i);
         }
@@ -184,7 +184,15 @@ public class SeleniumProxyExample1 {
             WebDriverWait createAccountButtonWaiteName = new WebDriverWait(driver, 60);
             WebElement complateEle = createAccountButtonWaiteName.until(ExpectedConditions
                     .presenceOfElementLocated(By.id("createAccountButton")));
-            complateEle.click();
+           try{
+               complateEle.click();
+               complateEle.click();
+               complateEle.click();
+               complateEle.click();
+               complateEle.click();
+           }catch (Exception e){
+               System.out.println("异常");
+           }
             String value = name +" , " + password;
             System.out.println("注册的账号："+value);
             FileUtil.writeNumber(value);
