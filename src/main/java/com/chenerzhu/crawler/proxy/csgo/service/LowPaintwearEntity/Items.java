@@ -3,12 +3,16 @@
   */
 package com.chenerzhu.crawler.proxy.csgo.service.LowPaintwearEntity;
 
+import lombok.Data;
+
 /**
  * Auto-generated: 2023-10-28 0:0:22
  *
  * @author ab173.com (info@ab173.com)
  * @website http://www.ab173.com/json/
  */
+
+@Data
 public class Items {
 
     private boolean allow_bargain;
@@ -18,7 +22,7 @@ public class Items {
     private boolean can_bargain;
     private boolean can_use_inspect_trn_url;
     private String cannot_bargain_reason;
-    private String coupon_infos;
+    private Object coupon_infos;
     private long created_at;
     private String description;
     private int featured;
@@ -86,12 +90,6 @@ public class Items {
          return cannot_bargain_reason;
      }
 
-    public void setCoupon_infos(String coupon_infos) {
-         this.coupon_infos = coupon_infos;
-     }
-     public String getCoupon_infos() {
-         return coupon_infos;
-     }
 
     public void setCreated_at(long created_at) {
          this.created_at = created_at;

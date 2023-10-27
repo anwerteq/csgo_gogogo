@@ -2,6 +2,8 @@
   * Copyright 2023 ab173.com 
   */
 package com.chenerzhu.crawler.proxy.csgo.service.LowPaintwearEntity;
+import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,7 @@ import java.util.List;
  * @author ab173.com (info@ab173.com)
  * @website http://www.ab173.com/json/
  */
+@Data
 public class Info {
 
     private String fraudwarnings;
@@ -24,8 +27,8 @@ public class Info {
     private String original_icon_url;
     private int paintindex;
     private int paintseed;
-    private List<String> stickers;
-    private List<String> tournament_tags;
+    private List<Object> stickers;
+    private List<Object> tournament_tags;
     public void setFraudwarnings(String fraudwarnings) {
          this.fraudwarnings = fraudwarnings;
      }
@@ -108,20 +111,6 @@ public class Info {
      }
      public int getPaintseed() {
          return paintseed;
-     }
-
-    public void setStickers(List<String> stickers) {
-         this.stickers = stickers;
-     }
-     public List<String> getStickers() {
-         return stickers;
-     }
-
-    public void setTournament_tags(List<String> tournament_tags) {
-         this.tournament_tags = tournament_tags;
-     }
-     public List<String> getTournament_tags() {
-         return tournament_tags;
      }
 
 }

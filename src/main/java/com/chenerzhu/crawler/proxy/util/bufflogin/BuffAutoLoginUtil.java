@@ -52,7 +52,7 @@ public class BuffAutoLoginUtil {
             try {
                 WebDriverWait iframeEleWait = new WebDriverWait(driver, 30);
                 WebElement iframeEle = iframeEleWait.until(ExpectedConditions
-                        .presenceOfElementLocated(By.xpath("/html/body/div[9]/div/div[3]/div[1]/iframe")));
+                        .presenceOfElementLocated(By.xpath("/html/body/div[10]/div/div[3]/div[1]/iframe")));
                 driver.switchTo().frame(iframeEle);
             } catch (Exception e) {
                 WebDriverWait iframeEle1Wait = new WebDriverWait(driver, 30);
