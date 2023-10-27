@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -40,23 +42,25 @@ public class BuffAutoLoginUtil {
 
             WebElement element = driver.findElement(By.cssSelector(".nav_entries>ul>li"));
             element.click();
-            Thread.sleep(10000);
-            WebDriver driver1 = driver;
-            driver1.findElement(By.cssSelector("#agree-checkbox > span > i")).click();
+            WebDriverWait waitemail = new WebDriverWait(driver, 15);
+            WebElement agreeEle = waitemail.until(ExpectedConditions
+                    .presenceOfElementLocated(By.cssSelector("#agree-checkbox > span > i")));
+            agreeEle.click();
             try {
                 driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div[9]/div/div[3]/div[1]/iframe")));
             } catch (Exception e) {
                 driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div[10]/div/div[3]/div[1]/iframe")));
             }
             driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[1]/a")).click();
-            Thread.sleep(1000);
-            WebElement phoneEl = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[2]/div[1]/input"));
+            WebElement phoneEl = waitemail.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[2]/div[1]/input")));
+            phoneEl.click();
             WebElement passwordEl = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[4]/div[2]/input[2]"));
             WebElement login = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[7]/a"));
             phoneEl.sendKeys(username);//手机号
             passwordEl.sendKeys(password);//密码
             login.click();
-            Thread.sleep(5900);
+            Thread.sleep(2900);
             WebDriver.Options manage = driver.manage();
             cookie = String.valueOf(manage.getCookieNamed("session"));
             if (StrUtil.isEmpty(cookie)) {

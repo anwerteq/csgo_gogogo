@@ -69,8 +69,11 @@ public class SteamApplicationRunner implements ApplicationRunner {
         List<SteamUserDate> steamUserDatesInit = SteamLoginUtil.readFilesInFolder(sdaPath);
         if (steamUserDatesInit.isEmpty()) {
             log.error("为找到有效sda文件，请检查sda路径(sda路径不能包含中文)，正在关闭脚本");
+
             SleepUtil.sleep(5000);
-            System.exit(1);
+
+            return;
+//            System.exit(1);
         }
         log.info("开始登录steam账号");
         SteamUserDate steamUserDate1 = steamUserDatesInit.get(0);
