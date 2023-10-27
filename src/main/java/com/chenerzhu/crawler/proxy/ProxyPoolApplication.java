@@ -24,6 +24,6 @@ public class ProxyPoolApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
         ItemGoodsService bean = run.getBean(ItemGoodsService.class);
-        bean.getLowPaintwear(1);
+        bean.getLowPaintwear();
     }
 }
