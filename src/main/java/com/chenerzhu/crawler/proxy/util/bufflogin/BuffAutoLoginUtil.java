@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.ProxyPoolApplication;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -39,20 +40,32 @@ public class BuffAutoLoginUtil {
             // 创建 ChromeDriver 实例
 
             driver.get(url);
-
-            WebElement element = driver.findElement(By.cssSelector(".nav_entries>ul>li"));
+            WebDriverWait waitemail = new WebDriverWait(driver, 30);
+            WebElement element = waitemail.until(ExpectedConditions
+                    .presenceOfElementLocated(By.cssSelector(".nav_entries>ul>li")));
             element.click();
-            WebDriverWait waitemail = new WebDriverWait(driver, 15);
-            WebElement agreeEle = waitemail.until(ExpectedConditions
+            SleepUtil.sleep(4000);
+            WebDriverWait agreeEleWait = new WebDriverWait(driver, 30);
+            WebElement agreeEle = agreeEleWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector("#agree-checkbox > span > i")));
             agreeEle.click();
             try {
-                driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div[9]/div/div[3]/div[1]/iframe")));
+                WebDriverWait iframeEleWait = new WebDriverWait(driver, 30);
+                WebElement iframeEle = iframeEleWait.until(ExpectedConditions
+                        .presenceOfElementLocated(By.xpath("/html/body/div[9]/div/div[3]/div[1]/iframe")));
+                driver.switchTo().frame(iframeEle);
             } catch (Exception e) {
-                driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div[10]/div/div[3]/div[1]/iframe")));
+                WebDriverWait iframeEle1Wait = new WebDriverWait(driver, 30);
+                WebElement iframeEle1 = iframeEle1Wait.until(ExpectedConditions
+                        .presenceOfElementLocated(By.xpath("/html/body/div[10]/div/div[3]/div[1]/iframe")));
+                driver.switchTo().frame(iframeEle1);
             }
-            driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[1]/a")).click();
-            WebElement phoneEl = waitemail.until(ExpectedConditions
+            WebDriverWait linkWait = new WebDriverWait(driver, 30);
+            WebElement linkEle = linkWait.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[1]/a")));
+            linkEle.click();
+            WebDriverWait phoneElWait = new WebDriverWait(driver, 30);
+            WebElement phoneEl = phoneElWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[2]/div[1]/input")));
             phoneEl.click();
             WebElement passwordEl = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[4]/div[2]/input[2]"));

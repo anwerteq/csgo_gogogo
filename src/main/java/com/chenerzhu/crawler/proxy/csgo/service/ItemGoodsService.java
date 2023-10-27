@@ -34,7 +34,7 @@ public class ItemGoodsService {
      */
     public void getLowPaintwear(int page_num){
         String url = "https://buff.163.com/api/market/sell_order/low_paintwear?game=csgo&page_size=500&page_num=" +page_num;
-        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataList.get(0);
         CookiesConfig.buffCookies.set(buffUserData.getCookie());
         ResponseEntity<LowPainJsonRootBean> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), LowPainJsonRootBean.class);
         System.out.println("123123");
