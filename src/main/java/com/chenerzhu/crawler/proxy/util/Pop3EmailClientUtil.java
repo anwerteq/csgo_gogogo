@@ -24,6 +24,7 @@ public class Pop3EmailClientUtil {
     }
 
     public static void registerUrl(String username) {
+        username = "admin@qingliu.love";
 //        SleepUtil.sleep(10000);
         getMessage(username, "123456789");
     }
@@ -70,11 +71,11 @@ public class Pop3EmailClientUtil {
             // 获取收件箱中的邮件数量
             int totalMessages = inbox.getMessageCount();
             // 根据搜索条件获取未读邮件
-            Message[] messages = inbox.getMessages( totalMessages - 4 + 1,totalMessages);
+            Message[] messages = inbox.getMessages( totalMessages - 2 + 1,totalMessages);
             for (Message message : messages) {
 
                 Date sentDate = message.getSentDate();
-                Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -4).toInstant());
+                Date expirationDate = DateTime.from(DateUtil.offsetMinute(new Date(), -3).toInstant());
                 String subject = message.getSubject();
                 if (sentDate.compareTo(expirationDate) > 0 && "新 Steam 帐户电子邮件验证".equals(subject)) {
                     String textFromMessage = getTextFromMessage(message);

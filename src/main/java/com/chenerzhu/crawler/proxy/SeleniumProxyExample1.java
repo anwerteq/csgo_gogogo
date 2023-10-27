@@ -20,8 +20,9 @@ import java.util.Set;
 public class SeleniumProxyExample1 {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-
+        for (int i = 7; i < 100; i++) {
+            System.out.println("i的值为："+i);
+            main1(i);
         }
     }
 
@@ -122,10 +123,26 @@ public class SeleniumProxyExample1 {
 
             ///html/body/div/div/div[6]/input
             driver.switchTo().defaultContent();
-
+            SleepUtil.sleep(705);
             //完成按钮
             WebElement continueEle = driver.findElement(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[6]/div[2]/button/span"));
             continueEle.click();
+            SleepUtil.sleep(1000);
+            try {
+                WebElement element = driver.findElement(By.xpath("/html/body/div[1]/div[7]/div[6]/div/div[1]/div[1]"));
+                String text1 = element.getText();
+                if (text1.contains("请在下方重新验证您不是机器人")){
+                    main1(count1);
+                    return;
+                }
+                // 元素存在
+                System.out.println("元素存在");
+//                return;
+            } catch (NoSuchElementException e) {
+                // 元素不存在
+                System.out.println("元素不存在");
+
+            }
 
             Pop3EmailClientUtil.registerUrl(email);
 
@@ -133,7 +150,7 @@ public class SeleniumProxyExample1 {
             while (count++ < 10){
                 SleepUtil.sleep(2000);
                 try {
-                    driver.findElement(By.className("title_text"));
+                    WebElement titleText = driver.findElement(By.className("title_text"));
                     // 元素存在
                     System.out.println("元素存在");
                 } catch (NoSuchElementException e) {
@@ -143,15 +160,18 @@ public class SeleniumProxyExample1 {
                 }
             }
             //第二个页面 创建账号
-            WebDriverWait waiteName = new WebDriverWait(driver, 10);
+            WebDriverWait waiteName = new WebDriverWait(driver, 15000);
             //账号名称
             WebElement nameEle = waiteName.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[2]/div[1]/input")));
 
-            WebElement passwordEle = driver.findElement(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input"));
-            // /html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[4]/div[1]/input
-            WebElement passwordEle2 = driver.findElement(By.id("reenter_password"));
 
+            WebElement passwordEle = waiteName.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("/html/body/div/div[7]/div[6]/div/div[1]/div[2]/form/div/div/div[3]/div[1]/input")));
+
+
+            WebElement passwordEle2 = waiteName.until(ExpectedConditions
+                    .presenceOfElementLocated(By.id("reenter_password")));
             String name = randomString();
             System.out.println("注册的账号为：" + name);
             String password = randomString();
@@ -160,7 +180,10 @@ public class SeleniumProxyExample1 {
             passwordEle.sendKeys(password);
             passwordEle2.sendKeys(password);
             //点击完成
-            WebElement complateEle = driver.findElement(By.id("createAccountButton"));
+
+            WebDriverWait createAccountButtonWaiteName = new WebDriverWait(driver, 60);
+            WebElement complateEle = createAccountButtonWaiteName.until(ExpectedConditions
+                    .presenceOfElementLocated(By.id("createAccountButton")));
             complateEle.click();
             String value = name +" , " + password;
             System.out.println("注册的账号："+value);
