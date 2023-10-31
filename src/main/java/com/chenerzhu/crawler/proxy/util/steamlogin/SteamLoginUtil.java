@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,10 +10,8 @@ import org.springframework.stereotype.Component;
 import javax.security.auth.login.LoginException;
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.SecureRandom;
+import java.util.*;
 
 
 /**
@@ -79,13 +78,33 @@ public class SteamLoginUtil {
     }
 
 
+    public static String randomHexNumber() {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] buffer = new byte[16];
+        secureRandom.nextBytes(buffer);
+        StringBuilder hexStr = new StringBuilder();
+        for (byte b : buffer) {
+            hexStr.append(String.format("%02x", b));
+        }
+        return hexStr.toString();
+    }
+
+    /**
+     * 获取sessionId
+     *
+     * @return
+     */
+    public static String generateSessionID() {
+        return randomHexNumber();
+    }
+
     /**
      * 获取cookie信息
      *
      * @param steamUserDate
      * @return
      */
-    public StringBuilder login(SteamUserDate steamUserDate) {
+    public StringBuilder login1(SteamUserDate steamUserDate) {
         String userName = steamUserDate.getAccount_name();
         Http Http = new Http();
         StringBuilder cookies = new StringBuilder();
@@ -212,6 +231,57 @@ public class SteamLoginUtil {
         return cookies;
     }
 
+    /**
+     * 获取cookie信息
+     *
+     * @param steamUserDate
+     * @return
+     */
+    public StringBuilder login(SteamUserDate steamUserDate) {
+        steamUserDate.getSession().setSessionID(generateSessionID());
+        String cookies = getCookies(steamUserDate);
+        return null;
+    }
+
+    /**
+     * 获取accessToken
+     *
+     * @param steamUserDate
+     * @return
+     */
+    public String get_access_token(SteamUserDate steamUserDate) {
+        String url = "https://api.steampowered.com/IAuthenticationService/GenerateAccessTokenForApp/v1/";
+        Map<String, String> headerMap = new HashMap() {{
+            put("Referer", "https://steamcommunity.com");
+        }};
+        Map<String, String> dataMap = new HashMap() {{
+            put("refresh_token", steamUserDate.getSession().getRefreshToken());
+            put("steamid", steamUserDate.getSession().getSteamID());
+
+        }};
+        String response = HttpClientUtils.sendPostForm(url, "", headerMap, dataMap);
+        JSONObject jsonObject = JSONObject.parseObject(response);
+        String access_token = jsonObject.getString("access_token");
+        access_token = steamUserDate.getSession().getSessionID() + "%7C%7C" + access_token;
+        return access_token;
+    }
+
+    public String getCookies(SteamUserDate steamUserDate) {
+        HashMap<Object, Object> map = new HashMap() {{
+            put("steamLoginSecure", get_access_token(steamUserDate));
+            put("sessionId", steamUserDate.getSession().getSessionID());
+            put("Steam_Language", "english");
+            put("timezoneOffset", "28800,0");
+            put("_ga", "GA1.2.234547838.1688523763");
+            put("browserid", "'2685889387687629642'");
+            put("strInventoryLastContext", "2504460_2");
+        }};
+        StringJoiner sj = new StringJoiner(";");
+        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+            sj.add(entry.getKey() + "=" + entry.getValue());
+        }
+        return sj.toString();
+    }
 
     /**
      * 校验cookie是否过期
