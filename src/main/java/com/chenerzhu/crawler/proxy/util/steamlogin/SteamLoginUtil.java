@@ -261,8 +261,8 @@ public class SteamLoginUtil {
         }};
         String response = HttpClientUtils.sendPostForm(url, "", headerMap, dataMap);
         JSONObject jsonObject = JSONObject.parseObject(response);
-        String access_token = jsonObject.getString("access_token");
-        access_token = steamUserDate.getSession().getSessionID() + "%7C%7C" + access_token;
+        String access_token = jsonObject.getJSONObject("response").getString("access_token");
+        access_token = steamUserDate.getSession().getSteamID() + "%7C%7C" + access_token;
         return access_token;
     }
 
