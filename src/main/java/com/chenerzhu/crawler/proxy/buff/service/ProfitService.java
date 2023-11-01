@@ -41,6 +41,9 @@ public class ProfitService implements ApplicationRunner {
     @Value(("${sales_ratio}"))
     private Double salesRatio;
 
+    @Value(("${mean_ratio}"))
+    private Double meanRatio;
+
     @Autowired
     SellBuffProfitRepository sellBuffProfitRepository;
 
@@ -72,12 +75,12 @@ public class ProfitService implements ApplicationRunner {
             return;
         }
         //获取最近几天的中位数
-        Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 15);
+        Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 20);
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
         Double sell_min_priceD = Double.valueOf(sell_min_price);
-        if (sell_min_priceD > dayMedianPrice) {
-            log.info("商品：{}，价格为：{}元，15天中位数为：{}元,不符合求购要求", marketName, sell_min_price, dayMedianPrice);
+        if (sell_min_priceD / dayMedianPrice < meanRatio) {
+            log.info("商品：{}，价格为：{}元，20天中位数为：{}元,不符合均值比例求购:{}要求:", marketName, sell_min_price, dayMedianPrice, meanRatio);
             return;
         }
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();

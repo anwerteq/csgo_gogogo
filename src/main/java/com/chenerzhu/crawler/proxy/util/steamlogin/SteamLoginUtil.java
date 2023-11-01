@@ -240,7 +240,9 @@ public class SteamLoginUtil {
     public StringBuilder login(SteamUserDate steamUserDate) {
         steamUserDate.getSession().setSessionID(generateSessionID());
         String cookies = getCookies(steamUserDate);
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(cookies);
+        return stringBuilder;
     }
 
     /**
