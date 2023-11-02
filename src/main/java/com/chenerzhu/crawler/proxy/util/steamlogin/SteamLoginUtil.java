@@ -43,7 +43,7 @@ public class SteamLoginUtil {
             File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    if (file.isFile() && file.getName().contains(".maFile") && file.getName().contains("-")) {
+                    if (file.isFile() && file.getName().contains(".maFile")) {
                         steamUserDates.add(readJsonFromFile(file));
                     } else if (file.isDirectory()) {
                         steamUserDates.addAll(readFilesInFolder(file.getAbsolutePath()));

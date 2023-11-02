@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.common;
 
 
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
  * 游戏类别
  */
 @Configuration
+@Slf4j
 public class GameCommet {
 
     public static Map<String, String> gameMap = new HashMap() {{
@@ -22,7 +24,7 @@ public class GameCommet {
 
     public static Boolean check(String game) {
         auto_sale = game;
-        return game.contains(game);
+        return gameMap.containsKey(game);
     }
 
 
@@ -82,6 +84,7 @@ public class GameCommet {
             return getCsgoSum(sell_num);
         } else if ("dota2".equals(game)) {
             if (sell_num < 300) {
+                log.info("dota2游戏,饰品在售小于300，跳过");
                 return 0;
             }
             return 5;
