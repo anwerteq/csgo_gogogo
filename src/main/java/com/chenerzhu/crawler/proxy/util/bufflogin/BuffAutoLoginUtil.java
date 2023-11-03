@@ -44,6 +44,7 @@ public class BuffAutoLoginUtil {
             WebElement element = waitemail.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector(".nav_entries>ul>li")));
             element.click();
+            SleepUtil.sleep(4000);
             WebDriverWait agreeEleWait = new WebDriverWait(driver, 30000);
             WebElement agreeEle = agreeEleWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector("#agree-checkbox > span > i")));
@@ -63,7 +64,7 @@ public class BuffAutoLoginUtil {
             WebElement linkEle = linkWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[1]/a")));
             linkEle.click();
-            WebDriverWait phoneElWait = new WebDriverWait(driver, 30000);
+            WebDriverWait phoneElWait = new WebDriverWait(driver, 30);
             WebElement phoneEl = phoneElWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[2]/div[1]/input")));
             phoneEl.click();
