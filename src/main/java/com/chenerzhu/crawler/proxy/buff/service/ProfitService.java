@@ -67,6 +67,9 @@ public class ProfitService implements ApplicationRunner {
     @Autowired
     SteamProfitService steamProfitService;
 
+    @Autowired
+    ItemDetailService itemDetailService;
+
     /**
      * 保存推荐在steam购买的记录
      * falg:true 购买，false:不购买
@@ -94,7 +97,7 @@ public class ProfitService implements ApplicationRunner {
             steamProfitService.wantToBuy(itemGoods,sell_min_priceD,quantity);
         }else if ("2".equals(wantToBuy)){
             //扫低磨损
-
+            itemDetailService.autoButSteam(itemGoods);
         }
 
 

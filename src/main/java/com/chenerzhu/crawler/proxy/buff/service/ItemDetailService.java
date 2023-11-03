@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.buff.service;
 
 
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * buff商品明细服务
@@ -23,6 +26,9 @@ public class ItemDetailService {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    SteamInventorySerivce steamInventorySerivce;
 
     /**
      * 获取这个商品的磨损区间
@@ -45,6 +51,30 @@ public class ItemDetailService {
         }catch (Exception e){
             log.error("获取饰品的磨损区间失败",e);
         }
+
         return new ArrayList<>();
+    }
+
+    /**
+     * 获取区间内，最低的价格
+     * @param goodId
+     * @param paintwearList
+     * @return
+     */
+    public Map<String,String> getSellPrices(String goodId, List<String> paintwearList){
+        Map<String,String> painwearMap = new HashMap();
+        for (String paintwear : paintwearList) {
+            String sellPrice = steamInventorySerivce.getSellPrice(goodId, paintwear);
+            painwearMap.put(paintwear,sellPrice);
+        }
+        return painwearMap;
+    }
+
+    /**
+     * 构建 扫steam低磨损的数据
+     */
+    public void autoButSteam(ItemGoods itemGoods){
+        List<String> wearIntervalList = getWearInterval(itemGoods.getId());
+        Map<String, String> sellPrices = getSellPrices(itemGoods.getId(), wearIntervalList);
     }
 }

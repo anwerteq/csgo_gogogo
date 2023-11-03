@@ -44,27 +44,26 @@ public class BuffAutoLoginUtil {
             WebElement element = waitemail.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector(".nav_entries>ul>li")));
             element.click();
-            SleepUtil.sleep(4000);
-            WebDriverWait agreeEleWait = new WebDriverWait(driver, 30);
+            WebDriverWait agreeEleWait = new WebDriverWait(driver, 30000);
             WebElement agreeEle = agreeEleWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector("#agree-checkbox > span > i")));
             agreeEle.click();
             try {
-                WebDriverWait iframeEleWait = new WebDriverWait(driver, 30);
+                WebDriverWait iframeEleWait = new WebDriverWait(driver, 30000);
                 WebElement iframeEle = iframeEleWait.until(ExpectedConditions
                         .presenceOfElementLocated(By.xpath("/html/body/div[10]/div/div[3]/div[1]/iframe")));
                 driver.switchTo().frame(iframeEle);
             } catch (Exception e) {
-                WebDriverWait iframeEle1Wait = new WebDriverWait(driver, 30);
+                WebDriverWait iframeEle1Wait = new WebDriverWait(driver, 30000);
                 WebElement iframeEle1 = iframeEle1Wait.until(ExpectedConditions
                         .presenceOfElementLocated(By.xpath("/html/body/div[10]/div/div[3]/div[1]/iframe")));
                 driver.switchTo().frame(iframeEle1);
             }
-            WebDriverWait linkWait = new WebDriverWait(driver, 30);
+            WebDriverWait linkWait = new WebDriverWait(driver, 30000);
             WebElement linkEle = linkWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[1]/a")));
             linkEle.click();
-            WebDriverWait phoneElWait = new WebDriverWait(driver, 30);
+            WebDriverWait phoneElWait = new WebDriverWait(driver, 30000);
             WebElement phoneEl = phoneElWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[2]/div[1]/input")));
             phoneEl.click();
