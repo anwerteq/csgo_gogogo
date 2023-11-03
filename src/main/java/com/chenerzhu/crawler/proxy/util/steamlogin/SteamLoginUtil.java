@@ -65,8 +65,8 @@ public class SteamLoginUtil {
 
             String jsonString = content.toString();
             SteamUserDate steamUserDate = JSONObject.parseObject(jsonString, SteamUserDate.class);
-            String password = file.getName().split("-")[1].split("\\.")[0];
-            steamUserDate.setUserPsw(password);
+//            String password = file.getName().split("-")[1].split("\\.")[0];
+//            steamUserDate.setUserPsw(password);
 //            login(steamUserDate);
             // 在这里对 jsonObject 进行你需要的处理
 //            System.out.println(JSONObject.parseObject(jsonString));
