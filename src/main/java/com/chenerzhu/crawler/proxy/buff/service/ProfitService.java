@@ -18,6 +18,7 @@ import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellSteamProfitRepository;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
+import com.chenerzhu.crawler.proxy.steam.service.SteamProfitService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +39,12 @@ import java.util.*;
 @Slf4j
 public class ProfitService implements ApplicationRunner {
 
+
     @Value(("${sales_ratio}"))
     private Double salesRatio;
+
+    @Value(("${want_to_buy}"))
+    private String wantToBuy;
 
     @Value(("${mean_ratio}"))
     private Double meanRatio;
@@ -59,6 +64,12 @@ public class ProfitService implements ApplicationRunner {
     @Autowired
     PullHistoryService pullHistoryService;
 
+    @Autowired
+    SteamProfitService steamProfitService;
+
+    @Autowired
+    ItemDetailService itemDetailService;
+
     /**
      * 保存推荐在steam购买的记录
      * falg:true 购买，false:不购买
@@ -74,72 +85,43 @@ public class ProfitService implements ApplicationRunner {
         if (quantity == 0) {
             return;
         }
+        //校验buff的条件
+        Double sell_min_priceD = checkBuffPriceDate(itemGoods);
+        if (sell_min_priceD == 0){
+            return;
+        }
+        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        SteamApplicationRunner.setThreadLocalSteamId(buffUserData.getSteamId());
+        //求购商品
+        if ("1".equals(wantToBuy)){
+            steamProfitService.wantToBuy(itemGoods,sell_min_priceD,quantity);
+        }else if ("2".equals(wantToBuy)){
+            //扫低磨损
+            itemDetailService.autoButSteam(itemGoods);
+        }
+
+
+        SleepUtil.sleep(5000);
+
+    }
+
+    /**
+     * 校验buff的条件
+     * @return
+     */
+    public Double checkBuffPriceDate(ItemGoods itemGoods){
         //获取最近几天的中位数
         Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 20);
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
         Double sell_min_priceD = Double.valueOf(sell_min_price);
         if (sell_min_priceD / dayMedianPrice < meanRatio) {
-            log.info("商品：{}，价格为：{}元，20天中位数为：{}元,不符合均值比例求购:{}要求:", marketName, sell_min_price, dayMedianPrice, meanRatio);
-            return;
+            log.info("商品：{}，价格为：{}元，20天中位数为：{}元,不符合均值比例求购:{}要求:", itemGoods.getName(), sell_min_price, dayMedianPrice, meanRatio);
+            return 0.0;
         }
-        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
-        SteamApplicationRunner.setThreadLocalSteamId(buffUserData.getSteamId());
-        try {
-            //steam的求购价
-            Double price_total = Double.parseDouble(getItemordershistogram(itemGoods.getMarketHashName(), 8)) * 100;
-            //steam的求购价 rmb
-            Double price_totalRmb = price_total * 7.3;
-            Double buySalesRatio = sell_min_priceD * 100 / price_totalRmb;
-            if (buySalesRatio < salesRatio) {
-                log.info("商品：{}，比例为：{}，不符合求购要求:{}", itemGoods.getName(), buySalesRatio, salesRatio);
-                return;
-            }
-            //求购价，去下订单
-            log.info("商品：{}，符合要求，求购价为：{}美分，求购数量为：{}，开始去求购", marketName, price_total.intValue(), quantity);
-            steamBuyItemService.createbuyorder(price_total.intValue(), itemGoods.getMarketHashName(), quantity, itemGoods.getName());
-            log.info("商品：{}，求购结束", marketName);
-        } catch (Exception e) {
-            log.error("steam下订单异常信息：", e);
-        }
-        SleepUtil.sleep(5000);
-        if (true) {
-            return;
-        }
-        SellBuffProfitEntity profit = new SellBuffProfitEntity();
-        profit.setItem_id(itemGoods.getId());
-        profit.setName(itemGoods.getName());
-        profit.setSteam_price_cny(Double.parseDouble(itemGoods.getGoods_info().getSteam_price_cny()));
-        profit.setIn_fact_steam_price_cny(Double.valueOf(String.format("%.3f", profit.getSteam_price_cny())));
-        profit.setSell_min_price(Double.valueOf(itemGoods.getSell_min_price()));
-        profit.setQuick_price(Double.valueOf(itemGoods.getQuick_price()));
-        profit.setSell_num(String.valueOf(itemGoods.getSell_num()));
-        //buff售卖=steam购买
-        double interest = profit.getSell_min_price() - profit.getIn_fact_steam_price_cny();
-        //几折
-        double interest_rate = (profit.getSell_min_price() / (profit.getIn_fact_steam_price_cny()));
-        profit.setInterest_rate(String.format("%.3f", interest_rate));
-        profit.setUp_date(new Date());
-        profit.setMarket_hash_name(itemGoods.getMarketHashName());
-        Boolean flag = false;
-        if (0.98 < interest_rate) {
-            //在buff售卖，利率超过3%
-            flag = true;
-        }
-        if (flag) {
-            sellBuffProfitRepository.save(profit);
-        }
-//        if (!isBuy) {
-//            return;
-//        }
-        if (flag && Integer.parseInt(profit.getSell_num()) > 100 && profit.getSell_min_price() < 50) {
-            //去steam下订单
-            if (StrUtil.isEmpty(profit.getMarket_hash_name())) {
-                return;
-            }
-        }
-
+        return sell_min_priceD;
     }
+
 
     /**
      * 获取需要求购的数量
@@ -158,78 +140,6 @@ public class ProfitService implements ApplicationRunner {
         int sell_num = itemGoods.getSell_num();
         int quantity = GameCommet.getQuantity(sell_num);
         return quantity;
-    }
-
-    /**
-     * 获取第count个求购价格
-     *
-     * @return
-     */
-    private String getItemordershistogram(String hashName, int count) {
-        String itemNameId = getItemNameId(hashName);
-        String url = "https://steamcommunity.com/market/itemordershistogram?country=US&language=schinese&currency=1&two_factor=0&item_nameid=" + itemNameId;
-        String responseStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
-        ItemOrdershistogram ordershistogram = JSONObject.parseObject(responseStr, ItemOrdershistogram.class);
-        List<List<String>> buyOrderGraph = ordershistogram.getBuyOrderGraph();
-        int saleCount = 0;
-        for (int i = 0; i < buyOrderGraph.size(); i++) {
-            List<String> list = buyOrderGraph.get(i);
-            //求购数量
-            saleCount = saleCount + Integer.parseInt(list.get(1));
-            //求购价格
-            String salePrice = list.get(0);
-            //第一行求购数量大于count 加价求购
-            if (i == 0 && saleCount > count) {
-                Double salePricef = Double.valueOf(salePrice) + 0.01;
-                return String.valueOf(salePricef);
-            }
-            if (saleCount > count) {
-                return list.get(0);
-            }
-        }
-        return "0";
-    }
-
-
-    /**
-     * 获取steam订单信息
-     *
-     * @param hashName
-     */
-    public String getListsDetail(String hashName) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        String hashNameUrl = URLUtil.encode(hashName, "UTF-8").replace("+", "%20");
-        String url = "https://steamcommunity.com/market/listings/" + GameCommet.getGameId() + "/" + hashNameUrl;
-        Map<String, String> saleHeader = SteamConfig.getSteamHeader();
-        String responseStr = HttpClientUtils.sendGet(url, saleHeader);
-        String itemNameId = "";
-        try {
-            itemNameId = responseStr.split("Market_LoadOrderSpread\\(")[1].split("\\)")[0];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.info("获取饰品：{}求购数据失败,失败原因：此货物不在steam市场", hashName);
-        } catch (Exception e) {
-            log.info("获取饰品：{}求购数据异常信息：{}", hashName, e);
-        }
-        return itemNameId.trim();
-    }
-
-    /**
-     * 根据hashName获取steam对应的itemNameId
-     *
-     * @param hashName
-     * @return
-     */
-    public String getItemNameId(String hashName) {
-        ItemGoods itemGoods = itemRepository.findByMarketHashName(hashName);
-        if (ObjectUtil.isNotNull(itemGoods) && StrUtil.isNotEmpty(itemGoods.getNameId())) {
-            return itemGoods.getNameId().trim();
-        }
-        String nameId = getListsDetail(hashName);
-        return nameId.trim();
     }
 
     public static void main(String[] args) {

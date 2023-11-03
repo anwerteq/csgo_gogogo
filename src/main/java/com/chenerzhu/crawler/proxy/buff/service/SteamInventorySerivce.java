@@ -113,7 +113,7 @@ public class SteamInventorySerivce {
      *
      * @return
      */
-    private String getSellPrice(String goods_id, String paintwear) {
+    public String getSellPrice(String goods_id, String paintwear) {
         String paintwearInterval = getPaintwearInterval(paintwear);
         String min_paintwear = paintwearInterval.split("-")[0];
         String max_paintwear = paintwearInterval.split("-")[1];

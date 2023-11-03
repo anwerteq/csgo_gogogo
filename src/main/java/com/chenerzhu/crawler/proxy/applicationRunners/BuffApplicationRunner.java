@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.applicationRunners;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.cache.BuffCacheService;
@@ -39,10 +40,11 @@ public class BuffApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (buffAccountInfoConfig.getAccount_information().isEmpty()) {
+        if (CollectionUtil.isEmpty(buffAccountInfoConfig.getAccount_information())) {
             log.error("未加载到buff账号，请检查[buff.account_information]配置,退出脚本中");
             SleepUtil.sleep(5000);
-            System.exit(1);
+//            System.exit(1);
+            return;
         }
         for (String acountData : buffAccountInfoConfig.getAccount_information()) {
             BuffUserData buffUserData = new BuffUserData();
