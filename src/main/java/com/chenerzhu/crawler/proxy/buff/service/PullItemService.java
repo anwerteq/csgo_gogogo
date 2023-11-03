@@ -8,6 +8,7 @@ import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
 import com.chenerzhu.crawler.proxy.csgo.entity.ProductList;
 import com.chenerzhu.crawler.proxy.csgo.repository.GoodsInfoRepository;
 import com.chenerzhu.crawler.proxy.csgo.repository.IItemGoodsRepository;
+import com.chenerzhu.crawler.proxy.steam.service.SteamProfitService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class PullItemService {
 
     @Autowired
     TagService tagService;
+
+    @Autowired
+    SteamProfitService steamProfitService;
 
 
     /**
@@ -137,9 +141,8 @@ public class PullItemService {
      */
 
     public void saveItem(ItemGoods itemGoods,Boolean isBuy) {
-
         try {
-            String nameId = profitService.getItemNameId(itemGoods.getMarketHashName());
+            String nameId = steamProfitService.getItemNameId(itemGoods.getMarketHashName());
             itemGoods.setNameId(nameId);
             itemRepository.save(itemGoods);
         }catch (Exception e){
