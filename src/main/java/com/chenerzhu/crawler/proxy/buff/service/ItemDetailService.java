@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
+import com.chenerzhu.crawler.proxy.steam.service.SteamLossPaintwearService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class ItemDetailService {
     @Autowired
     SteamInventorySerivce steamInventorySerivce;
 
+    @Autowired
+    SteamLossPaintwearService steamLossPaintwearService;
+
     /**
      * 获取这个商品的磨损区间
      *
@@ -36,7 +40,7 @@ public class ItemDetailService {
      * @return
      */
     public List<String> getWearInterval(String goodId) {
-        List<String>  wearIntervals = new ArrayList<>();
+        List<String> wearIntervals = new ArrayList<>();
         String url = "https://buff.163.com/goods/" + goodId + "?from=market";
         SleepUtil.sleep(5000);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
@@ -52,12 +56,10 @@ public class ItemDetailService {
                 JSONArray JSONArray1 = (JSONArray)object;
                 StringJoiner stringJoiner = new StringJoiner("-");
                 for (Object o : JSONArray1) {
-                    stringJoiner.add(o.toString());
+                    stringJoiner.add(String.valueOf(o.toString()));
                 }
                 wearIntervals.add(stringJoiner.toString());
             }
-
-            System.out.println("123123123");
         }catch (Exception e){
             log.error("获取饰品的磨损区间失败",e);
             return new ArrayList<>();
@@ -74,7 +76,7 @@ public class ItemDetailService {
     public Map<String,String> getSellPrices(String goodId, List<String> paintwearList){
         Map<String,String> painwearMap = new HashMap();
         for (String paintwear : paintwearList) {
-            String sellPrice = steamInventorySerivce.getSellPrice(goodId, paintwear);
+            String sellPrice = steamInventorySerivce.getSellPrices(goodId, paintwear);
             painwearMap.put(paintwear,sellPrice);
         }
         return painwearMap;
@@ -86,6 +88,6 @@ public class ItemDetailService {
     public void autoButSteam(ItemGoods itemGoods){
         List<String> wearIntervalList = getWearInterval(itemGoods.getId());
         Map<String, String> sellPrices = getSellPrices(itemGoods.getId(), wearIntervalList);
-
+        steamLossPaintwearService.getMarketLists(itemGoods, sellPrices);
     }
 }

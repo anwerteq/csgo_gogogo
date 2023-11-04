@@ -136,6 +136,28 @@ public class SteamInventorySerivce {
 
 
     /**
+     * 根据磨损度获取售卖列表的价格
+     *
+     * @return
+     */
+    public String getSellPrices(String goods_id, String paintwearInterval) {
+        String min_paintwear = paintwearInterval.split("-")[0];
+        String max_paintwear = paintwearInterval.split("-")[1];
+        String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id
+                + "&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&min_paintwear="
+                + min_paintwear + "&max_paintwear=" + max_paintwear + "&_=" + System.currentTimeMillis();
+        ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffBuyRoot.class);
+        BuffBuyRoot body = responseEntity.getBody();
+        BuffBuyData data = body.getData();
+        List<BuffBuyItems> items = data.getItems();
+        SleepUtil.sleep(5500);
+        BuffBuyItems buffBuyItems = items.get(1);
+        String price = buffBuyItems.getPrice();
+        return price;
+    }
+
+
+    /**
      * 将item转化为assets，没有磨损度的按照99999价格上架
      *
      * @return

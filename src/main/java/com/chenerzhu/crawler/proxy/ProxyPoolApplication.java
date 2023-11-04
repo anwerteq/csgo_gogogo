@@ -1,7 +1,5 @@
 package com.chenerzhu.crawler.proxy;
 
-import com.chenerzhu.crawler.proxy.csgo.service.ItemGoodsService;
-import com.chenerzhu.crawler.proxy.steam.service.SteamLossPaintwearService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,8 +22,8 @@ public class ProxyPoolApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
-        SteamLossPaintwearService bean = run.getBean(SteamLossPaintwearService.class);
-        bean.getMarketLists(null,null);
+//        SteamLossPaintwearService bean = run.getBean(SteamLossPaintwearService.class);
+//        bean.getMarketLists(null,null);
 //        ItemGoodsService bean = run.getBean(ItemGoodsService.class);
 //        bean.getLowPaintwear();
     }

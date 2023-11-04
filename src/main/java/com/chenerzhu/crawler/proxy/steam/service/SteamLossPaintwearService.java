@@ -14,7 +14,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,17 +37,49 @@ public class SteamLossPaintwearService {
     public void getMarketLists(ItemGoods itemGoods, Map<String, String> sellPrices) {
 
         List<SteamLossItemDetail> marketLists = getMarketLists(itemGoods, sellPrices, 1);
-
+        for (SteamLossItemDetail marketList : marketLists) {
+            Boolean aBoolean = checkWearPainPrice(sellPrices, marketList);
+            if (aBoolean) {
+                //进行购买操作
+                log.info("购买饰品");
+            }
+        }
         log.info("123123");
     }
 
+
+    /**
+     * 校验金额和磨损度
+     *
+     * @param sellPrices
+     * @param detail
+     * @return
+     */
+    public Boolean checkWearPainPrice(Map<String, String> sellPrices, SteamLossItemDetail detail) {
+        for (Map.Entry<String, String> entry : sellPrices.entrySet()) {
+            String[] split = entry.getKey().split("-");
+            Double minWear = Double.valueOf(split[0]);
+            Double maxWear = Double.valueOf(split[1]);
+            Double painwear = Double.valueOf(detail.getPainwear());
+            Boolean maxWearFlag = maxWear > painwear;
+            Boolean minWearFlag = painwear > minWear;
+            if (maxWearFlag && minWearFlag) {
+                //entry.getValue() 人民币
+                String value = entry.getValue();
+                Boolean flag = Integer.valueOf(value) > Double.valueOf(detail.getPriceDollar()) * 0.8 * 7.31;
+                return flag;
+            }
+        }
+        return false;
+    }
 
     /**
      * 获取steam市场数据
      */
     public List<SteamLossItemDetail> getMarketLists(ItemGoods itemGoods, Map<String, String> sellPrices, Integer pageIndex) {
 //        String hashName = itemGoods.getName();
-        String hashName = "StatTrak™ PP-Bizon | Night Riot (Field-Tested)";
+//        String hashName = "StatTrak™ PP-Bizon | Night Riot (Field-Tested)";
+        String hashName = itemGoods.getMarketHashName();
         String hashNameUrl = URLUtil.encode(hashName, "UTF-8").replace("+", "%20");
         String url = "https://steamcommunity.com/market/listings/" + GameCommet.getGameId() + "/" + hashNameUrl
                 + "/render/?query=&start=" + (pageIndex - 1) * 100 + "&count=" + pageIndex * 100 + "&country=US&language=schinese&currency=1";
@@ -123,8 +154,7 @@ public class SteamLossPaintwearService {
         JSONObject jsonObject = JSONObject.parseObject(reponse);
         //磨损信息
         List<FloatBulk> floatBulks = jsonObject.entrySet().stream().map(entrySet -> {
-            FloatBulk floatBulk = new FloatBulk();
-            BeanUtils.copyProperties(entrySet.getValue(), floatBulk);
+            FloatBulk floatBulk = JSONObject.parseObject(JSONObject.toJSONString(entrySet.getValue()), FloatBulk.class);
             floatBulk.setLinkKey(entrySet.getKey());
             return floatBulk;
         }).collect(Collectors.toList());
