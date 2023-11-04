@@ -44,13 +44,19 @@ public class RemovelistingService {
      * 取消被block的货物
      */
     public void unlisting() {
+
         //获取上架的饰品id
         Set<String> mylistings = getMylistings();
+        String url = "https://steamcommunity.com/market";
+        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
+
+        String sessionid = resStr.split("g_sessionID = \"")[1].split(";")[0];
+        sessionid = sessionid.substring(0, sessionid.length() - 1);
+        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        steamUserDate.getSession().setSessionID(sessionid);
         mylistings.forEach(this::removeList);
 
-        String url = "https://steamcommunity.com/market";
 
-        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         Document parse = Jsoup.parse(resStr);
 
         Element marketListingsRows = parse.getElementById("tabContentsMyActiveMarketListingsRows");
@@ -128,6 +134,7 @@ public class RemovelistingService {
         String url = "https://steamcommunity.com/market/removelisting/" + id;
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
+        saleHeader.put("Referer", "https://steamcommunity.com/market/");
         SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
         paramerMap.put("sessionid", steamUserDate.getSession().getSessionID());
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);

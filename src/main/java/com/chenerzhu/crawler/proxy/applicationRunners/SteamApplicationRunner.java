@@ -151,15 +151,6 @@ public class SteamApplicationRunner implements ApplicationRunner {
         HttpBean httpBean = http.request(url,
                 "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
         String response = httpBean.getResponse();
-        String cookies = httpBean.getCookies();
-        //设置sessionid
-        String sessionid = cookies.split("=")[1].split(";")[0].trim();
-        steamDate.getSession().setSessionID(sessionid);
-        String geneSeesionid = cookie.split("sessionId=")[1].split(";")[0].trim();
-        cookie = cookie.replace(geneSeesionid, sessionid);
-        StringBuilder newCookies = new StringBuilder();
-        newCookies.append(cookie);
-        steamDate.setCookies(newCookies);
         if (!response.contains("Key: ") && !response.contains("密钥: ")) {
             log.error("{}:获取交易apikye失败，请访问[ https://steamcommunity.com/dev/apikey ] 检查是否有 apikey链接", account);
             System.exit(0);
