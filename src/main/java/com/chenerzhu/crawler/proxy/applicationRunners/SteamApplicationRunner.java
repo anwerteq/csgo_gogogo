@@ -129,7 +129,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
         //获取apikey
         String apikey = steamCacheService.getApikey(account_name);
         if (StrUtil.isEmpty(apikey)) {
-            apikey = getApikey(account_name, steamDate.getCookies().toString());
+            apikey = getApikey(account_name, steamDate);
             steamCacheService.addApikey(account_name, apikey);
         }
         steamDate.setApikey(apikey);
@@ -141,15 +141,25 @@ public class SteamApplicationRunner implements ApplicationRunner {
     /**
      * 获取steam的交易连接
      *
-     * @param cookie
+     * @param steamDate
      * @return
      */
-    public String getApikey(String account, String cookie) {
+    public String getApikey(String account, SteamUserDate steamDate) {
+        String cookie = steamDate.getCookies().toString();
         String url = "https://steamcommunity.com/dev/apikey";
         CookiesConfig.steamCookies.set(cookie);
         HttpBean httpBean = http.request(url,
                 "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
         String response = httpBean.getResponse();
+        String cookies = httpBean.getCookies();
+        //设置sessionid
+        String sessionid = cookies.split("=")[1].split(";")[0].trim();
+        steamDate.getSession().setSessionID(sessionid);
+        String geneSeesionid = cookie.split("sessionId=")[1].split(";")[0].trim();
+        cookie = cookie.replace(geneSeesionid, sessionid);
+        StringBuilder newCookies = new StringBuilder();
+        newCookies.append(cookie);
+        steamDate.setCookies(newCookies);
         if (!response.contains("Key: ") && !response.contains("密钥: ")) {
             log.error("{}:获取交易apikye失败，请访问[ https://steamcommunity.com/dev/apikey ] 检查是否有 apikey链接", account);
             System.exit(0);

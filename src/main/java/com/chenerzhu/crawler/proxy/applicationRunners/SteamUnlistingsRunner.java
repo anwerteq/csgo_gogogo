@@ -28,6 +28,7 @@ public class SteamUnlistingsRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         List<SteamUserDate> steamUserDates = SteamApplicationRunner.steamUserDates;
         for (SteamUserDate steamUserDate : steamUserDates) {
+            SteamApplicationRunner.steamUserDateTL.set(steamUserDate);
             CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
             for (int i = 1; i < 100; i++) {
                 removelistingService.unlistings(i);

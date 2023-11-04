@@ -130,8 +130,9 @@ public class HttpClientUtils implements ApplicationRunner {
                     httpResponse = httpClient.execute(httpPatch);
                     break;
             }
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
 //            log.info("request url：" + url + "; response status：" + httpResponse.getStatusLine());
-            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+            if (statusCode == 200) {
                 BufferedHttpEntity entity = new BufferedHttpEntity(httpResponse.getEntity());
                 //获取响应内容
                 if (StringUtils.isEmpty(resultCharset)) {
@@ -139,10 +140,20 @@ public class HttpClientUtils implements ApplicationRunner {
                 }
                 return EntityUtils.toString(entity, resultCharset);
             }
-            if (httpResponse.getStatusLine().getStatusCode() == 429) {
+            if (statusCode == 429) {
                 log.info("代理ip访问steam频繁，可以通过切换clash节点，避免访问频繁");
                 log.info("因访问steam频繁,进行睡眠60s，此提示过多,就一定要切换clash的节点");
                 SleepUtil.sleep(60 * 1000);
+                return null;
+            }
+            if (statusCode != 200) {
+                BufferedHttpEntity entity = new BufferedHttpEntity(httpResponse.getEntity());
+                //获取响应内容
+                if (StringUtils.isEmpty(resultCharset)) {
+                    resultCharset = DEFAULT_CHARSET;
+                }
+                log.info("访问发生异常,异常码是:{},返回信息是:{}", EntityUtils.toString(entity, resultCharset));
+                return null;
             }
         } catch (ClientProtocolException e) {
             log.error("Protocol error", e);

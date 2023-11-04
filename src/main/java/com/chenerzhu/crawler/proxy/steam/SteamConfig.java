@@ -3,7 +3,6 @@ package com.chenerzhu.crawler.proxy.steam;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -72,9 +71,10 @@ public class SteamConfig implements ApplicationRunner {
      * 获取steamId
      */
     public static String getSteamId(){
-        String steamLoginSecure = getCookieOnlyKey("steamLoginSecure");
-        String substring = steamLoginSecure.substring(0, 17);
-        return substring;
+        String steamID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSteamID();
+//        String steamLoginSecure = getCookieOnlyKey("steamLoginSecure");
+//        String substring = steamLoginSecure.substring(0, 17);
+        return steamID;
     }
 
     public static  String getCookie(){
@@ -86,10 +86,9 @@ public class SteamConfig implements ApplicationRunner {
         return cookies;
     }
 
-    public static  String getCookieOnlyKey(String key){
-        String[] split = getCookie().split(key + "=");
-        String value = split[1].split(";")[0];
-        return value.trim();
+    public static  String getCookieOnlyKey(String key) {
+        String sessionID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSessionID();
+        return sessionID;
     }
 
 

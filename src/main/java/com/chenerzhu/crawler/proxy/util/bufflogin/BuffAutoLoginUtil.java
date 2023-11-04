@@ -40,9 +40,11 @@ public class BuffAutoLoginUtil {
             // 创建 ChromeDriver 实例
 
             driver.get(url);
-            WebDriverWait waitemail = new WebDriverWait(driver, 30);
+//            SleepUtil.sleep(2000);
+            WebDriverWait waitemail = new WebDriverWait(driver, 30000);
             WebElement element = waitemail.until(ExpectedConditions
-                    .presenceOfElementLocated(By.cssSelector(".nav_entries>ul>li")));
+                    .presenceOfElementLocated(By.xpath("/html/body/div[1]/div/div[3]/ul/li/a")));
+            //
             element.click();
             SleepUtil.sleep(4000);
             WebDriverWait agreeEleWait = new WebDriverWait(driver, 30000);

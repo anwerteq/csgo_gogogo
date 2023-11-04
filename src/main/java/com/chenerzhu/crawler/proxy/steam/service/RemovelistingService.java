@@ -2,9 +2,12 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
+import com.chenerzhu.crawler.proxy.steam.service.marketlist.MarketListJsonRootBean;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,9 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * steam商品下架
@@ -43,6 +44,10 @@ public class RemovelistingService {
      * 取消被block的货物
      */
     public void unlisting() {
+        //获取上架的饰品id
+        Set<String> mylistings = getMylistings();
+        mylistings.forEach(this::removeList);
+
         String url = "https://steamcommunity.com/market";
 
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
@@ -64,9 +69,9 @@ public class RemovelistingService {
             log.info("获取上架信息失败");
         }
         try {
-            int length = Math.min(10,marketListingsRows.children().size());
+            int length = Math.max(10, marketListingsRows.children().size());
             for (int i = 0; i < length; i++) {
-                SleepUtil.sleep(300);
+//                SleepUtil.sleep(300);
 
                 Element child = marketListingsRows.children().get(i);
                 String id = child.id();
@@ -101,18 +106,33 @@ public class RemovelistingService {
         log.info("被锁的商品，已经全部取消");
     }
 
-    public void getMylistings() {
+    /**
+     * 获取上架的steam 饰品id
+     */
+    public Set<String> getMylistings() {
         String url = "https://steamcommunity.com/market/mylistings/render/?query=&start=1&count=100";
+        String responseStr = HttpClientUtils.sendGet(url, SteamConfig.getSaleHeader());
+        MarketListJsonRootBean marketListJsonRootBean = JSONObject.parseObject(responseStr, MarketListJsonRootBean.class);
+        log.info("123123");
+        Document document = Jsoup.parse(marketListJsonRootBean.getResults_html());
+        Elements market_recent_listing_row = document.getElementsByClass("market_recent_listing_row");
+        Set<String> listId = new HashSet<>();
+        for (Element element : market_recent_listing_row) {
+            String id = element.id();
+            listId.add(id.split("_")[1]);
+        }
+        return listId;
     }
 
     public void removeList(String id) {
         String url = "https://steamcommunity.com/market/removelisting/" + id;
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
-        paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
+        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        paramerMap.put("sessionid", steamUserDate.getSession().getSessionID());
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
         ArrayList arrayList = JSONObject.parseObject(responseStr, ArrayList.class);
-        SleepUtil.sleep(500);
-        log.info("需要审批的饰品下架信息：{}",responseStr);
+//        SleepUtil.sleep(500);
+        log.info("需要审批的饰品下架信息：{}", responseStr);
     }
 }
