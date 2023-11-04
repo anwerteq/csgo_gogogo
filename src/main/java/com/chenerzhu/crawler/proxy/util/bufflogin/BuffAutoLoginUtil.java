@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.ProxyPoolApplication;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -38,15 +37,11 @@ public class BuffAutoLoginUtil {
         String cookie = "";
         try {
             // 创建 ChromeDriver 实例
-
             driver.get(url);
-//            SleepUtil.sleep(2000);
             WebDriverWait waitemail = new WebDriverWait(driver, 30000);
             WebElement element = waitemail.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[1]/div/div[3]/ul/li/a")));
-            //
             element.click();
-            SleepUtil.sleep(4000);
             WebDriverWait agreeEleWait = new WebDriverWait(driver, 30000);
             WebElement agreeEle = agreeEleWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector("#agree-checkbox > span > i")));
@@ -66,7 +61,7 @@ public class BuffAutoLoginUtil {
             WebElement linkEle = linkWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[1]/a")));
             linkEle.click();
-            WebDriverWait phoneElWait = new WebDriverWait(driver, 30);
+            WebDriverWait phoneElWait = new WebDriverWait(driver, 30000);
             WebElement phoneEl = phoneElWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[2]/div[2]/div[2]/form/div/div[2]/div[1]/input")));
             phoneEl.click();
