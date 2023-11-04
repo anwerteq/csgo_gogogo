@@ -112,4 +112,11 @@ public class Items
         return sj.toString();
     }
 
+    public String getClassidInstanceid() {
+        StringJoiner sj = new StringJoiner("-");
+        sj.add(asset_info.getClassid());
+        sj.add(asset_info.getInstanceid());
+        return sj.toString();
+    }
+
 }

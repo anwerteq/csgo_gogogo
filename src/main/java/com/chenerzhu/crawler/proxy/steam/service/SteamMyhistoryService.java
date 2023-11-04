@@ -32,15 +32,15 @@ public class SteamMyhistoryService {
     SteamBuyItemService steamBuyItemService;
 
 
-    public void marketMyhistorys(){
+    public void marketMyhistorys() {
 //        int start = 7030;
 //        int start = 5730;
 //        int start = 4230;
         int start = 950;
-        while (start >0){
-            log.info("start的值为：{}",start);
-            marketMyhistory( start);
-            start = start -10;
+        while (start > 0) {
+            log.info("start的值为：{}", start);
+            marketMyhistory(start);
+            start = start - 10;
         }
     }
 
@@ -65,15 +65,53 @@ public class SteamMyhistoryService {
         for (Map.Entry<String, Double> entry : hisotryPrice.entrySet()) {
             //美元变美分
             Double value = entry.getValue() * 100;
-            if (value == 0){
+            if (value == 0) {
                 continue;
             }
             SteamCostEntity steamCostEntity = mapSteamCostEntity.get(entry.getKey());
-            if (entry.getValue() > 0){
+            if (entry.getValue() > 0) {
                 //销售金额
                 steamCostEntity.setReturned_money(value.intValue());
                 sellCost.add(steamCostEntity);
-            }else {
+            } else {
+                //购买金额
+                steamCostEntity.setSteam_cost(-value.intValue());
+                buyCost.add(steamCostEntity);
+            }
+        }
+        SleepUtil.sleep(3000);
+        sellCost.forEach(steamBuyItemService::saveForsellPrice);
+        buyCost.forEach(steamBuyItemService::saveForCostPrice);
+    }
+
+
+    public void marketMyhistorys(int start) {
+        int count = 100;
+        String url = "https://steamcommunity.com/market/myhistory/render/?query=&count="
+                + count + "&start=" + (start - 1) * count;
+        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
+        SteamMyhistoryRoot steamMyhistoryRoot = JSONObject.parseObject(resStr, SteamMyhistoryRoot.class);
+
+        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(steamMyhistoryRoot.getAssets()));
+        JSONObject jsonObject1 = jsonObject.getJSONObject("730").getJSONObject("2");
+        Map<String, SteamCostEntity> mapSteamCostEntity = getMapSteamCostEntity(jsonObject1);
+        Map<String, Double> hisotryPrice = getHisotryPrice(steamMyhistoryRoot.getResults_html());
+        //销售记录
+        List<SteamCostEntity> sellCost = new ArrayList<>();
+        //购买集合
+        List<SteamCostEntity> buyCost = new ArrayList<>();
+        for (Map.Entry<String, Double> entry : hisotryPrice.entrySet()) {
+            //美元变美分
+            Double value = entry.getValue() * 100;
+            if (value == 0) {
+                continue;
+            }
+            SteamCostEntity steamCostEntity = mapSteamCostEntity.get(entry.getKey());
+            if (entry.getValue() > 0) {
+                //销售金额
+                steamCostEntity.setReturned_money(value.intValue());
+                sellCost.add(steamCostEntity);
+            } else {
                 //购买金额
                 steamCostEntity.setSteam_cost(-value.intValue());
                 buyCost.add(steamCostEntity);
@@ -99,7 +137,7 @@ public class SteamMyhistoryService {
             }
 
             String key = actions.getString(0).split("preview%20M")[1].split("A%assetid%")[0];
-            String elementId = "history_row_" + key + "_" + (Long.valueOf(key) +1);
+            String elementId = "history_row_" + key + "_" + (Long.valueOf(key) + 1);
             SteamCostEntity steamCostEntity = new SteamCostEntity();
             steamCostEntity.setClassid(values.getString("classid"));
             steamCostEntity.setAssetid(values.getString("id"));

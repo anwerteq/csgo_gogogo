@@ -71,6 +71,7 @@ public class SteamInventorySerivce {
      * @return
      */
     public List<Items> steamAllStatusInventory(int page_num) {
+        SleepUtil.sleep(5 * 1040);
         //查询的为可交易的
         String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&page_num=" + page_num + "&page_size=500&search=&_=" + System.currentTimeMillis();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
