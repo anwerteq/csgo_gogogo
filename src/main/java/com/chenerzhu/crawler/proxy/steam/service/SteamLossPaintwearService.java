@@ -100,6 +100,7 @@ public class SteamLossPaintwearService {
                 if (listId.equals(itemDetail.getListId())) {
                     link = link.replace("%listingid%", listId).replace("%assetid%", assetId);
                     itemDetail.setUrl(link);
+                    itemDetail.setName(itemGoods.getName());
                     continue;
                 }
             }
@@ -166,4 +167,5 @@ public class SteamLossPaintwearService {
         }
         return details;
     }
+
 }

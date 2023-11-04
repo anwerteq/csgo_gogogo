@@ -20,6 +20,7 @@ import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -46,6 +47,9 @@ public class SteamInventorySerivce {
     SteamBuyItemService steamBuyItemService;
 
     public static String priceMax = "49.69";
+
+    @Value("${buff_user_id}")
+    private String buffUserIds;
 
 
     /**
@@ -130,8 +134,12 @@ public class SteamInventorySerivce {
             return getSellPrice(goods_id, String.valueOf(paintwearf));
         }
         BuffBuyItems buffBuyItems = items.get(1);
-        String price = buffBuyItems.getPrice();
-        return price;
+        Double price = Double.valueOf(buffBuyItems.getPrice());
+        if (StrUtil.isEmpty(buffUserIds) || buffUserIds.contains(buffBuyItems.getUser_id())) {
+            return String.valueOf(price);
+        }
+        String priceStr = String.valueOf(price - 0.01);
+        return priceStr;
     }
 
 
@@ -193,7 +201,7 @@ public class SteamInventorySerivce {
      */
     public Set<String> getOnSale(int count) {
         String url = "https://buff.163.com/api/market/sell_order/on_sale?page_num=1&sort_by=updated.asc" +
-                "&mode=2%2C5&game=csgo&appid=730&page_size=30&min_price=" + priceMax + "&max_price=" + priceMax;
+                "&mode=2%2C5&game=csgo&appid=730&page_size=40&min_price=" + priceMax + "&max_price=" + priceMax;
         String responseStr = HttpClientUtils.sendGet(url, BuffConfig.getHeaderMap1());
         JSONObject jsonObject = JSONObject.parseObject(responseStr);
         Object codeObj = jsonObject.get("code");
@@ -222,7 +230,7 @@ public class SteamInventorySerivce {
         if (onSale.isEmpty()) {
             return;
         }
-        onSale = onSale.stream().limit(Long.valueOf("50")).collect(Collectors.toSet());
+        onSale = onSale.stream().limit(Long.valueOf("40")).collect(Collectors.toSet());
         //取消上架
         cancelOrder(onSale);
     }

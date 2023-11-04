@@ -10,6 +10,7 @@ import com.chenerzhu.crawler.proxy.steam.CreatebuyorderEntity;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
 import com.chenerzhu.crawler.proxy.steam.repository.SteamCostRepository;
+import com.chenerzhu.crawler.proxy.steam.service.marketlist.SteamLossItemDetail;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,25 @@ public class SteamBuyItemService {
         } else {
             log.info("商品:{},发送求购订单失败,steam返回的信息为:{}", name, jsonObject1);
         }
+    }
+
+
+    /**
+     * 购买饰品
+     *
+     * @param detail
+     */
+    public void buyItem(SteamLossItemDetail detail) {
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
+        hashMap.put("currency", "1");
+        hashMap.put("quantity", "1");
+        hashMap.put("total", "1");
+        hashMap.put("fee", "1");
+        hashMap.put("subtotal", "1");
+        Map<String, String> saleHeader = SteamConfig.getBuyHeader();
+
+
     }
 
 

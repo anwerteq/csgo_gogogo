@@ -49,19 +49,19 @@ public class ItemDetailService {
         }
         String body = responseEntity.getBody();
         try {
-            String wearStr  = body.split(" paintwear_choices: ")[1].split(",\n" +
+            String wearStr = body.split(" paintwear_choices: ")[1].split(",\n" +
                     "             ")[0];
             JSONArray objects = JSONObject.parseArray(wearStr);
             for (Object object : objects) {
-                JSONArray JSONArray1 = (JSONArray)object;
+                JSONArray JSONArray1 = (JSONArray) object;
                 StringJoiner stringJoiner = new StringJoiner("-");
                 for (Object o : JSONArray1) {
                     stringJoiner.add(String.valueOf(o.toString()));
                 }
                 wearIntervals.add(stringJoiner.toString());
             }
-        }catch (Exception e){
-            log.error("获取饰品的磨损区间失败",e);
+        } catch (Exception e) {
+            log.error("获取饰品的磨损区间失败", e);
             return new ArrayList<>();
         }
         return wearIntervals;
@@ -69,15 +69,16 @@ public class ItemDetailService {
 
     /**
      * 获取区间内，最低的价格
+     *
      * @param goodId
      * @param paintwearList
      * @return
      */
-    public Map<String,String> getSellPrices(String goodId, List<String> paintwearList){
-        Map<String,String> painwearMap = new HashMap();
+    public Map<String, String> getSellPrices(String goodId, List<String> paintwearList) {
+        Map<String, String> painwearMap = new HashMap();
         for (String paintwear : paintwearList) {
             String sellPrice = steamInventorySerivce.getSellPrices(goodId, paintwear);
-            painwearMap.put(paintwear,sellPrice);
+            painwearMap.put(paintwear, sellPrice);
         }
         return painwearMap;
     }
@@ -85,9 +86,13 @@ public class ItemDetailService {
     /**
      * 构建 扫steam低磨损的数据
      */
-    public void autoButSteam(ItemGoods itemGoods){
+    public void autoButSteam(ItemGoods itemGoods) {
         List<String> wearIntervalList = getWearInterval(itemGoods.getId());
         Map<String, String> sellPrices = getSellPrices(itemGoods.getId(), wearIntervalList);
         steamLossPaintwearService.getMarketLists(itemGoods, sellPrices);
     }
+
+
+
+
 }

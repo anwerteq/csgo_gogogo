@@ -40,6 +40,8 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
                 for (BuffUserData buffUserData : buffUserDataList) {
                     BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
                     CookiesConfig.buffCookies.set(buffUserData.getCookie());
+                    log.info("开始下架在售时间久的饰品");
+                    steamInventorySerivce.downOnSale();
                     log.info("buff账号：{}开始上架饰品", buffUserData.getAcount());
                     try {
                         autoSale(buffUserData);
@@ -49,8 +51,9 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
                     }
                     log.info("buff账号：{}上架饰品完成", buffUserData.getAcount());
                 }
-                log.info("buff账号全部上架完成，睡眠30分钟");
-                SleepUtil.sleep(30 * 60 * 1000);
+                log.info("buff账号全部上架完成，睡眠20分钟");
+                SleepUtil.sleep(20 * 60 * 1000);
+
             }
         });
     }
