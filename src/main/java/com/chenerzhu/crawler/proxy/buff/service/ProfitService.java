@@ -38,8 +38,12 @@ public class ProfitService implements ApplicationRunner {
     @Value(("${want_to_buy}"))
     private String wantToBuy;
 
-    @Value(("${mean_ratio}"))
-    private Double meanRatio;
+
+    @Value(("${mean_ratio_min}"))
+    private Double mean_ratio_min;
+
+    @Value(("${mean_ratio_max}"))
+    private Double mean_ratio_max;
 
     @Autowired
     SellBuffProfitRepository sellBuffProfitRepository;
@@ -101,14 +105,16 @@ public class ProfitService implements ApplicationRunner {
      * 校验buff的条件
      * @return
      */
-    public Double checkBuffPriceDate(ItemGoods itemGoods){
+    public Double checkBuffPriceDate(ItemGoods itemGoods) {
         //获取最近几天的中位数
         Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 20);
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
         Double sell_min_priceD = Double.valueOf(sell_min_price);
-        if (sell_min_priceD / dayMedianPrice < meanRatio) {
-            log.info("商品：{}，价格为：{}元，20天中位数为：{}元,不符合均值比例求购:{}要求:", itemGoods.getName(), sell_min_price, dayMedianPrice, meanRatio);
+        Double meanRatio = sell_min_priceD / dayMedianPrice;
+        if (meanRatio < mean_ratio_min || meanRatio > mean_ratio_max) {
+            log.info("商品：{} 不符合要求，价格为：{}元，20天中位数为：{}元,饰品均值比例:{},下限比例为:{},上限比例为:{}"
+                    , itemGoods.getName(), sell_min_price, dayMedianPrice, meanRatio, mean_ratio_min, mean_ratio_max);
             return 0.0;
         }
         return sell_min_priceD;
