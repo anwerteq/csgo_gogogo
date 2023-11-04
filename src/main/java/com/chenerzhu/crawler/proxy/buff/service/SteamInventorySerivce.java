@@ -151,8 +151,13 @@ public class SteamInventorySerivce {
         BuffBuyData data = body.getData();
         List<BuffBuyItems> items = data.getItems();
         SleepUtil.sleep(5500);
-        BuffBuyItems buffBuyItems = items.get(1);
-        String price = buffBuyItems.getPrice();
+        Double sumPrice = 0.0;
+        items = items.subList(0, Math.min(10, items.size()));
+        for (BuffBuyItems item : items) {
+            sumPrice = sumPrice + Double.valueOf(item.getPrice());
+        }
+
+        String price = String.valueOf(sumPrice / items.size());
         return price;
     }
 

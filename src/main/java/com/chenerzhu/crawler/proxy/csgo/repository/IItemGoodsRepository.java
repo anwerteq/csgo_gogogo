@@ -14,6 +14,7 @@ public interface IItemGoodsRepository extends JpaRepository<ItemGoods, Long> {
     List<Long> findAllId();
 
 
+    @Query(value = "  select * from item_goods where  market_hash_name = ?1 limit 1 ", nativeQuery = true)
     ItemGoods findByMarketHashName(String market_hash_name);
 
 }

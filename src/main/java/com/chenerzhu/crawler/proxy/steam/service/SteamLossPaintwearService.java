@@ -66,7 +66,8 @@ public class SteamLossPaintwearService {
             if (maxWearFlag && minWearFlag) {
                 //entry.getValue() 人民币
                 String value = entry.getValue();
-                Boolean flag = Integer.valueOf(value) > Double.valueOf(detail.getPriceDollar()) * 0.8 * 7.31;
+                Double costPrice = Double.valueOf(detail.getPriceDollar()) * 7.31 * 0.75;
+                Boolean flag = Double.valueOf(value) > costPrice;
                 return flag;
             }
         }
