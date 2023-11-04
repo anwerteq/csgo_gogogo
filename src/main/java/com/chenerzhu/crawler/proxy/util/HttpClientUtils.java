@@ -152,7 +152,7 @@ public class HttpClientUtils implements ApplicationRunner {
                 if (StringUtils.isEmpty(resultCharset)) {
                     resultCharset = DEFAULT_CHARSET;
                 }
-                log.info("访问发生异常,异常码是:{},返回信息是:{}", EntityUtils.toString(entity, resultCharset));
+                log.info("访问发生异常,异常码是:{},返回信息是:{}", statusCode, EntityUtils.toString(entity, resultCharset));
                 return null;
             }
         } catch (ClientProtocolException e) {

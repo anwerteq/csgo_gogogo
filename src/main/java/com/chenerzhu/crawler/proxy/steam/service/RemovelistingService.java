@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
-import com.chenerzhu.crawler.proxy.steam.service.marketlist.MarketListJsonRootBean;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
@@ -47,23 +46,23 @@ public class RemovelistingService {
 
         //获取上架的饰品id
         Set<String> mylistings = getMylistings();
-        String url = "https://steamcommunity.com/market";
-        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
-
-        String sessionid = resStr.split("g_sessionID = \"")[1].split(";")[0];
-        sessionid = sessionid.substring(0, sessionid.length() - 1);
-        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
-        steamUserDate.getSession().setSessionID(sessionid);
         mylistings.forEach(this::removeList);
+//
+//        String sessionid = resStr.split("g_sessionID = \"")[1].split(";")[0];
+//        sessionid = sessionid.substring(0, sessionid.length() - 1);
+//        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+//        steamUserDate.getSession().setSessionID(sessionid);
 
 
-        Document parse = Jsoup.parse(resStr);
-
-        Element marketListingsRows = parse.getElementById("tabContentsMyActiveMarketListingsRows");
-        //下架，已经上架的商品
-        parseActiveMarketList(marketListingsRows);
-        Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
-        //取消需要审核的商品
+//        String url = "https://steamcommunity.com/market";
+//        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
+//        Document parse = Jsoup.parse(resStr);
+//
+//        Element marketListingsRows = parse.getElementById("tabContentsMyActiveMarketListingsRows");
+//        //下架，已经上架的商品
+//        parseActiveMarketList(marketListingsRows);
+//        Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
+//        //取消需要审核的商品
 //        parseMarkBlockList(market_content_block);
     }
 
@@ -118,9 +117,15 @@ public class RemovelistingService {
     public Set<String> getMylistings() {
         String url = "https://steamcommunity.com/market/mylistings/render/?query=&start=1&count=100";
         String responseStr = HttpClientUtils.sendGet(url, SteamConfig.getSaleHeader());
-        MarketListJsonRootBean marketListJsonRootBean = JSONObject.parseObject(responseStr, MarketListJsonRootBean.class);
-        log.info("123123");
-        Document document = Jsoup.parse(marketListJsonRootBean.getResults_html());
+        JSONObject jsonObject = JSONObject.parseObject(responseStr);
+        Integer total_count = jsonObject.getInteger("total_count");
+        if (total_count == 0) {
+            return new HashSet<>();
+        }
+        String results_html = jsonObject.getString("results_html");
+//        MarketListJsonRootBean marketListJsonRootBean = JSONObject.parseObject(responseStr, MarketListJsonRootBean.class);
+//        log.info("123123");
+        Document document = Jsoup.parse(results_html);
         Elements market_recent_listing_row = document.getElementsByClass("market_recent_listing_row");
         Set<String> listId = new HashSet<>();
         for (Element element : market_recent_listing_row) {
@@ -136,7 +141,8 @@ public class RemovelistingService {
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         saleHeader.put("Referer", "https://steamcommunity.com/market/");
         SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
-        paramerMap.put("sessionid", steamUserDate.getSession().getSessionID());
+//        paramerMap.put("sessionid", steamUserDate.getSession().getSessionID());
+        paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
         ArrayList arrayList = JSONObject.parseObject(responseStr, ArrayList.class);
 //        SleepUtil.sleep(500);

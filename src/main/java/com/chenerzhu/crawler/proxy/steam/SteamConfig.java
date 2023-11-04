@@ -87,8 +87,11 @@ public class SteamConfig implements ApplicationRunner {
     }
 
     public static  String getCookieOnlyKey(String key) {
-        String sessionID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSessionID();
-        return sessionID;
+        String[] split = getCookie().split(key + "=");
+        String value = split[1].split(";")[0];
+        return value.trim();
+//        String sessionID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSessionID();
+//        return sessionID;
     }
 
 

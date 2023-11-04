@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.ProxyPoolApplication;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -42,6 +43,7 @@ public class BuffAutoLoginUtil {
             WebElement element = waitemail.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("/html/body/div[1]/div/div[3]/ul/li/a")));
             element.click();
+            SleepUtil.sleep(4 * 1000);
             WebDriverWait agreeEleWait = new WebDriverWait(driver, 30000);
             WebElement agreeEle = agreeEleWait.until(ExpectedConditions
                     .presenceOfElementLocated(By.cssSelector("#agree-checkbox > span > i")));

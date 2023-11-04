@@ -271,7 +271,7 @@ public class SteamLoginUtil {
     public String getCookies(SteamUserDate steamUserDate) {
         HashMap<Object, Object> map = new HashMap() {{
             put("steamLoginSecure", get_access_token(steamUserDate));
-            put("sessionId", steamUserDate.getSession().getSessionID());
+            put("sessionid", steamUserDate.getSession().getSessionID());
             put("Steam_Language", "english");
             put("timezoneOffset", "28800,0");
             put("_ga", "GA1.2.234547838.1688523763");
