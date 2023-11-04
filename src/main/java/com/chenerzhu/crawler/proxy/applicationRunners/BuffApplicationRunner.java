@@ -40,12 +40,13 @@ public class BuffApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (CollectionUtil.isEmpty(buffAccountInfoConfig.getAccount_information())) {
-            log.error("未加载到buff账号，请检查[buff.account_information]配置,退出脚本中");
+        if (CollectionUtil.isEmpty(buffAccountInfoConfig.getAccount_information()) && StrUtil.isEmpty(buffAccountInfoConfig.getBuff_cookie())) {
+            log.error("未加载到buff账号，请检查[buff.account_information]配置");
             SleepUtil.sleep(5000);
 //            System.exit(1);
             return;
         }
+
         for (String acountData : buffAccountInfoConfig.getAccount_information()) {
             BuffUserData buffUserData = new BuffUserData();
             String acount = acountData.split("-")[0];
@@ -56,15 +57,24 @@ public class BuffApplicationRunner implements ApplicationRunner {
             String cookie = "";
             while (StrUtil.isEmpty(cookie) && count++ < 3) {
                 cookie = buffCacheService.getCookie(acount, buffUserData);
-                //获取steamid
-                String steamId = buffCacheService.getSteamId(acount, cookie);
-                buffUserData.setSteamId(steamId);
                 break;
             }
+            //获取steamid
+            String steamId = buffCacheService.getSteamId(acount, cookie);
+            buffUserData.setSteamId(steamId);
+            buffUserDataList.add(buffUserData);
+        }
+
+        if (StrUtil.isNotEmpty(buffAccountInfoConfig.getBuff_cookie())) {
+            BuffUserData buffUserData = new BuffUserData();
+            buffUserData.setAcount("手动填入的cookie");
+            buffUserData.setCookie(buffAccountInfoConfig.getBuff_cookie());
+            String steamId = buffCacheService.getSteamId(buffUserData.getAcount(), buffUserData.getCookie());
+            buffUserData.setSteamId(steamId);
             buffUserDataList.add(buffUserData);
         }
         for (BuffUserData buffUserData : buffUserDataList) {
-            log.info("加载buff账号：{}成功",buffUserData.getAcount());
+            log.info("加载buff账号：{}成功", buffUserData.getAcount());
         }
     }
 }

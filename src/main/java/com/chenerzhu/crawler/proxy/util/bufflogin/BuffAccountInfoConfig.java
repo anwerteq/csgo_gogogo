@@ -17,6 +17,7 @@ public class BuffAccountInfoConfig {
 
 
     private List<String> account_information;
+    private String buff_cookie;
 
 
 }
