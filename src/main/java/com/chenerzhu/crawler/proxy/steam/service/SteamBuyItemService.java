@@ -80,6 +80,7 @@ public class SteamBuyItemService {
         hashMap.put("fee", "1");
         hashMap.put("subtotal", "1");
         Map<String, String> saleHeader = SteamConfig.getBuyHeader();
+        saleHeader.put("Referer", "https://steamcommunity.com/market/listings/" + GameCommet.getGameId() + "/" + URLEncoder.encode(detail.getHashName()));
 
 
     }
