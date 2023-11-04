@@ -65,6 +65,21 @@ public class SteamInventorySerivce {
     }
 
     /**
+     * 获取所有状态的数据
+     *
+     * @param page_num
+     * @return
+     */
+    public List<Items> steamAllStatusInventory(int page_num) {
+        //查询的为可交易的
+        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&page_num=" + page_num + "&page_size=500&search=&_=" + System.currentTimeMillis();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
+        SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
+        List<Items> items = steamInventoryRoot.getData().getItems();
+        return items;
+    }
+
+    /**
      * 自动上架逻辑
      */
     public Boolean autoSale() {

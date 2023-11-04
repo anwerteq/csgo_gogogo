@@ -32,17 +32,21 @@ public class SteamProfitService {
     @Autowired
     SteamBuyItemService steamBuyItemService;
 
-    @Value(("${sales_ratio}"))
+    @Value(("${sales_ratio_min}"))
     private Double salesRatio;
+
+    @Value(("${sales_ratio_max}"))
+    private Double salesRatioMax;
 
 
     /**
      * steam求购条件和逻辑
+     *
      * @param itemGoods
      * @param sell_min_priceD
      * @param quantity
      */
-    public void wantToBuy(ItemGoods itemGoods,Double sell_min_priceD, int quantity){
+    public void wantToBuy(ItemGoods itemGoods, Double sell_min_priceD, int quantity) {
         String marketName = itemGoods.getName();
         try {
             //steam的求购价
@@ -50,7 +54,7 @@ public class SteamProfitService {
             //steam的求购价 rmb
             Double price_totalRmb = price_total * 7.3;
             Double buySalesRatio = sell_min_priceD * 100 / price_totalRmb;
-            if (buySalesRatio < salesRatio) {
+            if (buySalesRatio < salesRatio || buySalesRatio > salesRatioMax) {
                 log.info("商品：{}，比例为：{}，不符合求购要求:{}", itemGoods.getName(), buySalesRatio, salesRatio);
                 return;
             }

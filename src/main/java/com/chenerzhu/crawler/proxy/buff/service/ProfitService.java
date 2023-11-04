@@ -32,7 +32,7 @@ import java.util.*;
 public class ProfitService implements ApplicationRunner {
 
 
-    @Value(("${sales_ratio}"))
+    @Value(("${sales_ratio_min}"))
     private Double salesRatio;
 
     @Value(("${want_to_buy}"))
