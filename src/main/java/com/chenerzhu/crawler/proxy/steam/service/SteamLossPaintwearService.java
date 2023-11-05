@@ -4,8 +4,8 @@ import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.common.GameCommet;
 import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
+import com.chenerzhu.crawler.proxy.csgofloat.CsgoFloatService;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
-import com.chenerzhu.crawler.proxy.steam.service.csgoFloat.FloatBulk;
 import com.chenerzhu.crawler.proxy.steam.service.marketlist.MarketListJsonRootBean;
 import com.chenerzhu.crawler.proxy.steam.service.marketlist.SteamLossItemDetail;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
@@ -14,13 +14,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -29,6 +29,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class SteamLossPaintwearService {
+
+    @Autowired
+    CsgoFloatService csgoFloatService;
 
 
     /**
@@ -106,7 +109,7 @@ public class SteamLossPaintwearService {
                 }
             }
         }
-        List<SteamLossItemDetail> itemDetails1 = postBulk(itemDetails);
+        List<SteamLossItemDetail> itemDetails1 = csgoFloatService.postBulk(itemDetails);
         return itemDetails1;
     }
 
@@ -136,37 +139,5 @@ public class SteamLossPaintwearService {
         return itemDetails;
     }
 
-
-    /**
-     * 获取磨损数据数据
-     *
-     * @param details
-     * @return
-     */
-    public List<SteamLossItemDetail> postBulk(List<SteamLossItemDetail> details) {
-        String url = "http://localhost:8086/bulk";
-        List<Map<String, String>> links = new ArrayList<>();
-        for (SteamLossItemDetail detail : details) {
-            Map<String, String> hashMap = new HashMap();
-            hashMap.put("link", detail.getUrl());
-            links.add(hashMap);
-        }
-        HashMap hashMap = new HashMap();
-        hashMap.put("links", links);
-        String reponse = HttpClientUtils.sendPost(url, JSONObject.toJSONString(hashMap), new HashMap<>());
-        JSONObject jsonObject = JSONObject.parseObject(reponse);
-        //磨损信息
-        List<FloatBulk> floatBulks = jsonObject.entrySet().stream().map(entrySet -> {
-            FloatBulk floatBulk = JSONObject.parseObject(JSONObject.toJSONString(entrySet.getValue()), FloatBulk.class);
-            floatBulk.setLinkKey(entrySet.getKey());
-            return floatBulk;
-        }).collect(Collectors.toList());
-        Map<String, Double> linkAndFloatValueMap = floatBulks.stream().collect(Collectors.toMap(FloatBulk::getLinkKey, FloatBulk::getFloatvalue));
-        for (SteamLossItemDetail detail : details) {
-            String linkKey = detail.getLinkKey();
-            detail.setPainwear(String.valueOf(linkAndFloatValueMap.get(linkKey)));
-        }
-        return details;
-    }
 
 }

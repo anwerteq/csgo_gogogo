@@ -18,7 +18,10 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -125,13 +128,10 @@ public class SteamMyhistoryService {
             if (ObjectUtil.isNull(assetJSONObject)) {
                 continue;
             }
-            String classid = assetJSONObject.getString("classid");
-            String instanceid = assetJSONObject.getString("instanceid");
-            StringJoiner sj = new StringJoiner("-");
-            sj.add(assetId);
-            sj.add(classid);
-            sj.add(instanceid);
-            itemOnlyKeyAndPriceMap.put(sj.toString(), entry.getValue());
+            Object actions = assetJSONObject.getJSONArray("actions").get(0);
+            String link = ((JSONObject) actions).getString("link");
+            link = link.replace("%assetid%", assetId);
+            itemOnlyKeyAndPriceMap.put(link, entry.getValue());
         }
         return itemOnlyKeyAndPriceMap;
     }

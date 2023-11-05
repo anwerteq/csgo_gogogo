@@ -49,6 +49,7 @@ public class BuffConfig implements ApplicationRunner {
             put("Sec-Fetch-Mode", "cors");
             put("Sec-Fetch-Dest", "empty");
             put("Referer", "http://buff.163.com/market/csgo");
+            put("Origin", "http://buff.163.com");
         }
     };
 

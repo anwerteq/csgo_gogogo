@@ -99,6 +99,10 @@ public class Items
 
     String sell_min_price;
 
+    String painwear;
+
+    String action_link;
+
     /**
      * 获取饰品的唯一值
      *

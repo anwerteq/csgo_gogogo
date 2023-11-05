@@ -28,8 +28,6 @@ public class BuffSetMemoRunner implements ApplicationRunner {
                 BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
                 buffSetMemoService.assetRemarkChange();
             }
-
-
         });
 
     }
