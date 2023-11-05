@@ -160,7 +160,7 @@ public class BuffSetMemoService {
             if (StrUtil.isEmpty(dollar)) {
                 continue;
             }
-            hashMap.put("remark", "人民币购买成本:" + getCostRmb(dollar) + "元");
+            hashMap.put("remark", "成本:" + getCostRmb(dollar) + "元");
             hashMap.put("assetid", Long.parseLong(item.getAsset_info().getAssetid()));
             assets.add(hashMap);
         }
