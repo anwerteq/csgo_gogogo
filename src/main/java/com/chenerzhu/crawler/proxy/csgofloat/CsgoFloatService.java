@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.steam.service.csgoFloat.FloatBulk;
 import com.chenerzhu.crawler.proxy.steam.service.marketlist.SteamLossItemDetail;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ public class CsgoFloatService {
             if (list.size() > 40) {
                 postBuffBulk(list);
                 list.clear();
+                SleepUtil.sleep(5 * 1000);
             }
         }
         postBuffBulk(list);

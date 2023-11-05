@@ -103,6 +103,8 @@ public class Items
 
     String action_link;
 
+    AssetExtra asset_extra;
+
     /**
      * 获取饰品的唯一值
      *

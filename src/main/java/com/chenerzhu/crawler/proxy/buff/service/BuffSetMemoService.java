@@ -1,8 +1,10 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.AssetExtra;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgofloat.CsgoFloatService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamMyhistoryService;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 设置buff购买成本
@@ -46,6 +49,7 @@ public class BuffSetMemoService {
      */
     public void assetRemarkChange() {
         List<Items> allStatusInventory = getAllStatusInventory();
+        allStatusInventory = filterRemark(allStatusInventory);
         Map<String, String> urlAndPriceMap = new HashMap<>();
         int page_index = 1;
         while (true) {
@@ -64,6 +68,24 @@ public class BuffSetMemoService {
         remarkChanges(allStatusInventory, wearAndPriceMap);
     }
 
+
+    /**
+     * 过滤已经有备注的饰品
+     *
+     * @param items
+     * @return
+     */
+    public List<Items> filterRemark(List<Items> items) {
+        List<Items> collect = items.stream().filter(items1 -> {
+            AssetExtra asset_extra = items1.getAsset_extra();
+            if (ObjectUtil.isNull(asset_extra)) {
+                return true;
+            }
+            String remark = items1.getAsset_extra().getRemark();
+            return !StrUtil.isNotEmpty(remark) || !remark.contains("成本:");
+        }).collect(Collectors.toList());
+        return collect;
+    }
 
     /**
      * 获取steam的饰品数据
@@ -108,6 +130,7 @@ public class BuffSetMemoService {
             if (itemsChanges.size() > 40) {
                 remarkChange(itemsChanges, map);
                 itemsChanges.clear();
+                SleepUtil.sleep(5 * 1000);
             }
         }
         remarkChange(itemsChanges, map);
@@ -136,7 +159,7 @@ public class BuffSetMemoService {
             log.error("饰品备注失败:错误信息为:{}", reponse);
             return;
         }
-        log.error("饰品备注成功");
+        log.info("饰品备注成功");
     }
 
     /**
