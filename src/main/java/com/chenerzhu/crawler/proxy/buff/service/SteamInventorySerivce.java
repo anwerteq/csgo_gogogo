@@ -9,6 +9,7 @@ import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.ManualPlusRoot;
+import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.SteamInventoryData;
 import com.chenerzhu.crawler.proxy.buff.entity.steamInventory.SteamInventoryRoot;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyData;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
@@ -71,12 +72,19 @@ public class SteamInventorySerivce {
      * @return
      */
     public List<Items> steamAllStatusInventory(int page_num) {
+        log.info("开始拉取,buff库存的第:{} 页", page_num);
         SleepUtil.sleep(5 * 1040);
         //查询的为可交易的
         String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&page_num=" + page_num + "&page_size=500&search=&_=" + System.currentTimeMillis();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
-        List<Items> items = steamInventoryRoot.getData().getItems();
+        SteamInventoryData data = steamInventoryRoot.getData();
+        List<Items> items = data.getItems();
+        int start = (page_num - 1) * 500;
+        int total_count = data.getTotal_count();
+        if (start > total_count) {
+            return new ArrayList<>();
+        }
         return items;
     }
 

@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
+import com.chenerzhu.crawler.proxy.steam.service.SteamMyhistoryService;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,12 +37,26 @@ public class BuffSetMemoService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    SteamMyhistoryService steamMyhistoryService;
+
     /**
      * 设置成本的主要逻辑
      */
     public void assetRemarkChange() {
         List<Items> allStatusInventory = getAllStatusInventory();
-
+        Map<String, String> itemOnlyKeyAndPriceMap = new HashMap<>();
+        int page_index = 1;
+        while (true) {
+            //饰品购买的价格
+            Map<String, String> map = steamMyhistoryService.marketMyhistorys(page_index++);
+            if (map == null) {
+                break;
+            }
+            SleepUtil.sleep(5 * 1000);
+            itemOnlyKeyAndPriceMap.putAll(map);
+        }
+        remarkChanges(allStatusInventory, itemOnlyKeyAndPriceMap);
     }
 
 
@@ -54,10 +70,11 @@ public class BuffSetMemoService {
         int pageIndex = 1;
         while (true) {
             List<Items> list1 = steamInventorySerivce.steamAllStatusInventory(pageIndex++);
-            if (list1.isEmpty()) {
+            list.addAll(list1);
+            if (list1.isEmpty() || list1.size() < 500) {
                 break;
             }
-            list.addAll(list1);
+
         }
         return list;
     }
