@@ -11,9 +11,7 @@ import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -124,8 +122,6 @@ public class BuffSetMemoService {
     public void remarkChange(List<Items> items, Map<String, String> map) {
         String url = "https://buff.163.com/api/market/steam_asset_remark/change";
         Map<String, Object> dataMap = buildRemarkParamer(items, map);
-        Map<String, String> headerMap = BuffConfig.getHeaderMap1();
-
         Map<String, String> headerMap1 = new HashMap<>();
         headerMap1.put("Cookie", BuffConfig.getCookie());
         headerMap1.put("Referer", "https://buff.163.com/market/steam_inventory?game=csgo");
@@ -133,9 +129,6 @@ public class BuffSetMemoService {
         headerMap1.put("Origin", "https://buff.163.com");
         headerMap1.put("Content-Type", "application/json");
         headerMap1.put("X-Requested-With", "XMLHttpRequest");
-//        headerMap1.put("Accept", "*/*");
-        HttpEntity<MultiValueMap<String, String>> httpEntity = BuffConfig.changeBuffHttpEntity(headerMap1);
-//        ResponseEntity<String> responseEntity1 = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class, dataMap);
         String reponse = HttpClientUtils.sendPost(url, JSONObject.toJSONString(dataMap), headerMap1);
         JSONObject jsonObject = JSONObject.parseObject(reponse);
         String code = jsonObject.getString("code");
