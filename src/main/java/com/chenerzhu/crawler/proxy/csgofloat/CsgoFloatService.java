@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.steam.service.csgoFloat.FloatBulk;
 import com.chenerzhu.crawler.proxy.steam.service.marketlist.SteamLossItemDetail;
+import com.chenerzhu.crawler.proxy.steam.service.steamrenderhistory.SteamAsset;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class CsgoFloatService {
      * @param details
      * @return
      */
-    public List<SteamLossItemDetail> postBulk(List<SteamLossItemDetail> details) {
+    public List<SteamLossItemDetail> postLossBulk(List<SteamLossItemDetail> details) {
         List<Map<String, String>> links = new ArrayList<>();
         for (SteamLossItemDetail detail : details) {
             Map<String, String> hashMap = new HashMap();
@@ -92,53 +93,49 @@ public class CsgoFloatService {
     /**
      * 获取steam磨损数据数据
      *
-     * @param urlAndPriceMap
+     * @param steamAssetAlls
      * @return
      */
-    public Map<String, String> postBulks(Map<String, String> urlAndPriceMap) {
-        //磨损度和价格的映射
-        Map<String, String> wearAndPriceMap = new HashMap<>();
-        Map<String, String> tempUrlAndPriceMap = new HashMap<>();
-        for (Map.Entry<String, String> entry : urlAndPriceMap.entrySet()) {
-            tempUrlAndPriceMap.put(entry.getKey(), entry.getValue());
-            if (tempUrlAndPriceMap.size() > 40) {
-                Map<String, String> map = postBulk(tempUrlAndPriceMap);
-                wearAndPriceMap.putAll(map);
-                tempUrlAndPriceMap.clear();
+    public List<SteamAsset> postBulks(List<SteamAsset> steamAssetAlls) {
+        //分配获取painwear
+        List<SteamAsset> postBuilPara = new ArrayList<>();
+        for (SteamAsset asset : steamAssetAlls) {
+            postBuilPara.add(asset);
+            if (postBuilPara.size() > 40) {
+                postBulk(postBuilPara);
+                postBuilPara.clear();
             }
         }
-        Map<String, String> map = postBulk(tempUrlAndPriceMap);
-        wearAndPriceMap.putAll(map);
-        return wearAndPriceMap;
+        postBulk(postBuilPara);
+        return steamAssetAlls;
     }
 
     /**
      * 获取磨损数据数据
      *
-     * @param urlAndPriceMap
+     * @param postBuilPara
      * @return
      */
-    public Map<String, String> postBulk(Map<String, String> urlAndPriceMap) {
+    public List<SteamAsset> postBulk(List<SteamAsset> postBuilPara) {
         List<Map<String, String>> links = new ArrayList<>();
-        for (Map.Entry<String, String> entry : urlAndPriceMap.entrySet()) {
+        //构建参数
+        for (SteamAsset steamAsset : postBuilPara) {
             Map<String, String> hashMap = new HashMap();
-            hashMap.put("link", entry.getKey());
+            hashMap.put("link", steamAsset.getLink());
             links.add(hashMap);
         }
-        // a 和磨损度
+        // a 和磨损度的映射
         Map<String, Double> listIdAndFloatValueMap = getListIdAndWearMap(links);
-        //磨损度和价格的映射
-        Map<String, String> wearAndPriceMap = new HashMap<>();
         for (Map.Entry<String, Double> entry : listIdAndFloatValueMap.entrySet()) {
             String linkKey = entry.getKey();
             String key = "A" + linkKey + "D";
-            for (Map.Entry<String, String> urlMapEntry : urlAndPriceMap.entrySet()) {
-                if (urlMapEntry.getKey().contains(key)) {
-                    wearAndPriceMap.put(String.valueOf(entry.getValue()), urlMapEntry.getValue());
+            for (SteamAsset steamAsset : postBuilPara) {
+                if (steamAsset.getLink().contains(key)) {
+                    steamAsset.setPainwear(String.valueOf(entry.getValue()));
                 }
             }
         }
-        return wearAndPriceMap;
+        return postBuilPara;
     }
 
 

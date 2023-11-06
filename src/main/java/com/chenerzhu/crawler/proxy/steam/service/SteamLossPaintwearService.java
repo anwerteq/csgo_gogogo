@@ -109,7 +109,7 @@ public class SteamLossPaintwearService {
                 }
             }
         }
-        List<SteamLossItemDetail> itemDetails1 = csgoFloatService.postBulk(itemDetails);
+        List<SteamLossItemDetail> itemDetails1 = csgoFloatService.postLossBulk(itemDetails);
         return itemDetails1;
     }
 

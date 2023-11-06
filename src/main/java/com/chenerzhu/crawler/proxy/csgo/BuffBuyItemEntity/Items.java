@@ -142,7 +142,7 @@ public class Items
             String cost = remark.split("成本:")[1].split("元")[0];
             Double costPrice = Double.valueOf(cost);
             Double sell_min_priceD = Double.valueOf(sell_min_price);
-            Boolean isSale = costPrice  * 1.05 < sell_min_priceD ;
+            Boolean isSale = costPrice * 1.05 < sell_min_priceD;
             return isSale;
         }
         return false;
@@ -151,5 +151,17 @@ public class Items
     public Boolean check4Stickers() {
 
         return true;
+    }
+
+    /**
+     * 实例id和磨损度的值,buff饰品和steam饰品的关联值
+     *
+     * @return
+     */
+    public String getInstanceidAndPainwear() {
+        StringJoiner sj = new StringJoiner("-");
+        sj.add(asset_info.getInstanceid());
+        sj.add(painwear);
+        return sj.toString();
     }
 }

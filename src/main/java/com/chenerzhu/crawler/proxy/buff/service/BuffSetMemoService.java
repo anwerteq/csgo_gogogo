@@ -8,6 +8,7 @@ import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.AssetExtra;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgofloat.CsgoFloatService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamMyhistoryService;
+import com.chenerzhu.crawler.proxy.steam.service.steamrenderhistory.SteamAsset;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,22 +48,22 @@ public class BuffSetMemoService {
     public void assetRemarkChange() {
         List<Items> allStatusInventory = getAllStatusInventory();
         allStatusInventory = filterRemark(allStatusInventory);
-        Map<String, String> urlAndPriceMap = new HashMap<>();
+        List<SteamAsset> steamAssetAlls = new ArrayList<>();
         int page_index = 1;
         while (true) {
             //饰品购买的价格
-            Map<String, String> map = steamMyhistoryService.marketMyhistorys(page_index++);
-            if (map == null) {
+            List<SteamAsset> steamAssets = steamMyhistoryService.marketMyhistorys(page_index++);
+            if (steamAssets == null) {
                 break;
             }
             SleepUtil.sleep(5 * 1000);
-            urlAndPriceMap.putAll(map);
+            steamAssetAlls.addAll(steamAssets);
         }
         //设置buff的磨损
         allStatusInventory = csgoFloatService.postBuffBulks(allStatusInventory);
         //获取磨损度和价格的映射
-        Map<String, String> wearAndPriceMap = csgoFloatService.postBulks(urlAndPriceMap);
-        remarkChanges(allStatusInventory, wearAndPriceMap);
+        steamAssetAlls = csgoFloatService.postBulks(steamAssetAlls);
+        remarkChanges(allStatusInventory, steamAssetAlls);
     }
 
 
@@ -121,30 +119,30 @@ public class BuffSetMemoService {
      * 批量设置备注信息
      *
      * @param items
-     * @param map
+     * @param steamAssetAlls
      */
-    public void remarkChanges(List<Items> items, Map<String, String> map) {
+    public void remarkChanges(List<Items> items, List<SteamAsset> steamAssetAlls) {
         List<Items> itemsChanges = new ArrayList();
         for (Items item : items) {
             itemsChanges.add(item);
             if (itemsChanges.size() > 40) {
-                remarkChange(itemsChanges, map);
+                remarkChange(itemsChanges, steamAssetAlls);
                 itemsChanges.clear();
                 SleepUtil.sleep(5 * 1000);
             }
         }
-        remarkChange(itemsChanges, map);
+        remarkChange(itemsChanges, steamAssetAlls);
     }
 
     /**
      * 批量设置备注信息
      *
      * @param items
-     * @param map
+     * @param steamAssetAlls
      */
-    public void remarkChange(List<Items> items, Map<String, String> map) {
+    public void remarkChange(List<Items> items, List<SteamAsset> steamAssetAlls) {
         String url = "https://buff.163.com/api/market/steam_asset_remark/change";
-        Map<String, Object> dataMap = buildRemarkParamer(items, map);
+        Map<String, Object> dataMap = buildRemarkParamer(items, steamAssetAlls);
         Map<String, String> headerMap1 = new HashMap<>();
         headerMap1.put("Cookie", BuffConfig.getCookie());
         headerMap1.put("Referer", "https://buff.163.com/market/steam_inventory?game=csgo");
@@ -167,23 +165,71 @@ public class BuffSetMemoService {
      *
      * @return
      */
-    public Map<String, Object> buildRemarkParamer(List<Items> items, Map<String, String> map) {
+    public Map<String, Object> buildRemarkParamer(List<Items> items, List<SteamAsset> steamAssetAlls) {
         List<Map<String, Object>> assets = new ArrayList<>();
-        for (Items item : items) {
+        //构建aeestId和memo的映射
+        Map<Long, String> assetIdAndCost = buildBuffAssetAndPriceParamer(items, steamAssetAlls);
+        //buff aeestId和memo的映射
+        for (Map.Entry<Long, String> entry : assetIdAndCost.entrySet()) {
             Map<String, Object> hashMap = new HashMap();
-            String painwear = item.getPainwear();
-            String dollar = map.getOrDefault(painwear, "");
-            if (StrUtil.isEmpty(dollar)) {
-                continue;
-            }
-            hashMap.put("remark", "成本:" + getCostRmb(dollar) + "元");
-            hashMap.put("assetid", Long.parseLong(item.getAsset_info().getAssetid()));
+            hashMap.put("remark", "成本:" + getCostRmb(entry.getValue()) + "元");
+            hashMap.put("assetid", entry.getKey());
             assets.add(hashMap);
         }
         Map<String, Object> hashMap = new HashMap();
         hashMap.put("game", "csgo");
         hashMap.put("assets", assets);
         return hashMap;
+    }
+
+    /**
+     * 获取buff assetis和美金成本的映射
+     *
+     * @param items
+     * @param steamAssetAlls
+     * @return
+     */
+    public Map<Long, String> buildBuffAssetAndPriceParamer(List<Items> items, List<SteamAsset> steamAssetAlls) {
+        Map<String, List<SteamAsset>> steamOnlykeyMap = steamAssetAlls.stream().collect(Collectors.groupingBy(SteamAsset::getInstanceidAndPainwear));
+        //因为buff识别的磨损度和steam识别的有差异,最大缩小五位
+        int beforeCount = steamOnlykeyMap.keySet().size();
+        int reducedValue = 0;
+        for (int i = 0; i < 5; i++) {
+            final int tempI = i;
+            Set<String> temp = steamOnlykeyMap.keySet().stream().map(str -> str.substring(0, str.length() - tempI)).collect(Collectors.toSet());
+            if (beforeCount != temp.size()) {
+                reducedValue = i - 1;
+            }
+        }
+        //key是和buff和steam饰品的关联字段
+        Map<String, List<Items>> buffOnlyKeyMap = items.stream().collect(Collectors.groupingBy(Items::getInstanceidAndPainwear));
+        //assetId和美元金额的映射
+        Map<Long, String> assetIdAndCost = new HashMap<>();
+        for (Map.Entry<String, List<Items>> buffEntry : buffOnlyKeyMap.entrySet()) {
+            //获取buff产生的关联id
+            String buffOnlyId = getAssociation(buffEntry.getKey(), reducedValue);
+            for (Map.Entry<String, List<SteamAsset>> steamEntry : steamOnlykeyMap.entrySet()) {
+                //获取steam产生的关联id
+                String steamOnlyId = getAssociation(steamEntry.getKey(), reducedValue);
+                if (buffOnlyId.equals(steamOnlyId)) {
+                    String assetid = buffEntry.getValue().get(0).getAsset_info().getAssetid();
+                    String price = steamEntry.getValue().get(0).getPrice();
+                    assetIdAndCost.put(Long.valueOf(assetid), price);
+                }
+            }
+        }
+        return assetIdAndCost;
+    }
+
+
+    /**
+     * 获取新的关联字段
+     *
+     * @return
+     */
+    public String getAssociation(String key, int reducedValue) {
+        String newKey = key.substring(0, key.length() - reducedValue);
+        return newKey;
     }
 
 

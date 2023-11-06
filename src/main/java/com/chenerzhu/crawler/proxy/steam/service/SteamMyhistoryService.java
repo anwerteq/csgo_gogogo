@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamMyhistoryRoot;
+import com.chenerzhu.crawler.proxy.steam.service.steamrenderhistory.SteamAsset;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -94,7 +95,7 @@ public class SteamMyhistoryService {
      *
      * @param page_index
      */
-    public Map<String, String> marketMyhistorys(int page_index) {
+    public List<SteamAsset> marketMyhistorys(int page_index) {
         log.info("开始拉取steam交易记录的第:{}页", page_index);
         int count = 500;
         int start = (page_index - 1) * count;
@@ -106,13 +107,13 @@ public class SteamMyhistoryService {
             return null;
         }
         if (StrUtil.isEmpty(steamMyhistoryRoot.getHovers())) {
-            return new HashMap<>();
+            return new ArrayList<>();
         }
         //div id 和 价格的映射
         Map<String, Double> historyRowAndPrice = getHisotryBuyPrice(steamMyhistoryRoot.getResults_html());
         //没有购买的数据
         if (historyRowAndPrice.isEmpty()) {
-            return new HashMap<>();
+            return new ArrayList<>();
         }
         //div id和 assetId的映射
         Map<String, String> historyRowAndAssestIdMap = parseHovers(steamMyhistoryRoot.getHovers());
@@ -121,19 +122,22 @@ public class SteamMyhistoryService {
         Map<String, String> assetIdAndPriceMap = buildAssetIdAndPriceMap(historyRowAndAssestIdMap, historyRowAndPrice);
         //饰品的数据
         JSONObject asset2JSONObject = parseAsset2JSONObject(steamMyhistoryRoot.getAssets());
-        Map<String, String> itemOnlyKeyAndPriceMap = new HashMap<>();
+        List<SteamAsset> steamAssets = new ArrayList();
         for (Map.Entry<String, String> entry : assetIdAndPriceMap.entrySet()) {
             String assetId = entry.getKey();
             JSONObject assetJSONObject = asset2JSONObject.getJSONObject(assetId);
             if (ObjectUtil.isNull(assetJSONObject)) {
                 continue;
             }
+            String string = JSONObject.toJSONString(assetJSONObject);
+            SteamAsset steamAsset = JSONObject.parseObject(string, SteamAsset.class);
             Object actions = assetJSONObject.getJSONArray("actions").get(0);
             String link = ((JSONObject) actions).getString("link");
             link = link.replace("%assetid%", assetId);
-            itemOnlyKeyAndPriceMap.put(link, entry.getValue());
+            steamAsset.setLink(link);
+            steamAsset.setPrice(entry.getValue());
         }
-        return itemOnlyKeyAndPriceMap;
+        return steamAssets;
     }
 
     /**
