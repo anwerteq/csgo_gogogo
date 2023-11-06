@@ -122,7 +122,7 @@ public class SteamInventorySerivce {
             asset.setPrice(sellPrice);
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(String.valueOf(income));
-            log.info("饰品:{},磨损度:{},在售价格:{}",asset.getMarket_hash_name(),paintwear,asset.getPrice());
+            log.info("饰品:{}准备上架数据ing,磨损度:{},在售价格:{}", asset.getMarket_hash_name(), paintwear, asset.getPrice());
             count++;
         }
         Boolean gotoUp = false;
@@ -168,11 +168,7 @@ public class SteamInventorySerivce {
                 }
             }
             //校验成本
-            if (item.cehck_isSale_remark_cost()) {
-                return true;
-            } else {
-                return false;
-            }
+            return item.cehck_isSale_remark_cost();
         }).collect(Collectors.toList());
         return items;
     }

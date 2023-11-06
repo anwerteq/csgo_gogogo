@@ -28,7 +28,7 @@ public class SteamautoBuyRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         if (!GameCommet.check(auto_sale)) {
-            log.info("目前求购脚本只支持：{}", GameCommet.gameMap.keySet());
+            log.info("配置错误,目前求购脚本只支持：{}", GameCommet.gameMap.keySet());
             return;
         }
         PullItemService.executorService.execute(() -> {

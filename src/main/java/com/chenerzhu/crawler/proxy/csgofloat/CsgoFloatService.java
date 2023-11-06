@@ -105,7 +105,7 @@ public class CsgoFloatService {
         for (SteamAsset asset : steamAssetAlls) {
             postBuilPara.add(asset);
             if (postBuilPara.size() > 40) {
-                log.info("第一页:{}steam数据和buff数据进行关联", ++count);
+                log.info("第:{}页steam数据和buff数据进行关联", ++count);
                 postBulk(postBuilPara);
                 postBuilPara.clear();
             }

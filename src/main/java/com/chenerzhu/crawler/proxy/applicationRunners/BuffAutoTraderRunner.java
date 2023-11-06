@@ -35,12 +35,16 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
             log.info("开始buff自动收货");
             for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
                 PullItemService.executorService.execute(() -> {
-                    BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
-                    CookiesConfig.buffCookies.set(buffUserData.getCookie());
-                    log.info("buff账号:{},开始自动收货,", buffUserData.getAcount());
                     while (true) {
-                        noticeService.steamTrade();
-                        SleepUtil.sleep(60 *  1000);
+                        BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
+                        CookiesConfig.buffCookies.set(buffUserData.getCookie());
+                        log.info("buff账号:{},开始自动收货,", buffUserData.getAcount());
+                        try {
+                            noticeService.steamTrade();
+                        } catch (Exception e) {
+                            log.error("buff自动收货异常", e);
+                        }
+                        SleepUtil.sleep(60 * 1000);
                     }
                 });
             }
