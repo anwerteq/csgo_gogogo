@@ -47,7 +47,11 @@ public class BuffSetMemoService {
      */
     public void assetRemarkChange() {
         List<Items> allStatusInventory = getAllStatusInventory();
-        allStatusInventory = filterRemark(allStatusInventory);
+
+
+//        allStatusInventory = filterRemark(allStatusInventory);
+
+
         List<SteamAsset> steamAssetAlls = new ArrayList<>();
         int page_index = 1;
         while (true) {
@@ -194,11 +198,14 @@ public class BuffSetMemoService {
         //因为buff识别的磨损度和steam识别的有差异,最大缩小五位
         int beforeCount = steamOnlykeyMap.keySet().size();
         int reducedValue = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             final int tempI = i;
-            Set<String> temp = steamOnlykeyMap.keySet().stream().map(str -> str.substring(0, str.length() - tempI)).collect(Collectors.toSet());
-            if (beforeCount != temp.size()) {
-                reducedValue = i - 1;
+            Set<String> temp = steamOnlykeyMap.keySet().stream().map(str -> str.substring(0, str.length() - tempI))
+                    .filter(str -> str.length() > 3).collect(Collectors.toSet());
+            if (beforeCount == temp.size()) {
+                reducedValue = i;
+            } else {
+                break;
             }
         }
         //key是和buff和steam饰品的关联字段

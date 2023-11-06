@@ -136,6 +136,7 @@ public class SteamMyhistoryService {
             link = link.replace("%assetid%", assetId);
             steamAsset.setLink(link);
             steamAsset.setPrice(entry.getValue());
+            steamAssets.add(steamAsset);
         }
         return steamAssets;
     }

@@ -52,9 +52,11 @@ public class CsgoFloatService {
      */
     public List<Items> postBuffBulks(List<Items> items) {
         List<Items> list = new ArrayList<>();
+        int count = 0;
         for (Items item : items) {
             list.add(item);
             if (list.size() > 40) {
+                log.info("第一页:{}buff数据和steam数据进行关联", ++count);
                 postBuffBulk(list);
                 list.clear();
                 SleepUtil.sleep(5 * 1000);
@@ -99,9 +101,11 @@ public class CsgoFloatService {
     public List<SteamAsset> postBulks(List<SteamAsset> steamAssetAlls) {
         //分配获取painwear
         List<SteamAsset> postBuilPara = new ArrayList<>();
+        int count = 0;
         for (SteamAsset asset : steamAssetAlls) {
             postBuilPara.add(asset);
             if (postBuilPara.size() > 40) {
+                log.info("第一页:{}steam数据和buff数据进行关联", ++count);
                 postBulk(postBuilPara);
                 postBuilPara.clear();
             }
