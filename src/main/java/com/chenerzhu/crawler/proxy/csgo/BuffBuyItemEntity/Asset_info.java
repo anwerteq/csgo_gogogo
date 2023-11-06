@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity;
 
+import com.chenerzhu.crawler.proxy.csgo.service.LowPaintwearEntity.Info;
 import lombok.Data;
 
 @Data
@@ -21,7 +22,7 @@ public class Asset_info
 
     private String id;
 
-    private Object info;
+    private Info info;
 
     private String instanceid;
 

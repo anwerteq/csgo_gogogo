@@ -18,6 +18,7 @@ import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.util.CheckWearUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class SteamInventorySerivce {
      */
     public List<Items> steamInventory() {
         //查询的为可交易的
-        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=50&search=&state=cansell&_=" + System.currentTimeMillis();
+        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=300&search=&state=cansell&_=" + System.currentTimeMillis();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
         List<Items> items = steamInventoryRoot.getData().getItems();
@@ -93,6 +94,7 @@ public class SteamInventorySerivce {
      */
     public Boolean autoSale() {
         List<Items> items = steamInventory();
+        items = filterItem(items);
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         if (items.isEmpty()) {
             log.info("buff账号:{},库存中没有可上架饰品", buffUserData.getAcount());
@@ -135,6 +137,37 @@ public class SteamInventorySerivce {
         return gotoUp;
     }
 
+
+    /**
+     * 过滤不可上架的饰品
+     *
+     * @param items
+     * @return
+     */
+    public List<Items> filterItem(List<Items> items) {
+
+        items = items.stream().filter(item -> {
+            String sell_min_price = item.getSell_min_price();
+            //大于43的不自动上架
+            if (43 < Integer.valueOf(sell_min_price)) {
+                log.info("饰品:{}价格为:{}大于43不自动上架", item.getName(), sell_min_price);
+                return false;
+            }
+            //校验是特殊磨损,是的话有值返回
+            String painwear = item.getPainwear();
+            if (StrUtil.isNotEmpty(painwear)) {
+                String painwearStr = CheckWearUtil.checkWear(painwear);
+                if (StrUtil.isNotEmpty(painwearStr)) {
+                    log.info("饰品:{},特殊磨损为:{},不自动上架", item.getName(), painwearStr);
+                    return false;
+                }
+            }
+            //校验成本
+
+            return true;
+        }).collect(Collectors.toList());
+        return items;
+    }
 
     /**
      * 根据磨损度获取售卖列表的价格

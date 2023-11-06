@@ -1,5 +1,7 @@
 package com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 
 import java.util.StringJoiner;
@@ -105,6 +107,8 @@ public class Items
 
     AssetExtra asset_extra;
 
+    String name;
+
     /**
      * 获取饰品的唯一值
      *
@@ -125,4 +129,27 @@ public class Items
         return sj.toString();
     }
 
+
+    public Boolean cehck_asset_extra_remark_cost() {
+        if (ObjectUtil.isNull(asset_extra)) {
+            return true;
+        }
+        String remark = asset_extra.getRemark();
+        if (StrUtil.isEmpty(remark)) {
+            return true;
+        }
+        if (remark.contains("成本")) {
+            String cost = remark.split("成本:")[1].split("元")[0];
+            Double costPrice = Double.valueOf(cost);
+            Double sell_min_priceD = Double.valueOf(sell_min_price);
+            return costPrice < sell_min_priceD * 1.05;
+        }
+
+        return false;
+    }
+
+    public Boolean check4Stickers() {
+
+        return true;
+    }
 }

@@ -14,7 +14,7 @@ public class CheckWearUtil {
      * @param wearDouble
      * @return
      */
-    private static String checkWear(String wearDouble) {
+    public static String checkWear(String wearDouble) {
         String wearDoubleReplace = wearDouble.replace("0.", "");
         char[] wearDoubleChar = wearDoubleReplace.toCharArray();
         Integer wearDoubleCharIndex = null;
@@ -24,7 +24,7 @@ public class CheckWearUtil {
                 break;
             }
         }
-        String wearStr = wearDoubleReplace.substring(wearDoubleCharIndex, wearDoubleReplace.length());
+        String wearStr = wearDoubleReplace.substring(wearDoubleCharIndex);
         char[] wearChar = wearStr.toCharArray();
         String equipmentWearDegree = "";
         if (wearStr.startsWith("6666") || wearStr.startsWith("8888")) {
