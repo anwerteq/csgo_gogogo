@@ -122,6 +122,7 @@ public class SteamInventorySerivce {
             asset.setPrice(sellPrice);
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(String.valueOf(income));
+            log.info("饰品:{},磨损度:{},在售价格:{}",asset.getMarket_hash_name(),paintwear,asset.getHas_market_min_price());
             count++;
         }
         Boolean gotoUp = false;
@@ -149,7 +150,7 @@ public class SteamInventorySerivce {
         items = items.stream().filter(item -> {
             String sell_min_price = item.getSell_min_price();
             //大于43的不自动上架
-            if (43 < Integer.valueOf(sell_min_price)) {
+            if (43 < Double.valueOf(sell_min_price)) {
                 log.info("饰品:{}价格为:{}大于43不自动上架", item.getName(), sell_min_price);
                 return false;
             }
@@ -163,8 +164,11 @@ public class SteamInventorySerivce {
                 }
             }
             //校验成本
-
-            return true;
+            if (item.cehck_isSale_remark_cost()) {
+                return true;
+            } else {
+                return false;
+            }
         }).collect(Collectors.toList());
         return items;
     }

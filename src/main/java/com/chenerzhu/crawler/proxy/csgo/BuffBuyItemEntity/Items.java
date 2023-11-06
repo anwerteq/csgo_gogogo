@@ -130,7 +130,7 @@ public class Items
     }
 
 
-    public Boolean cehck_asset_extra_remark_cost() {
+    public Boolean cehck_isSale_remark_cost() {
         if (ObjectUtil.isNull(asset_extra)) {
             return true;
         }
@@ -142,9 +142,9 @@ public class Items
             String cost = remark.split("成本:")[1].split("元")[0];
             Double costPrice = Double.valueOf(cost);
             Double sell_min_priceD = Double.valueOf(sell_min_price);
-            return costPrice < sell_min_priceD * 1.05;
+            Boolean isSale = costPrice  * 1.05 < sell_min_priceD ;
+            return isSale;
         }
-
         return false;
     }
 
