@@ -198,7 +198,7 @@ public class BuffSetMemoService {
         //因为buff识别的磨损度和steam识别的有差异,最大缩小五位
         int beforeCount = steamOnlykeyMap.keySet().size();
         int reducedValue = 0;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             final int tempI = i;
             Set<String> temp = steamOnlykeyMap.keySet().stream().map(str -> str.substring(0, str.length() - tempI))
                     .filter(str -> str.length() > 3).collect(Collectors.toSet());
@@ -249,7 +249,7 @@ public class BuffSetMemoService {
     public Double getCostRmb(String dollar) {
         Double dollarD = Double.valueOf(dollar);
         Double rmb = dollarD * cark_cost;
-        return rmb;
+        return Math.round(rmb * 1000.0) / 1000.0;
     }
 
 
