@@ -52,4 +52,9 @@ public class CheckWearUtil {
         Matcher m = p.matcher(dateTime);
         return m.matches();
     }
+
+    public static void main(String[] args) {
+        String s = checkWear("0.1995021402835846");
+        System.out.println("123123");
+    }
 }

@@ -59,7 +59,7 @@ public class SteamInventorySerivce {
      */
     public List<Items> steamInventory() {
         //查询的为可交易的
-        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=300&search=&state=cansell&_=" + System.currentTimeMillis();
+        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=1000&search=&state=cansell&_=" + System.currentTimeMillis();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
         List<Items> items = steamInventoryRoot.getData().getItems();
@@ -122,7 +122,7 @@ public class SteamInventorySerivce {
             asset.setPrice(sellPrice);
             Double income = Double.valueOf(asset.getPrice()) * 0.975;
             asset.setIncome(String.valueOf(income));
-            log.info("饰品:{},磨损度:{},在售价格:{}",asset.getMarket_hash_name(),paintwear,asset.getHas_market_min_price());
+            log.info("饰品:{},磨损度:{},在售价格:{}",asset.getMarket_hash_name(),paintwear,asset.getPrice());
             count++;
         }
         Boolean gotoUp = false;
@@ -136,6 +136,10 @@ public class SteamInventorySerivce {
             gotoUp = true;
         }
         return gotoUp;
+    }
+
+    public static void main(String[] args) {
+
     }
 
 
