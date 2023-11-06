@@ -54,9 +54,8 @@ public class NoticeService {
             //key：交易订单，value:商品信息
             Map<String, List<ItemsToTrade>> orderTradeofferid = getDeliverOrderTradeofferid();
             steamTradeofferService.trader(buffUserData.getSteamId(), orderTradeofferid);
-
+            log.info("确认收货完成和上架完成");
         }
-        log.info("确认收货完成和上架完成");
         return jsonsRootBean;
     }
 
