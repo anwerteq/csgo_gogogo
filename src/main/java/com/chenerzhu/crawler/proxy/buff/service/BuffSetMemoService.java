@@ -198,9 +198,11 @@ public class BuffSetMemoService {
         //因为buff识别的磨损度和steam识别的有差异,最大缩小五位
         int beforeCount = steamOnlykeyMap.keySet().size();
         int reducedValue = 0;
-        for (int i = 0; i < 8; i++) {
+        //同一个饰品的磨损度，应该不会差太多
+        for (int i = 0; i < 4; i++) {
             final int tempI = i;
             Set<String> temp = steamOnlykeyMap.keySet().stream().map(str -> str.substring(0, str.length() - tempI))
+                    //防止磨损度为 0.25的情况
                     .filter(str -> str.length() > 3).collect(Collectors.toSet());
             if (beforeCount == temp.size()) {
                 reducedValue = i;
@@ -218,10 +220,11 @@ public class BuffSetMemoService {
             for (Map.Entry<String, List<SteamAsset>> steamEntry : steamOnlykeyMap.entrySet()) {
                 //获取steam产生的关联id
                 String steamOnlyId = getAssociation(steamEntry.getKey(), reducedValue);
-                if (buffOnlyId.equals(steamOnlyId)) {
+                if (buffOnlyId.equals(steamOnlyId) || buffOnlyId.contains(steamOnlyId) || steamOnlyId.contains(buffOnlyId)) {
                     String assetid = buffEntry.getValue().get(0).getAsset_info().getAssetid();
                     String price = steamEntry.getValue().get(0).getPrice();
                     assetIdAndCost.put(Long.valueOf(assetid), price);
+                    break;
                 }
             }
         }
