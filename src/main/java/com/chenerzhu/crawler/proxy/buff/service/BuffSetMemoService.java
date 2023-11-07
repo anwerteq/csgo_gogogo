@@ -3,7 +3,10 @@ package com.chenerzhu.crawler.proxy.buff.service;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
+import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.AssetExtra;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgofloat.CsgoFloatService;
@@ -46,11 +49,17 @@ public class BuffSetMemoService {
      * 设置成本的主要逻辑
      */
     public void assetRemarkChange() {
+        if (!SteamApplicationRunner.checkHasSteamCookie()) {
+            BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+            log.info("steamId:{}未加载", buffUserData.getSteamId());
+            SleepUtil.sleep(4 * 1000);
+            return;
+        }
         List<Items> allStatusInventory = getAllStatusInventory();
-
-
-//        allStatusInventory = filterRemark(allStatusInventory);
-
+        allStatusInventory = filterRemark(allStatusInventory);
+        if (allStatusInventory.isEmpty()) {
+            return;
+        }
 
         List<SteamAsset> steamAssetAlls = new ArrayList<>();
         int page_index = 1;

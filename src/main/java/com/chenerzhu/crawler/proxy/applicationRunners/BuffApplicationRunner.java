@@ -46,15 +46,15 @@ public class BuffApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        latestUSD();
-        if (CollectionUtil.isEmpty(buffAccountInfoConfig.getAccount_information()) && StrUtil.isEmpty(buffAccountInfoConfig.getBuff_cookie())) {
+        List<String> buff_cookies = buffAccountInfoConfig.getBuff_cookies();
+        List<String> account_information = buffAccountInfoConfig.getAccount_information();
+        if (CollectionUtil.isEmpty(account_information) && CollectionUtil.isEmpty(buff_cookies)) {
             log.error("未加载到buff账号，请检查[buff.account_information]配置");
             SleepUtil.sleep(5000);
-//            System.exit(1);
             return;
         }
 
-        for (String acountData : buffAccountInfoConfig.getAccount_information()) {
+        for (String acountData : account_information) {
             BuffUserData buffUserData = new BuffUserData();
             String acount = acountData.split("-")[0];
             String pwd = acountData.split("-")[1];
@@ -72,13 +72,16 @@ public class BuffApplicationRunner implements ApplicationRunner {
             buffUserDataList.add(buffUserData);
         }
 
-        if (StrUtil.isNotEmpty(buffAccountInfoConfig.getBuff_cookie())) {
-            BuffUserData buffUserData = new BuffUserData();
-            buffUserData.setAcount("手动填入的cookie");
-            buffUserData.setCookie(buffAccountInfoConfig.getBuff_cookie());
-            String steamId = buffCacheService.getSteamId(buffUserData.getAcount(), buffUserData.getCookie());
-            buffUserData.setSteamId(steamId);
-            buffUserDataList.add(buffUserData);
+
+        if (CollectionUtil.isNotEmpty(buff_cookies)) {
+            for (int i = 1; i <= buff_cookies.size(); i++) {
+                BuffUserData buffUserData = new BuffUserData();
+                buffUserData.setAcount("手动填入的cookie:" + i);
+                buffUserData.setCookie(buff_cookies.get(i - 1));
+                String steamId = buffCacheService.getSteamId(buffUserData.getAcount(), buffUserData.getCookie());
+                buffUserData.setSteamId(steamId);
+                buffUserDataList.add(buffUserData);
+            }
         }
         for (BuffUserData buffUserData : buffUserDataList) {
             log.info("加载buff账号：{}成功", buffUserData.getAcount());

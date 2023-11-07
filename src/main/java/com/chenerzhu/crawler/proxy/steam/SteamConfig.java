@@ -1,8 +1,11 @@
 package com.chenerzhu.crawler.proxy.steam;
 
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
-import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.buff.BuffUserData;
+import com.chenerzhu.crawler.proxy.util.steamlogin.Session;
+import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -70,16 +73,33 @@ public class SteamConfig implements ApplicationRunner {
     /**
      * 获取steamId
      */
-    public static String getSteamId(){
+    public static String getSteamId() {
         String steamID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSteamID();
 //        String steamLoginSecure = getCookieOnlyKey("steamLoginSecure");
 //        String substring = steamLoginSecure.substring(0, 17);
         return steamID;
     }
 
-    public static  String getCookie(){
-        String cookies = CookiesConfig.steamCookies.get();
-        if (StrUtil.isNotEmpty(cookies)){
+    /**
+     * 获取线程应该有的cookie
+     *
+     * @return
+     */
+    public static String getTheadLocalCookie() {
+        BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        String steamId = buffUserData.getSteamId();
+        for (SteamUserDate steamUserDate : SteamApplicationRunner.steamUserDates) {
+            Session session = steamUserDate.getSession();
+            if (steamId.equals(session.getSteamID())) {
+                return steamUserDate.getCookies().toString();
+            }
+        }
+        return "";
+    }
+
+    public static String getCookie() {
+        String cookies = getTheadLocalCookie();
+        if (StrUtil.isNotEmpty(cookies)) {
             return cookies;
         }
         cookies = SteamApplicationRunner.steamUserDates.get(0).getCookies().toString();

@@ -2,9 +2,9 @@ package com.chenerzhu.crawler.proxy.applicationRunners;
 
 
 import cn.hutool.core.util.StrUtil;
-import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.cache.SteamCacheService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.*;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +53,16 @@ public class SteamApplicationRunner implements ApplicationRunner {
         return false;
     }
 
+    /**
+     * 校验是否有 steam cookie
+     *
+     * @return
+     */
+    public static Boolean checkHasSteamCookie() {
+        String theadLocalCookie = SteamConfig.getTheadLocalCookie();
+        return StrUtil.isNotEmpty(theadLocalCookie);
+    }
+
     @Autowired
     Http http;
     @Autowired
@@ -76,25 +86,19 @@ public class SteamApplicationRunner implements ApplicationRunner {
 //            System.exit(1);
         }
         log.info("开始登录steam账号");
-        SteamUserDate steamUserDate1 = steamUserDatesInit.get(0);
-        steamUserDates.add(loginSteamUserDate(steamUserDate1));
-
-        PullItemService.executorService.execute(() -> {
-            for (int i = 1; i < steamUserDatesInit.size(); i++) {
-                SteamUserDate steamUserDate = steamUserDatesInit.get(i);
-                while (true) {
-                    try {
-                        SleepUtil.sleep(60 * 1000);
-                        steamUserDates.add(loginSteamUserDate(steamUserDate));
-                    } catch (Exception e) {
-                        log.info("steam账号，steamId:{}登录失败，睡眠后继续登录", steamUserDate.getAccount_name());
-                        SleepUtil.sleep(60 * 1000);
-                    }
-                    break;
+        for (int i = 0; i < steamUserDatesInit.size(); i++) {
+            SteamUserDate steamUserDate = steamUserDatesInit.get(i);
+            while (true) {
+                try {
+                    steamUserDates.add(loginSteamUserDate(steamUserDate));
+                } catch (Exception e) {
+                    log.info("steam账号，steamId:{}登录失败，睡眠后继续登录", steamUserDate.getAccount_name());
+                    SleepUtil.sleep(60 * 1000);
+                    continue;
                 }
+                break;
             }
-        });
-
+        }
     }
 
     public SteamUserDate loginSteamUserDate(SteamUserDate steamDate) {
