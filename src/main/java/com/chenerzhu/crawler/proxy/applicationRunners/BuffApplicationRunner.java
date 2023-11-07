@@ -43,6 +43,7 @@ public class BuffApplicationRunner implements ApplicationRunner {
     @Autowired
     private BuffAccountInfoConfig buffAccountInfoConfig;
 
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
@@ -75,11 +76,14 @@ public class BuffApplicationRunner implements ApplicationRunner {
 
         if (CollectionUtil.isNotEmpty(buff_cookies)) {
             for (int i = 1; i <= buff_cookies.size(); i++) {
+                String sesionId = buff_cookies.get(i - 1);
                 BuffUserData buffUserData = new BuffUserData();
                 buffUserData.setAcount("手动填入的cookie:" + i);
-                buffUserData.setCookie(buff_cookies.get(i - 1));
-                String steamId = buffCacheService.getSteamId(buffUserData.getAcount(), buffUserData.getCookie());
-                buffUserData.setSteamId(steamId);
+                buffUserData.setCookie(sesionId);
+                String cookie = buffAutoLoginUtil.getCookie(buffUserData);
+                if (null == cookie) {
+                    continue;
+                }
                 buffUserDataList.add(buffUserData);
             }
         }

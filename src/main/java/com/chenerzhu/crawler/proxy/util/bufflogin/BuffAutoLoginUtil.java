@@ -1,8 +1,10 @@
 package com.chenerzhu.crawler.proxy.util.bufflogin;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.ProxyPoolApplication;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
+import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +15,17 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URL;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Slf4j
 @Component
@@ -116,6 +123,36 @@ public class BuffAutoLoginUtil {
 
     public static void main(String[] args) {
         System.out.println(getResource());
+    }
+
+    public String getCookie(BuffUserData buffUserData) {
+        String url = "https://buff.163.com/account/api/user/info";
+        String sessionId = buffUserData.getCookie();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", "session=" + sessionId);
+        headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36");
+        headers.set("Referer", "https://buff.163.com");
+        HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity1, String.class);
+        String body = responseEntity.getBody();
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        if (!"OK".equals(jsonObject.getString("code"))) {
+            log.error("session：{}登录失败");
+            return null;
+        }
+        String nickname = jsonObject.getString("nickname");
+        buffUserData.setAcount(nickname);
+        String steamid = jsonObject.getString("steamid");
+        buffUserData.setSteamId(steamid);
+        List<String> cookies = responseEntity.getHeaders().get("set-cookie");
+        StringJoiner sj = new StringJoiner(";");
+        for (String cookie : cookies) {
+            sj.add(cookie);
+        }
+        buffUserData.setCookie(sj.toString());
+
+        System.out.println("123123");
+        return "";
     }
 
 
