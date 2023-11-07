@@ -164,6 +164,10 @@ public class CsgoFloatService {
                 break;
             } catch (Exception e) {
                 log.error("获取磨损度失败,重新尝试发送【{}】请求,失败信息为:", (i + 1), e);
+                if (i >= 2) {
+                    log.error("获取磨损度失败，参数为{}", JSONObject.toJSONString(hashMap));
+                    return new HashMap<>();
+                }
                 SleepUtil.sleep(3 * 1000);
             }
         }

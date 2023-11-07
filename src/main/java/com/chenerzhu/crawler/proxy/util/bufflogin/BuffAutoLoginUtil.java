@@ -150,7 +150,7 @@ public class BuffAutoLoginUtil {
         for (String cookie : cookies) {
             sj.add(cookie);
         }
-        buffUserData.setCookie(sj.toString());
+        buffUserData.setCookie(sj.toString() + ";");
 
         System.out.println("123123");
         return "";
