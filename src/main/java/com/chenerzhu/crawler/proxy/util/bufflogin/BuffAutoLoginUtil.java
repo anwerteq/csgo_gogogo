@@ -140,9 +140,10 @@ public class BuffAutoLoginUtil {
             log.error("session：{}登录失败");
             return null;
         }
-        String nickname = jsonObject.getString("nickname");
+        JSONObject data = jsonObject.getJSONObject("data");
+        String nickname = data.getString("nickname");
         buffUserData.setAcount(nickname);
-        String steamid = jsonObject.getString("steamid");
+        String steamid = data.getString("steamid");
         buffUserData.setSteamId(steamid);
         List<String> cookies = responseEntity.getHeaders().get("set-cookie");
         StringJoiner sj = new StringJoiner(";");
