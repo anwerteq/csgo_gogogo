@@ -98,6 +98,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
                 }
                 break;
             }
+            SleepUtil.sleep(4 * 1000);
         }
     }
 
@@ -131,6 +132,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
         steamCacheService.addCookie(account_name, cookieSb);
         steamDate.setCookies(cookieSb);
         //获取apikey
+        SleepUtil.sleep(2 * 1000);
         String apikey = steamCacheService.getApikey(account_name);
         if (StrUtil.isEmpty(apikey)) {
             apikey = getApikey(account_name, steamDate);

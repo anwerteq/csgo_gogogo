@@ -57,7 +57,7 @@ public class CsgoFloatService {
         for (Items item : items) {
             list.add(item);
             if (list.size() > 40) {
-                log.info("第一页:{}buff数据和steam数据进行关联", ++count);
+                log.info("第[{}]页,buff数据和steam数据进行关联", ++count);
                 postBuffBulk(list);
                 list.clear();
             }
