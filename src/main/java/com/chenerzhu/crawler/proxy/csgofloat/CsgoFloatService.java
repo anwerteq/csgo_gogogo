@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.csgofloat;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.steam.service.csgoFloat.FloatBulk;
@@ -59,7 +60,6 @@ public class CsgoFloatService {
                 log.info("第一页:{}buff数据和steam数据进行关联", ++count);
                 postBuffBulk(list);
                 list.clear();
-                SleepUtil.sleep(5 * 1000);
             }
         }
         postBuffBulk(list);
@@ -104,7 +104,7 @@ public class CsgoFloatService {
         int count = 0;
         for (SteamAsset asset : steamAssetAlls) {
             postBuilPara.add(asset);
-            if (postBuilPara.size() > 40) {
+            if (postBuilPara.size() > 48) {
                 log.info("第:{}页steam数据和buff数据进行关联", ++count);
                 postBulk(postBuilPara);
                 postBuilPara.clear();
@@ -150,10 +150,24 @@ public class CsgoFloatService {
      * @return
      */
     public Map<String, Double> getListIdAndWearMap(List<Map<String, String>> links) {
-        String url = "http://localhost:8086/bulk";
+        String url = "http://127.0.0.1:8086/bulk";
         HashMap hashMap = new HashMap();
         hashMap.put("links", links);
-        String reponse = HttpClientUtils.sendPost(url, JSONObject.toJSONString(hashMap), new HashMap<>());
+        String reponse = "";
+        for (int i = 0; i < 3; i++) {
+            try {
+                reponse = HttpClientUtils.sendPost(url, JSONObject.toJSONString(hashMap), new HashMap<>());
+                if (StrUtil.isEmpty(reponse)) {
+                    SleepUtil.sleep(3 * 1000);
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                log.error("获取磨损度失败,重新尝试发送【{}】请求,失败信息为:", (i + 1), e);
+                SleepUtil.sleep(3 * 1000);
+            }
+        }
+
         JSONObject jsonObject = JSONObject.parseObject(reponse);
         //磨损信息
         List<FloatBulk> floatBulks = jsonObject.entrySet().stream().map(entrySet -> {

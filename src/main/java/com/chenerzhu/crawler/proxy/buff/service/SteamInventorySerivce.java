@@ -108,7 +108,7 @@ public class SteamInventorySerivce {
             if (StrUtil.isNotEmpty(asset.getPrice())) {
                 continue;
             }
-            if (count > 20) {
+            if (count > 10) {
                 assets.remove(asset);
                 continue;
             }
@@ -360,6 +360,7 @@ public class SteamInventorySerivce {
         if (!"OK".equals(jsonObject.getString("code"))) {
             //接口返回不成功
             log.error("buff账号:{},获取buff中可出售的商品接口响应错误，错误信息为：{}", buffUserData.getAcount(), responseEntity1.getBody());
+            SleepUtil.sleep(20 * 1000);
             return true;
         }
         JSONObject data = jsonObject.getJSONObject("data");

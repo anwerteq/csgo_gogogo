@@ -12,6 +12,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -45,6 +46,10 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
                     log.info("buff账号：{}开始上架饰品", buffUserData.getAcount());
                     try {
                         autoSale(buffUserData);
+                    } catch (HttpClientErrorException e) {
+                        log.info("buff账号：{}上架饰品发生429异常:{},切换下一个账号", buffUserData.getAcount(), e);
+                        SleepUtil.sleep(20 * 60 * 1000);
+                        continue;
                     } catch (Exception e) {
                         log.info("buff账号：{}上架饰品发生异常:{},切换下一个账号", buffUserData.getAcount(), e);
                         continue;
