@@ -159,6 +159,9 @@ public class CsgoFloatService {
                 reponse = HttpClientUtils.sendPost(url, JSONObject.toJSONString(hashMap), new HashMap<>());
                 if (StrUtil.isEmpty(reponse)) {
                     SleepUtil.sleep(3 * 1000);
+                    if (i >= 2) {
+                        return new HashMap<>();
+                    }
                     continue;
                 }
                 break;
