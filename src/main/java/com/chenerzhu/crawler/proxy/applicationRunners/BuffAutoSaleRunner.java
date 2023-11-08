@@ -48,7 +48,7 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
                         autoSale(buffUserData);
                     } catch (HttpClientErrorException e) {
                         log.info("buff账号：{}上架饰品发生429异常:{},切换下一个账号", buffUserData.getAcount(), e);
-                        SleepUtil.sleep(20 * 60 * 1000);
+                        SleepUtil.sleep(60 * 60 * 1000);
                         continue;
                     } catch (Exception e) {
                         log.info("buff账号：{}上架饰品发生异常:{},切换下一个账号", buffUserData.getAcount(), e);
@@ -57,7 +57,7 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
                     log.info("buff账号：{}上架饰品完成", buffUserData.getAcount());
                 }
                 log.info("buff账号全部上架完成，睡眠20分钟");
-                SleepUtil.sleep(20 * 60 * 1000);
+                SleepUtil.sleep(60 * 60 * 1000);
 
             }
         });

@@ -150,7 +150,7 @@ public class CsgoFloatService {
      * @return
      */
     public Map<String, Double> getListIdAndWearMap(List<Map<String, String>> links) {
-        String url = "http://127.0.0.1:8086/bulk";
+        String url = "http://45.144.136.173:8006/bulk";
         HashMap hashMap = new HashMap();
         hashMap.put("links", links);
         String reponse = "";
