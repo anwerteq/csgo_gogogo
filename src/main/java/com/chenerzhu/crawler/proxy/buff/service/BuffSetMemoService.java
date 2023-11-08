@@ -56,7 +56,7 @@ public class BuffSetMemoService {
             return;
         }
         List<Items> allStatusInventory = getAllStatusInventory();
-        allStatusInventory = filterRemark(allStatusInventory);
+//        allStatusInventory = filterRemark(allStatusInventory);
         if (allStatusInventory.isEmpty()) {
             return;
         }
@@ -208,7 +208,7 @@ public class BuffSetMemoService {
         int beforeCount = steamOnlykeyMap.keySet().size();
         int reducedValue = 0;
         //同一个饰品的磨损度，应该不会差太多
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
             final int tempI = i;
             Set<String> temp = steamOnlykeyMap.keySet().stream().map(str -> str.substring(0, str.length() - tempI))
                     //防止磨损度为 0.25的情况
