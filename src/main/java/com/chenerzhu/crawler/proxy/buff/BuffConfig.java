@@ -75,7 +75,7 @@ public class BuffConfig implements ApplicationRunner {
     public static HttpHeaders getHeaderMap() {
         HttpHeaders headers1 = new HttpHeaders();
         Map<String, String> headerMap = map;
-        headerMap.put("Cookie", getCookie());
+        headerMap.put("Cookie", CookiesConfig.buffCookies.get());
         for (Map.Entry<String, String> entry : headerMap.entrySet()) {
             headers1.set(entry.getKey(), entry.getValue());
         }
