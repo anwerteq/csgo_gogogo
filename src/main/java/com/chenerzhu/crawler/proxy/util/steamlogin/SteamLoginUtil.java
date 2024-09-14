@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
@@ -36,7 +37,7 @@ public class SteamLoginUtil {
      * @param folderPath
      * @return
      */
-    public static List<SteamUserDate> readFilesInFolder(String folderPath) {
+    public static List<SteamUserDate> readFilesInFolder(String folderPath) throws Exception {
         List<SteamUserDate> steamUserDates = new ArrayList();
         File folder = new File(folderPath);
         if (folder.exists() && folder.isDirectory()) {
@@ -54,7 +55,7 @@ public class SteamLoginUtil {
         return steamUserDates;
     }
 
-    public static SteamUserDate readJsonFromFile(File file) {
+    public static SteamUserDate readJsonFromFile(File file) throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             StringBuilder content = new StringBuilder();
@@ -70,11 +71,16 @@ public class SteamLoginUtil {
 //            login(steamUserDate);
             // 在这里对 jsonObject 进行你需要的处理
 //            System.out.println(JSONObject.parseObject(jsonString));
+            String refreshToken = steamUserDate.getSession().getRefreshToken();
+            if (StrUtil.isEmpty(refreshToken)){
+                throw new Exception("steam的maFile文件中获取RefreshToken失败，RefreshToken值为："+refreshToken);
+
+            }
             return steamUserDate;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new Exception(e);
         }
-        return null;
     }
 
 

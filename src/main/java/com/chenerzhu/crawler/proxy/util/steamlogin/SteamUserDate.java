@@ -24,5 +24,3 @@ public class SteamUserDate {
     private Session Session = new Session();
 
 }
-
-

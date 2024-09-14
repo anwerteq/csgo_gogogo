@@ -99,6 +99,7 @@ public class BuffAutoLoginUtil {
             if (cookie == null) {
                 System.out.println("获取 cookie 失败，请检查密码是否正确");
             } else {
+                log.info("buff登录成功，cookie为："+cookie);
                 return cookie;
             }
                 System.out.println("获取的 cookie: " + cookie);
@@ -238,7 +239,7 @@ public class BuffAutoLoginUtil {
      * @return
      */
     public String getSteamId(String cookie) {
-
+        SleepUtil.sleep(2000);
         String url = "https://buff.163.com/user-center/profile";
         CookiesConfig.buffCookies.set(cookie);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);

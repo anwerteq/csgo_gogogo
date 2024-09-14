@@ -36,7 +36,7 @@ public class BuffCacheService {
     RestTemplate restTemplate;
 
 
-    @Cacheable(value = "buff_cookie", key = "#account")
+//    @Cacheable(value = "buff_cookie", key = "#account")
     public String getCookie(String account, BuffUserData buffUserData) {
         int count = 0;
         String cookie = "";
