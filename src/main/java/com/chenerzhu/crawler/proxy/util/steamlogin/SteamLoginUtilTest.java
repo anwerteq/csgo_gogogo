@@ -1,67 +1,136 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 
+import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest;
+import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Request;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import javax.crypto.Cipher;
+import java.security.PublicKey;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SteamLoginUtilTest {
 
+    // steam登录标识
+    public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
-    public static void main2(String[] args) {
-        try {
-            String str = "CoAEYmUzOGJkM2E3YjgxNjYwZTQ2ZjZjNzFjYmUzZjM1MGE0ZDA1Mjc5YjM2MzM1NTJjODg1ZTE3NGU0ZjUyYjQ2MjRiYTI1MmVlMmQ2OTQyNWE0MTgyMmQyMzA0OTNkMWU0M2NiMWRlNTdmM2RjNWJjYWY3YzM5MjliZjVhNTQyNjI4ZjkxY2ZkMTAzYTFhZjNlYjVkYmM0Y2MxODlmYjIwZjBlYmYzNTFhYWI4MzMzZTMxZjI5YjRhMWVmNTVlMWVkZDNhMjJjZDVmZGRhNmYyNjllMTVjN2Q5NmI3MTVlMmNjZGVhNDYxNWNjN2Q1YjliNjExNjAwNmYxNTg2MjQzZjJhYTA0MzAyNGM1NzIzMGU2MzI0NGI0OGEyZmUxZjg0ODA5ZTc0MTMyYTQzNDY5ZmU1M2U3NmI2MDJkYzJlM2Y1ODdiZDA3YTQ5YzRiYTk5NzIwMjNiNTFjZWFhYzc3NDFiZGQ0Mzc1ZTQwY2EyZTY2MGU2MGUzMDgxZmZiYjYzNmJjMDE3NGU4ZDZlMGFiMWNmNDFkOWM3MWZkYTUxZjA0ZDcyZjdlNjEyZjBhMDcyM2YwOTlhMGVjNzEyNTU4YTkyMDVlZTA1MTFlMGMyZDY0MmViMmRjNTU4YmYwYTdkNjgyY2UwNThlNzczNzZkMjBjYjkyMWI0M2YwNmE0NWYSBjAxMDAwMRiQtdb3yxA=";
-            byte[] decode = Base64.getDecoder().decode(str);
-            byte[] bytes = "�\u0004be38bd3a7b81660e46f6c71cbe3f350a4d05279b3633552c885e174e4f52b4624ba252ee2d69425a41822d230493d1e43cb1de57f3dc5bcaf7c3929bf5a542628f91cfd103a1af3eb5dbc4cc189fb20f0ebf351aab8333e31f29b4a1ef55e1edd3a22cd5fdda6f269e15c7d96b715e2ccdea4615cc7d5b9b6116006f1586243f2aa043024c57230e63244b48a2fe1f84809e74132a43469fe53e76b602dc2e3f587bd07a49c4ba9972023b51ceaac7741bdd4375e40ca2e660e60e3081ffbb636bc0174e8d6e0ab1cf41d9c71fda51f04d72f7e612f0a0723f099a0ec712558a9205ee0511e0c2d642eb2dc558bf0a7d682ce058e77376d20cb921b43f06a45f\u0012\u0006010001\u0018�����\u0010".getBytes();
-            CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
-                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom(decode);
-            System.out.println("Public Key: " + getPasswordRSAPublicKeyResponse.getPublickeyExp());
-        }  catch (InvalidProtocolBufferException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
     public static void main(String[] args) throws UnsupportedEncodingException {
+        CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
+        String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), "QingLiu98!");
+        step3("mu64kkro",encryptPasswordProtobuf,Long.valueOf(step2Value.getTimestamp()));
+        // CNnRl9QWT9leRnGksIuwzJBLzfzX9OFKGNMzl+sXOhWUvlFt0dN1xfwD5Hs0Isq/QOSCRIomOcCNKoodByZzwP1UzIOxmqtsA2fHv/2E0gzFLmy5cAbBKq4eQE5MgS2p03ALr5GIWv5tMrFSec+o2rr+aXn9yqYFzY8OfFdOK+/xgNM07Nwpx1rRViTCZVn1d3wtRMNqPwyCTDRLleM4EC9DHJyK3XaKGICa1aBXMvMLOGMJEHa8wwWCNoUaBB5s
+
+    }
+
+    public static void step1() throws UnsupportedEncodingException {
+        String url = "https://steamcommunity.com";
         Http Http = new Http();
-        CAuthentication_GetPasswordRSAPublicKey_Request.GetPasswordRSAPublicKey_Request accountProtobufs = CAuthentication_GetPasswordRSAPublicKey_Request.GetPasswordRSAPublicKey_Request.newBuilder().setAccountName("mu64kkro").build();
+        HttpBean get = Http.request(url, "GET", new HashMap<>(), "", true,
+                "https://steamcommunity.com", false);
+        String response = get.getResponse();
 
+    }
 
-        // 序列化消息
-        byte[] serializedMessage = accountProtobufs.toByteArray();
+    /**
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response step2() throws UnsupportedEncodingException {
+        Http Http = new Http();
+        String url = "https://api.steampowered.com/IAuthenticationService/GetPasswordRSAPublicKey/v1";
+        CAuthentication_GetPasswordRSAPublicKey_Request.GetPasswordRSAPublicKey_Request accountProtobufs = CAuthentication_GetPasswordRSAPublicKey_Request
+                .GetPasswordRSAPublicKey_Request.newBuilder().setAccountName("mu64kkro").build();
+        steamLoginUrlFlag.set(true);
 
         // Base64 编码
-        String base64EncodedMessage = Base64.getEncoder().encodeToString(serializedMessage);
-
-        // 打印 Base64 编码后的消息
-        System.out.println("Base64 Encoded Message: " + base64EncodedMessage);
-
+        String base64EncodedMessage = Base64.getEncoder().encodeToString( accountProtobufs.toByteArray());
         // 序列化为字节数组
         Map<String, String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
 
-        HttpBean get = Http.request("https://api.steampowered.com/IAuthenticationService/GetPasswordRSAPublicKey/v1", "GET", objectObjectHashMap, "", true,
+        HttpBean get = Http.request(url, "GET", objectObjectHashMap, "", true,
                 "https://steamcommunity.com", false);
-        byte[] bytes = get.getResponse().getBytes();
+
+        byte[] decode = Base64.getDecoder().decode(get.getResponse());
+        CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = null;
         try {
-            CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
-                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom("\\n\\x80\\x04b03f187d58054f10f4f5efaa28e4da8c777910f701f5bed185b71e600e5fa74a79cea395c943cbd39404bf55fa507144b302032a5b3857e41b86cbb6901224c8e79ccbe79902bb40f027581893f3ef7d1902f811442f635fe8891d96cf25f486fdd0a94457f8b17169d27d167c93af2d4ff669e90d62695173c6".getBytes());
-            System.out.println("Public Key: " + getPasswordRSAPublicKeyResponse.getPublickeyExp());
-        }  catch (InvalidProtocolBufferException e) {
+            getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
+                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom(decode);
+        } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
+        }
+        return getPasswordRSAPublicKeyResponse;
+    }
+
+    public static void step3(String account_name,String encrypted_password,Long rsa_timestamp){
+
+        CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request build = CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request
+                .newBuilder()
+                .setAccountName(account_name)
+                .setEncryptedPassword(encrypted_password.getBytes())
+                .setEncryptionTimestamp(rsa_timestamp)
+                .setRememberLogin(true)
+                .setPlatformType(CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp)
+                .setWebsiteId("'Community'")
+                .setPersistence(CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.k_ESessionPersistence_Persistent)
+                .setDeviceFriendlyName("Mozilla/5.0 (X11; Linux x86_64; rv:1.9.5.20) Gecko/2812-12-10 04:56:28 Firefox/3.8")
+                .build();
+        String url ="https://api.steampowered.com/IAuthenticationService/BeginAuthSessionViaCredentials/v1";
+        // Base64 编码
+        String base64EncodedMessage = Base64.getEncoder().encodeToString(build.toByteArray());
+        // 序列化为字节数组
+        Map<String, String> objectObjectHashMap = new HashMap<>();
+        objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
+        Http Http = new Http();
+        HttpBean get = Http.request(url, "POST", objectObjectHashMap, "", true,
+                "https://steamcommunity.com", false);
+        byte[] decode = Base64.getDecoder().decode(get.getResponse());
+        CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse clientResponse = null;
+        try {
+             clientResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse.parseFrom(decode);
+        } catch (InvalidProtocolBufferException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("12312");
+    }
+
+    /**
+     * steam登录需对密码加密
+     * @param publickeyExp
+     * @param publickeyMod
+     * @return
+     * @throws Exception
+     */
+    public static String encryptPasswordProtobuf(String  publickeyExp,String publickeyMod,String password)  {
+        // 将十六进制字符串转换为 BigInteger
+        BigInteger publicKeyExp = new BigInteger(publickeyExp, 16);
+        BigInteger publicKeyMod = new BigInteger(publickeyMod, 16);
+
+        try {
+            // 创建 RSA 公钥
+            RSAPublicKeySpec spec = new RSAPublicKeySpec(publicKeyMod, publicKeyExp);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PublicKey publicKey = keyFactory.generatePublic(spec);
+
+            // 加密密码
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] encryptedPasswordBytes = cipher.doFinal(password.getBytes("ASCII"));
+            // Base64 编码
+            return Base64.getEncoder().encodeToString(encryptedPasswordBytes);
+        }catch (Exception e){
+            throw  new RuntimeException("encryptPasswordProtobuf error",e);
         }
     }
 
-    // 辅助函数：将字节数组转换为十六进制字符串
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
-    }
 }

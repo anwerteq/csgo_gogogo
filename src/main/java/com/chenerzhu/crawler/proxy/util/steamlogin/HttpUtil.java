@@ -6,6 +6,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * Created by Mr.W on 2017/5/15.
@@ -37,29 +38,15 @@ public class HttpUtil {
     public static String getContent(InputStream inputStream) {
         try {
             byte[] bytes = readInputStream(inputStream);
-
-            String s = new String(bytes);
-            CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
-                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom(s.getBytes());
-            System.out.println("Public Key: " + getPasswordRSAPublicKeyResponse.getPublickeyExp());
+            //steam登录
+            if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
+                String base64Encode = Base64.getEncoder().encodeToString(bytes);
+                return base64Encode;
+            }
+            return new String(bytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        InputStreamReader inputStreamReader;
-        inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String buff;
-        StringBuilder content = new StringBuilder();
-        try {
-            while (null != (buff = bufferedReader.readLine())) {
-                content.append(buff);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return content.toString();
     }
 
     private static byte[] readInputStream(InputStream inputStream) throws IOException {

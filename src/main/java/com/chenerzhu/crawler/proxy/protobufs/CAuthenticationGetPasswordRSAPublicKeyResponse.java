@@ -98,7 +98,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     }
 
     @Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -397,7 +397,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -414,7 +414,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       }
 
       @Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -427,7 +427,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
 
       }
