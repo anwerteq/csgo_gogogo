@@ -1,11 +1,10 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
+import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse;
+import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.http.client.methods.HttpRequestBase;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -28,7 +27,7 @@ public class HttpUtil {
     private static final String acceptLanguage = "q=0.8,en-US;q=0.5,en;q=0.3";
     private static final String cacheControl = "max-age=0";
     private static final String connection = "keep-alive";
-    private static final String host = "steamcommunity.com";
+    private static final String host = "https://steamcommunity.com";
     private static final String upgradeInsecureRequests = "1";
     private static final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.4 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.4";
 
@@ -36,6 +35,16 @@ public class HttpUtil {
      * input流转string
      */
     public static String getContent(InputStream inputStream) {
+        try {
+            byte[] bytes = readInputStream(inputStream);
+
+            String s = new String(bytes);
+            CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
+                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom(s.getBytes());
+            System.out.println("Public Key: " + getPasswordRSAPublicKeyResponse.getPublickeyExp());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         InputStreamReader inputStreamReader;
         inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -49,7 +58,20 @@ public class HttpUtil {
             e.printStackTrace();
             return null;
         }
+
         return content.toString();
+    }
+
+    private static byte[] readInputStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[1024]; // 创建一个缓冲区
+
+        int bytesRead;
+        while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, bytesRead); // 将读取的数据写入缓冲区
+        }
+        buffer.flush(); // 确保所有数据都被写入
+        return buffer.toByteArray(); // 转换为字节数组
     }
 
     public static void addHeader(HttpRequestBase method, String cookies, String referer) {

@@ -26,7 +26,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string publickey_mod = 1;</code>
      * @return The publickeyMod.
      */
-    String getPublickeyMod();
+    java.lang.String getPublickeyMod();
     /**
      * <pre>
      * 定义任何需要的字段，比如请求 ID，或者请求的上下文等
@@ -42,7 +42,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string publickey_exp = 2;</code>
      * @return The publickeyExp.
      */
-    String getPublickeyExp();
+    java.lang.String getPublickeyExp();
     /**
      * <code>string publickey_exp = 2;</code>
      * @return The bytes for publickeyExp.
@@ -54,7 +54,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string timestamp = 3;</code>
      * @return The timestamp.
      */
-    String getTimestamp();
+    java.lang.String getTimestamp();
     /**
      * <code>string timestamp = 3;</code>
      * @return The bytes for timestamp.
@@ -80,33 +80,33 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       timestamp_ = "";
     }
 
-    @Override
+    @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected Object newInstance(
+    protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
       return new CAuthentication_GetPasswordRSAPublicKey_Response();
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor;
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor;
     }
 
-    @Override
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              CAuthentication_GetPasswordRSAPublicKey_Response.class, Builder.class);
+              com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.Builder.class);
     }
 
     public static final int PUBLICKEY_MOD_FIELD_NUMBER = 1;
-    private volatile Object publickeyMod_;
+    private volatile java.lang.Object publickeyMod_;
     /**
      * <pre>
      * 定义任何需要的字段，比如请求 ID，或者请求的上下文等
@@ -115,15 +115,15 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string publickey_mod = 1;</code>
      * @return The publickeyMod.
      */
-    @Override
-    public String getPublickeyMod() {
-      Object ref = publickeyMod_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getPublickeyMod() {
+      java.lang.Object ref = publickeyMod_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         publickeyMod_ = s;
         return s;
       }
@@ -136,14 +136,14 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string publickey_mod = 1;</code>
      * @return The bytes for publickeyMod.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getPublickeyModBytes() {
-      Object ref = publickeyMod_;
-      if (ref instanceof String) {
+      java.lang.Object ref = publickeyMod_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         publickeyMod_ = b;
         return b;
       } else {
@@ -152,20 +152,20 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     }
 
     public static final int PUBLICKEY_EXP_FIELD_NUMBER = 2;
-    private volatile Object publickeyExp_;
+    private volatile java.lang.Object publickeyExp_;
     /**
      * <code>string publickey_exp = 2;</code>
      * @return The publickeyExp.
      */
-    @Override
-    public String getPublickeyExp() {
-      Object ref = publickeyExp_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getPublickeyExp() {
+      java.lang.Object ref = publickeyExp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         publickeyExp_ = s;
         return s;
       }
@@ -174,14 +174,14 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string publickey_exp = 2;</code>
      * @return The bytes for publickeyExp.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getPublickeyExpBytes() {
-      Object ref = publickeyExp_;
-      if (ref instanceof String) {
+      java.lang.Object ref = publickeyExp_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         publickeyExp_ = b;
         return b;
       } else {
@@ -190,20 +190,20 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     }
 
     public static final int TIMESTAMP_FIELD_NUMBER = 3;
-    private volatile Object timestamp_;
+    private volatile java.lang.Object timestamp_;
     /**
      * <code>string timestamp = 3;</code>
      * @return The timestamp.
      */
-    @Override
-    public String getTimestamp() {
-      Object ref = timestamp_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getTimestamp() {
+      java.lang.Object ref = timestamp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         timestamp_ = s;
         return s;
       }
@@ -212,14 +212,14 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
      * <code>string timestamp = 3;</code>
      * @return The bytes for timestamp.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTimestampBytes() {
-      Object ref = timestamp_;
-      if (ref instanceof String) {
+      java.lang.Object ref = timestamp_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         timestamp_ = b;
         return b;
       } else {
@@ -228,7 +228,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -238,7 +238,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(publickeyMod_)) {
@@ -253,7 +253,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       getUnknownFields().writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -273,15 +273,15 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof CAuthentication_GetPasswordRSAPublicKey_Response)) {
+      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response)) {
         return super.equals(obj);
       }
-      CAuthentication_GetPasswordRSAPublicKey_Response other = (CAuthentication_GetPasswordRSAPublicKey_Response) obj;
+      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response other = (com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response) obj;
 
       if (!getPublickeyMod()
           .equals(other.getPublickeyMod())) return false;
@@ -293,7 +293,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -311,69 +311,69 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       return hash;
     }
 
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(byte[] data)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseDelimitedFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseDelimitedFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -381,21 +381,21 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(CAuthentication_GetPasswordRSAPublicKey_Response prototype) {
+    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
@@ -407,18 +407,18 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Response)
-        CAuthentication_GetPasswordRSAPublicKey_ResponseOrBuilder {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_ResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor;
       }
 
-      @Override
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                CAuthentication_GetPasswordRSAPublicKey_Response.class, Builder.class);
+                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.Builder.class);
       }
 
       // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.newBuilder()
@@ -431,7 +431,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         super(parent);
 
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         publickeyMod_ = "";
@@ -443,29 +443,29 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor;
       }
 
-      @Override
-      public CAuthentication_GetPasswordRSAPublicKey_Response getDefaultInstanceForType() {
-        return CAuthentication_GetPasswordRSAPublicKey_Response.getDefaultInstance();
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getDefaultInstanceForType() {
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.getDefaultInstance();
       }
 
-      @Override
-      public CAuthentication_GetPasswordRSAPublicKey_Response build() {
-        CAuthentication_GetPasswordRSAPublicKey_Response result = buildPartial();
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response build() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public CAuthentication_GetPasswordRSAPublicKey_Response buildPartial() {
-        CAuthentication_GetPasswordRSAPublicKey_Response result = new CAuthentication_GetPasswordRSAPublicKey_Response(this);
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response buildPartial() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response result = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response(this);
         result.publickeyMod_ = publickeyMod_;
         result.publickeyExp_ = publickeyExp_;
         result.timestamp_ = timestamp_;
@@ -473,50 +473,50 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof CAuthentication_GetPasswordRSAPublicKey_Response) {
-          return mergeFrom((CAuthentication_GetPasswordRSAPublicKey_Response)other);
+        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response) {
+          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(CAuthentication_GetPasswordRSAPublicKey_Response other) {
-        if (other == CAuthentication_GetPasswordRSAPublicKey_Response.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response other) {
+        if (other == com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response.getDefaultInstance()) return this;
         if (!other.getPublickeyMod().isEmpty()) {
           publickeyMod_ = other.publickeyMod_;
           onChanged();
@@ -534,18 +534,18 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         if (extensionRegistry == null) {
-          throw new NullPointerException();
+          throw new java.lang.NullPointerException();
         }
         try {
           boolean done = false;
@@ -586,7 +586,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return this;
       }
 
-      private Object publickeyMod_ = "";
+      private java.lang.Object publickeyMod_ = "";
       /**
        * <pre>
        * 定义任何需要的字段，比如请求 ID，或者请求的上下文等
@@ -595,16 +595,16 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        * <code>string publickey_mod = 1;</code>
        * @return The publickeyMod.
        */
-      public String getPublickeyMod() {
-        Object ref = publickeyMod_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getPublickeyMod() {
+        java.lang.Object ref = publickeyMod_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           publickeyMod_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -617,11 +617,11 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        */
       public com.google.protobuf.ByteString
           getPublickeyModBytes() {
-        Object ref = publickeyMod_;
+        java.lang.Object ref = publickeyMod_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           publickeyMod_ = b;
           return b;
         } else {
@@ -638,7 +638,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        * @return This builder for chaining.
        */
       public Builder setPublickeyMod(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -682,21 +682,21 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return this;
       }
 
-      private Object publickeyExp_ = "";
+      private java.lang.Object publickeyExp_ = "";
       /**
        * <code>string publickey_exp = 2;</code>
        * @return The publickeyExp.
        */
-      public String getPublickeyExp() {
-        Object ref = publickeyExp_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getPublickeyExp() {
+        java.lang.Object ref = publickeyExp_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           publickeyExp_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -705,11 +705,11 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        */
       public com.google.protobuf.ByteString
           getPublickeyExpBytes() {
-        Object ref = publickeyExp_;
+        java.lang.Object ref = publickeyExp_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           publickeyExp_ = b;
           return b;
         } else {
@@ -722,7 +722,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        * @return This builder for chaining.
        */
       public Builder setPublickeyExp(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -758,21 +758,21 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return this;
       }
 
-      private Object timestamp_ = "";
+      private java.lang.Object timestamp_ = "";
       /**
        * <code>string timestamp = 3;</code>
        * @return The timestamp.
        */
-      public String getTimestamp() {
-        Object ref = timestamp_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getTimestamp() {
+        java.lang.Object ref = timestamp_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           timestamp_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -781,11 +781,11 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        */
       public com.google.protobuf.ByteString
           getTimestampBytes() {
-        Object ref = timestamp_;
+        java.lang.Object ref = timestamp_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           timestamp_ = b;
           return b;
         } else {
@@ -798,7 +798,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
        * @return This builder for chaining.
        */
       public Builder setTimestamp(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -833,13 +833,13 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -850,18 +850,18 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     }
 
     // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Response)
-    private static final CAuthentication_GetPasswordRSAPublicKey_Response DEFAULT_INSTANCE;
+    private static final com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new CAuthentication_GetPasswordRSAPublicKey_Response();
+      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response();
     }
 
-    public static CAuthentication_GetPasswordRSAPublicKey_Response getDefaultInstance() {
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<CAuthentication_GetPasswordRSAPublicKey_Response>
         PARSER = new com.google.protobuf.AbstractParser<CAuthentication_GetPasswordRSAPublicKey_Response>() {
-      @Override
+      @java.lang.Override
       public CAuthentication_GetPasswordRSAPublicKey_Response parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -885,13 +885,13 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<CAuthentication_GetPasswordRSAPublicKey_Response> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public CAuthentication_GetPasswordRSAPublicKey_Response getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -910,7 +910,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n6CAuthentication_GetPasswordRSAPublicKe" +
       "y_Response.proto\022%com.chenerzhu.crawler." +
       "proxy.protobufs\"s\n0CAuthentication_GetPa" +
@@ -927,7 +927,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_GetPasswordRSAPublicKey_Response_descriptor,
-        new String[] { "PublickeyMod", "PublickeyExp", "Timestamp", });
+        new java.lang.String[] { "PublickeyMod", "PublickeyExp", "Timestamp", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

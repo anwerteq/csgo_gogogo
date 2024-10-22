@@ -7,9 +7,13 @@ import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.util.OpenCVUtil;
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.options.Cookie;
 import lombok.extern.slf4j.Slf4j;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,6 +29,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.StringJoiner;
@@ -42,9 +50,8 @@ public class BuffAutoLoginUtil {
         String url = "https://buff.163.com/";
         // 初始化 Playwright
         try (Playwright playwright = Playwright.create()) {
-             browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+             browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
             Page page = browser.newPage();
-
             // 打开 URL
             page.navigate(url);
 
@@ -79,7 +86,15 @@ public class BuffAutoLoginUtil {
 //            Locator loginBut = frameLocator.locator("xpath=/html/body/div[2]/div[2]/div[2]/form/div/div[7]/a");
             Locator loginBut = frameLocator.locator("[id='submitBtn']");
             loginBut.click();
+//            poJieyanzhengma(frameLocator,page);
+            //验证码
+            Locator yanzhengmaLocator = frameLocator.locator("xpath=/html/body/div[3]/div[1]");
+            if (yanzhengmaLocator.count() > 0){
 
+
+
+            }
+            // yidun_cover-frame  /html/body/div[3]/div[2]
 
             // 等待并获取 cookie
             page.waitForTimeout(2900);
@@ -108,6 +123,39 @@ public class BuffAutoLoginUtil {
 
         return "";
     }
+
+    /**
+     * 破解验证码
+     * @param frameLocator
+     */
+    public static void poJieyanzhengma(FrameLocator frameLocator,Page page){
+        Locator bgLocatos = frameLocator.locator("xpath=/html/body/div[3]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/img[1]");
+        Locator mvLocatos = frameLocator.locator("xpath=/html/body/div[3]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/img[2]");
+        if (bgLocatos.count() < 1){
+            return;
+        }
+        //背景url
+        String bgimgUrl = bgLocatos.getAttribute("src");
+        //滑块url
+        String mvimgUrl = mvLocatos.getAttribute("src");
+        Double moveLimit = OpenCVUtil.getMoveLimit(bgimgUrl, mvimgUrl);
+        moveLimit = moveLimit * 234.0 / 320 ;
+        Locator mvButton = frameLocator.locator("xpath=/html/body/div[3]/div[2]/div/div/div[2]/div/div[2]/div[2]");
+        System.out.println(mvButton.boundingBox().width);
+        BoundingBox boundingBox = mvButton.boundingBox();
+        if (boundingBox !=null){
+            page.mouse().move(boundingBox.x + boundingBox.width / 2, boundingBox.y + boundingBox.height / 2); // 移动到元素中心
+            page.mouse().down(); // 按下鼠标
+            page.mouse().move(boundingBox.x + moveLimit, boundingBox.y + boundingBox.height / 2); // 向右移动 60px
+            page.mouse().up(); // 释放鼠标
+        }
+        mvButton.boundingBox().width = moveLimit;
+
+
+        System.out.println("12312");
+    }
+
+
 
     public static String login1(String username, String password) {
         String url = "https://buff.163.com/";

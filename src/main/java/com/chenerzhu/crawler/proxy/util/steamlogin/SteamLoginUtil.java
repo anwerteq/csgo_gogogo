@@ -25,11 +25,7 @@ public class SteamLoginUtil {
     Http http;
 
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String url = "https://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name="
-                + URLEncoder.encode("Sticker | Mahjong Zhong", "UTF-8");
-        System.out.println(url);
-    }
+
 
     /**
      * 登录账号
@@ -270,7 +266,10 @@ public class SteamLoginUtil {
         String response = HttpClientUtils.sendPostForm(url, "", headerMap, dataMap);
         JSONObject jsonObject = JSONObject.parseObject(response);
         String access_token = jsonObject.getJSONObject("response").getString("access_token");
-
+        if (StrUtil.isEmpty(access_token)){
+            log.error("获取access_token失败");
+            System.exit(0);
+        }
         access_token = steamUserDate.getSession().getSteamID() + "%7C%7C" + access_token;
         return access_token;
     }
@@ -320,4 +319,6 @@ public class SteamLoginUtil {
         }
         return true;
     }
+
+
 }

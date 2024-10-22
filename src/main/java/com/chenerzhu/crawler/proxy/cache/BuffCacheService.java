@@ -47,7 +47,7 @@ public class BuffCacheService {
                 continue;
             }
         }
-//        cookie = getCookieDetail(cookie);
+        cookie = getCookieDetail(cookie);
         buffUserData.setCookie(cookie);
         return addCookie(account, cookie);
     }
