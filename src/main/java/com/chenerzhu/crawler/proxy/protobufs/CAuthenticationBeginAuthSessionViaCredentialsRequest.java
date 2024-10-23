@@ -16,7 +16,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
   }
   /**
    * <pre>
-   * Auth Token Platform Type Enum
+   * 平台类型的枚举
    * </pre>
    *
    * Protobuf enum {@code com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType}
@@ -24,45 +24,61 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
   public enum EAuthTokenPlatformType
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>k_EAuthTokenPlatformType_Unknown = 0;</code>
+     * <pre>
+     * 无效
+     * </pre>
+     *
+     * <code>k_EAuthTokenPlatformType_Invalid = 0;</code>
      */
-    k_EAuthTokenPlatformType_Unknown(0),
+    k_EAuthTokenPlatformType_Invalid(0),
     /**
+     * <pre>
+     * 移动应用
+     * </pre>
+     *
      * <code>k_EAuthTokenPlatformType_MobileApp = 1;</code>
      */
     k_EAuthTokenPlatformType_MobileApp(1),
     /**
-     * <code>k_EAuthTokenPlatformType_DesktopApp = 2;</code>
+     * <pre>
+     * 网络
+     * </pre>
+     *
+     * <code>k_EAuthTokenPlatformType_Web = 2;</code>
      */
-    k_EAuthTokenPlatformType_DesktopApp(2),
-    /**
-     * <code>k_EAuthTokenPlatformType_WebApp = 3;</code>
-     */
-    k_EAuthTokenPlatformType_WebApp(3),
+    k_EAuthTokenPlatformType_Web(2),
     UNRECOGNIZED(-1),
     ;
 
     /**
-     * <code>k_EAuthTokenPlatformType_Unknown = 0;</code>
+     * <pre>
+     * 无效
+     * </pre>
+     *
+     * <code>k_EAuthTokenPlatformType_Invalid = 0;</code>
      */
-    public static final int k_EAuthTokenPlatformType_Unknown_VALUE = 0;
+    public static final int k_EAuthTokenPlatformType_Invalid_VALUE = 0;
     /**
+     * <pre>
+     * 移动应用
+     * </pre>
+     *
      * <code>k_EAuthTokenPlatformType_MobileApp = 1;</code>
      */
     public static final int k_EAuthTokenPlatformType_MobileApp_VALUE = 1;
     /**
-     * <code>k_EAuthTokenPlatformType_DesktopApp = 2;</code>
+     * <pre>
+     * 网络
+     * </pre>
+     *
+     * <code>k_EAuthTokenPlatformType_Web = 2;</code>
      */
-    public static final int k_EAuthTokenPlatformType_DesktopApp_VALUE = 2;
-    /**
-     * <code>k_EAuthTokenPlatformType_WebApp = 3;</code>
-     */
-    public static final int k_EAuthTokenPlatformType_WebApp_VALUE = 3;
+    public static final int k_EAuthTokenPlatformType_Web_VALUE = 2;
 
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -73,7 +89,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static EAuthTokenPlatformType valueOf(int value) {
       return forNumber(value);
     }
@@ -84,10 +100,9 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
      */
     public static EAuthTokenPlatformType forNumber(int value) {
       switch (value) {
-        case 0: return k_EAuthTokenPlatformType_Unknown;
+        case 0: return k_EAuthTokenPlatformType_Invalid;
         case 1: return k_EAuthTokenPlatformType_MobileApp;
-        case 2: return k_EAuthTokenPlatformType_DesktopApp;
-        case 3: return k_EAuthTokenPlatformType_WebApp;
+        case 2: return k_EAuthTokenPlatformType_Web;
         default: return null;
       }
     }
@@ -107,7 +122,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -118,7 +133,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return CAuthenticationBeginAuthSessionViaCredentialsRequest.getDescriptor().getEnumTypes().get(0);
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final EAuthTokenPlatformType[] VALUES = values();
@@ -126,7 +141,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     public static EAuthTokenPlatformType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -146,7 +161,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
 
   /**
    * <pre>
-   * Session Persistence Enum
+   * 会话持久性的枚举类型
    * </pre>
    *
    * Protobuf enum {@code com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence}
@@ -154,37 +169,61 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
   public enum ESessionPersistence
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>k_ESessionPersistence_Unknown = 0;</code>
+     * <pre>
+     * 无效
+     * </pre>
+     *
+     * <code>k_ESessionPersistence_Invalid = 0;</code>
      */
-    k_ESessionPersistence_Unknown(0),
+    k_ESessionPersistence_Invalid(0),
     /**
+     * <pre>
+     * 持久会话
+     * </pre>
+     *
      * <code>k_ESessionPersistence_Persistent = 1;</code>
      */
     k_ESessionPersistence_Persistent(1),
     /**
-     * <code>k_ESessionPersistence_NonPersistent = 2;</code>
+     * <pre>
+     * 短暂会话
+     * </pre>
+     *
+     * <code>k_ESessionPersistence_Ephemeral = 2;</code>
      */
-    k_ESessionPersistence_NonPersistent(2),
+    k_ESessionPersistence_Ephemeral(2),
     UNRECOGNIZED(-1),
     ;
 
     /**
-     * <code>k_ESessionPersistence_Unknown = 0;</code>
+     * <pre>
+     * 无效
+     * </pre>
+     *
+     * <code>k_ESessionPersistence_Invalid = 0;</code>
      */
-    public static final int k_ESessionPersistence_Unknown_VALUE = 0;
+    public static final int k_ESessionPersistence_Invalid_VALUE = 0;
     /**
+     * <pre>
+     * 持久会话
+     * </pre>
+     *
      * <code>k_ESessionPersistence_Persistent = 1;</code>
      */
     public static final int k_ESessionPersistence_Persistent_VALUE = 1;
     /**
-     * <code>k_ESessionPersistence_NonPersistent = 2;</code>
+     * <pre>
+     * 短暂会话
+     * </pre>
+     *
+     * <code>k_ESessionPersistence_Ephemeral = 2;</code>
      */
-    public static final int k_ESessionPersistence_NonPersistent_VALUE = 2;
+    public static final int k_ESessionPersistence_Ephemeral_VALUE = 2;
 
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -195,7 +234,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static ESessionPersistence valueOf(int value) {
       return forNumber(value);
     }
@@ -206,9 +245,9 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
      */
     public static ESessionPersistence forNumber(int value) {
       switch (value) {
-        case 0: return k_ESessionPersistence_Unknown;
+        case 0: return k_ESessionPersistence_Invalid;
         case 1: return k_ESessionPersistence_Persistent;
-        case 2: return k_ESessionPersistence_NonPersistent;
+        case 2: return k_ESessionPersistence_Ephemeral;
         default: return null;
       }
     }
@@ -228,7 +267,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -239,7 +278,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return CAuthenticationBeginAuthSessionViaCredentialsRequest.getDescriptor().getEnumTypes().get(1);
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final ESessionPersistence[] VALUES = values();
@@ -247,7 +286,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     public static ESessionPersistence valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -271,19 +310,39 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
 
     /**
      * <pre>
-     * Account name
+     * 设备友好名称
      * </pre>
      *
-     * <code>string account_name = 1;</code>
-     * @return The accountName.
+     * <code>string device_friendly_name = 1;</code>
+     * @return The deviceFriendlyName.
      */
-    String getAccountName();
+    java.lang.String getDeviceFriendlyName();
     /**
      * <pre>
-     * Account name
+     * 设备友好名称
      * </pre>
      *
-     * <code>string account_name = 1;</code>
+     * <code>string device_friendly_name = 1;</code>
+     * @return The bytes for deviceFriendlyName.
+     */
+    com.google.protobuf.ByteString
+        getDeviceFriendlyNameBytes();
+
+    /**
+     * <pre>
+     * 用户名
+     * </pre>
+     *
+     * <code>string account_name = 2;</code>
+     * @return The accountName.
+     */
+    java.lang.String getAccountName();
+    /**
+     * <pre>
+     * 用户名
+     * </pre>
+     *
+     * <code>string account_name = 2;</code>
      * @return The bytes for accountName.
      */
     com.google.protobuf.ByteString
@@ -291,27 +350,27 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
 
     /**
      * <pre>
-     * Encrypted password
+     * RSA 加密的密码
      * </pre>
      *
-     * <code>bytes encrypted_password = 2;</code>
+     * <code>string encrypted_password = 3;</code>
      * @return The encryptedPassword.
      */
-    com.google.protobuf.ByteString getEncryptedPassword();
-
+    java.lang.String getEncryptedPassword();
     /**
      * <pre>
-     * Timestamp of encryption
+     * RSA 加密的密码
      * </pre>
      *
-     * <code>int64 encryption_timestamp = 3;</code>
-     * @return The encryptionTimestamp.
+     * <code>string encrypted_password = 3;</code>
+     * @return The bytes for encryptedPassword.
      */
-    long getEncryptionTimestamp();
+    com.google.protobuf.ByteString
+        getEncryptedPasswordBytes();
 
     /**
      * <pre>
-     * Whether to remember login
+     * 是否记住登录信息
      * </pre>
      *
      * <code>bool remember_login = 4;</code>
@@ -321,46 +380,36 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
 
     /**
      * <pre>
-     * Platform type
+     * 加密时间戳
      * </pre>
      *
-     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+     * <code>int64 encryption_timestamp = 5;</code>
+     * @return The encryptionTimestamp.
+     */
+    long getEncryptionTimestamp();
+
+    /**
+     * <pre>
+     * 平台类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
      * @return The enum numeric value on the wire for platformType.
      */
     int getPlatformTypeValue();
     /**
      * <pre>
-     * Platform type
+     * 平台类型
      * </pre>
      *
-     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
      * @return The platformType.
      */
-    EAuthTokenPlatformType getPlatformType();
+    com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType getPlatformType();
 
     /**
      * <pre>
-     * Website identifier
-     * </pre>
-     *
-     * <code>string website_id = 6;</code>
-     * @return The websiteId.
-     */
-    String getWebsiteId();
-    /**
-     * <pre>
-     * Website identifier
-     * </pre>
-     *
-     * <code>string website_id = 6;</code>
-     * @return The bytes for websiteId.
-     */
-    com.google.protobuf.ByteString
-        getWebsiteIdBytes();
-
-    /**
-     * <pre>
-     * Session persistence
+     * 会话持久性
      * </pre>
      *
      * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
@@ -369,37 +418,37 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     int getPersistenceValue();
     /**
      * <pre>
-     * Session persistence
+     * 会话持久性
      * </pre>
      *
      * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
      * @return The persistence.
      */
-    ESessionPersistence getPersistence();
+    com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence getPersistence();
 
     /**
      * <pre>
-     * Friendly name of the device
+     * 请求身份验证的客户端网站 ID
      * </pre>
      *
-     * <code>string device_friendly_name = 8;</code>
-     * @return The deviceFriendlyName.
+     * <code>string website_id = 8;</code>
+     * @return The websiteId.
      */
-    String getDeviceFriendlyName();
+    java.lang.String getWebsiteId();
     /**
      * <pre>
-     * Friendly name of the device
+     * 请求身份验证的客户端网站 ID
      * </pre>
      *
-     * <code>string device_friendly_name = 8;</code>
-     * @return The bytes for deviceFriendlyName.
+     * <code>string website_id = 8;</code>
+     * @return The bytes for websiteId.
      */
     com.google.protobuf.ByteString
-        getDeviceFriendlyNameBytes();
+        getWebsiteIdBytes();
   }
   /**
    * <pre>
-   * Request message for beginning auth session via credentials
+   * 开始通过凭据进行身份验证的请求消息
    * </pre>
    *
    * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.CAuthentication_BeginAuthSessionViaCredentials_Request}
@@ -414,269 +463,78 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       super(builder);
     }
     private CAuthentication_BeginAuthSessionViaCredentials_Request() {
-      accountName_ = "";
-      encryptedPassword_ = com.google.protobuf.ByteString.EMPTY;
-      platformType_ = 0;
-      websiteId_ = "";
-      persistence_ = 0;
       deviceFriendlyName_ = "";
+      accountName_ = "";
+      encryptedPassword_ = "";
+      platformType_ = 0;
+      persistence_ = 0;
+      websiteId_ = "";
     }
 
-    @Override
+    @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected Object newInstance(
+    protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
       return new CAuthentication_BeginAuthSessionViaCredentials_Request();
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor;
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_fieldAccessorTable
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              CAuthentication_BeginAuthSessionViaCredentials_Request.class, Builder.class);
+              com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.Builder.class);
     }
 
-    public static final int ACCOUNT_NAME_FIELD_NUMBER = 1;
-    private volatile Object accountName_;
+    public static final int DEVICE_FRIENDLY_NAME_FIELD_NUMBER = 1;
+    private volatile java.lang.Object deviceFriendlyName_;
     /**
      * <pre>
-     * Account name
+     * 设备友好名称
      * </pre>
      *
-     * <code>string account_name = 1;</code>
-     * @return The accountName.
-     */
-    @Override
-    public String getAccountName() {
-      Object ref = accountName_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        accountName_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * Account name
-     * </pre>
-     *
-     * <code>string account_name = 1;</code>
-     * @return The bytes for accountName.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getAccountNameBytes() {
-      Object ref = accountName_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        accountName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int ENCRYPTED_PASSWORD_FIELD_NUMBER = 2;
-    private com.google.protobuf.ByteString encryptedPassword_;
-    /**
-     * <pre>
-     * Encrypted password
-     * </pre>
-     *
-     * <code>bytes encrypted_password = 2;</code>
-     * @return The encryptedPassword.
-     */
-    @Override
-    public com.google.protobuf.ByteString getEncryptedPassword() {
-      return encryptedPassword_;
-    }
-
-    public static final int ENCRYPTION_TIMESTAMP_FIELD_NUMBER = 3;
-    private long encryptionTimestamp_;
-    /**
-     * <pre>
-     * Timestamp of encryption
-     * </pre>
-     *
-     * <code>int64 encryption_timestamp = 3;</code>
-     * @return The encryptionTimestamp.
-     */
-    @Override
-    public long getEncryptionTimestamp() {
-      return encryptionTimestamp_;
-    }
-
-    public static final int REMEMBER_LOGIN_FIELD_NUMBER = 4;
-    private boolean rememberLogin_;
-    /**
-     * <pre>
-     * Whether to remember login
-     * </pre>
-     *
-     * <code>bool remember_login = 4;</code>
-     * @return The rememberLogin.
-     */
-    @Override
-    public boolean getRememberLogin() {
-      return rememberLogin_;
-    }
-
-    public static final int PLATFORM_TYPE_FIELD_NUMBER = 5;
-    private int platformType_;
-    /**
-     * <pre>
-     * Platform type
-     * </pre>
-     *
-     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
-     * @return The enum numeric value on the wire for platformType.
-     */
-    @Override public int getPlatformTypeValue() {
-      return platformType_;
-    }
-    /**
-     * <pre>
-     * Platform type
-     * </pre>
-     *
-     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
-     * @return The platformType.
-     */
-    @Override public EAuthTokenPlatformType getPlatformType() {
-      @SuppressWarnings("deprecation")
-      EAuthTokenPlatformType result = EAuthTokenPlatformType.valueOf(platformType_);
-      return result == null ? EAuthTokenPlatformType.UNRECOGNIZED : result;
-    }
-
-    public static final int WEBSITE_ID_FIELD_NUMBER = 6;
-    private volatile Object websiteId_;
-    /**
-     * <pre>
-     * Website identifier
-     * </pre>
-     *
-     * <code>string website_id = 6;</code>
-     * @return The websiteId.
-     */
-    @Override
-    public String getWebsiteId() {
-      Object ref = websiteId_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        websiteId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * Website identifier
-     * </pre>
-     *
-     * <code>string website_id = 6;</code>
-     * @return The bytes for websiteId.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getWebsiteIdBytes() {
-      Object ref = websiteId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        websiteId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int PERSISTENCE_FIELD_NUMBER = 7;
-    private int persistence_;
-    /**
-     * <pre>
-     * Session persistence
-     * </pre>
-     *
-     * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
-     * @return The enum numeric value on the wire for persistence.
-     */
-    @Override public int getPersistenceValue() {
-      return persistence_;
-    }
-    /**
-     * <pre>
-     * Session persistence
-     * </pre>
-     *
-     * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
-     * @return The persistence.
-     */
-    @Override public ESessionPersistence getPersistence() {
-      @SuppressWarnings("deprecation")
-      ESessionPersistence result = ESessionPersistence.valueOf(persistence_);
-      return result == null ? ESessionPersistence.UNRECOGNIZED : result;
-    }
-
-    public static final int DEVICE_FRIENDLY_NAME_FIELD_NUMBER = 8;
-    private volatile Object deviceFriendlyName_;
-    /**
-     * <pre>
-     * Friendly name of the device
-     * </pre>
-     *
-     * <code>string device_friendly_name = 8;</code>
+     * <code>string device_friendly_name = 1;</code>
      * @return The deviceFriendlyName.
      */
-    @Override
-    public String getDeviceFriendlyName() {
-      Object ref = deviceFriendlyName_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getDeviceFriendlyName() {
+      java.lang.Object ref = deviceFriendlyName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         deviceFriendlyName_ = s;
         return s;
       }
     }
     /**
      * <pre>
-     * Friendly name of the device
+     * 设备友好名称
      * </pre>
      *
-     * <code>string device_friendly_name = 8;</code>
+     * <code>string device_friendly_name = 1;</code>
      * @return The bytes for deviceFriendlyName.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDeviceFriendlyNameBytes() {
-      Object ref = deviceFriendlyName_;
-      if (ref instanceof String) {
+      java.lang.Object ref = deviceFriendlyName_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         deviceFriendlyName_ = b;
         return b;
       } else {
@@ -684,8 +542,230 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
     }
 
+    public static final int ACCOUNT_NAME_FIELD_NUMBER = 2;
+    private volatile java.lang.Object accountName_;
+    /**
+     * <pre>
+     * 用户名
+     * </pre>
+     *
+     * <code>string account_name = 2;</code>
+     * @return The accountName.
+     */
+    @java.lang.Override
+    public java.lang.String getAccountName() {
+      java.lang.Object ref = accountName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        accountName_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 用户名
+     * </pre>
+     *
+     * <code>string account_name = 2;</code>
+     * @return The bytes for accountName.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccountNameBytes() {
+      java.lang.Object ref = accountName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        accountName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ENCRYPTED_PASSWORD_FIELD_NUMBER = 3;
+    private volatile java.lang.Object encryptedPassword_;
+    /**
+     * <pre>
+     * RSA 加密的密码
+     * </pre>
+     *
+     * <code>string encrypted_password = 3;</code>
+     * @return The encryptedPassword.
+     */
+    @java.lang.Override
+    public java.lang.String getEncryptedPassword() {
+      java.lang.Object ref = encryptedPassword_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        encryptedPassword_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * RSA 加密的密码
+     * </pre>
+     *
+     * <code>string encrypted_password = 3;</code>
+     * @return The bytes for encryptedPassword.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getEncryptedPasswordBytes() {
+      java.lang.Object ref = encryptedPassword_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        encryptedPassword_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int REMEMBER_LOGIN_FIELD_NUMBER = 4;
+    private boolean rememberLogin_;
+    /**
+     * <pre>
+     * 是否记住登录信息
+     * </pre>
+     *
+     * <code>bool remember_login = 4;</code>
+     * @return The rememberLogin.
+     */
+    @java.lang.Override
+    public boolean getRememberLogin() {
+      return rememberLogin_;
+    }
+
+    public static final int ENCRYPTION_TIMESTAMP_FIELD_NUMBER = 5;
+    private long encryptionTimestamp_;
+    /**
+     * <pre>
+     * 加密时间戳
+     * </pre>
+     *
+     * <code>int64 encryption_timestamp = 5;</code>
+     * @return The encryptionTimestamp.
+     */
+    @java.lang.Override
+    public long getEncryptionTimestamp() {
+      return encryptionTimestamp_;
+    }
+
+    public static final int PLATFORM_TYPE_FIELD_NUMBER = 6;
+    private int platformType_;
+    /**
+     * <pre>
+     * 平台类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
+     * @return The enum numeric value on the wire for platformType.
+     */
+    @java.lang.Override public int getPlatformTypeValue() {
+      return platformType_;
+    }
+    /**
+     * <pre>
+     * 平台类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
+     * @return The platformType.
+     */
+    @java.lang.Override public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType getPlatformType() {
+      @SuppressWarnings("deprecation")
+      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType result = com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.valueOf(platformType_);
+      return result == null ? com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.UNRECOGNIZED : result;
+    }
+
+    public static final int PERSISTENCE_FIELD_NUMBER = 7;
+    private int persistence_;
+    /**
+     * <pre>
+     * 会话持久性
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
+     * @return The enum numeric value on the wire for persistence.
+     */
+    @java.lang.Override public int getPersistenceValue() {
+      return persistence_;
+    }
+    /**
+     * <pre>
+     * 会话持久性
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
+     * @return The persistence.
+     */
+    @java.lang.Override public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence getPersistence() {
+      @SuppressWarnings("deprecation")
+      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence result = com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.valueOf(persistence_);
+      return result == null ? com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.UNRECOGNIZED : result;
+    }
+
+    public static final int WEBSITE_ID_FIELD_NUMBER = 8;
+    private volatile java.lang.Object websiteId_;
+    /**
+     * <pre>
+     * 请求身份验证的客户端网站 ID
+     * </pre>
+     *
+     * <code>string website_id = 8;</code>
+     * @return The websiteId.
+     */
+    @java.lang.Override
+    public java.lang.String getWebsiteId() {
+      java.lang.Object ref = websiteId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        websiteId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 请求身份验证的客户端网站 ID
+     * </pre>
+     *
+     * <code>string website_id = 8;</code>
+     * @return The bytes for websiteId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getWebsiteIdBytes() {
+      java.lang.Object ref = websiteId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        websiteId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -695,197 +775,196 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceFriendlyName_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, deviceFriendlyName_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(accountName_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, accountName_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, accountName_);
       }
-      if (!encryptedPassword_.isEmpty()) {
-        output.writeBytes(2, encryptedPassword_);
-      }
-      if (encryptionTimestamp_ != 0L) {
-        output.writeInt64(3, encryptionTimestamp_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(encryptedPassword_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, encryptedPassword_);
       }
       if (rememberLogin_ != false) {
         output.writeBool(4, rememberLogin_);
       }
-      if (platformType_ != EAuthTokenPlatformType.k_EAuthTokenPlatformType_Unknown.getNumber()) {
-        output.writeEnum(5, platformType_);
+      if (encryptionTimestamp_ != 0L) {
+        output.writeInt64(5, encryptionTimestamp_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(websiteId_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, websiteId_);
+      if (platformType_ != com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.k_EAuthTokenPlatformType_Invalid.getNumber()) {
+        output.writeEnum(6, platformType_);
       }
-      if (persistence_ != ESessionPersistence.k_ESessionPersistence_Unknown.getNumber()) {
+      if (persistence_ != com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.k_ESessionPersistence_Invalid.getNumber()) {
         output.writeEnum(7, persistence_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceFriendlyName_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, deviceFriendlyName_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(websiteId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, websiteId_);
       }
       getUnknownFields().writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceFriendlyName_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, deviceFriendlyName_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(accountName_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, accountName_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, accountName_);
       }
-      if (!encryptedPassword_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, encryptedPassword_);
-      }
-      if (encryptionTimestamp_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(3, encryptionTimestamp_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(encryptedPassword_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, encryptedPassword_);
       }
       if (rememberLogin_ != false) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(4, rememberLogin_);
       }
-      if (platformType_ != EAuthTokenPlatformType.k_EAuthTokenPlatformType_Unknown.getNumber()) {
+      if (encryptionTimestamp_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, platformType_);
+          .computeInt64Size(5, encryptionTimestamp_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(websiteId_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, websiteId_);
+      if (platformType_ != com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.k_EAuthTokenPlatformType_Invalid.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(6, platformType_);
       }
-      if (persistence_ != ESessionPersistence.k_ESessionPersistence_Unknown.getNumber()) {
+      if (persistence_ != com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.k_ESessionPersistence_Invalid.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(7, persistence_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceFriendlyName_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, deviceFriendlyName_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(websiteId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, websiteId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof CAuthentication_BeginAuthSessionViaCredentials_Request)) {
+      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request)) {
         return super.equals(obj);
       }
-      CAuthentication_BeginAuthSessionViaCredentials_Request other = (CAuthentication_BeginAuthSessionViaCredentials_Request) obj;
+      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request other = (com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request) obj;
 
+      if (!getDeviceFriendlyName()
+          .equals(other.getDeviceFriendlyName())) return false;
       if (!getAccountName()
           .equals(other.getAccountName())) return false;
       if (!getEncryptedPassword()
           .equals(other.getEncryptedPassword())) return false;
-      if (getEncryptionTimestamp()
-          != other.getEncryptionTimestamp()) return false;
       if (getRememberLogin()
           != other.getRememberLogin()) return false;
+      if (getEncryptionTimestamp()
+          != other.getEncryptionTimestamp()) return false;
       if (platformType_ != other.platformType_) return false;
+      if (persistence_ != other.persistence_) return false;
       if (!getWebsiteId()
           .equals(other.getWebsiteId())) return false;
-      if (persistence_ != other.persistence_) return false;
-      if (!getDeviceFriendlyName()
-          .equals(other.getDeviceFriendlyName())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + DEVICE_FRIENDLY_NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getDeviceFriendlyName().hashCode();
       hash = (37 * hash) + ACCOUNT_NAME_FIELD_NUMBER;
       hash = (53 * hash) + getAccountName().hashCode();
       hash = (37 * hash) + ENCRYPTED_PASSWORD_FIELD_NUMBER;
       hash = (53 * hash) + getEncryptedPassword().hashCode();
-      hash = (37 * hash) + ENCRYPTION_TIMESTAMP_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getEncryptionTimestamp());
       hash = (37 * hash) + REMEMBER_LOGIN_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getRememberLogin());
+      hash = (37 * hash) + ENCRYPTION_TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getEncryptionTimestamp());
       hash = (37 * hash) + PLATFORM_TYPE_FIELD_NUMBER;
       hash = (53 * hash) + platformType_;
-      hash = (37 * hash) + WEBSITE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getWebsiteId().hashCode();
       hash = (37 * hash) + PERSISTENCE_FIELD_NUMBER;
       hash = (53 * hash) + persistence_;
-      hash = (37 * hash) + DEVICE_FRIENDLY_NAME_FIELD_NUMBER;
-      hash = (53 * hash) + getDeviceFriendlyName().hashCode();
+      hash = (37 * hash) + WEBSITE_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getWebsiteId().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(byte[] data)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseDelimitedFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseDelimitedFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -893,29 +972,29 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(CAuthentication_BeginAuthSessionViaCredentials_Request prototype) {
+    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * <pre>
-     * Request message for beginning auth session via credentials
+     * 开始通过凭据进行身份验证的请求消息
      * </pre>
      *
      * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.CAuthentication_BeginAuthSessionViaCredentials_Request}
@@ -923,18 +1002,18 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.CAuthentication_BeginAuthSessionViaCredentials_Request)
-        CAuthentication_BeginAuthSessionViaCredentials_RequestOrBuilder {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_RequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_fieldAccessorTable
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                CAuthentication_BeginAuthSessionViaCredentials_Request.class, Builder.class);
+                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.Builder.class);
       }
 
       // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.newBuilder()
@@ -943,136 +1022,137 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
 
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        deviceFriendlyName_ = "";
+
         accountName_ = "";
 
-        encryptedPassword_ = com.google.protobuf.ByteString.EMPTY;
-
-        encryptionTimestamp_ = 0L;
+        encryptedPassword_ = "";
 
         rememberLogin_ = false;
 
-        platformType_ = 0;
+        encryptionTimestamp_ = 0L;
 
-        websiteId_ = "";
+        platformType_ = 0;
 
         persistence_ = 0;
 
-        deviceFriendlyName_ = "";
+        websiteId_ = "";
 
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor;
       }
 
-      @Override
-      public CAuthentication_BeginAuthSessionViaCredentials_Request getDefaultInstanceForType() {
-        return CAuthentication_BeginAuthSessionViaCredentials_Request.getDefaultInstance();
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request getDefaultInstanceForType() {
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.getDefaultInstance();
       }
 
-      @Override
-      public CAuthentication_BeginAuthSessionViaCredentials_Request build() {
-        CAuthentication_BeginAuthSessionViaCredentials_Request result = buildPartial();
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request build() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public CAuthentication_BeginAuthSessionViaCredentials_Request buildPartial() {
-        CAuthentication_BeginAuthSessionViaCredentials_Request result = new CAuthentication_BeginAuthSessionViaCredentials_Request(this);
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request buildPartial() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request result = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request(this);
+        result.deviceFriendlyName_ = deviceFriendlyName_;
         result.accountName_ = accountName_;
         result.encryptedPassword_ = encryptedPassword_;
-        result.encryptionTimestamp_ = encryptionTimestamp_;
         result.rememberLogin_ = rememberLogin_;
+        result.encryptionTimestamp_ = encryptionTimestamp_;
         result.platformType_ = platformType_;
-        result.websiteId_ = websiteId_;
         result.persistence_ = persistence_;
-        result.deviceFriendlyName_ = deviceFriendlyName_;
+        result.websiteId_ = websiteId_;
         onBuilt();
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof CAuthentication_BeginAuthSessionViaCredentials_Request) {
-          return mergeFrom((CAuthentication_BeginAuthSessionViaCredentials_Request)other);
+        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request) {
+          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(CAuthentication_BeginAuthSessionViaCredentials_Request other) {
-        if (other == CAuthentication_BeginAuthSessionViaCredentials_Request.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request other) {
+        if (other == com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.getDefaultInstance()) return this;
+        if (!other.getDeviceFriendlyName().isEmpty()) {
+          deviceFriendlyName_ = other.deviceFriendlyName_;
+          onChanged();
+        }
         if (!other.getAccountName().isEmpty()) {
           accountName_ = other.accountName_;
           onChanged();
         }
-        if (other.getEncryptedPassword() != com.google.protobuf.ByteString.EMPTY) {
-          setEncryptedPassword(other.getEncryptedPassword());
-        }
-        if (other.getEncryptionTimestamp() != 0L) {
-          setEncryptionTimestamp(other.getEncryptionTimestamp());
+        if (!other.getEncryptedPassword().isEmpty()) {
+          encryptedPassword_ = other.encryptedPassword_;
+          onChanged();
         }
         if (other.getRememberLogin() != false) {
           setRememberLogin(other.getRememberLogin());
         }
+        if (other.getEncryptionTimestamp() != 0L) {
+          setEncryptionTimestamp(other.getEncryptionTimestamp());
+        }
         if (other.platformType_ != 0) {
           setPlatformTypeValue(other.getPlatformTypeValue());
-        }
-        if (!other.getWebsiteId().isEmpty()) {
-          websiteId_ = other.websiteId_;
-          onChanged();
         }
         if (other.persistence_ != 0) {
           setPersistenceValue(other.getPersistenceValue());
         }
-        if (!other.getDeviceFriendlyName().isEmpty()) {
-          deviceFriendlyName_ = other.deviceFriendlyName_;
+        if (!other.getWebsiteId().isEmpty()) {
+          websiteId_ = other.websiteId_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -1080,18 +1160,18 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         if (extensionRegistry == null) {
-          throw new NullPointerException();
+          throw new java.lang.NullPointerException();
         }
         try {
           boolean done = false;
@@ -1102,42 +1182,42 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
                 done = true;
                 break;
               case 10: {
-                accountName_ = input.readStringRequireUtf8();
+                deviceFriendlyName_ = input.readStringRequireUtf8();
 
                 break;
               } // case 10
               case 18: {
-                encryptedPassword_ = input.readBytes();
+                accountName_ = input.readStringRequireUtf8();
 
                 break;
               } // case 18
-              case 24: {
-                encryptionTimestamp_ = input.readInt64();
+              case 26: {
+                encryptedPassword_ = input.readStringRequireUtf8();
 
                 break;
-              } // case 24
+              } // case 26
               case 32: {
                 rememberLogin_ = input.readBool();
 
                 break;
               } // case 32
               case 40: {
-                platformType_ = input.readEnum();
+                encryptionTimestamp_ = input.readInt64();
 
                 break;
               } // case 40
-              case 50: {
-                websiteId_ = input.readStringRequireUtf8();
+              case 48: {
+                platformType_ = input.readEnum();
 
                 break;
-              } // case 50
+              } // case 48
               case 56: {
                 persistence_ = input.readEnum();
 
                 break;
               } // case 56
               case 66: {
-                deviceFriendlyName_ = input.readStringRequireUtf8();
+                websiteId_ = input.readStringRequireUtf8();
 
                 break;
               } // case 66
@@ -1157,42 +1237,138 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         return this;
       }
 
-      private Object accountName_ = "";
+      private java.lang.Object deviceFriendlyName_ = "";
       /**
        * <pre>
-       * Account name
+       * 设备友好名称
        * </pre>
        *
-       * <code>string account_name = 1;</code>
-       * @return The accountName.
+       * <code>string device_friendly_name = 1;</code>
+       * @return The deviceFriendlyName.
        */
-      public String getAccountName() {
-        Object ref = accountName_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getDeviceFriendlyName() {
+        java.lang.Object ref = deviceFriendlyName_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          accountName_ = s;
+          java.lang.String s = bs.toStringUtf8();
+          deviceFriendlyName_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <pre>
-       * Account name
+       * 设备友好名称
        * </pre>
        *
-       * <code>string account_name = 1;</code>
+       * <code>string device_friendly_name = 1;</code>
+       * @return The bytes for deviceFriendlyName.
+       */
+      public com.google.protobuf.ByteString
+          getDeviceFriendlyNameBytes() {
+        java.lang.Object ref = deviceFriendlyName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          deviceFriendlyName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 设备友好名称
+       * </pre>
+       *
+       * <code>string device_friendly_name = 1;</code>
+       * @param value The deviceFriendlyName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDeviceFriendlyName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        deviceFriendlyName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 设备友好名称
+       * </pre>
+       *
+       * <code>string device_friendly_name = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDeviceFriendlyName() {
+        
+        deviceFriendlyName_ = getDefaultInstance().getDeviceFriendlyName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 设备友好名称
+       * </pre>
+       *
+       * <code>string device_friendly_name = 1;</code>
+       * @param value The bytes for deviceFriendlyName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDeviceFriendlyNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        deviceFriendlyName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object accountName_ = "";
+      /**
+       * <pre>
+       * 用户名
+       * </pre>
+       *
+       * <code>string account_name = 2;</code>
+       * @return The accountName.
+       */
+      public java.lang.String getAccountName() {
+        java.lang.Object ref = accountName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          accountName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 用户名
+       * </pre>
+       *
+       * <code>string account_name = 2;</code>
        * @return The bytes for accountName.
        */
       public com.google.protobuf.ByteString
           getAccountNameBytes() {
-        Object ref = accountName_;
+        java.lang.Object ref = accountName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           accountName_ = b;
           return b;
         } else {
@@ -1201,15 +1377,15 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Account name
+       * 用户名
        * </pre>
        *
-       * <code>string account_name = 1;</code>
+       * <code>string account_name = 2;</code>
        * @param value The accountName to set.
        * @return This builder for chaining.
        */
       public Builder setAccountName(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1220,10 +1396,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Account name
+       * 用户名
        * </pre>
        *
-       * <code>string account_name = 1;</code>
+       * <code>string account_name = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearAccountName() {
@@ -1234,10 +1410,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Account name
+       * 用户名
        * </pre>
        *
-       * <code>string account_name = 1;</code>
+       * <code>string account_name = 2;</code>
        * @param value The bytes for accountName to set.
        * @return This builder for chaining.
        */
@@ -1253,29 +1429,59 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         return this;
       }
 
-      private com.google.protobuf.ByteString encryptedPassword_ = com.google.protobuf.ByteString.EMPTY;
+      private java.lang.Object encryptedPassword_ = "";
       /**
        * <pre>
-       * Encrypted password
+       * RSA 加密的密码
        * </pre>
        *
-       * <code>bytes encrypted_password = 2;</code>
+       * <code>string encrypted_password = 3;</code>
        * @return The encryptedPassword.
        */
-      @Override
-      public com.google.protobuf.ByteString getEncryptedPassword() {
-        return encryptedPassword_;
+      public java.lang.String getEncryptedPassword() {
+        java.lang.Object ref = encryptedPassword_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          encryptedPassword_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
        * <pre>
-       * Encrypted password
+       * RSA 加密的密码
        * </pre>
        *
-       * <code>bytes encrypted_password = 2;</code>
+       * <code>string encrypted_password = 3;</code>
+       * @return The bytes for encryptedPassword.
+       */
+      public com.google.protobuf.ByteString
+          getEncryptedPasswordBytes() {
+        java.lang.Object ref = encryptedPassword_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          encryptedPassword_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * RSA 加密的密码
+       * </pre>
+       *
+       * <code>string encrypted_password = 3;</code>
        * @param value The encryptedPassword to set.
        * @return This builder for chaining.
        */
-      public Builder setEncryptedPassword(com.google.protobuf.ByteString value) {
+      public Builder setEncryptedPassword(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1286,10 +1492,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Encrypted password
+       * RSA 加密的密码
        * </pre>
        *
-       * <code>bytes encrypted_password = 2;</code>
+       * <code>string encrypted_password = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearEncryptedPassword() {
@@ -1298,46 +1504,23 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         onChanged();
         return this;
       }
-
-      private long encryptionTimestamp_ ;
       /**
        * <pre>
-       * Timestamp of encryption
+       * RSA 加密的密码
        * </pre>
        *
-       * <code>int64 encryption_timestamp = 3;</code>
-       * @return The encryptionTimestamp.
-       */
-      @Override
-      public long getEncryptionTimestamp() {
-        return encryptionTimestamp_;
-      }
-      /**
-       * <pre>
-       * Timestamp of encryption
-       * </pre>
-       *
-       * <code>int64 encryption_timestamp = 3;</code>
-       * @param value The encryptionTimestamp to set.
+       * <code>string encrypted_password = 3;</code>
+       * @param value The bytes for encryptedPassword to set.
        * @return This builder for chaining.
        */
-      public Builder setEncryptionTimestamp(long value) {
+      public Builder setEncryptedPasswordBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         
-        encryptionTimestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * Timestamp of encryption
-       * </pre>
-       *
-       * <code>int64 encryption_timestamp = 3;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearEncryptionTimestamp() {
-        
-        encryptionTimestamp_ = 0L;
+        encryptedPassword_ = value;
         onChanged();
         return this;
       }
@@ -1345,19 +1528,19 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       private boolean rememberLogin_ ;
       /**
        * <pre>
-       * Whether to remember login
+       * 是否记住登录信息
        * </pre>
        *
        * <code>bool remember_login = 4;</code>
        * @return The rememberLogin.
        */
-      @Override
+      @java.lang.Override
       public boolean getRememberLogin() {
         return rememberLogin_;
       }
       /**
        * <pre>
-       * Whether to remember login
+       * 是否记住登录信息
        * </pre>
        *
        * <code>bool remember_login = 4;</code>
@@ -1372,7 +1555,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Whether to remember login
+       * 是否记住登录信息
        * </pre>
        *
        * <code>bool remember_login = 4;</code>
@@ -1385,24 +1568,67 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         return this;
       }
 
+      private long encryptionTimestamp_ ;
+      /**
+       * <pre>
+       * 加密时间戳
+       * </pre>
+       *
+       * <code>int64 encryption_timestamp = 5;</code>
+       * @return The encryptionTimestamp.
+       */
+      @java.lang.Override
+      public long getEncryptionTimestamp() {
+        return encryptionTimestamp_;
+      }
+      /**
+       * <pre>
+       * 加密时间戳
+       * </pre>
+       *
+       * <code>int64 encryption_timestamp = 5;</code>
+       * @param value The encryptionTimestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEncryptionTimestamp(long value) {
+        
+        encryptionTimestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 加密时间戳
+       * </pre>
+       *
+       * <code>int64 encryption_timestamp = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEncryptionTimestamp() {
+        
+        encryptionTimestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+
       private int platformType_ = 0;
       /**
        * <pre>
-       * Platform type
+       * 平台类型
        * </pre>
        *
-       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
        * @return The enum numeric value on the wire for platformType.
        */
-      @Override public int getPlatformTypeValue() {
+      @java.lang.Override public int getPlatformTypeValue() {
         return platformType_;
       }
       /**
        * <pre>
-       * Platform type
+       * 平台类型
        * </pre>
        *
-       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
        * @param value The enum numeric value on the wire for platformType to set.
        * @return This builder for chaining.
        */
@@ -1414,28 +1640,28 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Platform type
+       * 平台类型
        * </pre>
        *
-       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
        * @return The platformType.
        */
-      @Override
-      public EAuthTokenPlatformType getPlatformType() {
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType getPlatformType() {
         @SuppressWarnings("deprecation")
-        EAuthTokenPlatformType result = EAuthTokenPlatformType.valueOf(platformType_);
-        return result == null ? EAuthTokenPlatformType.UNRECOGNIZED : result;
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType result = com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.valueOf(platformType_);
+        return result == null ? com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.UNRECOGNIZED : result;
       }
       /**
        * <pre>
-       * Platform type
+       * 平台类型
        * </pre>
        *
-       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
        * @param value The platformType to set.
        * @return This builder for chaining.
        */
-      public Builder setPlatformType(EAuthTokenPlatformType value) {
+      public Builder setPlatformType(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1446,10 +1672,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Platform type
+       * 平台类型
        * </pre>
        *
-       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 5;</code>
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.EAuthTokenPlatformType platform_type = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearPlatformType() {
@@ -1459,117 +1685,21 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         return this;
       }
 
-      private Object websiteId_ = "";
-      /**
-       * <pre>
-       * Website identifier
-       * </pre>
-       *
-       * <code>string website_id = 6;</code>
-       * @return The websiteId.
-       */
-      public String getWebsiteId() {
-        Object ref = websiteId_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          websiteId_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * Website identifier
-       * </pre>
-       *
-       * <code>string website_id = 6;</code>
-       * @return The bytes for websiteId.
-       */
-      public com.google.protobuf.ByteString
-          getWebsiteIdBytes() {
-        Object ref = websiteId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          websiteId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * Website identifier
-       * </pre>
-       *
-       * <code>string website_id = 6;</code>
-       * @param value The websiteId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setWebsiteId(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        websiteId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * Website identifier
-       * </pre>
-       *
-       * <code>string website_id = 6;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearWebsiteId() {
-        
-        websiteId_ = getDefaultInstance().getWebsiteId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * Website identifier
-       * </pre>
-       *
-       * <code>string website_id = 6;</code>
-       * @param value The bytes for websiteId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setWebsiteIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        websiteId_ = value;
-        onChanged();
-        return this;
-      }
-
       private int persistence_ = 0;
       /**
        * <pre>
-       * Session persistence
+       * 会话持久性
        * </pre>
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
        * @return The enum numeric value on the wire for persistence.
        */
-      @Override public int getPersistenceValue() {
+      @java.lang.Override public int getPersistenceValue() {
         return persistence_;
       }
       /**
        * <pre>
-       * Session persistence
+       * 会话持久性
        * </pre>
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
@@ -1584,28 +1714,28 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Session persistence
+       * 会话持久性
        * </pre>
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
        * @return The persistence.
        */
-      @Override
-      public ESessionPersistence getPersistence() {
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence getPersistence() {
         @SuppressWarnings("deprecation")
-        ESessionPersistence result = ESessionPersistence.valueOf(persistence_);
-        return result == null ? ESessionPersistence.UNRECOGNIZED : result;
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence result = com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.valueOf(persistence_);
+        return result == null ? com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence.UNRECOGNIZED : result;
       }
       /**
        * <pre>
-       * Session persistence
+       * 会话持久性
        * </pre>
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
        * @param value The persistence to set.
        * @return This builder for chaining.
        */
-      public Builder setPersistence(ESessionPersistence value) {
+      public Builder setPersistence(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.ESessionPersistence value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1616,7 +1746,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Session persistence
+       * 会话持久性
        * </pre>
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.ESessionPersistence persistence = 7;</code>
@@ -1629,43 +1759,43 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
         return this;
       }
 
-      private Object deviceFriendlyName_ = "";
+      private java.lang.Object websiteId_ = "";
       /**
        * <pre>
-       * Friendly name of the device
+       * 请求身份验证的客户端网站 ID
        * </pre>
        *
-       * <code>string device_friendly_name = 8;</code>
-       * @return The deviceFriendlyName.
+       * <code>string website_id = 8;</code>
+       * @return The websiteId.
        */
-      public String getDeviceFriendlyName() {
-        Object ref = deviceFriendlyName_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getWebsiteId() {
+        java.lang.Object ref = websiteId_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          deviceFriendlyName_ = s;
+          java.lang.String s = bs.toStringUtf8();
+          websiteId_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <pre>
-       * Friendly name of the device
+       * 请求身份验证的客户端网站 ID
        * </pre>
        *
-       * <code>string device_friendly_name = 8;</code>
-       * @return The bytes for deviceFriendlyName.
+       * <code>string website_id = 8;</code>
+       * @return The bytes for websiteId.
        */
       public com.google.protobuf.ByteString
-          getDeviceFriendlyNameBytes() {
-        Object ref = deviceFriendlyName_;
+          getWebsiteIdBytes() {
+        java.lang.Object ref = websiteId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          deviceFriendlyName_ = b;
+                  (java.lang.String) ref);
+          websiteId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -1673,64 +1803,64 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       }
       /**
        * <pre>
-       * Friendly name of the device
+       * 请求身份验证的客户端网站 ID
        * </pre>
        *
-       * <code>string device_friendly_name = 8;</code>
-       * @param value The deviceFriendlyName to set.
+       * <code>string website_id = 8;</code>
+       * @param value The websiteId to set.
        * @return This builder for chaining.
        */
-      public Builder setDeviceFriendlyName(
-          String value) {
+      public Builder setWebsiteId(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        deviceFriendlyName_ = value;
+        websiteId_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * Friendly name of the device
+       * 请求身份验证的客户端网站 ID
        * </pre>
        *
-       * <code>string device_friendly_name = 8;</code>
+       * <code>string website_id = 8;</code>
        * @return This builder for chaining.
        */
-      public Builder clearDeviceFriendlyName() {
+      public Builder clearWebsiteId() {
         
-        deviceFriendlyName_ = getDefaultInstance().getDeviceFriendlyName();
+        websiteId_ = getDefaultInstance().getWebsiteId();
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * Friendly name of the device
+       * 请求身份验证的客户端网站 ID
        * </pre>
        *
-       * <code>string device_friendly_name = 8;</code>
-       * @param value The bytes for deviceFriendlyName to set.
+       * <code>string website_id = 8;</code>
+       * @param value The bytes for websiteId to set.
        * @return This builder for chaining.
        */
-      public Builder setDeviceFriendlyNameBytes(
+      public Builder setWebsiteIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        deviceFriendlyName_ = value;
+        websiteId_ = value;
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -1741,18 +1871,18 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     }
 
     // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.CAuthentication_BeginAuthSessionViaCredentials_Request)
-    private static final CAuthentication_BeginAuthSessionViaCredentials_Request DEFAULT_INSTANCE;
+    private static final com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new CAuthentication_BeginAuthSessionViaCredentials_Request();
+      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request();
     }
 
-    public static CAuthentication_BeginAuthSessionViaCredentials_Request getDefaultInstance() {
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<CAuthentication_BeginAuthSessionViaCredentials_Request>
         PARSER = new com.google.protobuf.AbstractParser<CAuthentication_BeginAuthSessionViaCredentials_Request>() {
-      @Override
+      @java.lang.Override
       public CAuthentication_BeginAuthSessionViaCredentials_Request parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1776,13 +1906,13 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<CAuthentication_BeginAuthSessionViaCredentials_Request> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public CAuthentication_BeginAuthSessionViaCredentials_Request getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1801,28 +1931,27 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n<CAuthentication_BeginAuthSessionViaCre" +
       "dentials_Request.proto\022%com.chenerzhu.cr" +
       "awler.proxy.protobufs\"\371\002\n6CAuthenticatio" +
       "n_BeginAuthSessionViaCredentials_Request" +
-      "\022\024\n\014account_name\030\001 \001(\t\022\032\n\022encrypted_pass" +
-      "word\030\002 \001(\014\022\034\n\024encryption_timestamp\030\003 \001(\003" +
-      "\022\026\n\016remember_login\030\004 \001(\010\022T\n\rplatform_typ" +
-      "e\030\005 \001(\0162=.com.chenerzhu.crawler.proxy.pr" +
-      "otobufs.EAuthTokenPlatformType\022\022\n\nwebsit" +
-      "e_id\030\006 \001(\t\022O\n\013persistence\030\007 \001(\0162:.com.ch" +
-      "enerzhu.crawler.proxy.protobufs.ESession" +
-      "Persistence\022\034\n\024device_friendly_name\030\010 \001(" +
-      "\t*\264\001\n\026EAuthTokenPlatformType\022$\n k_EAuthT" +
-      "okenPlatformType_Unknown\020\000\022&\n\"k_EAuthTok" +
-      "enPlatformType_MobileApp\020\001\022\'\n#k_EAuthTok" +
-      "enPlatformType_DesktopApp\020\002\022#\n\037k_EAuthTo" +
-      "kenPlatformType_WebApp\020\003*\207\001\n\023ESessionPer" +
-      "sistence\022!\n\035k_ESessionPersistence_Unknow" +
-      "n\020\000\022$\n k_ESessionPersistence_Persistent\020" +
-      "\001\022\'\n#k_ESessionPersistence_NonPersistent" +
-      "\020\002b\006proto3"
+      "\022\034\n\024device_friendly_name\030\001 \001(\t\022\024\n\014accoun" +
+      "t_name\030\002 \001(\t\022\032\n\022encrypted_password\030\003 \001(\t" +
+      "\022\026\n\016remember_login\030\004 \001(\010\022\034\n\024encryption_t" +
+      "imestamp\030\005 \001(\003\022T\n\rplatform_type\030\006 \001(\0162=." +
+      "com.chenerzhu.crawler.proxy.protobufs.EA" +
+      "uthTokenPlatformType\022O\n\013persistence\030\007 \001(" +
+      "\0162:.com.chenerzhu.crawler.proxy.protobuf" +
+      "s.ESessionPersistence\022\022\n\nwebsite_id\030\010 \001(" +
+      "\t*\210\001\n\026EAuthTokenPlatformType\022$\n k_EAuthT" +
+      "okenPlatformType_Invalid\020\000\022&\n\"k_EAuthTok" +
+      "enPlatformType_MobileApp\020\001\022 \n\034k_EAuthTok" +
+      "enPlatformType_Web\020\002*\203\001\n\023ESessionPersist" +
+      "ence\022!\n\035k_ESessionPersistence_Invalid\020\000\022" +
+      "$\n k_ESessionPersistence_Persistent\020\001\022#\n" +
+      "\037k_ESessionPersistence_Ephemeral\020\002b\006prot" +
+      "o3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1833,7 +1962,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsRequest {
     internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_chenerzhu_crawler_proxy_protobufs_CAuthentication_BeginAuthSessionViaCredentials_Request_descriptor,
-        new String[] { "AccountName", "EncryptedPassword", "EncryptionTimestamp", "RememberLogin", "PlatformType", "WebsiteId", "Persistence", "DeviceFriendlyName", });
+        new java.lang.String[] { "DeviceFriendlyName", "AccountName", "EncryptedPassword", "RememberLogin", "EncryptionTimestamp", "PlatformType", "Persistence", "WebsiteId", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
