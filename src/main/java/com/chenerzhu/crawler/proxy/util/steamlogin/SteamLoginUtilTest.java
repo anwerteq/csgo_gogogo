@@ -1,13 +1,14 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Request;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import com.google.protobuf.InvalidProtocolBufferException;
-
+import com.google.protobuf.ByteString;
 import javax.crypto.Cipher;
 import java.security.PublicKey;
 import java.io.UnsupportedEncodingException;
@@ -24,15 +25,9 @@ public class SteamLoginUtilTest {
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
     public static void main(String[] args) {
-        String basestr= "CoAEYzJiNDVmOTU2NThkZGE5NGY0NTY3Y2ZkMWI0MjE1M2M4NmFkYTE3ZmYxOGM0YmViNmE0ZTJmNjA5NTVhNDQwYTU3N2FkZmFmNmVmOTAyMmU3YTQ5ZGJlYzkzNDc3NGMxODQ4ZjIxMWQ2NjJlYjA2ZDViM2M3OGMwNGNiYTYwYjNiOWIzNWY1YjA3NGFmNjhhMjc2ODIwYmJkMTBlNGEwODJkZjM4MWJmYTJhMDE3MmNiOWFjNjc3NTI4MDlhMDZkZmU3MDFlZDJlMDVjODljNjk4NDhlOGIxODZmZTI1NTljMmVjNzgzZDQ0ZmFmMDIxMzAyYjZmZWM3MDllMDMzMDhmNDI0OGFlMzQ1Njk2OWRlMzI3NTA0NGJiYzhkMjVlOWRhZTFiZWNkMDE3OTE5OTYyNTdkNjdmYWRlOGE1ZjVhOWRiZTk4NGYyNGI0MzA3MDM4MzcyN2ZkYmNkZmI2ZmI4OTFjNTgxZGEzOTgzM2M1Njk5MmIxMDYzMTIyYjk3NzhhYThmNWU3ZTA5MzQ2MzFmMzUwODVhMzBkNzI1NDZjYTFlNjdiZmYxMDYxOTBlMDY2ODhhZTI1MThhODJiNmRhODNiZjAwODk4M2Y4ZjE1NDFlNGE2MGRiMzJiZjdmNmVhMTAwYjljYmJmMDAzNmUxYTA3YWMwNjE4OTdiZmYSBjAxMDAwMRiQyubLlQE=";
+        String basestr= "ClJNb3ppbGxhLzUuMCAoWDExOyBMaW51eCB4ODZfNjQ7IHJ2OjEuOS41LjIwKSBHZWNrby8yODEyLTEyLTEwIDA0OjU2OjI4IEZpcmVmb3gvMy44EghtdTY0a2tybxrYAm5iNTNoNW92L3ZkMlJndXUrR2JjUVZneVhpUXhpRlVDaEhTRzR0RmpnTEpLbXZ4eE5ZeHNuNHVUL245bkpncUpJU0ZWbmZKeUdnUWJGUHpLY21qSENHWlEzRUhZNXlHSFFIcFlQSDYwSlNack5aUHdqYnF2L1ZLN0xjdmVYRXErVk5waW44SjQzd3VEUXlRRTdWbStGU0pCampLd21vRFZRSCt4UmJtUi9BNGpPeEMrVmFXSUo4QWI4b0tmN2djd1ZYbmNHa3N0bnRxcU16djV4SUJxaUJocU9aekZsVmN6VEZmVTl5VzRWS1pQN2U2bzg0S2FpRW8rYWYrcFNQbTZzZERJaUM4VHpBN1drM2JQbnc0cGt2blhsTEZNcXUwTEdkNko3QzI4dkY0clNFOXIyWFRzVU1ubmM4WEtuVWdDNUVGdStlVGdqTzgxQ2p0ZjNYcU1nUT09IJDK5suVASgBMAM4AUIJQ29tbXVuaXR5";
         byte[] decode = Base64.getDecoder().decode(basestr);
-        CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = null;
-        try {
-            getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
-                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom(decode);
-        } catch (InvalidProtocolBufferException e) {
-            throw new RuntimeException(e);
-        }
+        String s = new String(decode);
         System.out.println("123123");
     }
 
@@ -89,7 +84,7 @@ public class SteamLoginUtilTest {
         CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request build = CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request
                 .newBuilder()
                 .setAccountName(account_name)
-//                .setEncryptedPassword(encrypted_password.getBytes())
+                .setEncryptedPassword(ByteString.copyFromUtf8(encrypted_password))
                 .setEncryptionTimestamp(rsa_timestamp)
                 .setRememberLogin(true)
                 .setPlatformType(CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp)
@@ -103,10 +98,12 @@ public class SteamLoginUtilTest {
         // 序列化为字节数组
         Map<String, String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
-        Http Http = new Http();
-        HttpBean get = Http.request(url, "POST", objectObjectHashMap, "", true,
-                "https://steamcommunity.com", false);
-        byte[] decode = Base64.getDecoder().decode(get.getResponse());
+        Map<String, String> headerMap = new HashMap() {{
+            put("Referer", "https://steamcommunity.com");
+        }};
+        String response = HttpClientUtils.sendPost(url, JSONObject.toJSONString(objectObjectHashMap), headerMap);
+
+        byte[] decode = Base64.getDecoder().decode(response);
         CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse clientResponse = null;
         try {
              clientResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse.parseFrom(decode);
