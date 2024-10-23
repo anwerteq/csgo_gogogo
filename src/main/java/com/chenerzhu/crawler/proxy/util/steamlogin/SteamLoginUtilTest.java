@@ -5,6 +5,7 @@ import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaC
 import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse;
 import com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Request;
+import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import javax.crypto.Cipher;
@@ -22,8 +23,21 @@ public class SteamLoginUtilTest {
     // steam登录标识
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
+    public static void main(String[] args) {
+        String basestr= "CoAEYzJiNDVmOTU2NThkZGE5NGY0NTY3Y2ZkMWI0MjE1M2M4NmFkYTE3ZmYxOGM0YmViNmE0ZTJmNjA5NTVhNDQwYTU3N2FkZmFmNmVmOTAyMmU3YTQ5ZGJlYzkzNDc3NGMxODQ4ZjIxMWQ2NjJlYjA2ZDViM2M3OGMwNGNiYTYwYjNiOWIzNWY1YjA3NGFmNjhhMjc2ODIwYmJkMTBlNGEwODJkZjM4MWJmYTJhMDE3MmNiOWFjNjc3NTI4MDlhMDZkZmU3MDFlZDJlMDVjODljNjk4NDhlOGIxODZmZTI1NTljMmVjNzgzZDQ0ZmFmMDIxMzAyYjZmZWM3MDllMDMzMDhmNDI0OGFlMzQ1Njk2OWRlMzI3NTA0NGJiYzhkMjVlOWRhZTFiZWNkMDE3OTE5OTYyNTdkNjdmYWRlOGE1ZjVhOWRiZTk4NGYyNGI0MzA3MDM4MzcyN2ZkYmNkZmI2ZmI4OTFjNTgxZGEzOTgzM2M1Njk5MmIxMDYzMTIyYjk3NzhhYThmNWU3ZTA5MzQ2MzFmMzUwODVhMzBkNzI1NDZjYTFlNjdiZmYxMDYxOTBlMDY2ODhhZTI1MThhODJiNmRhODNiZjAwODk4M2Y4ZjE1NDFlNGE2MGRiMzJiZjdmNmVhMTAwYjljYmJmMDAzNmUxYTA3YWMwNjE4OTdiZmYSBjAxMDAwMRiQyubLlQE=";
+        byte[] decode = Base64.getDecoder().decode(basestr);
+        CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = null;
+        try {
+            getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
+                    CAuthentication_GetPasswordRSAPublicKey_Response.parseFrom(decode);
+        } catch (InvalidProtocolBufferException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("123123");
+    }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main1(String[] args) throws UnsupportedEncodingException {
+        steamLoginUrlFlag.set(true);
         CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
         String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), "QingLiu98!");
         step3("mu64kkro",encryptPasswordProtobuf,Long.valueOf(step2Value.getTimestamp()));
@@ -46,22 +60,20 @@ public class SteamLoginUtilTest {
      * @throws UnsupportedEncodingException
      */
     public static CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response step2() throws UnsupportedEncodingException {
-        Http Http = new Http();
         String url = "https://api.steampowered.com/IAuthenticationService/GetPasswordRSAPublicKey/v1";
         CAuthentication_GetPasswordRSAPublicKey_Request.GetPasswordRSAPublicKey_Request accountProtobufs = CAuthentication_GetPasswordRSAPublicKey_Request
                 .GetPasswordRSAPublicKey_Request.newBuilder().setAccountName("mu64kkro").build();
         steamLoginUrlFlag.set(true);
-
         // Base64 编码
         String base64EncodedMessage = Base64.getEncoder().encodeToString( accountProtobufs.toByteArray());
         // 序列化为字节数组
         Map<String, String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
-
-        HttpBean get = Http.request(url, "GET", objectObjectHashMap, "", true,
-                "https://steamcommunity.com", false);
-
-        byte[] decode = Base64.getDecoder().decode(get.getResponse());
+        Map<String, String> headerMap = new HashMap() {{
+            put("Referer", "https://steamcommunity.com");
+        }};
+        String response = HttpClientUtils.sendGet(url, headerMap, objectObjectHashMap);
+        byte[] decode = Base64.getDecoder().decode(response);
         CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response getPasswordRSAPublicKeyResponse = null;
         try {
             getPasswordRSAPublicKeyResponse = CAuthenticationGetPasswordRSAPublicKeyResponse.
@@ -77,7 +89,7 @@ public class SteamLoginUtilTest {
         CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request build = CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request
                 .newBuilder()
                 .setAccountName(account_name)
-                .setEncryptedPassword(encrypted_password.getBytes())
+//                .setEncryptedPassword(encrypted_password.getBytes())
                 .setEncryptionTimestamp(rsa_timestamp)
                 .setRememberLogin(true)
                 .setPlatformType(CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp)

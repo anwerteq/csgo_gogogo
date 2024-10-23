@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.util;
 import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.common.HttpMethod;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.util.steamlogin.SteamLoginUtilTest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -137,6 +138,12 @@ public class HttpClientUtils implements ApplicationRunner {
                 //获取响应内容
                 if (StringUtils.isEmpty(resultCharset)) {
                     resultCharset = DEFAULT_CHARSET;
+                }
+                //steam登录接口
+                if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
+                    byte[] byteArray = EntityUtils.toByteArray(entity);
+                    String base64Encode = Base64.getEncoder().encodeToString(byteArray);
+                    return base64Encode;
                 }
                 return EntityUtils.toString(entity, resultCharset);
             }

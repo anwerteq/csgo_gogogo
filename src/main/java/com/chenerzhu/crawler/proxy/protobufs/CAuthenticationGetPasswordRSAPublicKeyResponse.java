@@ -51,16 +51,10 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         getPublickeyExpBytes();
 
     /**
-     * <code>string timestamp = 3;</code>
+     * <code>int64 timestamp = 3;</code>
      * @return The timestamp.
      */
-    String getTimestamp();
-    /**
-     * <code>string timestamp = 3;</code>
-     * @return The bytes for timestamp.
-     */
-    com.google.protobuf.ByteString
-        getTimestampBytes();
+    long getTimestamp();
   }
   /**
    * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Response}
@@ -77,7 +71,6 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     private CAuthentication_GetPasswordRSAPublicKey_Response() {
       publickeyMod_ = "";
       publickeyExp_ = "";
-      timestamp_ = "";
     }
 
     @Override
@@ -190,41 +183,14 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
     }
 
     public static final int TIMESTAMP_FIELD_NUMBER = 3;
-    private volatile Object timestamp_;
+    private long timestamp_;
     /**
-     * <code>string timestamp = 3;</code>
+     * <code>int64 timestamp = 3;</code>
      * @return The timestamp.
      */
     @Override
-    public String getTimestamp() {
-      Object ref = timestamp_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        timestamp_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string timestamp = 3;</code>
-     * @return The bytes for timestamp.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getTimestampBytes() {
-      Object ref = timestamp_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        timestamp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getTimestamp() {
+      return timestamp_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -247,8 +213,8 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(publickeyExp_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, publickeyExp_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(timestamp_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, timestamp_);
+      if (timestamp_ != 0L) {
+        output.writeInt64(3, timestamp_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -265,8 +231,9 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(publickeyExp_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, publickeyExp_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(timestamp_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, timestamp_);
+      if (timestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, timestamp_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -287,8 +254,8 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
           .equals(other.getPublickeyMod())) return false;
       if (!getPublickeyExp()
           .equals(other.getPublickeyExp())) return false;
-      if (!getTimestamp()
-          .equals(other.getTimestamp())) return false;
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -305,7 +272,8 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       hash = (37 * hash) + PUBLICKEY_EXP_FIELD_NUMBER;
       hash = (53 * hash) + getPublickeyExp().hashCode();
       hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-      hash = (53 * hash) + getTimestamp().hashCode();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -438,7 +406,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
 
         publickeyExp_ = "";
 
-        timestamp_ = "";
+        timestamp_ = 0L;
 
         return this;
       }
@@ -525,9 +493,8 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
           publickeyExp_ = other.publickeyExp_;
           onChanged();
         }
-        if (!other.getTimestamp().isEmpty()) {
-          timestamp_ = other.timestamp_;
-          onChanged();
+        if (other.getTimestamp() != 0L) {
+          setTimestamp(other.getTimestamp());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -565,11 +532,11 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
 
                 break;
               } // case 18
-              case 26: {
-                timestamp_ = input.readStringRequireUtf8();
+              case 24: {
+                timestamp_ = input.readInt64();
 
                 break;
-              } // case 26
+              } // case 24
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -758,78 +725,33 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
         return this;
       }
 
-      private Object timestamp_ = "";
+      private long timestamp_ ;
       /**
-       * <code>string timestamp = 3;</code>
+       * <code>int64 timestamp = 3;</code>
        * @return The timestamp.
        */
-      public String getTimestamp() {
-        Object ref = timestamp_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          timestamp_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      @Override
+      public long getTimestamp() {
+        return timestamp_;
       }
       /**
-       * <code>string timestamp = 3;</code>
-       * @return The bytes for timestamp.
-       */
-      public com.google.protobuf.ByteString
-          getTimestampBytes() {
-        Object ref = timestamp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          timestamp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string timestamp = 3;</code>
+       * <code>int64 timestamp = 3;</code>
        * @param value The timestamp to set.
        * @return This builder for chaining.
        */
-      public Builder setTimestamp(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setTimestamp(long value) {
+        
         timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string timestamp = 3;</code>
+       * <code>int64 timestamp = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearTimestamp() {
         
-        timestamp_ = getDefaultInstance().getTimestamp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string timestamp = 3;</code>
-       * @param value The bytes for timestamp to set.
-       * @return This builder for chaining.
-       */
-      public Builder setTimestampBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        timestamp_ = value;
+        timestamp_ = 0L;
         onChanged();
         return this;
       }
@@ -916,7 +838,7 @@ public final class CAuthenticationGetPasswordRSAPublicKeyResponse {
       "proxy.protobufs\"s\n0CAuthentication_GetPa" +
       "sswordRSAPublicKey_Response\022\025\n\rpublickey" +
       "_mod\030\001 \001(\t\022\025\n\rpublickey_exp\030\002 \001(\t\022\021\n\ttim" +
-      "estamp\030\003 \001(\tb\006proto3"
+      "estamp\030\003 \001(\003b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

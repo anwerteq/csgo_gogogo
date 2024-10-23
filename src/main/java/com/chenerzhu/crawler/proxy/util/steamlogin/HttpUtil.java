@@ -1,11 +1,8 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
-import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse;
-import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.http.client.methods.HttpRequestBase;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
