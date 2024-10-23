@@ -1,0 +1,2 @@
+protoc --java_out=D:\\code\\company\\csgo-bi\\src\\main\\java  CAuthentication_BeginAuthSessionViaCredentials_Response.proto
+

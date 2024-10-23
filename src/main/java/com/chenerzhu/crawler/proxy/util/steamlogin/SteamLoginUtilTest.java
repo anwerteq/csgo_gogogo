@@ -24,11 +24,12 @@ public class SteamLoginUtilTest {
     // steam登录标识
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
-    public static void main(String[] args) {
-        String basestr= "ClJNb3ppbGxhLzUuMCAoWDExOyBMaW51eCB4ODZfNjQ7IHJ2OjEuOS41LjIwKSBHZWNrby8yODEyLTEyLTEwIDA0OjU2OjI4IEZpcmVmb3gvMy44EghtdTY0a2tybxrYAm5iNTNoNW92L3ZkMlJndXUrR2JjUVZneVhpUXhpRlVDaEhTRzR0RmpnTEpLbXZ4eE5ZeHNuNHVUL245bkpncUpJU0ZWbmZKeUdnUWJGUHpLY21qSENHWlEzRUhZNXlHSFFIcFlQSDYwSlNack5aUHdqYnF2L1ZLN0xjdmVYRXErVk5waW44SjQzd3VEUXlRRTdWbStGU0pCampLd21vRFZRSCt4UmJtUi9BNGpPeEMrVmFXSUo4QWI4b0tmN2djd1ZYbmNHa3N0bnRxcU16djV4SUJxaUJocU9aekZsVmN6VEZmVTl5VzRWS1pQN2U2bzg0S2FpRW8rYWYrcFNQbTZzZERJaUM4VHpBN1drM2JQbnc0cGt2blhsTEZNcXUwTEdkNko3QzI4dkY0clNFOXIyWFRzVU1ubmM4WEtuVWdDNUVGdStlVGdqTzgxQ2p0ZjNYcU1nUT09IJDK5suVASgBMAM4AUIJQ29tbXVuaXR5";
+    public static void main1(String[] args) {
+        String basestr= "CP/KvOHc2I3xXBIQKSyx4lAM48Y4nNEHGBP5Bx0AAKBAIgIIAyj5/56XlYCAiAEy1wNleUFpZEhsd0lqb2dJa3BYVkNJc0lDSmhiR2NpT2lBaVJXUkVVMEVpSUgwLmV5QWlhWE56SWpvZ0ltTTZOalk1TWprM01qSXhPVE00T0RBM056UXpPU0lzSUNKemRXSWlPaUFpTnpZMU5qRXhPVGt6TlRFeE9EVTBNREVpTENBaVlYVmtJam9nV3lBaWQy";
         byte[] decode = Base64.getDecoder().decode(basestr);
         try {
-            CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request cAuthenticationBeginAuthSessionViaCredentialsRequest = CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.parseFrom(decode);
+            CAuthenticationBeginAuthSessionViaCredentialsResponse.CAUTHENTICATION_BEGINAUTHSESSIONVIACREDENTIALS_RESPONSE parseFrom = CAuthenticationBeginAuthSessionViaCredentialsResponse.CAUTHENTICATION_BEGINAUTHSESSIONVIACREDENTIALS_RESPONSE.parseFrom(decode);
+
             System.out.println("123123");
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
@@ -36,7 +37,7 @@ public class SteamLoginUtilTest {
         System.out.println("123123");
     }
 
-    public static void main1(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         steamLoginUrlFlag.set(true);
         CAuthenticationGetPasswordRSAPublicKeyResponse.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
         String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), "QingLiu98!");
@@ -109,9 +110,10 @@ public class SteamLoginUtilTest {
         String response = HttpClientUtils.sendPost(url, JSONObject.toJSONString(objectObjectHashMap), headerMap);
 
         byte[] decode = Base64.getDecoder().decode(response);
-        CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse clientResponse = null;
         try {
-             clientResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse.parseFrom(decode);
+            CAuthenticationBeginAuthSessionViaCredentialsResponse.CAUTHENTICATION_BEGINAUTHSESSIONVIACREDENTIALS_RESPONSE parseFrom = CAuthenticationBeginAuthSessionViaCredentialsResponse.CAUTHENTICATION_BEGINAUTHSESSIONVIACREDENTIALS_RESPONSE.parseFrom(decode);
+
+            System.out.println("123123");
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
