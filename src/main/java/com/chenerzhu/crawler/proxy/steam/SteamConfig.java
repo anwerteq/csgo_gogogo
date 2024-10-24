@@ -87,6 +87,9 @@ public class SteamConfig implements ApplicationRunner {
      */
     public static String getTheadLocalCookie() {
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
+        if (buffUserData == null){
+            return "";
+        }
         String steamId = buffUserData.getSteamId();
         for (SteamUserDate steamUserDate : SteamApplicationRunner.steamUserDates) {
             Session session = steamUserDate.getSession();

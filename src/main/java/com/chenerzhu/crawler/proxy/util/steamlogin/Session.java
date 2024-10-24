@@ -8,5 +8,5 @@ public class Session {
     private String SteamID;
     private String AccessToken;
     private String RefreshToken;
-    private String SessionID;
+    private String SessionID = "";
 }

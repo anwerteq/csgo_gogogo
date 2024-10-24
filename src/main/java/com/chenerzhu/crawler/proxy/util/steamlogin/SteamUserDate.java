@@ -11,7 +11,7 @@ public class SteamUserDate {
     private String revocation_code;
     private String uri;
     private String userPsw;
-    private StringBuilder cookies;
+    private StringBuilder cookies = new StringBuilder();
     private long server_time;
     private String account_name;
     private String token_gid;

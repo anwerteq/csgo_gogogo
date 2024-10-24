@@ -1,14 +1,18 @@
 package com.chenerzhu.crawler.proxy.util;
 
 import cn.hutool.core.util.StrUtil;
+import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.common.HttpMethod;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamLoginUtilTest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
@@ -17,8 +21,10 @@ import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
@@ -36,6 +42,7 @@ import org.springframework.util.StringUtils;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -67,15 +74,18 @@ public class HttpClientUtils implements ApplicationRunner {
         CloseableHttpClient httpClient = null;
         HttpResponse httpResponse = null;
         try {
+            // 创建 CookieStore
+            CookieStore cookieStore = new BasicCookieStore();
             if (StrUtil.isNotEmpty(staticProxyIp)) {
                 //设置代理IP、端口
                 HttpHost proxy = new HttpHost(staticProxyIp.split(":")[0], Integer.parseInt(staticProxyIp.split(":")[1]));
                 DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 //            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
-                httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).build();
+                httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).setDefaultCookieStore(cookieStore).build();
             } else {
-                httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).build();
+                httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).setDefaultCookieStore(cookieStore).build();
             }
+
 
             if (url.toLowerCase().startsWith("https")) {
 //                initSSL(httpClient, getPort(url));
@@ -141,7 +151,16 @@ public class HttpClientUtils implements ApplicationRunner {
                 }
                 //steam登录接口
                 if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
+                    Header[] allHeaders = httpResponse.getAllHeaders();
                     byte[] byteArray = EntityUtils.toByteArray(entity);
+                    StringJoiner sj = new StringJoiner(";");
+                    for (Cookie cookie : cookieStore.getCookies()) {
+                        sj.add(cookie.getName() + "=" + cookie.getValue());
+                    }
+                    String cookie = sj.toString();
+                    if (StrUtil.isNotBlank(cookie)){
+                        CookiesConfig.steamCookies.set(sj.toString());
+                    }
                     String base64Encode = Base64.getEncoder().encodeToString(byteArray);
                     return base64Encode;
                 }
