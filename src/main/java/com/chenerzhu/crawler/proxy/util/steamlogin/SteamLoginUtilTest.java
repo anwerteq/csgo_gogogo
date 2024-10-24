@@ -18,6 +18,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import com.google.protobuf.util.JsonFormat;
 
 public class SteamLoginUtilTest {
 
@@ -25,11 +26,12 @@ public class SteamLoginUtilTest {
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
     public static void main(String[] args) {
-        String basestr= "CoAEZGZhZWU4MGQ2MjliOWE2NmMxMTBhNGQyZDBkOTAxOWJiNWY5NTE0Yzg4NzhkOTM0NWZkZDU2ZWU2ZWQ1Y2M2NjcyNzJiYTRiMGU4NWI2ZWY3NmZlOTRkOWY5OWM5YzkxMTFhM2ZjNWM3MzlmMzNjZjc0ODMzZDQyM2FmNDVhMjEzNmU3ZjE3MmQ1ZWM3NWQzZTQzNjBlMWVkZGUyZTI5NDNlYjk0ZGVjNWNiZDZkYTkyNjRiYzk5ODg4OGM4MmZmMDdkZGUwNmM3OGJhMTdhNjAzMTVmMWJjMzA0OTNiMWNmMmI3ZDRkZmY1NGNlMjAxZTJmODYwZTU3YWNjODVmMTExYzAxZDlmMzZjMGZiYjQ3Zjc3NjM0MGFmZTQ3YTY2NTczMzg5YjhlZTZmMmM4Mjk0YTE0ODQ4NjgyYTcxYjIzMjNiZmE2YzQwNzU4YjIxZDIxNjJmNjBkOTM5NTljN2UxMzQzZjEzMDIzZDEyYzgyMTVjZGIzYjRlZjNlOGM4ZGJlNGZmODliNDFjZWYzYmJlN2FkODQ3MzJjNTI0OGUwZjEwMTVjOGMwYWVmOTJhOTk4YzE3ODE5MTRjZmMyMGFkOGQyMjI2MWYxZWI4NTBlZmI2YTY3M2QyODUzYWExMDVmN2NiNTY1ZmMwNjE4MGVlNDFmZGIwMzQ0MmE3YjESBjAxMDAwMRjQ/fjMwAM=";
+        String basestr= "CMTo8OCx27z1dhIQJyBMQnntWn2lGZ6YDe/YSB0AAKBAIgIIAyj5/56XlYCAiAEy2gNleUFpZEhsd0lqb2dJa3BYVkNJc0lDSmhiR2NpT2lBaVJXUkVVMEVpSUgwLmV5QWlhWE56SWpvZ0ltTTZPRFUyT0RreU9ESTJNemt3T1RFMk1EQXdOQ0lzSUNKemRXSWlPaUFpTnpZMU5qRXhPVGt6TlRFeE9EVTBNREVpTENBaVlYVmtJam9nV3lBaWQyVmhheUlnWFN3Z0ltVjRjQ0k2SURFM01qazNOak0yTmpBc0lDSnVZbVlpT2lBd0xDQWlhV0YwSWpvZ01UY3lPVGMyTWpjMk1Dd2dJbXAwYVNJNklDSXhNREpCWHpJMU5ERkRRVEJGWDBORVFUUTVJaXdnSW05aGRDSTZJREUzTWprM05qSTNOakFzSUNKeWRGOWxlSEFpT2lBd0xDQWlhWEJmYzNWaWFtVmpkQ0k2SUNJeU1Ua3VOemt1TVRBMkxqSXpNU0lzSUNKcGNGOWpiMjVtYVhKdFpYSWlPaUFpTWpFNUxqYzVMakV3Tmk0eU16RWlJSDAuZnBDNGowS1hmU3dhT1NjUmw0czZaUU1hRENmZi04UGlyWFpHbGhKcFBENWxFVTltSFdsYm4tOXhvSDUtSV8wYnpHN0Fkanh0MjhpcE82UG93VDIwQVFCAA==";
         byte[] decode = Base64.getDecoder().decode(basestr);
         try {
-            CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse beginAuthSessionViaCredentialsResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.parseFrom(decode);
-            System.out.println("123123");
+            CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse  beginAuthSessionViaCredentialsResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.parseFrom(decode);
+            String jsonString = JsonFormat.printer().print(beginAuthSessionViaCredentialsResponse);
+            System.out.println(jsonString);
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }

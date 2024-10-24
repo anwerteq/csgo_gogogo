@@ -14,158 +14,129 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface BeginAuthSessionViaCredentialsResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
+  public interface AuthSessionResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
-     * Unique identifier of requestor, also used for routing
+     * Unique identifier of requestor
      * </pre>
      *
-     * <code>string client_id = 1;</code>
+     * <code>uint64 clientId = 1;</code>
      * @return The clientId.
      */
-    java.lang.String getClientId();
-    /**
-     * <pre>
-     * Unique identifier of requestor, also used for routing
-     * </pre>
-     *
-     * <code>string client_id = 1;</code>
-     * @return The bytes for clientId.
-     */
-    com.google.protobuf.ByteString
-        getClientIdBytes();
+    long getClientId();
 
     /**
      * <pre>
-     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+     * Request ID as bytes
      * </pre>
      *
-     * <code>string request_id = 2;</code>
+     * <code>bytes requestId = 2;</code>
      * @return The requestId.
      */
-    java.lang.String getRequestId();
-    /**
-     * <pre>
-     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
-     * </pre>
-     *
-     * <code>string request_id = 2;</code>
-     * @return The bytes for requestId.
-     */
-    com.google.protobuf.ByteString
-        getRequestIdBytes();
+    com.google.protobuf.ByteString getRequestId();
 
     /**
      * <pre>
-     * Refresh interval with which requestor should call PollAuthSessionStatus
+     * Refresh interval
      * </pre>
      *
-     * <code>int32 interval = 3;</code>
+     * <code>float interval = 3;</code>
      * @return The interval.
      */
-    int getInterval();
+    float getInterval();
 
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @return A list containing the allowedConfirmations.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
-    java.util.List<java.lang.String>
+    java.util.List<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation> 
         getAllowedConfirmationsList();
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @return The count of allowedConfirmations.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+     */
+    com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation getAllowedConfirmations(int index);
+    /**
+     * <pre>
+     * Confirmation types
+     * </pre>
+     *
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
     int getAllowedConfirmationsCount();
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @param index The index of the element to return.
-     * @return The allowedConfirmations at the given index.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
-    java.lang.String getAllowedConfirmations(int index);
+    java.util.List<? extends com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder> 
+        getAllowedConfirmationsOrBuilderList();
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the allowedConfirmations at the given index.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
-    com.google.protobuf.ByteString
-        getAllowedConfirmationsBytes(int index);
+    com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder getAllowedConfirmationsOrBuilder(
+        int index);
 
     /**
      * <pre>
-     * SteamID of the account logging in - will only be included if the credentials were correct
+     * SteamID of the account logging in
      * </pre>
      *
-     * <code>string steamid = 5;</code>
+     * <code>int64 steamid = 5;</code>
      * @return The steamid.
      */
-    java.lang.String getSteamid();
-    /**
-     * <pre>
-     * SteamID of the account logging in - will only be included if the credentials were correct
-     * </pre>
-     *
-     * <code>string steamid = 5;</code>
-     * @return The bytes for steamid.
-     */
-    com.google.protobuf.ByteString
-        getSteamidBytes();
+    long getSteamid();
 
     /**
      * <pre>
-     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * Partial-authentication token
      * </pre>
      *
-     * <code>string weak_token = 6;</code>
+     * <code>string weakToken = 6;</code>
      * @return The weakToken.
      */
     java.lang.String getWeakToken();
     /**
      * <pre>
-     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * Partial-authentication token
      * </pre>
      *
-     * <code>string weak_token = 6;</code>
+     * <code>string weakToken = 6;</code>
      * @return The bytes for weakToken.
      */
     com.google.protobuf.ByteString
         getWeakTokenBytes();
   }
   /**
-   * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse}
+   * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse}
    */
-  public static final class BeginAuthSessionViaCredentialsResponse extends
+  public static final class AuthSessionResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
-      BeginAuthSessionViaCredentialsResponseOrBuilder {
+      // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse)
+      AuthSessionResponseOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use BeginAuthSessionViaCredentialsResponse.newBuilder() to construct.
-    private BeginAuthSessionViaCredentialsResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use AuthSessionResponse.newBuilder() to construct.
+    private AuthSessionResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private BeginAuthSessionViaCredentialsResponse() {
-      clientId_ = "";
-      requestId_ = "";
-      allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      steamid_ = "";
+    private AuthSessionResponse() {
+      requestId_ = com.google.protobuf.ByteString.EMPTY;
+      allowedConfirmations_ = java.util.Collections.emptyList();
       weakToken_ = "";
     }
 
@@ -173,7 +144,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new BeginAuthSessionViaCredentialsResponse();
+      return new AuthSessionResponse();
     }
 
     @java.lang.Override
@@ -183,229 +154,915 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.Builder.class);
+              com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.Builder.class);
     }
 
-    public static final int CLIENT_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object clientId_;
+    public interface AllowedConfirmationOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <pre>
+       * Type of confirmation
+       * </pre>
+       *
+       * <code>string confirmationType = 1;</code>
+       * @return The confirmationType.
+       */
+      java.lang.String getConfirmationType();
+      /**
+       * <pre>
+       * Type of confirmation
+       * </pre>
+       *
+       * <code>string confirmationType = 1;</code>
+       * @return The bytes for confirmationType.
+       */
+      com.google.protobuf.ByteString
+          getConfirmationTypeBytes();
+
+      /**
+       * <pre>
+       * Message related to confirmation type
+       * </pre>
+       *
+       * <code>string associatedMessage = 2;</code>
+       * @return The associatedMessage.
+       */
+      java.lang.String getAssociatedMessage();
+      /**
+       * <pre>
+       * Message related to confirmation type
+       * </pre>
+       *
+       * <code>string associatedMessage = 2;</code>
+       * @return The bytes for associatedMessage.
+       */
+      com.google.protobuf.ByteString
+          getAssociatedMessageBytes();
+    }
+    /**
+     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation}
+     */
+    public static final class AllowedConfirmation extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation)
+        AllowedConfirmationOrBuilder {
+    private static final long serialVersionUID = 0L;
+      // Use AllowedConfirmation.newBuilder() to construct.
+      private AllowedConfirmation(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private AllowedConfirmation() {
+        confirmationType_ = "";
+        associatedMessage_ = "";
+      }
+
+      @java.lang.Override
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new AllowedConfirmation();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return this.unknownFields;
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder.class);
+      }
+
+      public static final int CONFIRMATIONTYPE_FIELD_NUMBER = 1;
+      private volatile java.lang.Object confirmationType_;
+      /**
+       * <pre>
+       * Type of confirmation
+       * </pre>
+       *
+       * <code>string confirmationType = 1;</code>
+       * @return The confirmationType.
+       */
+      @java.lang.Override
+      public java.lang.String getConfirmationType() {
+        java.lang.Object ref = confirmationType_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          confirmationType_ = s;
+          return s;
+        }
+      }
+      /**
+       * <pre>
+       * Type of confirmation
+       * </pre>
+       *
+       * <code>string confirmationType = 1;</code>
+       * @return The bytes for confirmationType.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getConfirmationTypeBytes() {
+        java.lang.Object ref = confirmationType_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          confirmationType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      public static final int ASSOCIATEDMESSAGE_FIELD_NUMBER = 2;
+      private volatile java.lang.Object associatedMessage_;
+      /**
+       * <pre>
+       * Message related to confirmation type
+       * </pre>
+       *
+       * <code>string associatedMessage = 2;</code>
+       * @return The associatedMessage.
+       */
+      @java.lang.Override
+      public java.lang.String getAssociatedMessage() {
+        java.lang.Object ref = associatedMessage_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          associatedMessage_ = s;
+          return s;
+        }
+      }
+      /**
+       * <pre>
+       * Message related to confirmation type
+       * </pre>
+       *
+       * <code>string associatedMessage = 2;</code>
+       * @return The bytes for associatedMessage.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAssociatedMessageBytes() {
+        java.lang.Object ref = associatedMessage_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          associatedMessage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private byte memoizedIsInitialized = -1;
+      @java.lang.Override
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      @java.lang.Override
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(confirmationType_)) {
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 1, confirmationType_);
+        }
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(associatedMessage_)) {
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 2, associatedMessage_);
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      @java.lang.Override
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(confirmationType_)) {
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, confirmationType_);
+        }
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(associatedMessage_)) {
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, associatedMessage_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation)) {
+          return super.equals(obj);
+        }
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation other = (com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation) obj;
+
+        if (!getConfirmationType()
+            .equals(other.getConfirmationType())) return false;
+        if (!getAssociatedMessage()
+            .equals(other.getAssociatedMessage())) return false;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+        return true;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + CONFIRMATIONTYPE_FIELD_NUMBER;
+        hash = (53 * hash) + getConfirmationType().hashCode();
+        hash = (37 * hash) + ASSOCIATEDMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getAssociatedMessage().hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      @java.lang.Override
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      @java.lang.Override
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation)
+          com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_descriptor;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder.class);
+        }
+
+        // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.newBuilder()
+        private Builder() {
+
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+
+        }
+        @java.lang.Override
+        public Builder clear() {
+          super.clear();
+          confirmationType_ = "";
+
+          associatedMessage_ = "";
+
+          return this;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_descriptor;
+        }
+
+        @java.lang.Override
+        public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation getDefaultInstanceForType() {
+          return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.getDefaultInstance();
+        }
+
+        @java.lang.Override
+        public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation build() {
+          com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        @java.lang.Override
+        public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation buildPartial() {
+          com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation result = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation(this);
+          result.confirmationType_ = confirmationType_;
+          result.associatedMessage_ = associatedMessage_;
+          onBuilt();
+          return result;
+        }
+
+        @java.lang.Override
+        public Builder clone() {
+          return super.clone();
+        }
+        @java.lang.Override
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.setField(field, value);
+        }
+        @java.lang.Override
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return super.clearField(field);
+        }
+        @java.lang.Override
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return super.clearOneof(oneof);
+        }
+        @java.lang.Override
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, java.lang.Object value) {
+          return super.setRepeatedField(field, index, value);
+        }
+        @java.lang.Override
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.addRepeatedField(field, value);
+        }
+        @java.lang.Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation) {
+            return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation other) {
+          if (other == com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.getDefaultInstance()) return this;
+          if (!other.getConfirmationType().isEmpty()) {
+            confirmationType_ = other.confirmationType_;
+            onChanged();
+          }
+          if (!other.getAssociatedMessage().isEmpty()) {
+            associatedMessage_ = other.associatedMessage_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          onChanged();
+          return this;
+        }
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        @java.lang.Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 10: {
+                  confirmationType_ = input.readStringRequireUtf8();
+
+                  break;
+                } // case 10
+                case 18: {
+                  associatedMessage_ = input.readStringRequireUtf8();
+
+                  break;
+                } // case 18
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.unwrapIOException();
+          } finally {
+            onChanged();
+          } // finally
+          return this;
+        }
+
+        private java.lang.Object confirmationType_ = "";
+        /**
+         * <pre>
+         * Type of confirmation
+         * </pre>
+         *
+         * <code>string confirmationType = 1;</code>
+         * @return The confirmationType.
+         */
+        public java.lang.String getConfirmationType() {
+          java.lang.Object ref = confirmationType_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            confirmationType_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <pre>
+         * Type of confirmation
+         * </pre>
+         *
+         * <code>string confirmationType = 1;</code>
+         * @return The bytes for confirmationType.
+         */
+        public com.google.protobuf.ByteString
+            getConfirmationTypeBytes() {
+          java.lang.Object ref = confirmationType_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            confirmationType_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <pre>
+         * Type of confirmation
+         * </pre>
+         *
+         * <code>string confirmationType = 1;</code>
+         * @param value The confirmationType to set.
+         * @return This builder for chaining.
+         */
+        public Builder setConfirmationType(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          confirmationType_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <pre>
+         * Type of confirmation
+         * </pre>
+         *
+         * <code>string confirmationType = 1;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearConfirmationType() {
+          
+          confirmationType_ = getDefaultInstance().getConfirmationType();
+          onChanged();
+          return this;
+        }
+        /**
+         * <pre>
+         * Type of confirmation
+         * </pre>
+         *
+         * <code>string confirmationType = 1;</code>
+         * @param value The bytes for confirmationType to set.
+         * @return This builder for chaining.
+         */
+        public Builder setConfirmationTypeBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          confirmationType_ = value;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object associatedMessage_ = "";
+        /**
+         * <pre>
+         * Message related to confirmation type
+         * </pre>
+         *
+         * <code>string associatedMessage = 2;</code>
+         * @return The associatedMessage.
+         */
+        public java.lang.String getAssociatedMessage() {
+          java.lang.Object ref = associatedMessage_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            associatedMessage_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <pre>
+         * Message related to confirmation type
+         * </pre>
+         *
+         * <code>string associatedMessage = 2;</code>
+         * @return The bytes for associatedMessage.
+         */
+        public com.google.protobuf.ByteString
+            getAssociatedMessageBytes() {
+          java.lang.Object ref = associatedMessage_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            associatedMessage_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <pre>
+         * Message related to confirmation type
+         * </pre>
+         *
+         * <code>string associatedMessage = 2;</code>
+         * @param value The associatedMessage to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAssociatedMessage(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          associatedMessage_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <pre>
+         * Message related to confirmation type
+         * </pre>
+         *
+         * <code>string associatedMessage = 2;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearAssociatedMessage() {
+          
+          associatedMessage_ = getDefaultInstance().getAssociatedMessage();
+          onChanged();
+          return this;
+        }
+        /**
+         * <pre>
+         * Message related to confirmation type
+         * </pre>
+         *
+         * <code>string associatedMessage = 2;</code>
+         * @param value The bytes for associatedMessage to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAssociatedMessageBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          associatedMessage_ = value;
+          onChanged();
+          return this;
+        }
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFields(unknownFields);
+        }
+
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation)
+      }
+
+      // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation)
+      private static final com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation();
+      }
+
+      public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<AllowedConfirmation>
+          PARSER = new com.google.protobuf.AbstractParser<AllowedConfirmation>() {
+        @java.lang.Override
+        public AllowedConfirmation parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
+        }
+      };
+
+      public static com.google.protobuf.Parser<AllowedConfirmation> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<AllowedConfirmation> getParserForType() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public static final int CLIENTID_FIELD_NUMBER = 1;
+    private long clientId_;
     /**
      * <pre>
-     * Unique identifier of requestor, also used for routing
+     * Unique identifier of requestor
      * </pre>
      *
-     * <code>string client_id = 1;</code>
+     * <code>uint64 clientId = 1;</code>
      * @return The clientId.
      */
     @java.lang.Override
-    public java.lang.String getClientId() {
-      java.lang.Object ref = clientId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        clientId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * Unique identifier of requestor, also used for routing
-     * </pre>
-     *
-     * <code>string client_id = 1;</code>
-     * @return The bytes for clientId.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getClientIdBytes() {
-      java.lang.Object ref = clientId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        clientId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getClientId() {
+      return clientId_;
     }
 
-    public static final int REQUEST_ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object requestId_;
+    public static final int REQUESTID_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString requestId_;
     /**
      * <pre>
-     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+     * Request ID as bytes
      * </pre>
      *
-     * <code>string request_id = 2;</code>
+     * <code>bytes requestId = 2;</code>
      * @return The requestId.
      */
     @java.lang.Override
-    public java.lang.String getRequestId() {
-      java.lang.Object ref = requestId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        requestId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
-     * </pre>
-     *
-     * <code>string request_id = 2;</code>
-     * @return The bytes for requestId.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getRequestIdBytes() {
-      java.lang.Object ref = requestId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        requestId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public com.google.protobuf.ByteString getRequestId() {
+      return requestId_;
     }
 
     public static final int INTERVAL_FIELD_NUMBER = 3;
-    private int interval_;
+    private float interval_;
     /**
      * <pre>
-     * Refresh interval with which requestor should call PollAuthSessionStatus
+     * Refresh interval
      * </pre>
      *
-     * <code>int32 interval = 3;</code>
+     * <code>float interval = 3;</code>
      * @return The interval.
      */
     @java.lang.Override
-    public int getInterval() {
+    public float getInterval() {
       return interval_;
     }
 
-    public static final int ALLOWED_CONFIRMATIONS_FIELD_NUMBER = 4;
-    private com.google.protobuf.LazyStringList allowedConfirmations_;
+    public static final int ALLOWEDCONFIRMATIONS_FIELD_NUMBER = 4;
+    private java.util.List<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation> allowedConfirmations_;
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @return A list containing the allowedConfirmations.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
-    public com.google.protobuf.ProtocolStringList
-        getAllowedConfirmationsList() {
+    @java.lang.Override
+    public java.util.List<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation> getAllowedConfirmationsList() {
       return allowedConfirmations_;
     }
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @return The count of allowedConfirmations.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
+    @java.lang.Override
+    public java.util.List<? extends com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder> 
+        getAllowedConfirmationsOrBuilderList() {
+      return allowedConfirmations_;
+    }
+    /**
+     * <pre>
+     * Confirmation types
+     * </pre>
+     *
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+     */
+    @java.lang.Override
     public int getAllowedConfirmationsCount() {
       return allowedConfirmations_.size();
     }
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @param index The index of the element to return.
-     * @return The allowedConfirmations at the given index.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
-    public java.lang.String getAllowedConfirmations(int index) {
+    @java.lang.Override
+    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation getAllowedConfirmations(int index) {
       return allowedConfirmations_.get(index);
     }
     /**
      * <pre>
-     * The confirmation types that will be able to confirm the request
+     * Confirmation types
      * </pre>
      *
-     * <code>repeated string allowed_confirmations = 4;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the allowedConfirmations at the given index.
+     * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
      */
-    public com.google.protobuf.ByteString
-        getAllowedConfirmationsBytes(int index) {
-      return allowedConfirmations_.getByteString(index);
+    @java.lang.Override
+    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder getAllowedConfirmationsOrBuilder(
+        int index) {
+      return allowedConfirmations_.get(index);
     }
 
     public static final int STEAMID_FIELD_NUMBER = 5;
-    private volatile java.lang.Object steamid_;
+    private long steamid_;
     /**
      * <pre>
-     * SteamID of the account logging in - will only be included if the credentials were correct
+     * SteamID of the account logging in
      * </pre>
      *
-     * <code>string steamid = 5;</code>
+     * <code>int64 steamid = 5;</code>
      * @return The steamid.
      */
     @java.lang.Override
-    public java.lang.String getSteamid() {
-      java.lang.Object ref = steamid_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        steamid_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * SteamID of the account logging in - will only be included if the credentials were correct
-     * </pre>
-     *
-     * <code>string steamid = 5;</code>
-     * @return The bytes for steamid.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getSteamidBytes() {
-      java.lang.Object ref = steamid_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        steamid_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getSteamid() {
+      return steamid_;
     }
 
-    public static final int WEAK_TOKEN_FIELD_NUMBER = 6;
+    public static final int WEAKTOKEN_FIELD_NUMBER = 6;
     private volatile java.lang.Object weakToken_;
     /**
      * <pre>
-     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * Partial-authentication token
      * </pre>
      *
-     * <code>string weak_token = 6;</code>
+     * <code>string weakToken = 6;</code>
      * @return The weakToken.
      */
     @java.lang.Override
@@ -423,10 +1080,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     }
     /**
      * <pre>
-     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * Partial-authentication token
      * </pre>
      *
-     * <code>string weak_token = 6;</code>
+     * <code>string weakToken = 6;</code>
      * @return The bytes for weakToken.
      */
     @java.lang.Override
@@ -458,20 +1115,20 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(clientId_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, clientId_);
+      if (clientId_ != 0L) {
+        output.writeUInt64(1, clientId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(requestId_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, requestId_);
+      if (!requestId_.isEmpty()) {
+        output.writeBytes(2, requestId_);
       }
-      if (interval_ != 0) {
-        output.writeInt32(3, interval_);
+      if (java.lang.Float.floatToRawIntBits(interval_) != 0) {
+        output.writeFloat(3, interval_);
       }
       for (int i = 0; i < allowedConfirmations_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, allowedConfirmations_.getRaw(i));
+        output.writeMessage(4, allowedConfirmations_.get(i));
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(steamid_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, steamid_);
+      if (steamid_ != 0L) {
+        output.writeInt64(5, steamid_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(weakToken_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, weakToken_);
@@ -485,26 +1142,25 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(clientId_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, clientId_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(requestId_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, requestId_);
-      }
-      if (interval_ != 0) {
+      if (clientId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, interval_);
+          .computeUInt64Size(1, clientId_);
       }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < allowedConfirmations_.size(); i++) {
-          dataSize += computeStringSizeNoTag(allowedConfirmations_.getRaw(i));
-        }
-        size += dataSize;
-        size += 1 * getAllowedConfirmationsList().size();
+      if (!requestId_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, requestId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(steamid_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, steamid_);
+      if (java.lang.Float.floatToRawIntBits(interval_) != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(3, interval_);
+      }
+      for (int i = 0; i < allowedConfirmations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, allowedConfirmations_.get(i));
+      }
+      if (steamid_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(5, steamid_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(weakToken_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, weakToken_);
@@ -519,21 +1175,22 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse)) {
+      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse)) {
         return super.equals(obj);
       }
-      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse other = (com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse) obj;
+      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse other = (com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse) obj;
 
-      if (!getClientId()
-          .equals(other.getClientId())) return false;
+      if (getClientId()
+          != other.getClientId()) return false;
       if (!getRequestId()
           .equals(other.getRequestId())) return false;
-      if (getInterval()
-          != other.getInterval()) return false;
+      if (java.lang.Float.floatToIntBits(getInterval())
+          != java.lang.Float.floatToIntBits(
+              other.getInterval())) return false;
       if (!getAllowedConfirmationsList()
           .equals(other.getAllowedConfirmationsList())) return false;
-      if (!getSteamid()
-          .equals(other.getSteamid())) return false;
+      if (getSteamid()
+          != other.getSteamid()) return false;
       if (!getWeakToken()
           .equals(other.getWeakToken())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -547,88 +1204,91 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + CLIENT_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getClientId().hashCode();
-      hash = (37 * hash) + REQUEST_ID_FIELD_NUMBER;
+      hash = (37 * hash) + CLIENTID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getClientId());
+      hash = (37 * hash) + REQUESTID_FIELD_NUMBER;
       hash = (53 * hash) + getRequestId().hashCode();
       hash = (37 * hash) + INTERVAL_FIELD_NUMBER;
-      hash = (53 * hash) + getInterval();
+      hash = (53 * hash) + java.lang.Float.floatToIntBits(
+          getInterval());
       if (getAllowedConfirmationsCount() > 0) {
-        hash = (37 * hash) + ALLOWED_CONFIRMATIONS_FIELD_NUMBER;
+        hash = (37 * hash) + ALLOWEDCONFIRMATIONS_FIELD_NUMBER;
         hash = (53 * hash) + getAllowedConfirmationsList().hashCode();
       }
       hash = (37 * hash) + STEAMID_FIELD_NUMBER;
-      hash = (53 * hash) + getSteamid().hashCode();
-      hash = (37 * hash) + WEAK_TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getSteamid());
+      hash = (37 * hash) + WEAKTOKEN_FIELD_NUMBER;
       hash = (53 * hash) + getWeakToken().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(byte[] data)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseDelimitedFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseDelimitedFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -641,7 +1301,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse prototype) {
+    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -657,26 +1317,26 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       return builder;
     }
     /**
-     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse}
+     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
-        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse)
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.Builder.class);
+                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.Builder.class);
       }
 
-      // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.newBuilder()
+      // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.newBuilder()
       private Builder() {
 
       }
@@ -689,15 +1349,20 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        clientId_ = "";
+        clientId_ = 0L;
 
-        requestId_ = "";
+        requestId_ = com.google.protobuf.ByteString.EMPTY;
 
-        interval_ = 0;
+        interval_ = 0F;
 
-        allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        if (allowedConfirmationsBuilder_ == null) {
+          allowedConfirmations_ = java.util.Collections.emptyList();
+        } else {
+          allowedConfirmations_ = null;
+          allowedConfirmationsBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000001);
-        steamid_ = "";
+        steamid_ = 0L;
 
         weakToken_ = "";
 
@@ -707,17 +1372,17 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor;
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse getDefaultInstanceForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.getDefaultInstance();
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse getDefaultInstanceForType() {
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse build() {
-        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse result = buildPartial();
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse build() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -725,17 +1390,21 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse buildPartial() {
-        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse result = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse(this);
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse buildPartial() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse result = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse(this);
         int from_bitField0_ = bitField0_;
         result.clientId_ = clientId_;
         result.requestId_ = requestId_;
         result.interval_ = interval_;
-        if (((bitField0_ & 0x00000001) != 0)) {
-          allowedConfirmations_ = allowedConfirmations_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000001);
+        if (allowedConfirmationsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            allowedConfirmations_ = java.util.Collections.unmodifiableList(allowedConfirmations_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.allowedConfirmations_ = allowedConfirmations_;
+        } else {
+          result.allowedConfirmations_ = allowedConfirmationsBuilder_.build();
         }
-        result.allowedConfirmations_ = allowedConfirmations_;
         result.steamid_ = steamid_;
         result.weakToken_ = weakToken_;
         onBuilt();
@@ -776,40 +1445,53 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse) {
-          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse)other);
+        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse) {
+          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse other) {
-        if (other == com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.getDefaultInstance()) return this;
-        if (!other.getClientId().isEmpty()) {
-          clientId_ = other.clientId_;
-          onChanged();
+      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse other) {
+        if (other == com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.getDefaultInstance()) return this;
+        if (other.getClientId() != 0L) {
+          setClientId(other.getClientId());
         }
-        if (!other.getRequestId().isEmpty()) {
-          requestId_ = other.requestId_;
-          onChanged();
+        if (other.getRequestId() != com.google.protobuf.ByteString.EMPTY) {
+          setRequestId(other.getRequestId());
         }
-        if (other.getInterval() != 0) {
+        if (other.getInterval() != 0F) {
           setInterval(other.getInterval());
         }
-        if (!other.allowedConfirmations_.isEmpty()) {
-          if (allowedConfirmations_.isEmpty()) {
-            allowedConfirmations_ = other.allowedConfirmations_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureAllowedConfirmationsIsMutable();
-            allowedConfirmations_.addAll(other.allowedConfirmations_);
+        if (allowedConfirmationsBuilder_ == null) {
+          if (!other.allowedConfirmations_.isEmpty()) {
+            if (allowedConfirmations_.isEmpty()) {
+              allowedConfirmations_ = other.allowedConfirmations_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureAllowedConfirmationsIsMutable();
+              allowedConfirmations_.addAll(other.allowedConfirmations_);
+            }
+            onChanged();
           }
-          onChanged();
+        } else {
+          if (!other.allowedConfirmations_.isEmpty()) {
+            if (allowedConfirmationsBuilder_.isEmpty()) {
+              allowedConfirmationsBuilder_.dispose();
+              allowedConfirmationsBuilder_ = null;
+              allowedConfirmations_ = other.allowedConfirmations_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              allowedConfirmationsBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getAllowedConfirmationsFieldBuilder() : null;
+            } else {
+              allowedConfirmationsBuilder_.addAllMessages(other.allowedConfirmations_);
+            }
+          }
         }
-        if (!other.getSteamid().isEmpty()) {
-          steamid_ = other.steamid_;
-          onChanged();
+        if (other.getSteamid() != 0L) {
+          setSteamid(other.getSteamid());
         }
         if (!other.getWeakToken().isEmpty()) {
           weakToken_ = other.weakToken_;
@@ -841,32 +1523,39 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
               case 0:
                 done = true;
                 break;
-              case 10: {
-                clientId_ = input.readStringRequireUtf8();
+              case 8: {
+                clientId_ = input.readUInt64();
 
                 break;
-              } // case 10
+              } // case 8
               case 18: {
-                requestId_ = input.readStringRequireUtf8();
+                requestId_ = input.readBytes();
 
                 break;
               } // case 18
-              case 24: {
-                interval_ = input.readInt32();
+              case 29: {
+                interval_ = input.readFloat();
 
                 break;
-              } // case 24
+              } // case 29
               case 34: {
-                java.lang.String s = input.readStringRequireUtf8();
-                ensureAllowedConfirmationsIsMutable();
-                allowedConfirmations_.add(s);
+                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation m =
+                    input.readMessage(
+                        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.parser(),
+                        extensionRegistry);
+                if (allowedConfirmationsBuilder_ == null) {
+                  ensureAllowedConfirmationsIsMutable();
+                  allowedConfirmations_.add(m);
+                } else {
+                  allowedConfirmationsBuilder_.addMessage(m);
+                }
                 break;
               } // case 34
-              case 42: {
-                steamid_ = input.readStringRequireUtf8();
+              case 40: {
+                steamid_ = input.readInt64();
 
                 break;
-              } // case 42
+              } // case 40
               case 50: {
                 weakToken_ = input.readStringRequireUtf8();
 
@@ -889,155 +1578,72 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       private int bitField0_;
 
-      private java.lang.Object clientId_ = "";
+      private long clientId_ ;
       /**
        * <pre>
-       * Unique identifier of requestor, also used for routing
+       * Unique identifier of requestor
        * </pre>
        *
-       * <code>string client_id = 1;</code>
+       * <code>uint64 clientId = 1;</code>
        * @return The clientId.
        */
-      public java.lang.String getClientId() {
-        java.lang.Object ref = clientId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          clientId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      @java.lang.Override
+      public long getClientId() {
+        return clientId_;
       }
       /**
        * <pre>
-       * Unique identifier of requestor, also used for routing
+       * Unique identifier of requestor
        * </pre>
        *
-       * <code>string client_id = 1;</code>
-       * @return The bytes for clientId.
-       */
-      public com.google.protobuf.ByteString
-          getClientIdBytes() {
-        java.lang.Object ref = clientId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          clientId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * Unique identifier of requestor, also used for routing
-       * </pre>
-       *
-       * <code>string client_id = 1;</code>
+       * <code>uint64 clientId = 1;</code>
        * @param value The clientId to set.
        * @return This builder for chaining.
        */
-      public Builder setClientId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setClientId(long value) {
+        
         clientId_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * Unique identifier of requestor, also used for routing
+       * Unique identifier of requestor
        * </pre>
        *
-       * <code>string client_id = 1;</code>
+       * <code>uint64 clientId = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearClientId() {
         
-        clientId_ = getDefaultInstance().getClientId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * Unique identifier of requestor, also used for routing
-       * </pre>
-       *
-       * <code>string client_id = 1;</code>
-       * @param value The bytes for clientId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setClientIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        clientId_ = value;
+        clientId_ = 0L;
         onChanged();
         return this;
       }
 
-      private java.lang.Object requestId_ = "";
+      private com.google.protobuf.ByteString requestId_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <pre>
-       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+       * Request ID as bytes
        * </pre>
        *
-       * <code>string request_id = 2;</code>
+       * <code>bytes requestId = 2;</code>
        * @return The requestId.
        */
-      public java.lang.String getRequestId() {
-        java.lang.Object ref = requestId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          requestId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      @java.lang.Override
+      public com.google.protobuf.ByteString getRequestId() {
+        return requestId_;
       }
       /**
        * <pre>
-       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+       * Request ID as bytes
        * </pre>
        *
-       * <code>string request_id = 2;</code>
-       * @return The bytes for requestId.
-       */
-      public com.google.protobuf.ByteString
-          getRequestIdBytes() {
-        java.lang.Object ref = requestId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          requestId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
-       * </pre>
-       *
-       * <code>string request_id = 2;</code>
+       * <code>bytes requestId = 2;</code>
        * @param value The requestId to set.
        * @return This builder for chaining.
        */
-      public Builder setRequestId(
-          java.lang.String value) {
+      public Builder setRequestId(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1048,10 +1654,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+       * Request ID as bytes
        * </pre>
        *
-       * <code>string request_id = 2;</code>
+       * <code>bytes requestId = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearRequestId() {
@@ -1060,50 +1666,30 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
-       * </pre>
-       *
-       * <code>string request_id = 2;</code>
-       * @param value The bytes for requestId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setRequestIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        requestId_ = value;
-        onChanged();
-        return this;
-      }
 
-      private int interval_ ;
+      private float interval_ ;
       /**
        * <pre>
-       * Refresh interval with which requestor should call PollAuthSessionStatus
+       * Refresh interval
        * </pre>
        *
-       * <code>int32 interval = 3;</code>
+       * <code>float interval = 3;</code>
        * @return The interval.
        */
       @java.lang.Override
-      public int getInterval() {
+      public float getInterval() {
         return interval_;
       }
       /**
        * <pre>
-       * Refresh interval with which requestor should call PollAuthSessionStatus
+       * Refresh interval
        * </pre>
        *
-       * <code>int32 interval = 3;</code>
+       * <code>float interval = 3;</code>
        * @param value The interval to set.
        * @return This builder for chaining.
        */
-      public Builder setInterval(int value) {
+      public Builder setInterval(float value) {
         
         interval_ = value;
         onChanged();
@@ -1111,257 +1697,370 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Refresh interval with which requestor should call PollAuthSessionStatus
+       * Refresh interval
        * </pre>
        *
-       * <code>int32 interval = 3;</code>
+       * <code>float interval = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearInterval() {
         
-        interval_ = 0;
+        interval_ = 0F;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.LazyStringList allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private java.util.List<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation> allowedConfirmations_ =
+        java.util.Collections.emptyList();
       private void ensureAllowedConfirmationsIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
-          allowedConfirmations_ = new com.google.protobuf.LazyStringArrayList(allowedConfirmations_);
+          allowedConfirmations_ = new java.util.ArrayList<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation>(allowedConfirmations_);
           bitField0_ |= 0x00000001;
          }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder> allowedConfirmationsBuilder_;
+
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @return A list containing the allowedConfirmations.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
-      public com.google.protobuf.ProtocolStringList
-          getAllowedConfirmationsList() {
-        return allowedConfirmations_.getUnmodifiableView();
+      public java.util.List<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation> getAllowedConfirmationsList() {
+        if (allowedConfirmationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(allowedConfirmations_);
+        } else {
+          return allowedConfirmationsBuilder_.getMessageList();
+        }
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @return The count of allowedConfirmations.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
       public int getAllowedConfirmationsCount() {
-        return allowedConfirmations_.size();
+        if (allowedConfirmationsBuilder_ == null) {
+          return allowedConfirmations_.size();
+        } else {
+          return allowedConfirmationsBuilder_.getCount();
+        }
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @param index The index of the element to return.
-       * @return The allowedConfirmations at the given index.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
-      public java.lang.String getAllowedConfirmations(int index) {
-        return allowedConfirmations_.get(index);
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation getAllowedConfirmations(int index) {
+        if (allowedConfirmationsBuilder_ == null) {
+          return allowedConfirmations_.get(index);
+        } else {
+          return allowedConfirmationsBuilder_.getMessage(index);
+        }
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @param index The index of the value to return.
-       * @return The bytes of the allowedConfirmations at the given index.
-       */
-      public com.google.protobuf.ByteString
-          getAllowedConfirmationsBytes(int index) {
-        return allowedConfirmations_.getByteString(index);
-      }
-      /**
-       * <pre>
-       * The confirmation types that will be able to confirm the request
-       * </pre>
-       *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @param index The index to set the value at.
-       * @param value The allowedConfirmations to set.
-       * @return This builder for chaining.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
       public Builder setAllowedConfirmations(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureAllowedConfirmationsIsMutable();
-        allowedConfirmations_.set(index, value);
-        onChanged();
+          int index, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation value) {
+        if (allowedConfirmationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.set(index, value);
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.setMessage(index, value);
+        }
         return this;
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @param value The allowedConfirmations to add.
-       * @return This builder for chaining.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public Builder setAllowedConfirmations(
+          int index, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder builderForValue) {
+        if (allowedConfirmationsBuilder_ == null) {
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public Builder addAllowedConfirmations(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation value) {
+        if (allowedConfirmationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.add(value);
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
       public Builder addAllowedConfirmations(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureAllowedConfirmationsIsMutable();
-        allowedConfirmations_.add(value);
-        onChanged();
+          int index, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation value) {
+        if (allowedConfirmationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.add(index, value);
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.addMessage(index, value);
+        }
         return this;
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @param values The allowedConfirmations to add.
-       * @return This builder for chaining.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public Builder addAllowedConfirmations(
+          com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder builderForValue) {
+        if (allowedConfirmationsBuilder_ == null) {
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public Builder addAllowedConfirmations(
+          int index, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder builderForValue) {
+        if (allowedConfirmationsBuilder_ == null) {
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
       public Builder addAllAllowedConfirmations(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureAllowedConfirmationsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, allowedConfirmations_);
-        onChanged();
+          java.lang.Iterable<? extends com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation> values) {
+        if (allowedConfirmationsBuilder_ == null) {
+          ensureAllowedConfirmationsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, allowedConfirmations_);
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.addAllMessages(values);
+        }
         return this;
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @return This builder for chaining.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
       public Builder clearAllowedConfirmations() {
-        allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
+        if (allowedConfirmationsBuilder_ == null) {
+          allowedConfirmations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.clear();
+        }
         return this;
       }
       /**
        * <pre>
-       * The confirmation types that will be able to confirm the request
+       * Confirmation types
        * </pre>
        *
-       * <code>repeated string allowed_confirmations = 4;</code>
-       * @param value The bytes of the allowedConfirmations to add.
-       * @return This builder for chaining.
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
        */
-      public Builder addAllowedConfirmationsBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        ensureAllowedConfirmationsIsMutable();
-        allowedConfirmations_.add(value);
-        onChanged();
+      public Builder removeAllowedConfirmations(int index) {
+        if (allowedConfirmationsBuilder_ == null) {
+          ensureAllowedConfirmationsIsMutable();
+          allowedConfirmations_.remove(index);
+          onChanged();
+        } else {
+          allowedConfirmationsBuilder_.remove(index);
+        }
         return this;
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder getAllowedConfirmationsBuilder(
+          int index) {
+        return getAllowedConfirmationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder getAllowedConfirmationsOrBuilder(
+          int index) {
+        if (allowedConfirmationsBuilder_ == null) {
+          return allowedConfirmations_.get(index);  } else {
+          return allowedConfirmationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public java.util.List<? extends com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder> 
+           getAllowedConfirmationsOrBuilderList() {
+        if (allowedConfirmationsBuilder_ != null) {
+          return allowedConfirmationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(allowedConfirmations_);
+        }
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder addAllowedConfirmationsBuilder() {
+        return getAllowedConfirmationsFieldBuilder().addBuilder(
+            com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder addAllowedConfirmationsBuilder(
+          int index) {
+        return getAllowedConfirmationsFieldBuilder().addBuilder(
+            index, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * Confirmation types
+       * </pre>
+       *
+       * <code>repeated .com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse.AllowedConfirmation allowedConfirmations = 4;</code>
+       */
+      public java.util.List<com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder> 
+           getAllowedConfirmationsBuilderList() {
+        return getAllowedConfirmationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder> 
+          getAllowedConfirmationsFieldBuilder() {
+        if (allowedConfirmationsBuilder_ == null) {
+          allowedConfirmationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmation.Builder, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.AllowedConfirmationOrBuilder>(
+                  allowedConfirmations_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          allowedConfirmations_ = null;
+        }
+        return allowedConfirmationsBuilder_;
       }
 
-      private java.lang.Object steamid_ = "";
+      private long steamid_ ;
       /**
        * <pre>
-       * SteamID of the account logging in - will only be included if the credentials were correct
+       * SteamID of the account logging in
        * </pre>
        *
-       * <code>string steamid = 5;</code>
+       * <code>int64 steamid = 5;</code>
        * @return The steamid.
        */
-      public java.lang.String getSteamid() {
-        java.lang.Object ref = steamid_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          steamid_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      @java.lang.Override
+      public long getSteamid() {
+        return steamid_;
       }
       /**
        * <pre>
-       * SteamID of the account logging in - will only be included if the credentials were correct
+       * SteamID of the account logging in
        * </pre>
        *
-       * <code>string steamid = 5;</code>
-       * @return The bytes for steamid.
-       */
-      public com.google.protobuf.ByteString
-          getSteamidBytes() {
-        java.lang.Object ref = steamid_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          steamid_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * SteamID of the account logging in - will only be included if the credentials were correct
-       * </pre>
-       *
-       * <code>string steamid = 5;</code>
+       * <code>int64 steamid = 5;</code>
        * @param value The steamid to set.
        * @return This builder for chaining.
        */
-      public Builder setSteamid(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setSteamid(long value) {
+        
         steamid_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * SteamID of the account logging in - will only be included if the credentials were correct
+       * SteamID of the account logging in
        * </pre>
        *
-       * <code>string steamid = 5;</code>
+       * <code>int64 steamid = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearSteamid() {
         
-        steamid_ = getDefaultInstance().getSteamid();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * SteamID of the account logging in - will only be included if the credentials were correct
-       * </pre>
-       *
-       * <code>string steamid = 5;</code>
-       * @param value The bytes for steamid to set.
-       * @return This builder for chaining.
-       */
-      public Builder setSteamidBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        steamid_ = value;
+        steamid_ = 0L;
         onChanged();
         return this;
       }
@@ -1369,10 +2068,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       private java.lang.Object weakToken_ = "";
       /**
        * <pre>
-       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * Partial-authentication token
        * </pre>
        *
-       * <code>string weak_token = 6;</code>
+       * <code>string weakToken = 6;</code>
        * @return The weakToken.
        */
       public java.lang.String getWeakToken() {
@@ -1389,10 +2088,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * Partial-authentication token
        * </pre>
        *
-       * <code>string weak_token = 6;</code>
+       * <code>string weakToken = 6;</code>
        * @return The bytes for weakToken.
        */
       public com.google.protobuf.ByteString
@@ -1410,10 +2109,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * Partial-authentication token
        * </pre>
        *
-       * <code>string weak_token = 6;</code>
+       * <code>string weakToken = 6;</code>
        * @param value The weakToken to set.
        * @return This builder for chaining.
        */
@@ -1429,10 +2128,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * Partial-authentication token
        * </pre>
        *
-       * <code>string weak_token = 6;</code>
+       * <code>string weakToken = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearWeakToken() {
@@ -1443,10 +2142,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * Partial-authentication token
        * </pre>
        *
-       * <code>string weak_token = 6;</code>
+       * <code>string weakToken = 6;</code>
        * @param value The bytes for weakToken to set.
        * @return This builder for chaining.
        */
@@ -1474,23 +2173,23 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
+      // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
-    private static final com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.AuthSessionResponse)
+    private static final com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse();
+      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse();
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse getDefaultInstance() {
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<BeginAuthSessionViaCredentialsResponse>
-        PARSER = new com.google.protobuf.AbstractParser<BeginAuthSessionViaCredentialsResponse>() {
+    private static final com.google.protobuf.Parser<AuthSessionResponse>
+        PARSER = new com.google.protobuf.AbstractParser<AuthSessionResponse>() {
       @java.lang.Override
-      public BeginAuthSessionViaCredentialsResponse parsePartialFrom(
+      public AuthSessionResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1509,27 +2208,32 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
     };
 
-    public static com.google.protobuf.Parser<BeginAuthSessionViaCredentialsResponse> parser() {
+    public static com.google.protobuf.Parser<AuthSessionResponse> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<BeginAuthSessionViaCredentialsResponse> getParserForType() {
+    public com.google.protobuf.Parser<AuthSessionResponse> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse getDefaultInstanceForType() {
+    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable;
+      internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1541,22 +2245,32 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     java.lang.String[] descriptorData = {
       "\n=CAuthentication_BeginAuthSessionViaCre" +
       "dentials_Response.proto\022%com.chenerzhu.c" +
-      "rawler.proxy.protobufs\"\245\001\n&BeginAuthSess" +
-      "ionViaCredentialsResponse\022\021\n\tclient_id\030\001" +
-      " \001(\t\022\022\n\nrequest_id\030\002 \001(\t\022\020\n\010interval\030\003 \001" +
-      "(\005\022\035\n\025allowed_confirmations\030\004 \003(\t\022\017\n\007ste" +
-      "amid\030\005 \001(\t\022\022\n\nweak_token\030\006 \001(\tb\006proto3"
+      "rawler.proxy.protobufs\"\252\002\n\023AuthSessionRe" +
+      "sponse\022\020\n\010clientId\030\001 \001(\004\022\021\n\trequestId\030\002 " +
+      "\001(\014\022\020\n\010interval\030\003 \001(\002\022l\n\024allowedConfirma" +
+      "tions\030\004 \003(\0132N.com.chenerzhu.crawler.prox" +
+      "y.protobufs.AuthSessionResponse.AllowedC" +
+      "onfirmation\022\017\n\007steamid\030\005 \001(\003\022\021\n\tweakToke" +
+      "n\030\006 \001(\t\032J\n\023AllowedConfirmation\022\030\n\020confir" +
+      "mationType\030\001 \001(\t\022\031\n\021associatedMessage\030\002 " +
+      "\001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor =
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable = new
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor,
+        internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor,
         new java.lang.String[] { "ClientId", "RequestId", "Interval", "AllowedConfirmations", "Steamid", "WeakToken", });
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_descriptor =
+      internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_descriptor.getNestedTypes().get(0);
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_chenerzhu_crawler_proxy_protobufs_AuthSessionResponse_AllowedConfirmation_descriptor,
+        new java.lang.String[] { "ConfirmationType", "AssociatedMessage", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
