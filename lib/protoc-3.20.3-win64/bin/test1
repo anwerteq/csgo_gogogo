@@ -1,0 +1,9 @@
+protoc --proto_path=PATH_TO_PROTO_FILES --<language>_out=OUTPUT_DIRECTORY example.proto
+
+
+protoc --java_out=D:\\code\\csgo-bi\\src\\main\\java CAuthentication_BeginAuthSessionViaCredentials_Response.proto
+
+protoc --java_out=D:\\code\\csgo-bi\\src\\main\\java enums_pb2.proto
+protoc --java_out=D:\\code\\csgo-bi\\src\\main\\java steammessages_auth.proto
+protoc --java_out=D:\\code\\csgo-bi\\src\\main\\java steammessages_base_pb2.proto
+protoc --java_out=D:\\code\\csgo-bi\\src\\main\\java steammessages_unified_base.proto

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package com.chenerzhu.crawler.proxy.protobufs.steammessages_unified_base;
+
+// 导入必要的 Protobuf 描述符
+import "google/protobuf/descriptor.proto";
+
+// 空响应消息
+message NoResponse {}
+
+// 执行站点枚举
+enum EProtoExecutionSite {
+    k_EProtoExecutionSiteUnknown = 0; // 未知站点
+    k_EProtoExecutionSiteSteamClient = 2; // Steam 客户端
+}
+
+// 描述字段选项
+extend google.protobuf.FieldOptions {
+    string description = 100000; // 字段描述
+}
+
+// 描述服务选项
+extend google.protobuf.ServiceOptions {
+    string service_description = 100000; // 服务描述
+    EProtoExecutionSite service_execution_site = 100001; // 服务执行站点
+}
+
+// 描述方法选项
+extend google.protobuf.MethodOptions {
+    string method_description = 100000; // 方法描述
+}
+
+// 描述枚举选项
+extend google.protobuf.EnumOptions {
+    string enum_description = 100000; // 枚举描述
+}
+
+// 描述枚举值选项
+extend google.protobuf.EnumValueOptions {
+    string enum_value_description = 100000; // 枚举值描述
+}
