@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package com.chenerzhu.crawler.proxy.protobufs;
 
+// 空响应消息
+message NoResponse {}
 // 发布文件查询类型
 enum EPublishedFileQueryType {
     k_PublishedFileQueryType_RankedByVote = 0;
