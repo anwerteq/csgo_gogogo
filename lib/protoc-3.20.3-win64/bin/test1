@@ -1,0 +1,4 @@
+protoc --proto_path=PATH_TO_PROTO_FILES --<language>_out=OUTPUT_DIRECTORY example.proto
+
+
+protoc --java_out=D:\\code\\csgo-bi\\src\\main\\java CAuthentication_BeginAuthSessionViaCredentials_Response.proto

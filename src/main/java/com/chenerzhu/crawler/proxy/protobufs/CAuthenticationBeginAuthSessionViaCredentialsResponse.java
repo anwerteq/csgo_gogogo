@@ -14,33 +14,53 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface ClientRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.ClientRequest)
+  public interface BeginAuthSessionViaCredentialsResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
-     * 客户端 ID
+     * Unique identifier of requestor, also used for routing
      * </pre>
      *
-     * <code>int64 client_id = 1;</code>
+     * <code>string client_id = 1;</code>
      * @return The clientId.
      */
-    long getClientId();
-
+    java.lang.String getClientId();
     /**
      * <pre>
-     * 请求 ID，使用 bytes 类型以支持任意字节
+     * Unique identifier of requestor, also used for routing
      * </pre>
      *
-     * <code>bytes request_id = 2;</code>
-     * @return The requestId.
+     * <code>string client_id = 1;</code>
+     * @return The bytes for clientId.
      */
-    com.google.protobuf.ByteString getRequestId();
+    com.google.protobuf.ByteString
+        getClientIdBytes();
 
     /**
      * <pre>
-     * 请求间隔
+     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+     * </pre>
+     *
+     * <code>string request_id = 2;</code>
+     * @return The requestId.
+     */
+    java.lang.String getRequestId();
+    /**
+     * <pre>
+     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+     * </pre>
+     *
+     * <code>string request_id = 2;</code>
+     * @return The bytes for requestId.
+     */
+    com.google.protobuf.ByteString
+        getRequestIdBytes();
+
+    /**
+     * <pre>
+     * Refresh interval with which requestor should call PollAuthSessionStatus
      * </pre>
      *
      * <code>int32 interval = 3;</code>
@@ -50,154 +70,327 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
 
     /**
      * <pre>
-     * Steam ID
+     * The confirmation types that will be able to confirm the request
      * </pre>
      *
-     * <code>string steamid = 4;</code>
-     * @return The steamid.
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @return A list containing the allowedConfirmations.
      */
-    String getSteamid();
+    java.util.List<java.lang.String>
+        getAllowedConfirmationsList();
     /**
      * <pre>
-     * Steam ID
+     * The confirmation types that will be able to confirm the request
      * </pre>
      *
-     * <code>string steamid = 4;</code>
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @return The count of allowedConfirmations.
+     */
+    int getAllowedConfirmationsCount();
+    /**
+     * <pre>
+     * The confirmation types that will be able to confirm the request
+     * </pre>
+     *
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @param index The index of the element to return.
+     * @return The allowedConfirmations at the given index.
+     */
+    java.lang.String getAllowedConfirmations(int index);
+    /**
+     * <pre>
+     * The confirmation types that will be able to confirm the request
+     * </pre>
+     *
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the allowedConfirmations at the given index.
+     */
+    com.google.protobuf.ByteString
+        getAllowedConfirmationsBytes(int index);
+
+    /**
+     * <pre>
+     * SteamID of the account logging in - will only be included if the credentials were correct
+     * </pre>
+     *
+     * <code>string steamid = 5;</code>
+     * @return The steamid.
+     */
+    java.lang.String getSteamid();
+    /**
+     * <pre>
+     * SteamID of the account logging in - will only be included if the credentials were correct
+     * </pre>
+     *
+     * <code>string steamid = 5;</code>
      * @return The bytes for steamid.
      */
     com.google.protobuf.ByteString
         getSteamidBytes();
+
+    /**
+     * <pre>
+     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * </pre>
+     *
+     * <code>string weak_token = 6;</code>
+     * @return The weakToken.
+     */
+    java.lang.String getWeakToken();
+    /**
+     * <pre>
+     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * </pre>
+     *
+     * <code>string weak_token = 6;</code>
+     * @return The bytes for weakToken.
+     */
+    com.google.protobuf.ByteString
+        getWeakTokenBytes();
   }
   /**
-   * <pre>
-   * 定义客户端请求消息
-   * </pre>
-   *
-   * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.ClientRequest}
+   * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse}
    */
-  public static final class ClientRequest extends
+  public static final class BeginAuthSessionViaCredentialsResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.ClientRequest)
-      ClientRequestOrBuilder {
+      // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
+      BeginAuthSessionViaCredentialsResponseOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use ClientRequest.newBuilder() to construct.
-    private ClientRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use BeginAuthSessionViaCredentialsResponse.newBuilder() to construct.
+    private BeginAuthSessionViaCredentialsResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private ClientRequest() {
-      requestId_ = com.google.protobuf.ByteString.EMPTY;
+    private BeginAuthSessionViaCredentialsResponse() {
+      clientId_ = "";
+      requestId_ = "";
+      allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       steamid_ = "";
+      weakToken_ = "";
     }
 
-    @Override
+    @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected Object newInstance(
+    protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new ClientRequest();
+      return new BeginAuthSessionViaCredentialsResponse();
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_descriptor;
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_fieldAccessorTable
+      return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ClientRequest.class, Builder.class);
+              com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.Builder.class);
     }
 
     public static final int CLIENT_ID_FIELD_NUMBER = 1;
-    private long clientId_;
+    private volatile java.lang.Object clientId_;
     /**
      * <pre>
-     * 客户端 ID
+     * Unique identifier of requestor, also used for routing
      * </pre>
      *
-     * <code>int64 client_id = 1;</code>
+     * <code>string client_id = 1;</code>
      * @return The clientId.
      */
-    @Override
-    public long getClientId() {
-      return clientId_;
+    @java.lang.Override
+    public java.lang.String getClientId() {
+      java.lang.Object ref = clientId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        clientId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Unique identifier of requestor, also used for routing
+     * </pre>
+     *
+     * <code>string client_id = 1;</code>
+     * @return The bytes for clientId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getClientIdBytes() {
+      java.lang.Object ref = clientId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        clientId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int REQUEST_ID_FIELD_NUMBER = 2;
-    private com.google.protobuf.ByteString requestId_;
+    private volatile java.lang.Object requestId_;
     /**
      * <pre>
-     * 请求 ID，使用 bytes 类型以支持任意字节
+     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
      * </pre>
      *
-     * <code>bytes request_id = 2;</code>
+     * <code>string request_id = 2;</code>
      * @return The requestId.
      */
-    @Override
-    public com.google.protobuf.ByteString getRequestId() {
-      return requestId_;
+    @java.lang.Override
+    public java.lang.String getRequestId() {
+      java.lang.Object ref = requestId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        requestId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+     * </pre>
+     *
+     * <code>string request_id = 2;</code>
+     * @return The bytes for requestId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRequestIdBytes() {
+      java.lang.Object ref = requestId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        requestId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int INTERVAL_FIELD_NUMBER = 3;
     private int interval_;
     /**
      * <pre>
-     * 请求间隔
+     * Refresh interval with which requestor should call PollAuthSessionStatus
      * </pre>
      *
      * <code>int32 interval = 3;</code>
      * @return The interval.
      */
-    @Override
+    @java.lang.Override
     public int getInterval() {
       return interval_;
     }
 
-    public static final int STEAMID_FIELD_NUMBER = 4;
-    private volatile Object steamid_;
+    public static final int ALLOWED_CONFIRMATIONS_FIELD_NUMBER = 4;
+    private com.google.protobuf.LazyStringList allowedConfirmations_;
     /**
      * <pre>
-     * Steam ID
+     * The confirmation types that will be able to confirm the request
      * </pre>
      *
-     * <code>string steamid = 4;</code>
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @return A list containing the allowedConfirmations.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getAllowedConfirmationsList() {
+      return allowedConfirmations_;
+    }
+    /**
+     * <pre>
+     * The confirmation types that will be able to confirm the request
+     * </pre>
+     *
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @return The count of allowedConfirmations.
+     */
+    public int getAllowedConfirmationsCount() {
+      return allowedConfirmations_.size();
+    }
+    /**
+     * <pre>
+     * The confirmation types that will be able to confirm the request
+     * </pre>
+     *
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @param index The index of the element to return.
+     * @return The allowedConfirmations at the given index.
+     */
+    public java.lang.String getAllowedConfirmations(int index) {
+      return allowedConfirmations_.get(index);
+    }
+    /**
+     * <pre>
+     * The confirmation types that will be able to confirm the request
+     * </pre>
+     *
+     * <code>repeated string allowed_confirmations = 4;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the allowedConfirmations at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getAllowedConfirmationsBytes(int index) {
+      return allowedConfirmations_.getByteString(index);
+    }
+
+    public static final int STEAMID_FIELD_NUMBER = 5;
+    private volatile java.lang.Object steamid_;
+    /**
+     * <pre>
+     * SteamID of the account logging in - will only be included if the credentials were correct
+     * </pre>
+     *
+     * <code>string steamid = 5;</code>
      * @return The steamid.
      */
-    @Override
-    public String getSteamid() {
-      Object ref = steamid_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getSteamid() {
+      java.lang.Object ref = steamid_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         steamid_ = s;
         return s;
       }
     }
     /**
      * <pre>
-     * Steam ID
+     * SteamID of the account logging in - will only be included if the credentials were correct
      * </pre>
      *
-     * <code>string steamid = 4;</code>
+     * <code>string steamid = 5;</code>
      * @return The bytes for steamid.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSteamidBytes() {
-      Object ref = steamid_;
-      if (ref instanceof String) {
+      java.lang.Object ref = steamid_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         steamid_ = b;
         return b;
       } else {
@@ -205,8 +398,54 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
     }
 
+    public static final int WEAK_TOKEN_FIELD_NUMBER = 6;
+    private volatile java.lang.Object weakToken_;
+    /**
+     * <pre>
+     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * </pre>
+     *
+     * <code>string weak_token = 6;</code>
+     * @return The weakToken.
+     */
+    @java.lang.Override
+    public java.lang.String getWeakToken() {
+      java.lang.Object ref = weakToken_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        weakToken_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+     * </pre>
+     *
+     * <code>string weak_token = 6;</code>
+     * @return The bytes for weakToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getWeakTokenBytes() {
+      java.lang.Object ref = weakToken_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        weakToken_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -216,73 +455,92 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (clientId_ != 0L) {
-        output.writeInt64(1, clientId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(clientId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, clientId_);
       }
-      if (!requestId_.isEmpty()) {
-        output.writeBytes(2, requestId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(requestId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, requestId_);
       }
       if (interval_ != 0) {
         output.writeInt32(3, interval_);
       }
+      for (int i = 0; i < allowedConfirmations_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, allowedConfirmations_.getRaw(i));
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(steamid_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, steamid_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, steamid_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(weakToken_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, weakToken_);
       }
       getUnknownFields().writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (clientId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, clientId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(clientId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, clientId_);
       }
-      if (!requestId_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, requestId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(requestId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, requestId_);
       }
       if (interval_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, interval_);
       }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < allowedConfirmations_.size(); i++) {
+          dataSize += computeStringSizeNoTag(allowedConfirmations_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getAllowedConfirmationsList().size();
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(steamid_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, steamid_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, steamid_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(weakToken_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, weakToken_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof ClientRequest)) {
+      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse)) {
         return super.equals(obj);
       }
-      ClientRequest other = (ClientRequest) obj;
+      com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse other = (com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse) obj;
 
-      if (getClientId()
-          != other.getClientId()) return false;
+      if (!getClientId()
+          .equals(other.getClientId())) return false;
       if (!getRequestId()
           .equals(other.getRequestId())) return false;
       if (getInterval()
           != other.getInterval()) return false;
+      if (!getAllowedConfirmationsList()
+          .equals(other.getAllowedConfirmationsList())) return false;
       if (!getSteamid()
           .equals(other.getSteamid())) return false;
+      if (!getWeakToken()
+          .equals(other.getWeakToken())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -290,82 +548,87 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + CLIENT_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getClientId());
+      hash = (53 * hash) + getClientId().hashCode();
       hash = (37 * hash) + REQUEST_ID_FIELD_NUMBER;
       hash = (53 * hash) + getRequestId().hashCode();
       hash = (37 * hash) + INTERVAL_FIELD_NUMBER;
       hash = (53 * hash) + getInterval();
+      if (getAllowedConfirmationsCount() > 0) {
+        hash = (37 * hash) + ALLOWED_CONFIRMATIONS_FIELD_NUMBER;
+        hash = (53 * hash) + getAllowedConfirmationsList().hashCode();
+      }
       hash = (37 * hash) + STEAMID_FIELD_NUMBER;
       hash = (53 * hash) + getSteamid().hashCode();
+      hash = (37 * hash) + WEAK_TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getWeakToken().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ClientRequest parseFrom(byte[] data)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ClientRequest parseFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ClientRequest parseDelimitedFrom(java.io.InputStream input)
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static ClientRequest parseDelimitedFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ClientRequest parseFrom(
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -373,160 +636,183 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(ClientRequest prototype) {
+    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * <pre>
-     * 定义客户端请求消息
-     * </pre>
-     *
-     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.ClientRequest}
+     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.ClientRequest)
-        ClientRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_fieldAccessorTable
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                ClientRequest.class, Builder.class);
+                com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.class, com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.Builder.class);
       }
 
-      // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientRequest.newBuilder()
+      // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.newBuilder()
       private Builder() {
 
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
 
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
-        clientId_ = 0L;
+        clientId_ = "";
 
-        requestId_ = com.google.protobuf.ByteString.EMPTY;
+        requestId_ = "";
 
         interval_ = 0;
 
+        allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
         steamid_ = "";
+
+        weakToken_ = "";
 
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_descriptor;
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
       }
 
-      @Override
-      public ClientRequest getDefaultInstanceForType() {
-        return ClientRequest.getDefaultInstance();
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse getDefaultInstanceForType() {
+        return com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.getDefaultInstance();
       }
 
-      @Override
-      public ClientRequest build() {
-        ClientRequest result = buildPartial();
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse build() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public ClientRequest buildPartial() {
-        ClientRequest result = new ClientRequest(this);
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse buildPartial() {
+        com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse result = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse(this);
+        int from_bitField0_ = bitField0_;
         result.clientId_ = clientId_;
         result.requestId_ = requestId_;
         result.interval_ = interval_;
+        if (((bitField0_ & 0x00000001) != 0)) {
+          allowedConfirmations_ = allowedConfirmations_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.allowedConfirmations_ = allowedConfirmations_;
         result.steamid_ = steamid_;
+        result.weakToken_ = weakToken_;
         onBuilt();
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ClientRequest) {
-          return mergeFrom((ClientRequest)other);
+        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse) {
+          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(ClientRequest other) {
-        if (other == ClientRequest.getDefaultInstance()) return this;
-        if (other.getClientId() != 0L) {
-          setClientId(other.getClientId());
+      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse other) {
+        if (other == com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.getDefaultInstance()) return this;
+        if (!other.getClientId().isEmpty()) {
+          clientId_ = other.clientId_;
+          onChanged();
         }
-        if (other.getRequestId() != com.google.protobuf.ByteString.EMPTY) {
-          setRequestId(other.getRequestId());
+        if (!other.getRequestId().isEmpty()) {
+          requestId_ = other.requestId_;
+          onChanged();
         }
         if (other.getInterval() != 0) {
           setInterval(other.getInterval());
         }
+        if (!other.allowedConfirmations_.isEmpty()) {
+          if (allowedConfirmations_.isEmpty()) {
+            allowedConfirmations_ = other.allowedConfirmations_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureAllowedConfirmationsIsMutable();
+            allowedConfirmations_.addAll(other.allowedConfirmations_);
+          }
+          onChanged();
+        }
         if (!other.getSteamid().isEmpty()) {
           steamid_ = other.steamid_;
+          onChanged();
+        }
+        if (!other.getWeakToken().isEmpty()) {
+          weakToken_ = other.weakToken_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -534,18 +820,18 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         if (extensionRegistry == null) {
-          throw new NullPointerException();
+          throw new java.lang.NullPointerException();
         }
         try {
           boolean done = false;
@@ -555,13 +841,13 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
               case 0:
                 done = true;
                 break;
-              case 8: {
-                clientId_ = input.readInt64();
+              case 10: {
+                clientId_ = input.readStringRequireUtf8();
 
                 break;
-              } // case 8
+              } // case 10
               case 18: {
-                requestId_ = input.readBytes();
+                requestId_ = input.readStringRequireUtf8();
 
                 break;
               } // case 18
@@ -571,10 +857,21 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
                 break;
               } // case 24
               case 34: {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureAllowedConfirmationsIsMutable();
+                allowedConfirmations_.add(s);
+                break;
+              } // case 34
+              case 42: {
                 steamid_ = input.readStringRequireUtf8();
 
                 break;
-              } // case 34
+              } // case 42
+              case 50: {
+                weakToken_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 50
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -590,73 +887,157 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
         } // finally
         return this;
       }
+      private int bitField0_;
 
-      private long clientId_ ;
+      private java.lang.Object clientId_ = "";
       /**
        * <pre>
-       * 客户端 ID
+       * Unique identifier of requestor, also used for routing
        * </pre>
        *
-       * <code>int64 client_id = 1;</code>
+       * <code>string client_id = 1;</code>
        * @return The clientId.
        */
-      @Override
-      public long getClientId() {
-        return clientId_;
+      public java.lang.String getClientId() {
+        java.lang.Object ref = clientId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          clientId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
        * <pre>
-       * 客户端 ID
+       * Unique identifier of requestor, also used for routing
        * </pre>
        *
-       * <code>int64 client_id = 1;</code>
+       * <code>string client_id = 1;</code>
+       * @return The bytes for clientId.
+       */
+      public com.google.protobuf.ByteString
+          getClientIdBytes() {
+        java.lang.Object ref = clientId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          clientId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Unique identifier of requestor, also used for routing
+       * </pre>
+       *
+       * <code>string client_id = 1;</code>
        * @param value The clientId to set.
        * @return This builder for chaining.
        */
-      public Builder setClientId(long value) {
-        
+      public Builder setClientId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         clientId_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * 客户端 ID
+       * Unique identifier of requestor, also used for routing
        * </pre>
        *
-       * <code>int64 client_id = 1;</code>
+       * <code>string client_id = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearClientId() {
         
-        clientId_ = 0L;
+        clientId_ = getDefaultInstance().getClientId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Unique identifier of requestor, also used for routing
+       * </pre>
+       *
+       * <code>string client_id = 1;</code>
+       * @param value The bytes for clientId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setClientIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        clientId_ = value;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.ByteString requestId_ = com.google.protobuf.ByteString.EMPTY;
+      private java.lang.Object requestId_ = "";
       /**
        * <pre>
-       * 请求 ID，使用 bytes 类型以支持任意字节
+       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
        * </pre>
        *
-       * <code>bytes request_id = 2;</code>
+       * <code>string request_id = 2;</code>
        * @return The requestId.
        */
-      @Override
-      public com.google.protobuf.ByteString getRequestId() {
-        return requestId_;
+      public java.lang.String getRequestId() {
+        java.lang.Object ref = requestId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          requestId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
        * <pre>
-       * 请求 ID，使用 bytes 类型以支持任意字节
+       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
        * </pre>
        *
-       * <code>bytes request_id = 2;</code>
+       * <code>string request_id = 2;</code>
+       * @return The bytes for requestId.
+       */
+      public com.google.protobuf.ByteString
+          getRequestIdBytes() {
+        java.lang.Object ref = requestId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          requestId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+       * </pre>
+       *
+       * <code>string request_id = 2;</code>
        * @param value The requestId to set.
        * @return This builder for chaining.
        */
-      public Builder setRequestId(com.google.protobuf.ByteString value) {
+      public Builder setRequestId(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -667,10 +1048,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * 请求 ID，使用 bytes 类型以支持任意字节
+       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
        * </pre>
        *
-       * <code>bytes request_id = 2;</code>
+       * <code>string request_id = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearRequestId() {
@@ -679,23 +1060,43 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
         onChanged();
         return this;
       }
+      /**
+       * <pre>
+       * Unique request ID to be presented by requestor at poll time - must not be transferred or displayed
+       * </pre>
+       *
+       * <code>string request_id = 2;</code>
+       * @param value The bytes for requestId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRequestIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        requestId_ = value;
+        onChanged();
+        return this;
+      }
 
       private int interval_ ;
       /**
        * <pre>
-       * 请求间隔
+       * Refresh interval with which requestor should call PollAuthSessionStatus
        * </pre>
        *
        * <code>int32 interval = 3;</code>
        * @return The interval.
        */
-      @Override
+      @java.lang.Override
       public int getInterval() {
         return interval_;
       }
       /**
        * <pre>
-       * 请求间隔
+       * Refresh interval with which requestor should call PollAuthSessionStatus
        * </pre>
        *
        * <code>int32 interval = 3;</code>
@@ -710,7 +1111,7 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * 请求间隔
+       * Refresh interval with which requestor should call PollAuthSessionStatus
        * </pre>
        *
        * <code>int32 interval = 3;</code>
@@ -723,42 +1124,188 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
         return this;
       }
 
-      private Object steamid_ = "";
+      private com.google.protobuf.LazyStringList allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureAllowedConfirmationsIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          allowedConfirmations_ = new com.google.protobuf.LazyStringArrayList(allowedConfirmations_);
+          bitField0_ |= 0x00000001;
+         }
+      }
       /**
        * <pre>
-       * Steam ID
+       * The confirmation types that will be able to confirm the request
        * </pre>
        *
-       * <code>string steamid = 4;</code>
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @return A list containing the allowedConfirmations.
+       */
+      public com.google.protobuf.ProtocolStringList
+          getAllowedConfirmationsList() {
+        return allowedConfirmations_.getUnmodifiableView();
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @return The count of allowedConfirmations.
+       */
+      public int getAllowedConfirmationsCount() {
+        return allowedConfirmations_.size();
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @param index The index of the element to return.
+       * @return The allowedConfirmations at the given index.
+       */
+      public java.lang.String getAllowedConfirmations(int index) {
+        return allowedConfirmations_.get(index);
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the allowedConfirmations at the given index.
+       */
+      public com.google.protobuf.ByteString
+          getAllowedConfirmationsBytes(int index) {
+        return allowedConfirmations_.getByteString(index);
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @param index The index to set the value at.
+       * @param value The allowedConfirmations to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAllowedConfirmations(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAllowedConfirmationsIsMutable();
+        allowedConfirmations_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @param value The allowedConfirmations to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllowedConfirmations(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAllowedConfirmationsIsMutable();
+        allowedConfirmations_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @param values The allowedConfirmations to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllAllowedConfirmations(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureAllowedConfirmationsIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, allowedConfirmations_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAllowedConfirmations() {
+        allowedConfirmations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The confirmation types that will be able to confirm the request
+       * </pre>
+       *
+       * <code>repeated string allowed_confirmations = 4;</code>
+       * @param value The bytes of the allowedConfirmations to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllowedConfirmationsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureAllowedConfirmationsIsMutable();
+        allowedConfirmations_.add(value);
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object steamid_ = "";
+      /**
+       * <pre>
+       * SteamID of the account logging in - will only be included if the credentials were correct
+       * </pre>
+       *
+       * <code>string steamid = 5;</code>
        * @return The steamid.
        */
-      public String getSteamid() {
-        Object ref = steamid_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getSteamid() {
+        java.lang.Object ref = steamid_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           steamid_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <pre>
-       * Steam ID
+       * SteamID of the account logging in - will only be included if the credentials were correct
        * </pre>
        *
-       * <code>string steamid = 4;</code>
+       * <code>string steamid = 5;</code>
        * @return The bytes for steamid.
        */
       public com.google.protobuf.ByteString
           getSteamidBytes() {
-        Object ref = steamid_;
+        java.lang.Object ref = steamid_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           steamid_ = b;
           return b;
         } else {
@@ -767,15 +1314,15 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Steam ID
+       * SteamID of the account logging in - will only be included if the credentials were correct
        * </pre>
        *
-       * <code>string steamid = 4;</code>
+       * <code>string steamid = 5;</code>
        * @param value The steamid to set.
        * @return This builder for chaining.
        */
       public Builder setSteamid(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -786,10 +1333,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Steam ID
+       * SteamID of the account logging in - will only be included if the credentials were correct
        * </pre>
        *
-       * <code>string steamid = 4;</code>
+       * <code>string steamid = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearSteamid() {
@@ -800,10 +1347,10 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
       /**
        * <pre>
-       * Steam ID
+       * SteamID of the account logging in - will only be included if the credentials were correct
        * </pre>
        *
-       * <code>string steamid = 4;</code>
+       * <code>string steamid = 5;</code>
        * @param value The bytes for steamid to set.
        * @return This builder for chaining.
        */
@@ -818,36 +1365,132 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
         onChanged();
         return this;
       }
-      @Override
+
+      private java.lang.Object weakToken_ = "";
+      /**
+       * <pre>
+       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * </pre>
+       *
+       * <code>string weak_token = 6;</code>
+       * @return The weakToken.
+       */
+      public java.lang.String getWeakToken() {
+        java.lang.Object ref = weakToken_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          weakToken_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * </pre>
+       *
+       * <code>string weak_token = 6;</code>
+       * @return The bytes for weakToken.
+       */
+      public com.google.protobuf.ByteString
+          getWeakTokenBytes() {
+        java.lang.Object ref = weakToken_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          weakToken_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * </pre>
+       *
+       * <code>string weak_token = 6;</code>
+       * @param value The weakToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWeakToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        weakToken_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * </pre>
+       *
+       * <code>string weak_token = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearWeakToken() {
+        
+        weakToken_ = getDefaultInstance().getWeakToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Partial-authentication token - limited lifetime and scope, included only if credentials were correct
+       * </pre>
+       *
+       * <code>string weak_token = 6;</code>
+       * @param value The bytes for weakToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWeakTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        weakToken_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.ClientRequest)
+      // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.ClientRequest)
-    private static final ClientRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.BeginAuthSessionViaCredentialsResponse)
+    private static final com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new ClientRequest();
+      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse();
     }
 
-    public static ClientRequest getDefaultInstance() {
+    public static com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<ClientRequest>
-        PARSER = new com.google.protobuf.AbstractParser<ClientRequest>() {
-      @Override
-      public ClientRequest parsePartialFrom(
+    private static final com.google.protobuf.Parser<BeginAuthSessionViaCredentialsResponse>
+        PARSER = new com.google.protobuf.AbstractParser<BeginAuthSessionViaCredentialsResponse>() {
+      @java.lang.Override
+      public BeginAuthSessionViaCredentialsResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -866,810 +1509,27 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
       }
     };
 
-    public static com.google.protobuf.Parser<ClientRequest> parser() {
+    public static com.google.protobuf.Parser<BeginAuthSessionViaCredentialsResponse> parser() {
       return PARSER;
     }
 
-    @Override
-    public com.google.protobuf.Parser<ClientRequest> getParserForType() {
+    @java.lang.Override
+    public com.google.protobuf.Parser<BeginAuthSessionViaCredentialsResponse> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public ClientRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface ClientResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.ClientResponse)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     * 响应状态
-     * </pre>
-     *
-     * <code>string status = 1;</code>
-     * @return The status.
-     */
-    String getStatus();
-    /**
-     * <pre>
-     * 响应状态
-     * </pre>
-     *
-     * <code>string status = 1;</code>
-     * @return The bytes for status.
-     */
-    com.google.protobuf.ByteString
-        getStatusBytes();
-
-    /**
-     * <pre>
-     * 响应消息
-     * </pre>
-     *
-     * <code>string message = 2;</code>
-     * @return The message.
-     */
-    String getMessage();
-    /**
-     * <pre>
-     * 响应消息
-     * </pre>
-     *
-     * <code>string message = 2;</code>
-     * @return The bytes for message.
-     */
-    com.google.protobuf.ByteString
-        getMessageBytes();
-  }
-  /**
-   * <pre>
-   * 定义响应消息（如有需要，可添加）
-   * </pre>
-   *
-   * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.ClientResponse}
-   */
-  public static final class ClientResponse extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.ClientResponse)
-      ClientResponseOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use ClientResponse.newBuilder() to construct.
-    private ClientResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private ClientResponse() {
-      status_ = "";
-      message_ = "";
-    }
-
-    @Override
-    @SuppressWarnings({"unused"})
-    protected Object newInstance(
-        UnusedPrivateParameter unused) {
-      return new ClientResponse();
-    }
-
-    @Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_descriptor;
-    }
-
-    @Override
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              ClientResponse.class, Builder.class);
-    }
-
-    public static final int STATUS_FIELD_NUMBER = 1;
-    private volatile Object status_;
-    /**
-     * <pre>
-     * 响应状态
-     * </pre>
-     *
-     * <code>string status = 1;</code>
-     * @return The status.
-     */
-    @Override
-    public String getStatus() {
-      Object ref = status_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        status_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * 响应状态
-     * </pre>
-     *
-     * <code>string status = 1;</code>
-     * @return The bytes for status.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getStatusBytes() {
-      Object ref = status_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        status_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int MESSAGE_FIELD_NUMBER = 2;
-    private volatile Object message_;
-    /**
-     * <pre>
-     * 响应消息
-     * </pre>
-     *
-     * <code>string message = 2;</code>
-     * @return The message.
-     */
-    @Override
-    public String getMessage() {
-      Object ref = message_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        message_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * 响应消息
-     * </pre>
-     *
-     * <code>string message = 2;</code>
-     * @return The bytes for message.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getMessageBytes() {
-      Object ref = message_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        message_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(status_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, status_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(message_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, message_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(status_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, status_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(message_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, message_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof ClientResponse)) {
-        return super.equals(obj);
-      }
-      ClientResponse other = (ClientResponse) obj;
-
-      if (!getStatus()
-          .equals(other.getStatus())) return false;
-      if (!getMessage()
-          .equals(other.getMessage())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + STATUS_FIELD_NUMBER;
-      hash = (53 * hash) + getStatus().hashCode();
-      hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
-      hash = (53 * hash) + getMessage().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static ClientResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static ClientResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static ClientResponse parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static ClientResponse parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static ClientResponse parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static ClientResponse parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static ClientResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static ClientResponse parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static ClientResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static ClientResponse parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static ClientResponse parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static ClientResponse parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(ClientResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @Override
-    protected Builder newBuilderForType(
-        BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * <pre>
-     * 定义响应消息（如有需要，可添加）
-     * </pre>
-     *
-     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.ClientResponse}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.ClientResponse)
-        ClientResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_descriptor;
-      }
-
-      @Override
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                ClientResponse.class, Builder.class);
-      }
-
-      // Construct using com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse.newBuilder()
-      private Builder() {
-
-      }
-
-      private Builder(
-          BuilderParent parent) {
-        super(parent);
-
-      }
-      @Override
-      public Builder clear() {
-        super.clear();
-        status_ = "";
-
-        message_ = "";
-
-        return this;
-      }
-
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return CAuthenticationBeginAuthSessionViaCredentialsResponse.internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_descriptor;
-      }
-
-      @Override
-      public ClientResponse getDefaultInstanceForType() {
-        return ClientResponse.getDefaultInstance();
-      }
-
-      @Override
-      public ClientResponse build() {
-        ClientResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @Override
-      public ClientResponse buildPartial() {
-        ClientResponse result = new ClientResponse(this);
-        result.status_ = status_;
-        result.message_ = message_;
-        onBuilt();
-        return result;
-      }
-
-      @Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return super.setField(field, value);
-      }
-      @Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return super.addRepeatedField(field, value);
-      }
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ClientResponse) {
-          return mergeFrom((ClientResponse)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(ClientResponse other) {
-        if (other == ClientResponse.getDefaultInstance()) return this;
-        if (!other.getStatus().isEmpty()) {
-          status_ = other.status_;
-          onChanged();
-        }
-        if (!other.getMessage().isEmpty()) {
-          message_ = other.message_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        onChanged();
-        return this;
-      }
-
-      @Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new NullPointerException();
-        }
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                status_ = input.readStringRequireUtf8();
-
-                break;
-              } // case 10
-              case 18: {
-                message_ = input.readStringRequireUtf8();
-
-                break;
-              } // case 18
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.unwrapIOException();
-        } finally {
-          onChanged();
-        } // finally
-        return this;
-      }
-
-      private Object status_ = "";
-      /**
-       * <pre>
-       * 响应状态
-       * </pre>
-       *
-       * <code>string status = 1;</code>
-       * @return The status.
-       */
-      public String getStatus() {
-        Object ref = status_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          status_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 响应状态
-       * </pre>
-       *
-       * <code>string status = 1;</code>
-       * @return The bytes for status.
-       */
-      public com.google.protobuf.ByteString
-          getStatusBytes() {
-        Object ref = status_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          status_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 响应状态
-       * </pre>
-       *
-       * <code>string status = 1;</code>
-       * @param value The status to set.
-       * @return This builder for chaining.
-       */
-      public Builder setStatus(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        status_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 响应状态
-       * </pre>
-       *
-       * <code>string status = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearStatus() {
-        
-        status_ = getDefaultInstance().getStatus();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 响应状态
-       * </pre>
-       *
-       * <code>string status = 1;</code>
-       * @param value The bytes for status to set.
-       * @return This builder for chaining.
-       */
-      public Builder setStatusBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        status_ = value;
-        onChanged();
-        return this;
-      }
-
-      private Object message_ = "";
-      /**
-       * <pre>
-       * 响应消息
-       * </pre>
-       *
-       * <code>string message = 2;</code>
-       * @return The message.
-       */
-      public String getMessage() {
-        Object ref = message_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          message_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 响应消息
-       * </pre>
-       *
-       * <code>string message = 2;</code>
-       * @return The bytes for message.
-       */
-      public com.google.protobuf.ByteString
-          getMessageBytes() {
-        Object ref = message_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          message_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 响应消息
-       * </pre>
-       *
-       * <code>string message = 2;</code>
-       * @param value The message to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessage(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        message_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 响应消息
-       * </pre>
-       *
-       * <code>string message = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearMessage() {
-        
-        message_ = getDefaultInstance().getMessage();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 响应消息
-       * </pre>
-       *
-       * <code>string message = 2;</code>
-       * @param value The bytes for message to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        message_ = value;
-        onChanged();
-        return this;
-      }
-      @Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.ClientResponse)
-    }
-
-    // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.ClientResponse)
-    private static final ClientResponse DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new ClientResponse();
-    }
-
-    public static ClientResponse getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<ClientResponse>
-        PARSER = new com.google.protobuf.AbstractParser<ClientResponse>() {
-      @Override
-      public ClientResponse parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
-      }
-    };
-
-    public static com.google.protobuf.Parser<ClientResponse> parser() {
-      return PARSER;
-    }
-
-    @Override
-    public com.google.protobuf.Parser<ClientResponse> getParserForType() {
-      return PARSER;
-    }
-
-    @Override
-    public ClientResponse getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_descriptor;
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_fieldAccessorTable;
+      internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1678,31 +1538,25 @@ public final class CAuthenticationBeginAuthSessionViaCredentialsResponse {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n=CAuthentication_BeginAuthSessionViaCre" +
       "dentials_Response.proto\022%com.chenerzhu.c" +
-      "rawler.proxy.protobufs\"Y\n\rClientRequest\022" +
-      "\021\n\tclient_id\030\001 \001(\003\022\022\n\nrequest_id\030\002 \001(\014\022\020" +
-      "\n\010interval\030\003 \001(\005\022\017\n\007steamid\030\004 \001(\t\"1\n\016Cli" +
-      "entResponse\022\016\n\006status\030\001 \001(\t\022\017\n\007message\030\002" +
-      " \001(\tb\006proto3"
+      "rawler.proxy.protobufs\"\245\001\n&BeginAuthSess" +
+      "ionViaCredentialsResponse\022\021\n\tclient_id\030\001" +
+      " \001(\t\022\022\n\nrequest_id\030\002 \001(\t\022\020\n\010interval\030\003 \001" +
+      "(\005\022\035\n\025allowed_confirmations\030\004 \003(\t\022\017\n\007ste" +
+      "amid\030\005 \001(\t\022\022\n\nweak_token\030\006 \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_descriptor =
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_fieldAccessorTable = new
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientRequest_descriptor,
-        new String[] { "ClientId", "RequestId", "Interval", "Steamid", });
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_chenerzhu_crawler_proxy_protobufs_ClientResponse_descriptor,
-        new String[] { "Status", "Message", });
+        internal_static_com_chenerzhu_crawler_proxy_protobufs_BeginAuthSessionViaCredentialsResponse_descriptor,
+        new java.lang.String[] { "ClientId", "RequestId", "Interval", "AllowedConfirmations", "Steamid", "WeakToken", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

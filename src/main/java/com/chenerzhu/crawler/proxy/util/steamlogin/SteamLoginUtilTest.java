@@ -25,10 +25,10 @@ public class SteamLoginUtilTest {
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
     public static void main(String[] args) {
-        String basestr= "ClJNb3ppbGxhLzUuMCAoWDExOyBMaW51eCB4ODZfNjQ7IHJ2OjEuOS41LjIwKSBHZWNrby8yODEyLTEyLTEwIDA0OjU2OjI4IEZpcmVmb3gvMy44EghtdTY0a2tybxrYAm5iNTNoNW92L3ZkMlJndXUrR2JjUVZneVhpUXhpRlVDaEhTRzR0RmpnTEpLbXZ4eE5ZeHNuNHVUL245bkpncUpJU0ZWbmZKeUdnUWJGUHpLY21qSENHWlEzRUhZNXlHSFFIcFlQSDYwSlNack5aUHdqYnF2L1ZLN0xjdmVYRXErVk5waW44SjQzd3VEUXlRRTdWbStGU0pCampLd21vRFZRSCt4UmJtUi9BNGpPeEMrVmFXSUo4QWI4b0tmN2djd1ZYbmNHa3N0bnRxcU16djV4SUJxaUJocU9aekZsVmN6VEZmVTl5VzRWS1pQN2U2bzg0S2FpRW8rYWYrcFNQbTZzZERJaUM4VHpBN1drM2JQbnc0cGt2blhsTEZNcXUwTEdkNko3QzI4dkY0clNFOXIyWFRzVU1ubmM4WEtuVWdDNUVGdStlVGdqTzgxQ2p0ZjNYcU1nUT09IJDK5suVASgBMAM4AUIJQ29tbXVuaXR5";
+        String basestr= "CoAEZGZhZWU4MGQ2MjliOWE2NmMxMTBhNGQyZDBkOTAxOWJiNWY5NTE0Yzg4NzhkOTM0NWZkZDU2ZWU2ZWQ1Y2M2NjcyNzJiYTRiMGU4NWI2ZWY3NmZlOTRkOWY5OWM5YzkxMTFhM2ZjNWM3MzlmMzNjZjc0ODMzZDQyM2FmNDVhMjEzNmU3ZjE3MmQ1ZWM3NWQzZTQzNjBlMWVkZGUyZTI5NDNlYjk0ZGVjNWNiZDZkYTkyNjRiYzk5ODg4OGM4MmZmMDdkZGUwNmM3OGJhMTdhNjAzMTVmMWJjMzA0OTNiMWNmMmI3ZDRkZmY1NGNlMjAxZTJmODYwZTU3YWNjODVmMTExYzAxZDlmMzZjMGZiYjQ3Zjc3NjM0MGFmZTQ3YTY2NTczMzg5YjhlZTZmMmM4Mjk0YTE0ODQ4NjgyYTcxYjIzMjNiZmE2YzQwNzU4YjIxZDIxNjJmNjBkOTM5NTljN2UxMzQzZjEzMDIzZDEyYzgyMTVjZGIzYjRlZjNlOGM4ZGJlNGZmODliNDFjZWYzYmJlN2FkODQ3MzJjNTI0OGUwZjEwMTVjOGMwYWVmOTJhOTk4YzE3ODE5MTRjZmMyMGFkOGQyMjI2MWYxZWI4NTBlZmI2YTY3M2QyODUzYWExMDVmN2NiNTY1ZmMwNjE4MGVlNDFmZGIwMzQ0MmE3YjESBjAxMDAwMRjQ/fjMwAM=";
         byte[] decode = Base64.getDecoder().decode(basestr);
         try {
-            CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request cAuthenticationBeginAuthSessionViaCredentialsRequest = CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request.parseFrom(decode);
+            CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse beginAuthSessionViaCredentialsResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.BeginAuthSessionViaCredentialsResponse.parseFrom(decode);
             System.out.println("123123");
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
@@ -89,7 +89,7 @@ public class SteamLoginUtilTest {
         CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request build = CAuthenticationBeginAuthSessionViaCredentialsRequest.CAuthentication_BeginAuthSessionViaCredentials_Request
                 .newBuilder()
                 .setAccountName(account_name)
-//                .setEncryptedPassword(ByteString.copyFromUtf8(encrypted_password))
+                .setEncryptedPassword(encrypted_password)
                 .setEncryptionTimestamp(rsa_timestamp)
                 .setRememberLogin(true)
                 .setPlatformType(CAuthenticationBeginAuthSessionViaCredentialsRequest.EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp)
@@ -109,12 +109,7 @@ public class SteamLoginUtilTest {
         String response = HttpClientUtils.sendPost(url, JSONObject.toJSONString(objectObjectHashMap), headerMap);
 
         byte[] decode = Base64.getDecoder().decode(response);
-        CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse clientResponse = null;
-        try {
-             clientResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.ClientResponse.parseFrom(decode);
-        } catch (InvalidProtocolBufferException e) {
-            throw new RuntimeException(e);
-        }
+
         System.out.println("12312");
     }
 
