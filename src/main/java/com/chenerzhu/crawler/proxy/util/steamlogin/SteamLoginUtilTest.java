@@ -2,13 +2,9 @@ package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsRequest;
-import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationBeginAuthSessionViaCredentialsResponse;
-import com.chenerzhu.crawler.proxy.protobufs.CAuthenticationGetPasswordRSAPublicKeyResponse;
-import com.chenerzhu.crawler.proxy.protobufs.CAuthentication_GetPasswordRSAPublicKey_Request;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.ByteString;
+
 import javax.crypto.Cipher;
 import java.security.PublicKey;
 import java.io.UnsupportedEncodingException;
@@ -31,6 +27,7 @@ public class SteamLoginUtilTest {
         try {
             CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse  beginAuthSessionViaCredentialsResponse = CAuthenticationBeginAuthSessionViaCredentialsResponse.AuthSessionResponse.parseFrom(decode);
             String jsonString = JsonFormat.printer().print(beginAuthSessionViaCredentialsResponse);
+            System.out.println(beginAuthSessionViaCredentialsResponse.getAllowedConfirmations(0));
             System.out.println(jsonString);
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);

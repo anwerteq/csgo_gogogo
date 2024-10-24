@@ -49,6 +49,7 @@ enum EPublishedFileInappropriateResult {
 
 // 个人状态标志
 enum EPersonaStateFlag {
+	k_EProfileCustomizationTypeInvalid0 = 0;
     k_EPersonaStateFlag_HasRichPresence = 1;
     k_EPersonaStateFlag_InJoinableGame = 2;
     k_EPersonaStateFlag_Golden = 4;
