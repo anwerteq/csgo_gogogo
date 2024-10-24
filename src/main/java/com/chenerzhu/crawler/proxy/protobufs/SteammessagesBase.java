@@ -3,8 +3,8 @@
 
 package com.chenerzhu.crawler.proxy.protobufs;
 
-public final class SteammessagesBasePb2 {
-  private SteammessagesBasePb2() {}
+public final class SteammessagesBase {
+  private SteammessagesBase() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -72,15 +72,15 @@ public final class SteammessagesBasePb2 {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_descriptor;
+      return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_fieldAccessorTable
+      return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.class, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder.class);
+              SteammessagesBase.CMsgIPAddress.class, SteammessagesBase.CMsgIPAddress.Builder.class);
     }
 
     public static final int V4_FIELD_NUMBER = 1;
@@ -160,10 +160,10 @@ public final class SteammessagesBasePb2 {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress)) {
+      if (!(obj instanceof SteammessagesBase.CMsgIPAddress)) {
         return super.equals(obj);
       }
-      com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress other = (com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress) obj;
+      SteammessagesBase.CMsgIPAddress other = (SteammessagesBase.CMsgIPAddress) obj;
 
       if (getV4()
           != other.getV4()) return false;
@@ -189,69 +189,69 @@ public final class SteammessagesBasePb2 {
       return hash;
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(byte[] data)
+    public static SteammessagesBase.CMsgIPAddress parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(java.io.InputStream input)
+    public static SteammessagesBase.CMsgIPAddress parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseDelimitedFrom(java.io.InputStream input)
+    public static SteammessagesBase.CMsgIPAddress parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseDelimitedFrom(
+    public static SteammessagesBase.CMsgIPAddress parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress parseFrom(
+    public static SteammessagesBase.CMsgIPAddress parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -264,7 +264,7 @@ public final class SteammessagesBasePb2 {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress prototype) {
+    public static Builder newBuilder(SteammessagesBase.CMsgIPAddress prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -289,18 +289,18 @@ public final class SteammessagesBasePb2 {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress)
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder {
+        SteammessagesBase.CMsgIPAddressOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_descriptor;
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_fieldAccessorTable
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.class, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder.class);
+                SteammessagesBase.CMsgIPAddress.class, SteammessagesBase.CMsgIPAddress.Builder.class);
       }
 
       // Construct using com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.newBuilder()
@@ -326,17 +326,17 @@ public final class SteammessagesBasePb2 {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_descriptor;
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddress_descriptor;
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress getDefaultInstanceForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.getDefaultInstance();
+      public SteammessagesBase.CMsgIPAddress getDefaultInstanceForType() {
+        return SteammessagesBase.CMsgIPAddress.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress build() {
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress result = buildPartial();
+      public SteammessagesBase.CMsgIPAddress build() {
+        SteammessagesBase.CMsgIPAddress result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -344,8 +344,8 @@ public final class SteammessagesBasePb2 {
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress buildPartial() {
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress result = new com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress(this);
+      public SteammessagesBase.CMsgIPAddress buildPartial() {
+        SteammessagesBase.CMsgIPAddress result = new SteammessagesBase.CMsgIPAddress(this);
         result.v4_ = v4_;
         result.v6_ = v6_;
         onBuilt();
@@ -386,16 +386,16 @@ public final class SteammessagesBasePb2 {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress) {
-          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress)other);
+        if (other instanceof SteammessagesBase.CMsgIPAddress) {
+          return mergeFrom((SteammessagesBase.CMsgIPAddress)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress other) {
-        if (other == com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.getDefaultInstance()) return this;
+      public Builder mergeFrom(SteammessagesBase.CMsgIPAddress other) {
+        if (other == SteammessagesBase.CMsgIPAddress.getDefaultInstance()) return this;
         if (other.getV4() != 0) {
           setV4(other.getV4());
         }
@@ -559,12 +559,12 @@ public final class SteammessagesBasePb2 {
     }
 
     // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress)
-    private static final com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress DEFAULT_INSTANCE;
+    private static final SteammessagesBase.CMsgIPAddress DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress();
+      DEFAULT_INSTANCE = new SteammessagesBase.CMsgIPAddress();
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress getDefaultInstance() {
+    public static SteammessagesBase.CMsgIPAddress getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -600,7 +600,7 @@ public final class SteammessagesBasePb2 {
     }
 
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress getDefaultInstanceForType() {
+    public SteammessagesBase.CMsgIPAddress getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -627,7 +627,7 @@ public final class SteammessagesBasePb2 {
      * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
      * @return The originalIpAddress.
      */
-    com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress getOriginalIpAddress();
+    SteammessagesBase.CMsgIPAddress getOriginalIpAddress();
     /**
      * <pre>
      * 原始 IP 地址
@@ -635,7 +635,7 @@ public final class SteammessagesBasePb2 {
      *
      * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
      */
-    com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder getOriginalIpAddressOrBuilder();
+    SteammessagesBase.CMsgIPAddressOrBuilder getOriginalIpAddressOrBuilder();
 
     /**
      * <pre>
@@ -680,19 +680,19 @@ public final class SteammessagesBasePb2 {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_descriptor;
+      return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_fieldAccessorTable
+      return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.class, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.Builder.class);
+              SteammessagesBase.CMsgIPAddressBucket.class, SteammessagesBase.CMsgIPAddressBucket.Builder.class);
     }
 
     public static final int ORIGINAL_IP_ADDRESS_FIELD_NUMBER = 1;
-    private com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress originalIpAddress_;
+    private SteammessagesBase.CMsgIPAddress originalIpAddress_;
     /**
      * <pre>
      * 原始 IP 地址
@@ -714,8 +714,8 @@ public final class SteammessagesBasePb2 {
      * @return The originalIpAddress.
      */
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress getOriginalIpAddress() {
-      return originalIpAddress_ == null ? com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.getDefaultInstance() : originalIpAddress_;
+    public SteammessagesBase.CMsgIPAddress getOriginalIpAddress() {
+      return originalIpAddress_ == null ? SteammessagesBase.CMsgIPAddress.getDefaultInstance() : originalIpAddress_;
     }
     /**
      * <pre>
@@ -725,7 +725,7 @@ public final class SteammessagesBasePb2 {
      * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
      */
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder getOriginalIpAddressOrBuilder() {
+    public SteammessagesBase.CMsgIPAddressOrBuilder getOriginalIpAddressOrBuilder() {
       return getOriginalIpAddress();
     }
 
@@ -791,10 +791,10 @@ public final class SteammessagesBasePb2 {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket)) {
+      if (!(obj instanceof SteammessagesBase.CMsgIPAddressBucket)) {
         return super.equals(obj);
       }
-      com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket other = (com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket) obj;
+      SteammessagesBase.CMsgIPAddressBucket other = (SteammessagesBase.CMsgIPAddressBucket) obj;
 
       if (hasOriginalIpAddress() != other.hasOriginalIpAddress()) return false;
       if (hasOriginalIpAddress()) {
@@ -826,69 +826,69 @@ public final class SteammessagesBasePb2 {
       return hash;
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(byte[] data)
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(java.io.InputStream input)
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseDelimitedFrom(java.io.InputStream input)
+    public static SteammessagesBase.CMsgIPAddressBucket parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseDelimitedFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket parseFrom(
+    public static SteammessagesBase.CMsgIPAddressBucket parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -901,7 +901,7 @@ public final class SteammessagesBasePb2 {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket prototype) {
+    public static Builder newBuilder(SteammessagesBase.CMsgIPAddressBucket prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -926,18 +926,18 @@ public final class SteammessagesBasePb2 {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddressBucket)
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucketOrBuilder {
+        SteammessagesBase.CMsgIPAddressBucketOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_descriptor;
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_fieldAccessorTable
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.class, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.Builder.class);
+                SteammessagesBase.CMsgIPAddressBucket.class, SteammessagesBase.CMsgIPAddressBucket.Builder.class);
       }
 
       // Construct using com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.newBuilder()
@@ -967,17 +967,17 @@ public final class SteammessagesBasePb2 {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_descriptor;
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgIPAddressBucket_descriptor;
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket getDefaultInstanceForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.getDefaultInstance();
+      public SteammessagesBase.CMsgIPAddressBucket getDefaultInstanceForType() {
+        return SteammessagesBase.CMsgIPAddressBucket.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket build() {
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket result = buildPartial();
+      public SteammessagesBase.CMsgIPAddressBucket build() {
+        SteammessagesBase.CMsgIPAddressBucket result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -985,8 +985,8 @@ public final class SteammessagesBasePb2 {
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket buildPartial() {
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket result = new com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket(this);
+      public SteammessagesBase.CMsgIPAddressBucket buildPartial() {
+        SteammessagesBase.CMsgIPAddressBucket result = new SteammessagesBase.CMsgIPAddressBucket(this);
         if (originalIpAddressBuilder_ == null) {
           result.originalIpAddress_ = originalIpAddress_;
         } else {
@@ -1031,16 +1031,16 @@ public final class SteammessagesBasePb2 {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket) {
-          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket)other);
+        if (other instanceof SteammessagesBase.CMsgIPAddressBucket) {
+          return mergeFrom((SteammessagesBase.CMsgIPAddressBucket)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket other) {
-        if (other == com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket.getDefaultInstance()) return this;
+      public Builder mergeFrom(SteammessagesBase.CMsgIPAddressBucket other) {
+        if (other == SteammessagesBase.CMsgIPAddressBucket.getDefaultInstance()) return this;
         if (other.hasOriginalIpAddress()) {
           mergeOriginalIpAddress(other.getOriginalIpAddress());
         }
@@ -1101,9 +1101,9 @@ public final class SteammessagesBasePb2 {
         return this;
       }
 
-      private com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress originalIpAddress_;
+      private SteammessagesBase.CMsgIPAddress originalIpAddress_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder> originalIpAddressBuilder_;
+          SteammessagesBase.CMsgIPAddress, SteammessagesBase.CMsgIPAddress.Builder, SteammessagesBase.CMsgIPAddressOrBuilder> originalIpAddressBuilder_;
       /**
        * <pre>
        * 原始 IP 地址
@@ -1123,9 +1123,9 @@ public final class SteammessagesBasePb2 {
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        * @return The originalIpAddress.
        */
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress getOriginalIpAddress() {
+      public SteammessagesBase.CMsgIPAddress getOriginalIpAddress() {
         if (originalIpAddressBuilder_ == null) {
-          return originalIpAddress_ == null ? com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.getDefaultInstance() : originalIpAddress_;
+          return originalIpAddress_ == null ? SteammessagesBase.CMsgIPAddress.getDefaultInstance() : originalIpAddress_;
         } else {
           return originalIpAddressBuilder_.getMessage();
         }
@@ -1137,7 +1137,7 @@ public final class SteammessagesBasePb2 {
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        */
-      public Builder setOriginalIpAddress(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress value) {
+      public Builder setOriginalIpAddress(SteammessagesBase.CMsgIPAddress value) {
         if (originalIpAddressBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1158,7 +1158,7 @@ public final class SteammessagesBasePb2 {
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        */
       public Builder setOriginalIpAddress(
-          com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder builderForValue) {
+          SteammessagesBase.CMsgIPAddress.Builder builderForValue) {
         if (originalIpAddressBuilder_ == null) {
           originalIpAddress_ = builderForValue.build();
           onChanged();
@@ -1175,11 +1175,11 @@ public final class SteammessagesBasePb2 {
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        */
-      public Builder mergeOriginalIpAddress(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress value) {
+      public Builder mergeOriginalIpAddress(SteammessagesBase.CMsgIPAddress value) {
         if (originalIpAddressBuilder_ == null) {
           if (originalIpAddress_ != null) {
             originalIpAddress_ =
-              com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.newBuilder(originalIpAddress_).mergeFrom(value).buildPartial();
+              SteammessagesBase.CMsgIPAddress.newBuilder(originalIpAddress_).mergeFrom(value).buildPartial();
           } else {
             originalIpAddress_ = value;
           }
@@ -1215,7 +1215,7 @@ public final class SteammessagesBasePb2 {
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        */
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder getOriginalIpAddressBuilder() {
+      public SteammessagesBase.CMsgIPAddress.Builder getOriginalIpAddressBuilder() {
         
         onChanged();
         return getOriginalIpAddressFieldBuilder().getBuilder();
@@ -1227,12 +1227,12 @@ public final class SteammessagesBasePb2 {
        *
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        */
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder getOriginalIpAddressOrBuilder() {
+      public SteammessagesBase.CMsgIPAddressOrBuilder getOriginalIpAddressOrBuilder() {
         if (originalIpAddressBuilder_ != null) {
           return originalIpAddressBuilder_.getMessageOrBuilder();
         } else {
           return originalIpAddress_ == null ?
-              com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.getDefaultInstance() : originalIpAddress_;
+              SteammessagesBase.CMsgIPAddress.getDefaultInstance() : originalIpAddress_;
         }
       }
       /**
@@ -1243,11 +1243,11 @@ public final class SteammessagesBasePb2 {
        * <code>.com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddress original_ip_address = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder> 
+          SteammessagesBase.CMsgIPAddress, SteammessagesBase.CMsgIPAddress.Builder, SteammessagesBase.CMsgIPAddressOrBuilder>
           getOriginalIpAddressFieldBuilder() {
         if (originalIpAddressBuilder_ == null) {
           originalIpAddressBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddress.Builder, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressOrBuilder>(
+              SteammessagesBase.CMsgIPAddress, SteammessagesBase.CMsgIPAddress.Builder, SteammessagesBase.CMsgIPAddressOrBuilder>(
                   getOriginalIpAddress(),
                   getParentForChildren(),
                   isClean());
@@ -1315,12 +1315,12 @@ public final class SteammessagesBasePb2 {
     }
 
     // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.CMsgIPAddressBucket)
-    private static final com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket DEFAULT_INSTANCE;
+    private static final SteammessagesBase.CMsgIPAddressBucket DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket();
+      DEFAULT_INSTANCE = new SteammessagesBase.CMsgIPAddressBucket();
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket getDefaultInstance() {
+    public static SteammessagesBase.CMsgIPAddressBucket getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1356,7 +1356,7 @@ public final class SteammessagesBasePb2 {
     }
 
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgIPAddressBucket getDefaultInstanceForType() {
+    public SteammessagesBase.CMsgIPAddressBucket getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1571,15 +1571,15 @@ public final class SteammessagesBasePb2 {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_descriptor;
+      return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_fieldAccessorTable
+      return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.class, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.Builder.class);
+              SteammessagesBase.CMsgProtoBufHeader.class, SteammessagesBase.CMsgProtoBufHeader.Builder.class);
     }
 
     public static final int STEAMID_FIELD_NUMBER = 1;
@@ -2001,10 +2001,10 @@ public final class SteammessagesBasePb2 {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader)) {
+      if (!(obj instanceof SteammessagesBase.CMsgProtoBufHeader)) {
         return super.equals(obj);
       }
-      com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader other = (com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader) obj;
+      SteammessagesBase.CMsgProtoBufHeader other = (SteammessagesBase.CMsgProtoBufHeader) obj;
 
       if (getSteamid()
           != other.getSteamid()) return false;
@@ -2080,69 +2080,69 @@ public final class SteammessagesBasePb2 {
       return hash;
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(byte[] data)
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(java.io.InputStream input)
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseDelimitedFrom(java.io.InputStream input)
+    public static SteammessagesBase.CMsgProtoBufHeader parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseDelimitedFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader parseFrom(
+    public static SteammessagesBase.CMsgProtoBufHeader parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2155,7 +2155,7 @@ public final class SteammessagesBasePb2 {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader prototype) {
+    public static Builder newBuilder(SteammessagesBase.CMsgProtoBufHeader prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -2180,18 +2180,18 @@ public final class SteammessagesBasePb2 {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.CMsgProtoBufHeader)
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeaderOrBuilder {
+        SteammessagesBase.CMsgProtoBufHeaderOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_descriptor;
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_fieldAccessorTable
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.class, com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.Builder.class);
+                SteammessagesBase.CMsgProtoBufHeader.class, SteammessagesBase.CMsgProtoBufHeader.Builder.class);
       }
 
       // Construct using com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.newBuilder()
@@ -2239,17 +2239,17 @@ public final class SteammessagesBasePb2 {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_descriptor;
+        return SteammessagesBase.internal_static_com_chenerzhu_crawler_proxy_protobufs_CMsgProtoBufHeader_descriptor;
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader getDefaultInstanceForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.getDefaultInstance();
+      public SteammessagesBase.CMsgProtoBufHeader getDefaultInstanceForType() {
+        return SteammessagesBase.CMsgProtoBufHeader.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader build() {
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader result = buildPartial();
+      public SteammessagesBase.CMsgProtoBufHeader build() {
+        SteammessagesBase.CMsgProtoBufHeader result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -2257,8 +2257,8 @@ public final class SteammessagesBasePb2 {
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader buildPartial() {
-        com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader result = new com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader(this);
+      public SteammessagesBase.CMsgProtoBufHeader buildPartial() {
+        SteammessagesBase.CMsgProtoBufHeader result = new SteammessagesBase.CMsgProtoBufHeader(this);
         int from_bitField0_ = bitField0_;
         result.steamid_ = steamid_;
         result.clientSessionid_ = clientSessionid_;
@@ -2315,16 +2315,16 @@ public final class SteammessagesBasePb2 {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader) {
-          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader)other);
+        if (other instanceof SteammessagesBase.CMsgProtoBufHeader) {
+          return mergeFrom((SteammessagesBase.CMsgProtoBufHeader)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader other) {
-        if (other == com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader.getDefaultInstance()) return this;
+      public Builder mergeFrom(SteammessagesBase.CMsgProtoBufHeader other) {
+        if (other == SteammessagesBase.CMsgProtoBufHeader.getDefaultInstance()) return this;
         if (other.getSteamid() != 0L) {
           setSteamid(other.getSteamid());
         }
@@ -3237,12 +3237,12 @@ public final class SteammessagesBasePb2 {
     }
 
     // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.CMsgProtoBufHeader)
-    private static final com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader DEFAULT_INSTANCE;
+    private static final SteammessagesBase.CMsgProtoBufHeader DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader();
+      DEFAULT_INSTANCE = new SteammessagesBase.CMsgProtoBufHeader();
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader getDefaultInstance() {
+    public static SteammessagesBase.CMsgProtoBufHeader getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -3278,7 +3278,7 @@ public final class SteammessagesBasePb2 {
     }
 
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.SteammessagesBasePb2.CMsgProtoBufHeader getDefaultInstanceForType() {
+    public SteammessagesBase.CMsgProtoBufHeader getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 

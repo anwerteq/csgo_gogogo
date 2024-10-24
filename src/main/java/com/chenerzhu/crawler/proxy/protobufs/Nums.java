@@ -3,8 +3,8 @@
 
 package com.chenerzhu.crawler.proxy.protobufs;
 
-public final class EnumsPb2 {
-  private EnumsPb2() {}
+public final class Nums {
+  private Nums() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -280,7 +280,7 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.getDescriptor().getEnumTypes().get(0);
+      return Nums.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final EPublishedFileQueryType[] VALUES = values();
@@ -401,7 +401,7 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.getDescriptor().getEnumTypes().get(1);
+      return Nums.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final EPublishedFileInappropriateProvider[] VALUES = values();
@@ -549,7 +549,7 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.getDescriptor().getEnumTypes().get(2);
+      return Nums.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final EPublishedFileInappropriateResult[] VALUES = values();
@@ -742,7 +742,7 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.getDescriptor().getEnumTypes().get(3);
+      return Nums.getDescriptor().getEnumTypes().get(3);
     }
 
     private static final EPersonaStateFlag[] VALUES = values();
@@ -872,7 +872,7 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.getDescriptor().getEnumTypes().get(4);
+      return Nums.getDescriptor().getEnumTypes().get(4);
     }
 
     private static final EContentCheckProvider[] VALUES = values();
@@ -1182,7 +1182,7 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.getDescriptor().getEnumTypes().get(5);
+      return Nums.getDescriptor().getEnumTypes().get(5);
     }
 
     private static final EProfileCustomizationType[] VALUES = values();
@@ -1245,15 +1245,15 @@ public final class EnumsPb2 {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_descriptor;
+      return Nums.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_fieldAccessorTable
+      return Nums.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.class, com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.Builder.class);
+              Nums.NoResponse.class, Nums.NoResponse.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1289,10 +1289,10 @@ public final class EnumsPb2 {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse)) {
+      if (!(obj instanceof Nums.NoResponse)) {
         return super.equals(obj);
       }
-      com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse other = (com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse) obj;
+      Nums.NoResponse other = (Nums.NoResponse) obj;
 
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
@@ -1310,69 +1310,69 @@ public final class EnumsPb2 {
       return hash;
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(byte[] data)
+    public static Nums.NoResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(java.io.InputStream input)
+    public static Nums.NoResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseDelimitedFrom(java.io.InputStream input)
+    public static Nums.NoResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseDelimitedFrom(
+    public static Nums.NoResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse parseFrom(
+    public static Nums.NoResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1385,7 +1385,7 @@ public final class EnumsPb2 {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse prototype) {
+    public static Builder newBuilder(Nums.NoResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -1410,18 +1410,18 @@ public final class EnumsPb2 {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.NoResponse)
-        com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponseOrBuilder {
+        Nums.NoResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_descriptor;
+        return Nums.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_fieldAccessorTable
+        return Nums.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.class, com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.Builder.class);
+                Nums.NoResponse.class, Nums.NoResponse.Builder.class);
       }
 
       // Construct using com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.newBuilder()
@@ -1443,17 +1443,17 @@ public final class EnumsPb2 {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_descriptor;
+        return Nums.internal_static_com_chenerzhu_crawler_proxy_protobufs_NoResponse_descriptor;
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse getDefaultInstanceForType() {
-        return com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.getDefaultInstance();
+      public Nums.NoResponse getDefaultInstanceForType() {
+        return Nums.NoResponse.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse build() {
-        com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse result = buildPartial();
+      public Nums.NoResponse build() {
+        Nums.NoResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1461,8 +1461,8 @@ public final class EnumsPb2 {
       }
 
       @java.lang.Override
-      public com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse buildPartial() {
-        com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse result = new com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse(this);
+      public Nums.NoResponse buildPartial() {
+        Nums.NoResponse result = new Nums.NoResponse(this);
         onBuilt();
         return result;
       }
@@ -1501,16 +1501,16 @@ public final class EnumsPb2 {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse) {
-          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse)other);
+        if (other instanceof Nums.NoResponse) {
+          return mergeFrom((Nums.NoResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse other) {
-        if (other == com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(Nums.NoResponse other) {
+        if (other == Nums.NoResponse.getDefaultInstance()) return this;
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -1569,12 +1569,12 @@ public final class EnumsPb2 {
     }
 
     // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.NoResponse)
-    private static final com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse DEFAULT_INSTANCE;
+    private static final Nums.NoResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse();
+      DEFAULT_INSTANCE = new Nums.NoResponse();
     }
 
-    public static com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse getDefaultInstance() {
+    public static Nums.NoResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1610,7 +1610,7 @@ public final class EnumsPb2 {
     }
 
     @java.lang.Override
-    public com.chenerzhu.crawler.proxy.protobufs.EnumsPb2.NoResponse getDefaultInstanceForType() {
+    public Nums.NoResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
