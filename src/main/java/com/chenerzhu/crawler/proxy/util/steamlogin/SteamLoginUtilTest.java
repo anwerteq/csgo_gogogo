@@ -1,15 +1,21 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
+import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.ByteBuffer;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -22,13 +28,17 @@ import java.util.Map;
 import com.google.protobuf.util.JsonFormat;
 import feign.HeaderMap;
 
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.CHARACTERS;
+
+
 public class SteamLoginUtilTest {
 
     // steam登录标识
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
 
     // steam登录的的请求头数据
-    public static ThreadLocal< Map<String, String>> steamLoginHeaderMapThreadLocal = new ThreadLocal<>();
+    public static ThreadLocal<Map<String, String>> steamLoginHeaderMapThreadLocal = new ThreadLocal<>();
+
     static {
         steamLoginHeaderMapThreadLocal.set(new HashMap<>());
     }
@@ -49,13 +59,106 @@ public class SteamLoginUtilTest {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         steamLoginUrlFlag.set(true);
-        SteamApplicationRunner.steamUserDates.add(new SteamUserDate());
+        SteamUserDate steamUserDate = new SteamUserDate();
+        steamUserDate.setAccount_name("mu64kkro");
+        steamUserDate.setUserPsw("QingLiu98!");
+        steamUserDate.setShared_secret("vbAREhPkibtwemEklyePZH2b73c=");
+        SteamApplicationRunner.steamUserDates.add(steamUserDate);
         step1();
         SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
-        String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), "QingLiu98!");
-        step3("mu64kkro", encryptPasswordProtobuf, Long.valueOf(step2Value.getTimestamp()));
-        // CNnRl9QWT9leRnGksIuwzJBLzfzX9OFKGNMzl+sXOhWUvlFt0dN1xfwD5Hs0Isq/QOSCRIomOcCNKoodByZzwP1UzIOxmqtsA2fHv/2E0gzFLmy5cAbBKq4eQE5MgS2p03ALr5GIWv5tMrFSec+o2rr+aXn9yqYFzY8OfFdOK+/xgNM07Nwpx1rRViTCZVn1d3wtRMNqPwyCTDRLleM4EC9DHJyK3XaKGICa1aBXMvMLOGMJEHa8wwWCNoUaBB5s
+        String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), steamUserDate.getUserPsw());
+        SleepUtil.sleep(4000);
+        SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response authSessionViaCredentialsResponse =
+                step3(steamUserDate.getAccount_name(), encryptPasswordProtobuf, Long.valueOf(step2Value.getTimestamp()));
+        SteammessagesAuth.CAuthentication_AllowedConfirmation allowedConfirmations = authSessionViaCredentialsResponse.getAllowedConfirmations(0);
+        if (allowedConfirmations != null) {
+            //移动设备
+            SteammessagesAuth.EAuthSessionGuardType confirmationType = allowedConfirmations.getConfirmationType();
+            if (confirmationType.getNumber() == SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceCode.getNumber()) {
+                if (StrUtil.isEmpty(steamUserDate.getShared_secret())) {
+                    //获取shared_secret值
+                } else {
+                    String one_time_code = generateOneTimeCode(steamUserDate.getShared_secret(), null);
+                    System.out.println("123123");
+                }
+            }
+        }
 
+    }
+
+    /**
+     * 生成认证码
+     *
+     * @param sharedSecret
+     * @param timestamp
+     * @return
+     */
+    public static String generateOneTimeCode(String sharedSecret, Long timestamp) {
+        if (timestamp == null) {
+            timestamp = System.currentTimeMillis() / 1000;
+            timestamp += tryToGetTimeDeltaFromSteam(); // Implement this method as needed
+        }
+        // Pack the timestamp as Big Endian uint64
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(0, timestamp / 30);
+        byte[] timeBuffer = buffer.array();
+
+        // Decode the shared secret
+        byte[] decodedKey = Base64.getDecoder().decode(sharedSecret);
+        // Create HMAC using SHA-1
+        Mac mac = null;
+        try {
+            mac = Mac.getInstance("HmacSHA1");
+            SecretKeySpec keySpec = new SecretKeySpec(decodedKey, "HmacSHA1");
+            mac.init(keySpec);
+            byte[] timeHmac = mac.doFinal(timeBuffer);
+            // Calculate the offset
+            int begin = timeHmac[19] & 0x0F;
+            int fullCode = ((timeHmac[begin] & 0xFF) << 24) |
+                    ((timeHmac[begin + 1] & 0xFF) << 16) |
+                    ((timeHmac[begin + 2] & 0xFF) << 8) |
+                    (timeHmac[begin + 3] & 0xFF);
+            fullCode &= 0x7FFFFFFF; // 31 bits
+            // Generate the code
+            StringBuilder code = new StringBuilder();
+            for (int i = 0; i < 5; i++) {
+                fullCode = fullCode / CHARACTERS.length();
+                int index = fullCode % CHARACTERS.length();
+                code.append(CHARACTERS.charAt(index));
+            }
+            return code.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static long tryToGetTimeDeltaFromSteam() {
+        long timeDelta = 0;
+        if (timeDelta == Long.MAX_VALUE) {
+            for (int i = 0; i < 3; i++) {
+                long serverTime = getSteamServerTime();
+                if (serverTime != -1) {
+                    timeDelta = serverTime - System.currentTimeMillis() / 1000; // Convert to seconds
+                    return (int) timeDelta;
+                }
+            }
+            timeDelta = 0;
+        }
+        return (int) timeDelta;
+    }
+
+    /**
+     * 获取服务器时间
+     *
+     * @return
+     */
+    public static long getSteamServerTime() {
+        String url = "https://api.steampowered.com/ITwoFactorService/QueryTime/v1/";
+        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
+        headerMap.put("Referer", "https://steamcommunity.com");
+        headerMap.put("Cookie", CookiesConfig.steamCookies.get());
+        String response = HttpClientUtils.sendPost(url, "", headerMap);
+        return 1;
     }
 
     public static void step1() throws UnsupportedEncodingException {
@@ -71,13 +174,12 @@ public class SteamLoginUtilTest {
     public static SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response step2() throws UnsupportedEncodingException {
         String url = "https://api.steampowered.com/IAuthenticationService/GetPasswordRSAPublicKey/v1";
         SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Request accountProtobufs = SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Request.newBuilder().setAccountName("mu64kkro").build();
-        steamLoginUrlFlag.set(true);
         // Base64 编码
         String base64EncodedMessage = Base64.getEncoder().encodeToString(accountProtobufs.toByteArray());
         // 序列化为字节数组
         Map<String, String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
-        Map<String, String> headerMap =  SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
+        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
         headerMap.put("Referer", "https://steamcommunity.com");
         headerMap.put("Cookie", CookiesConfig.steamCookies.get());
         String response = HttpClientUtils.sendGet(url, headerMap, objectObjectHashMap);
@@ -93,7 +195,7 @@ public class SteamLoginUtilTest {
         return rsaPublicKeyResponse;
     }
 
-    public static void step3(String account_name, String encrypted_password, Long rsa_timestamp) {
+    public static SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response step3(String account_name, String encrypted_password, Long rsa_timestamp) {
 
         SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Request credentialsRequest = SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Request
                 .newBuilder()
@@ -120,17 +222,17 @@ public class SteamLoginUtilTest {
         headerMap.put("Accept-Encoding", "gzip, deflate");
         headerMap.put("User-Agent", "python-requests/2.32.3");
 
-        String response = HttpClientUtils.sendPostForm(url,"", headerMap,objectObjectHashMap);
+        String response = HttpClientUtils.sendPostForm(url, "", headerMap, objectObjectHashMap);
 // {'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Referer': 'https://steamcommunity.com/', 'Origin': 'https://steamcommunity.com', 'Content-Length': '645', 'Content-Type': 'application/x-www-form-urlencoded'}
         byte[] decode = Base64.getDecoder().decode(response);
         try {
             SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response beginAuthSessionViaCredentialsResponse = SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response.parseFrom(decode);
             System.out.println("12312");
+            return beginAuthSessionViaCredentialsResponse;
 
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("12312");
     }
 
     /**

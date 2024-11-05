@@ -22,5 +22,5 @@ public class SteamUserDate {
     private boolean fully_enrolled;
     private String apikey;
     private Session Session = new Session();
-
+    private String oneTimeCode;
 }
