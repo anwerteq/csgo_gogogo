@@ -20,11 +20,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.protobuf.util.JsonFormat;
+import feign.HeaderMap;
 
 public class SteamLoginUtilTest {
 
     // steam登录标识
     public static ThreadLocal<Boolean> steamLoginUrlFlag = new ThreadLocal<>();
+
+    // steam登录的的请求头数据
+    public static ThreadLocal< Map<String, String>> steamLoginHeaderMapThreadLocal = new ThreadLocal<>();
+    static {
+        steamLoginHeaderMapThreadLocal.set(new HashMap<>());
+    }
 
     public static void main1(String[] args) {
         String basestr = "CMTo8OCx27z1dhIQJyBMQnntWn2lGZ6YDe/YSB0AAKBAIgIIAyj5/56XlYCAiAEy2gNleUFpZEhsd0lqb2dJa3BYVkNJc0lDSmhiR2NpT2lBaVJXUkVVMEVpSUgwLmV5QWlhWE56SWpvZ0ltTTZPRFUyT0RreU9ESTJNemt3T1RFMk1EQXdOQ0lzSUNKemRXSWlPaUFpTnpZMU5qRXhPVGt6TlRFeE9EVTBNREVpTENBaVlYVmtJam9nV3lBaWQyVmhheUlnWFN3Z0ltVjRjQ0k2SURFM01qazNOak0yTmpBc0lDSnVZbVlpT2lBd0xDQWlhV0YwSWpvZ01UY3lPVGMyTWpjMk1Dd2dJbXAwYVNJNklDSXhNREpCWHpJMU5ERkRRVEJGWDBORVFUUTVJaXdnSW05aGRDSTZJREUzTWprM05qSTNOakFzSUNKeWRGOWxlSEFpT2lBd0xDQWlhWEJmYzNWaWFtVmpkQ0k2SUNJeU1Ua3VOemt1TVRBMkxqSXpNU0lzSUNKcGNGOWpiMjVtYVhKdFpYSWlPaUFpTWpFNUxqYzVMakV3Tmk0eU16RWlJSDAuZnBDNGowS1hmU3dhT1NjUmw0czZaUU1hRENmZi04UGlyWFpHbGhKcFBENWxFVTltSFdsYm4tOXhvSDUtSV8wYnpHN0Fkanh0MjhpcE82UG93VDIwQVFCAA==";
@@ -70,9 +77,9 @@ public class SteamLoginUtilTest {
         // 序列化为字节数组
         Map<String, String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
-        Map<String, String> headerMap = new HashMap<>();
+        Map<String, String> headerMap =  SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
         headerMap.put("Referer", "https://steamcommunity.com");
-        headerMap.put("cookie", CookiesConfig.steamCookies.get());
+        headerMap.put("Cookie", CookiesConfig.steamCookies.get());
         String response = HttpClientUtils.sendGet(url, headerMap, objectObjectHashMap);
         byte[] decode = Base64.getDecoder().decode(response);
         SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response rsaPublicKeyResponse = null;
@@ -104,18 +111,22 @@ public class SteamLoginUtilTest {
         String base64EncodedMessage = Base64.getEncoder().encodeToString(credentialsRequest.toByteArray());
         // 序列化为字节数组
         Map<String, String> objectObjectHashMap = new HashMap<>();
-        objectObjectHashMap.put("input_protobuf_encoded", "ClJNb3ppbGxhLzUuMCAoWDExOyBMaW51eCB4ODZfNjQ7IHJ2OjEuOS41LjIwKSBHZWNrby8yODEyLTEyLTEwIDA0OjU2OjI4IEZpcmVmb3gvMy44EghtdTY0a2tybxrYAkJORmpzTzJCRGpEU2RVTisxZ3ZaN1JPc24vREhlckZoRFpEWlV5SmVROFB2RmgwRzhJaVZwckdiRE5XVXZ0WEZRdkd5WmM5M0J6YWcxN0tJdnduZnNsVjU4TWtQZDl6");
-        Map<String, String> headerMap = new HashMap() {{
-            put("Referer", "https://steamcommunity.com");
-            put("Origin", "https://steamcommunity.com");
-        }};
+        objectObjectHashMap.put("input_protobuf_encoded", base64EncodedMessage);
+        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
+        headerMap.put("Origin", "https://steamcommunity.com");
+        headerMap.put("Referer", "https://steamcommunity.com");
         headerMap.put("Cookie", CookiesConfig.steamCookies.get());
-        headerMap.put("Content-Type", "application/json"); // 设置请求头为 JSON
-        String response = HttpClientUtils.sendPost(url, JSONObject.toJSONString(objectObjectHashMap), headerMap);
+        headerMap.put("Content-Type", "application/x-www-form-urlencoded"); // 设置请求头为 JSON
+        headerMap.put("Accept-Encoding", "gzip, deflate");
+        headerMap.put("User-Agent", "python-requests/2.32.3");
 
+        String response = HttpClientUtils.sendPostForm(url,"", headerMap,objectObjectHashMap);
+// {'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Referer': 'https://steamcommunity.com/', 'Origin': 'https://steamcommunity.com', 'Content-Length': '645', 'Content-Type': 'application/x-www-form-urlencoded'}
         byte[] decode = Base64.getDecoder().decode(response);
         try {
             SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response beginAuthSessionViaCredentialsResponse = SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response.parseFrom(decode);
+            System.out.println("12312");
+
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }

@@ -151,10 +151,16 @@ public class HttpClientUtils implements ApplicationRunner {
                 }
                 //steam登录接口
                 if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
-                    Header[] allHeaders = httpResponse.getAllHeaders();
                     byte[] byteArray = EntityUtils.toByteArray(entity);
                     StringJoiner sj = new StringJoiner(";");
+                    // 输出响应头
+                    System.out.println("Response Headers:");
+                    for (org.apache.http.Header header : httpResponse.getAllHeaders()) {
+                        SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get().put(header.getName(),header.getValue());
+                        System.out.println(header.getName() + ": " + header.getValue());
+                    }
                     for (Cookie cookie : cookieStore.getCookies()) {
+                        System.out.println(cookie.getName() + ": " + cookie.getValue());
                         sj.add(cookie.getName() + "=" + cookie.getValue());
                     }
                     String cookie = sj.toString();
