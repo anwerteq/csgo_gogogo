@@ -80,6 +80,16 @@ message CAuthentication_PollAuthSessionStatus_Response {
     string account_name = 6; // 认证账户的名称
 }
 
+// 更新认证会话请求（Steam Guard代码）
+message CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request {
+    int64 client_id = 1; // 待处理的客户端ID
+    int64 steamid = 2; // 登录用户的SteamID
+    string code = 3; // 确认代码
+    EAuthSessionGuardType code_type = 4; // 确认代码的类型
+}
+
+
+
 // 认证平台类型枚举
 enum EAuthTokenPlatformType {
     k_EAuthTokenPlatformType_Unknown = 0;

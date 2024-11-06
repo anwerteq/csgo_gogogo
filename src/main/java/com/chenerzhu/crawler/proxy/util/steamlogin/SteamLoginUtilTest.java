@@ -63,6 +63,7 @@ public class SteamLoginUtilTest {
         steamUserDate.setAccount_name("mu64kkro");
         steamUserDate.setUserPsw("QingLiu98!");
         steamUserDate.setShared_secret("vbAREhPkibtwemEklyePZH2b73c=");
+        steamUserDate.getSession().setSteamID("76561199351185401");
         SteamApplicationRunner.steamUserDates.add(steamUserDate);
         step1();
         SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
@@ -79,6 +80,7 @@ public class SteamLoginUtilTest {
                     //获取shared_secret值
                 } else {
                     String one_time_code = generateOneTimeCode(steamUserDate.getShared_secret(), null);
+                    steamUserDate.setOneTimeCode(one_time_code);
                     System.out.println("123123");
                 }
             }
@@ -264,5 +266,15 @@ public class SteamLoginUtilTest {
             throw new RuntimeException("encryptPasswordProtobuf error", e);
         }
     }
+
+    public static  void step4(){
+        String cookie = CookiesConfig.steamCookies.get();
+
+
+        String url = "";
+    }
+
+    }
+
 
 }
