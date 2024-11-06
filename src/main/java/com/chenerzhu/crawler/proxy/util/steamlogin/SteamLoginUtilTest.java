@@ -28,6 +28,7 @@ import java.util.Map;
 import com.google.protobuf.util.JsonFormat;
 import feign.HeaderMap;
 
+import static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceConfirmation;
 import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.CHARACTERS;
 
 
@@ -64,7 +65,7 @@ public class SteamLoginUtilTest {
         steamUserDate.setUserPsw("QingLiu98!");
         steamUserDate.setShared_secret("vbAREhPkibtwemEklyePZH2b73c=");
         steamUserDate.getSession().setSteamID("76561199351185401");
-        SteamApplicationRunner.steamUserDates.add(steamUserDate);
+        SteamApplicationRunner.steamUserDateTL.set(steamUserDate);
         step1();
         SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
         String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), steamUserDate.getUserPsw());
@@ -81,6 +82,8 @@ public class SteamLoginUtilTest {
                 } else {
                     String one_time_code = generateOneTimeCode(steamUserDate.getShared_secret(), null);
                     steamUserDate.setOneTimeCode(one_time_code);
+                    step4(authSessionViaCredentialsResponse);
+                    step5(authSessionViaCredentialsResponse);
                     System.out.println("123123");
                 }
             }
@@ -267,14 +270,60 @@ public class SteamLoginUtilTest {
         }
     }
 
-    public static  void step4(){
-        String cookie = CookiesConfig.steamCookies.get();
-
-
-        String url = "";
+    public static  void step4(SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response authSessionViaCredentialsResponse){
+        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
+        headerMap.put("Cookie", CookiesConfig.steamCookies.get());
+        headerMap.put("Content-Type", "application/x-www-form-urlencoded"); // 设置请求头为 JSON
+        headerMap.put("Origin", "https://steamcommunity.com");
+        headerMap.put("Referer", "https://steamcommunity.com");
+        headerMap.remove("Content-Length");
+        long clineId = authSessionViaCredentialsResponse.getClientId();
+        SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request build = SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.newBuilder()
+                .setClientId(clineId)
+                .setCode(steamUserDate.getOneTimeCode())
+                .setSteamid(Long.valueOf(steamUserDate.getSession().getSteamID()))
+                .setCodeTypeValue(k_EAuthSessionGuardType_DeviceConfirmation.getNumber()).build();
+        String base64EncodedMessage = Base64.getEncoder().encodeToString(build.toByteArray());
+        Map<String, String> paraMap = new HashMap<>();
+        paraMap.put("input_protobuf_encoded",base64EncodedMessage);
+        String url = "https://api.steampowered.com/IAuthenticationService/UpdateAuthSessionWithSteamGuardCode/v1";
+        String response = HttpClientUtils.sendPostForm(url, "",headerMap,paraMap);
+        if (!"".equals(response)){
+            throw  new RuntimeException("执行报错");
+        }
+        System.out.println("!@#");
     }
 
+    public static void step5(SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response authSessionViaCredentialsResponse){
+        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
+        headerMap.put("Cookie", CookiesConfig.steamCookies.get());
+        headerMap.put("Content-Type", "application/x-www-form-urlencoded"); // 设置请求头为 JSON
+        headerMap.put("Origin", "https://steamcommunity.com");
+        headerMap.put("Referer", "https://steamcommunity.com");
+        headerMap.remove("Content-Length");
+        SteammessagesAuth.CAuthentication_PollAuthSessionStatus_Request build = SteammessagesAuth.CAuthentication_PollAuthSessionStatus_Request.newBuilder()
+                .setClientId(authSessionViaCredentialsResponse.getClientId())
+                .setRequestId(authSessionViaCredentialsResponse.getRequestId()).build();
+        String base64EncodedMessage = Base64.getEncoder().encodeToString(build.toByteArray());
+        Map<String, String> paraMap = new HashMap<>();
+        paraMap.put("input_protobuf_encoded",base64EncodedMessage);
+        String url = "https://api.steampowered.com/IAuthenticationService/PollAuthSessionStatus/v1";
+        String response = HttpClientUtils.sendPostForm(url, "",headerMap,paraMap);
+        byte[] decode = Base64.getDecoder().decode(response);
+        SteammessagesAuth.CAuthentication_PollAuthSessionStatus_Response pollAuthSessionStatusResponse = null;
+        try {
+            pollAuthSessionStatusResponse = SteammessagesAuth.CAuthentication_PollAuthSessionStatus_Response.parseFrom(decode);
+            String jsonString = JsonFormat.printer().print(pollAuthSessionStatusResponse);
+            System.out.println("123123 : "+jsonString);
+        } catch (InvalidProtocolBufferException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("123123");
     }
+
 
 
 }

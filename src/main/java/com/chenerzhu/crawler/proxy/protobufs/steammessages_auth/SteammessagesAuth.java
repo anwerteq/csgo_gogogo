@@ -9876,6 +9876,923 @@ public final class SteammessagesAuth {
 
   }
 
+  public interface CAuthentication_UpdateAuthSessionWithSteamGuardCode_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 待处理的客户端ID
+     * </pre>
+     *
+     * <code>int64 client_id = 1;</code>
+     * @return The clientId.
+     */
+    long getClientId();
+
+    /**
+     * <pre>
+     * 登录用户的SteamID
+     * </pre>
+     *
+     * <code>int64 steamid = 2;</code>
+     * @return The steamid.
+     */
+    long getSteamid();
+
+    /**
+     * <pre>
+     * 确认代码
+     * </pre>
+     *
+     * <code>string code = 3;</code>
+     * @return The code.
+     */
+    java.lang.String getCode();
+    /**
+     * <pre>
+     * 确认代码
+     * </pre>
+     *
+     * <code>string code = 3;</code>
+     * @return The bytes for code.
+     */
+    com.google.protobuf.ByteString
+        getCodeBytes();
+
+    /**
+     * <pre>
+     * 确认代码的类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+     * @return The enum numeric value on the wire for codeType.
+     */
+    int getCodeTypeValue();
+    /**
+     * <pre>
+     * 确认代码的类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+     * @return The codeType.
+     */
+    com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType getCodeType();
+  }
+  /**
+   * <pre>
+   * 更新认证会话请求（Steam Guard代码）
+   * </pre>
+   *
+   * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request}
+   */
+  public static final class CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)
+      CAuthentication_UpdateAuthSessionWithSteamGuardCode_RequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.newBuilder() to construct.
+    private CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request() {
+      code_ = "";
+      codeType_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.class, com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.Builder.class);
+    }
+
+    public static final int CLIENT_ID_FIELD_NUMBER = 1;
+    private long clientId_;
+    /**
+     * <pre>
+     * 待处理的客户端ID
+     * </pre>
+     *
+     * <code>int64 client_id = 1;</code>
+     * @return The clientId.
+     */
+    @java.lang.Override
+    public long getClientId() {
+      return clientId_;
+    }
+
+    public static final int STEAMID_FIELD_NUMBER = 2;
+    private long steamid_;
+    /**
+     * <pre>
+     * 登录用户的SteamID
+     * </pre>
+     *
+     * <code>int64 steamid = 2;</code>
+     * @return The steamid.
+     */
+    @java.lang.Override
+    public long getSteamid() {
+      return steamid_;
+    }
+
+    public static final int CODE_FIELD_NUMBER = 3;
+    private volatile java.lang.Object code_;
+    /**
+     * <pre>
+     * 确认代码
+     * </pre>
+     *
+     * <code>string code = 3;</code>
+     * @return The code.
+     */
+    @java.lang.Override
+    public java.lang.String getCode() {
+      java.lang.Object ref = code_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        code_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 确认代码
+     * </pre>
+     *
+     * <code>string code = 3;</code>
+     * @return The bytes for code.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCodeBytes() {
+      java.lang.Object ref = code_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        code_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CODE_TYPE_FIELD_NUMBER = 4;
+    private int codeType_;
+    /**
+     * <pre>
+     * 确认代码的类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+     * @return The enum numeric value on the wire for codeType.
+     */
+    @java.lang.Override public int getCodeTypeValue() {
+      return codeType_;
+    }
+    /**
+     * <pre>
+     * 确认代码的类型
+     * </pre>
+     *
+     * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+     * @return The codeType.
+     */
+    @java.lang.Override public com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType getCodeType() {
+      @SuppressWarnings("deprecation")
+      com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType result = com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.valueOf(codeType_);
+      return result == null ? com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.UNRECOGNIZED : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (clientId_ != 0L) {
+        output.writeInt64(1, clientId_);
+      }
+      if (steamid_ != 0L) {
+        output.writeInt64(2, steamid_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(code_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, code_);
+      }
+      if (codeType_ != com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_Unknown.getNumber()) {
+        output.writeEnum(4, codeType_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (clientId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, clientId_);
+      }
+      if (steamid_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, steamid_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(code_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, code_);
+      }
+      if (codeType_ != com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_Unknown.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(4, codeType_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)) {
+        return super.equals(obj);
+      }
+      com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request other = (com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request) obj;
+
+      if (getClientId()
+          != other.getClientId()) return false;
+      if (getSteamid()
+          != other.getSteamid()) return false;
+      if (!getCode()
+          .equals(other.getCode())) return false;
+      if (codeType_ != other.codeType_) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + CLIENT_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getClientId());
+      hash = (37 * hash) + STEAMID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getSteamid());
+      hash = (37 * hash) + CODE_FIELD_NUMBER;
+      hash = (53 * hash) + getCode().hashCode();
+      hash = (37 * hash) + CODE_TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + codeType_;
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 更新认证会话请求（Steam Guard代码）
+     * </pre>
+     *
+     * Protobuf type {@code com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)
+        com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_RequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.class, com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.Builder.class);
+      }
+
+      // Construct using com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        clientId_ = 0L;
+
+        steamid_ = 0L;
+
+        code_ = "";
+
+        codeType_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_descriptor;
+      }
+
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request getDefaultInstanceForType() {
+        return com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request build() {
+        com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request buildPartial() {
+        com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request result = new com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request(this);
+        result.clientId_ = clientId_;
+        result.steamid_ = steamid_;
+        result.code_ = code_;
+        result.codeType_ = codeType_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request) {
+          return mergeFrom((com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request other) {
+        if (other == com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.getDefaultInstance()) return this;
+        if (other.getClientId() != 0L) {
+          setClientId(other.getClientId());
+        }
+        if (other.getSteamid() != 0L) {
+          setSteamid(other.getSteamid());
+        }
+        if (!other.getCode().isEmpty()) {
+          code_ = other.code_;
+          onChanged();
+        }
+        if (other.codeType_ != 0) {
+          setCodeTypeValue(other.getCodeTypeValue());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                clientId_ = input.readInt64();
+
+                break;
+              } // case 8
+              case 16: {
+                steamid_ = input.readInt64();
+
+                break;
+              } // case 16
+              case 26: {
+                code_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 26
+              case 32: {
+                codeType_ = input.readEnum();
+
+                break;
+              } // case 32
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+
+      private long clientId_ ;
+      /**
+       * <pre>
+       * 待处理的客户端ID
+       * </pre>
+       *
+       * <code>int64 client_id = 1;</code>
+       * @return The clientId.
+       */
+      @java.lang.Override
+      public long getClientId() {
+        return clientId_;
+      }
+      /**
+       * <pre>
+       * 待处理的客户端ID
+       * </pre>
+       *
+       * <code>int64 client_id = 1;</code>
+       * @param value The clientId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setClientId(long value) {
+        
+        clientId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 待处理的客户端ID
+       * </pre>
+       *
+       * <code>int64 client_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearClientId() {
+        
+        clientId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long steamid_ ;
+      /**
+       * <pre>
+       * 登录用户的SteamID
+       * </pre>
+       *
+       * <code>int64 steamid = 2;</code>
+       * @return The steamid.
+       */
+      @java.lang.Override
+      public long getSteamid() {
+        return steamid_;
+      }
+      /**
+       * <pre>
+       * 登录用户的SteamID
+       * </pre>
+       *
+       * <code>int64 steamid = 2;</code>
+       * @param value The steamid to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSteamid(long value) {
+        
+        steamid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 登录用户的SteamID
+       * </pre>
+       *
+       * <code>int64 steamid = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSteamid() {
+        
+        steamid_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object code_ = "";
+      /**
+       * <pre>
+       * 确认代码
+       * </pre>
+       *
+       * <code>string code = 3;</code>
+       * @return The code.
+       */
+      public java.lang.String getCode() {
+        java.lang.Object ref = code_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          code_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 确认代码
+       * </pre>
+       *
+       * <code>string code = 3;</code>
+       * @return The bytes for code.
+       */
+      public com.google.protobuf.ByteString
+          getCodeBytes() {
+        java.lang.Object ref = code_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          code_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 确认代码
+       * </pre>
+       *
+       * <code>string code = 3;</code>
+       * @param value The code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCode(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        code_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 确认代码
+       * </pre>
+       *
+       * <code>string code = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCode() {
+        
+        code_ = getDefaultInstance().getCode();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 确认代码
+       * </pre>
+       *
+       * <code>string code = 3;</code>
+       * @param value The bytes for code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        code_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int codeType_ = 0;
+      /**
+       * <pre>
+       * 确认代码的类型
+       * </pre>
+       *
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+       * @return The enum numeric value on the wire for codeType.
+       */
+      @java.lang.Override public int getCodeTypeValue() {
+        return codeType_;
+      }
+      /**
+       * <pre>
+       * 确认代码的类型
+       * </pre>
+       *
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+       * @param value The enum numeric value on the wire for codeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodeTypeValue(int value) {
+        
+        codeType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 确认代码的类型
+       * </pre>
+       *
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+       * @return The codeType.
+       */
+      @java.lang.Override
+      public com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType getCodeType() {
+        @SuppressWarnings("deprecation")
+        com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType result = com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.valueOf(codeType_);
+        return result == null ? com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.UNRECOGNIZED : result;
+      }
+      /**
+       * <pre>
+       * 确认代码的类型
+       * </pre>
+       *
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+       * @param value The codeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodeType(com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        codeType_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 确认代码的类型
+       * </pre>
+       *
+       * <code>.com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.EAuthSessionGuardType code_type = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCodeType() {
+        
+        codeType_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request)
+    private static final com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request();
+    }
+
+    public static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request>
+        PARSER = new com.google.protobuf.AbstractParser<CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request>() {
+      @java.lang.Override
+      public CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_GetPasswordRSAPublicKey_Request_descriptor;
   private static final 
@@ -9921,6 +10838,11 @@ public final class SteammessagesAuth {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_PollAuthSessionStatus_Response_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -9980,23 +10902,28 @@ public final class SteammessagesAuth {
       "\n\021new_challenge_url\030\002 \001(\t\022\025\n\rrefresh_tok" +
       "en\030\003 \001(\t\022\024\n\014access_token\030\004 \001(\t\022\036\n\026had_re" +
       "mote_interaction\030\005 \001(\010\022\024\n\014account_name\030\006" +
-      " \001(\t*\271\001\n\026EAuthTokenPlatformType\022$\n k_EAu" +
-      "thTokenPlatformType_Unknown\020\000\022(\n$k_EAuth" +
-      "TokenPlatformType_SteamClient\020\001\022\'\n#k_EAu" +
-      "thTokenPlatformType_WebBrowser\020\002\022&\n\"k_EA" +
-      "uthTokenPlatformType_MobileApp\020\003*\203\001\n\023ESe" +
-      "ssionPersistence\022!\n\035k_ESessionPersistenc" +
-      "e_Invalid\020\000\022$\n k_ESessionPersistence_Per" +
-      "sistent\020\001\022#\n\037k_ESessionPersistence_Ephem" +
-      "eral\020\002*\266\002\n\025EAuthSessionGuardType\022#\n\037k_EA" +
-      "uthSessionGuardType_Unknown\020\000\022 \n\034k_EAuth" +
-      "SessionGuardType_None\020\001\022%\n!k_EAuthSessio" +
-      "nGuardType_EmailCode\020\002\022&\n\"k_EAuthSession" +
-      "GuardType_DeviceCode\020\003\022.\n*k_EAuthSession" +
-      "GuardType_DeviceConfirmation\020\004\022-\n)k_EAut" +
-      "hSessionGuardType_EmailConfirmation\020\005\022(\n" +
-      "$k_EAuthSessionGuardType_MachineToken\020\006b" +
-      "\006proto3"
+      " \001(\t\"\323\001\n;CAuthentication_UpdateAuthSessi" +
+      "onWithSteamGuardCode_Request\022\021\n\tclient_i" +
+      "d\030\001 \001(\003\022\017\n\007steamid\030\002 \001(\003\022\014\n\004code\030\003 \001(\t\022b" +
+      "\n\tcode_type\030\004 \001(\0162O.com.chenerzhu.crawle" +
+      "r.proxy.protobufs.steammessages_auth.EAu" +
+      "thSessionGuardType*\271\001\n\026EAuthTokenPlatfor" +
+      "mType\022$\n k_EAuthTokenPlatformType_Unknow" +
+      "n\020\000\022(\n$k_EAuthTokenPlatformType_SteamCli" +
+      "ent\020\001\022\'\n#k_EAuthTokenPlatformType_WebBro" +
+      "wser\020\002\022&\n\"k_EAuthTokenPlatformType_Mobil" +
+      "eApp\020\003*\203\001\n\023ESessionPersistence\022!\n\035k_ESes" +
+      "sionPersistence_Invalid\020\000\022$\n k_ESessionP" +
+      "ersistence_Persistent\020\001\022#\n\037k_ESessionPer" +
+      "sistence_Ephemeral\020\002*\266\002\n\025EAuthSessionGua" +
+      "rdType\022#\n\037k_EAuthSessionGuardType_Unknow" +
+      "n\020\000\022 \n\034k_EAuthSessionGuardType_None\020\001\022%\n" +
+      "!k_EAuthSessionGuardType_EmailCode\020\002\022&\n\"" +
+      "k_EAuthSessionGuardType_DeviceCode\020\003\022.\n*" +
+      "k_EAuthSessionGuardType_DeviceConfirmati" +
+      "on\020\004\022-\n)k_EAuthSessionGuardType_EmailCon" +
+      "firmation\020\005\022(\n$k_EAuthSessionGuardType_M" +
+      "achineToken\020\006b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -10059,6 +10986,12 @@ public final class SteammessagesAuth {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_PollAuthSessionStatus_Response_descriptor,
         new java.lang.String[] { "NewClientId", "NewChallengeUrl", "RefreshToken", "AccessToken", "HadRemoteInteraction", "AccountName", });
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_chenerzhu_crawler_proxy_protobufs_steammessages_auth_CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request_descriptor,
+        new java.lang.String[] { "ClientId", "Steamid", "Code", "CodeType", });
     com.chenerzhu.crawler.proxy.protobufs.SteammessagesBase.getDescriptor();
     com.chenerzhu.crawler.proxy.protobufs.steammessages_unified_base.SteammessagesUnifiedBaseSteamclient.getDescriptor();
     com.chenerzhu.crawler.proxy.protobufs.Nums.getDescriptor();
