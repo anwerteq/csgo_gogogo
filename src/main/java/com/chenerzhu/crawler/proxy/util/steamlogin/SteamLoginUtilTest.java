@@ -39,10 +39,13 @@ public class SteamLoginUtilTest {
 
     // steam登录的的请求头数据
     public static ThreadLocal<Map<String, String>> steamLoginHeaderMapThreadLocal = new ThreadLocal<>();
-
+    // 记录服务器时间
+    public static long timeDelta = Long.MAX_VALUE;
     static {
         steamLoginHeaderMapThreadLocal.set(new HashMap<>());
     }
+
+
 
     public static void main1(String[] args) {
         String basestr = "CMTo8OCx27z1dhIQJyBMQnntWn2lGZ6YDe/YSB0AAKBAIgIIAyj5/56XlYCAiAEy2gNleUFpZEhsd0lqb2dJa3BYVkNJc0lDSmhiR2NpT2lBaVJXUkVVMEVpSUgwLmV5QWlhWE56SWpvZ0ltTTZPRFUyT0RreU9ESTJNemt3T1RFMk1EQXdOQ0lzSUNKemRXSWlPaUFpTnpZMU5qRXhPVGt6TlRFeE9EVTBNREVpTENBaVlYVmtJam9nV3lBaWQyVmhheUlnWFN3Z0ltVjRjQ0k2SURFM01qazNOak0yTmpBc0lDSnVZbVlpT2lBd0xDQWlhV0YwSWpvZ01UY3lPVGMyTWpjMk1Dd2dJbXAwYVNJNklDSXhNREpCWHpJMU5ERkRRVEJGWDBORVFUUTVJaXdnSW05aGRDSTZJREUzTWprM05qSTNOakFzSUNKeWRGOWxlSEFpT2lBd0xDQWlhWEJmYzNWaWFtVmpkQ0k2SUNJeU1Ua3VOemt1TVRBMkxqSXpNU0lzSUNKcGNGOWpiMjVtYVhKdFpYSWlPaUFpTWpFNUxqYzVMakV3Tmk0eU16RWlJSDAuZnBDNGowS1hmU3dhT1NjUmw0czZaUU1hRENmZi04UGlyWFpHbGhKcFBENWxFVTltSFdsYm4tOXhvSDUtSV8wYnpHN0Fkanh0MjhpcE82UG93VDIwQVFCAA==";
@@ -138,7 +141,6 @@ public class SteamLoginUtilTest {
     }
 
     private static long tryToGetTimeDeltaFromSteam() {
-        long timeDelta = 0;
         if (timeDelta == Long.MAX_VALUE) {
             for (int i = 0; i < 3; i++) {
                 long serverTime = getSteamServerTime();
@@ -149,7 +151,7 @@ public class SteamLoginUtilTest {
             }
             timeDelta = 0;
         }
-        return (int) timeDelta;
+        return timeDelta;
     }
 
     /**
@@ -162,13 +164,30 @@ public class SteamLoginUtilTest {
         Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
         headerMap.put("Referer", "https://steamcommunity.com");
         headerMap.put("Cookie", CookiesConfig.steamCookies.get());
+        headerMap.put("Content-Type", "application/x-www-form-urlencoded"); // 设置请求头为 JSON
+        headerMap.remove("Content-Length");
+        for (Map.Entry<String, String> entry : headerMap.entrySet()) {
+            System.out.println(entry.getKey()+":"+entry.getValue());
+        }
         String response = HttpClientUtils.sendPost(url, "", headerMap);
-        return 1;
+        // 解码
+        byte[] decodedBytes = Base64.getDecoder().decode(response);
+        // 将字节数组转换为字符串
+        String decodedString = new String(decodedBytes);
+        JSONObject jsonObject = JSONObject.parseObject(decodedString);
+        Long server_time = jsonObject.getJSONObject("response").getLong("server_time");
+        return server_time;
     }
 
     public static void step1() throws UnsupportedEncodingException {
+        tryToGetTimeDeltaFromSteam();
+        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
+        headerMap.put("Referer", "https://steamcommunity.com");
+        headerMap.put("Cookie", CookiesConfig.steamCookies.get());
+        headerMap.put("Content-Type", "application/x-www-form-urlencoded"); // 设置请求头为 JSON
+        headerMap.remove("Content-Length");
         String url = "https://steamcommunity.com";
-        String response = HttpClientUtils.sendGet(url, new HashMap<>(), new HashMap<>());
+        String response = HttpClientUtils.sendGet(url, headerMap, new HashMap<>());
     }
 
 
@@ -209,7 +228,7 @@ public class SteamLoginUtilTest {
                 .setEncryptionTimestamp(rsa_timestamp)
                 .setRememberLogin(true)
                 .setPlatformType(SteammessagesAuth.EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp)
-                .setWebsiteId("'Community'")
+                .setWebsiteId("Community")
                 .setPersistence(SteammessagesAuth.ESessionPersistence.k_ESessionPersistence_Persistent)
                 .setDeviceFriendlyName("Mozilla/5.0 (X11; Linux x86_64; rv:1.9.5.20) Gecko/2812-12-10 04:56:28 Firefox/3.8")
                 .build();
