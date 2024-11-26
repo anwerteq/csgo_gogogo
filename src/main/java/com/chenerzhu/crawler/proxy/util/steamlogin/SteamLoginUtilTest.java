@@ -15,6 +15,8 @@ import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.io.UnsupportedEncodingException;
@@ -72,7 +74,6 @@ public class SteamLoginUtilTest {
         step1();
         SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
         String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), steamUserDate.getUserPsw());
-        SleepUtil.sleep(4000);
         SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response authSessionViaCredentialsResponse =
                 step3(steamUserDate.getAccount_name(), encryptPasswordProtobuf, Long.valueOf(step2Value.getTimestamp()));
         SteammessagesAuth.CAuthentication_AllowedConfirmation allowedConfirmations = authSessionViaCredentialsResponse.getAllowedConfirmations(0);
@@ -106,38 +107,50 @@ public class SteamLoginUtilTest {
             timestamp = System.currentTimeMillis() / 1000;
             timestamp += tryToGetTimeDeltaFromSteam(); // Implement this method as needed
         }
-        // Pack the timestamp as Big Endian uint64
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(0, timestamp / 30);
-        byte[] timeBuffer = buffer.array();
+        // Pack the timestamp as Big Endian, uint64
+        ByteBuffer timeBuffer = ByteBuffer.allocate(8);
+        timeBuffer.order(ByteOrder.BIG_ENDIAN);
+        timeBuffer.putLong(timestamp / 30);
 
-        // Decode the shared secret
-        byte[] decodedKey = Base64.getDecoder().decode(sharedSecret);
-        // Create HMAC using SHA-1
-        Mac mac = null;
+        // Calculate HMAC using SHA-1
+        Mac hmac = null;
         try {
-            mac = Mac.getInstance("HmacSHA1");
-            SecretKeySpec keySpec = new SecretKeySpec(decodedKey, "HmacSHA1");
-            mac.init(keySpec);
-            byte[] timeHmac = mac.doFinal(timeBuffer);
-            // Calculate the offset
-            int begin = timeHmac[19] & 0x0F;
-            int fullCode = ((timeHmac[begin] & 0xFF) << 24) |
-                    ((timeHmac[begin + 1] & 0xFF) << 16) |
-                    ((timeHmac[begin + 2] & 0xFF) << 8) |
-                    (timeHmac[begin + 3] & 0xFF);
-            fullCode &= 0x7FFFFFFF; // 31 bits
-            // Generate the code
-            StringBuilder code = new StringBuilder();
-            for (int i = 0; i < 5; i++) {
-                fullCode = fullCode / CHARACTERS.length();
-                int index = fullCode % CHARACTERS.length();
-                code.append(CHARACTERS.charAt(index));
-            }
-            return code.toString();
-        } catch (Exception e) {
+            hmac = Mac.getInstance("HmacSHA1");
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+        SecretKeySpec keySpec = new SecretKeySpec(Base64.getDecoder().decode(sharedSecret), "HmacSHA1");
+        try {
+            hmac.init(keySpec);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+        byte[] timeHmac = hmac.doFinal(timeBuffer.array());
+
+        // Get the 20th byte and compute the offset
+        int begin = timeHmac[19] & 0xf;
+
+        // Unpack as Big Endian uint32
+        ByteBuffer codeBuffer = ByteBuffer.wrap(timeHmac, begin, 4);
+        codeBuffer.order(ByteOrder.BIG_ENDIAN);
+        int fullCode = codeBuffer.getInt() & 0x7fffffff;
+
+        // Define the character set
+        String chars = "23456789BCDFGHJKMNPQRTVWXY";
+        StringBuilder code = new StringBuilder();
+
+        // Generate the code
+        for (int i = 0; i < 5; i++) {
+            int[] divmod = divmod(fullCode, chars.length());
+            fullCode = divmod[0];
+            int index = divmod[1];
+            code.append(chars.charAt(index));
+        }
+
+        return code.toString();
+    }
+    public static int[] divmod(int a, int b) {
+        return new int[]{a / b, a % b};
     }
 
     private static long tryToGetTimeDeltaFromSteam() {
