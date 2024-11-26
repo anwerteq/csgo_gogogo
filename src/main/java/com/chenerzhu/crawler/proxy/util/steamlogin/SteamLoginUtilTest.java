@@ -30,6 +30,7 @@ import java.util.Map;
 import com.google.protobuf.util.JsonFormat;
 import feign.HeaderMap;
 
+import static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceCode;
 import static com.chenerzhu.crawler.proxy.protobufs.steammessages_auth.SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceConfirmation;
 import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.CHARACTERS;
 
@@ -80,7 +81,7 @@ public class SteamLoginUtilTest {
         if (allowedConfirmations != null) {
             //移动设备
             SteammessagesAuth.EAuthSessionGuardType confirmationType = allowedConfirmations.getConfirmationType();
-            if (confirmationType.getNumber() == SteammessagesAuth.EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceCode.getNumber()) {
+            if (confirmationType.getNumber() == k_EAuthSessionGuardType_DeviceCode.getNumber()) {
                 if (StrUtil.isEmpty(steamUserDate.getShared_secret())) {
                     //获取shared_secret值
                 } else {
@@ -312,10 +313,10 @@ public class SteamLoginUtilTest {
         headerMap.remove("Content-Length");
         long clineId = authSessionViaCredentialsResponse.getClientId();
         SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request build = SteammessagesAuth.CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request.newBuilder()
-                .setClientId(clineId)
+                .setClientId(authSessionViaCredentialsResponse.getClientId())
                 .setCode(steamUserDate.getOneTimeCode())
                 .setSteamid(Long.valueOf(steamUserDate.getSession().getSteamID()))
-                .setCodeTypeValue(k_EAuthSessionGuardType_DeviceConfirmation.getNumber()).build();
+                .setCodeTypeValue(k_EAuthSessionGuardType_DeviceCode.getNumber()).build();
         String base64EncodedMessage = Base64.getEncoder().encodeToString(build.toByteArray());
         Map<String, String> paraMap = new HashMap<>();
         paraMap.put("input_protobuf_encoded",base64EncodedMessage);
