@@ -34,6 +34,7 @@ public class SteamLoginUtil {
      * @return
      */
     public static List<SteamUserDate> readFilesInFolder(String folderPath) throws Exception {
+        String s = new String(folderPath.getBytes(), "UTF-8");
         List<SteamUserDate> steamUserDates = new ArrayList();
         File folder = new File(folderPath);
         if (folder.exists() && folder.isDirectory()) {
@@ -67,11 +68,11 @@ public class SteamLoginUtil {
 //            login(steamUserDate);
             // 在这里对 jsonObject 进行你需要的处理
 //            System.out.println(JSONObject.parseObject(jsonString));
-            String refreshToken = steamUserDate.getSession().getRefreshToken();
-            if (StrUtil.isEmpty(refreshToken)){
-                throw new Exception("steam的maFile文件中获取RefreshToken失败，RefreshToken值为："+refreshToken);
-
-            }
+//            String refreshToken = steamUserDate.getSession().getRefreshToken();
+//            if (StrUtil.isEmpty(refreshToken)){
+//                throw new Exception("steam的maFile文件中获取RefreshToken失败，RefreshToken值为："+refreshToken);
+//
+//            }
             return steamUserDate;
         } catch (IOException e) {
             e.printStackTrace();
