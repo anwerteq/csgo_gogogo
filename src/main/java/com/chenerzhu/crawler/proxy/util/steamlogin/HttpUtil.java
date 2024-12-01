@@ -35,11 +35,11 @@ public class HttpUtil {
     public static String getContent(InputStream inputStream) {
         try {
             byte[] bytes = readInputStream(inputStream);
-            //steam登录
-            if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
-                String base64Encode = Base64.getEncoder().encodeToString(bytes);
-                return base64Encode;
-            }
+//            //steam登录
+//            if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
+//                String base64Encode = Base64.getEncoder().encodeToString(bytes);
+//                return base64Encode;
+//            }
             return new String(bytes);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -5,7 +5,6 @@ import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.common.HttpMethod;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
-import com.chenerzhu.crawler.proxy.util.steamlogin.SteamLoginUtilTest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
@@ -149,27 +148,27 @@ public class HttpClientUtils implements ApplicationRunner {
                 if (StringUtils.isEmpty(resultCharset)) {
                     resultCharset = DEFAULT_CHARSET;
                 }
-                //steam登录接口
-                if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
-                    byte[] byteArray = EntityUtils.toByteArray(entity);
-                    StringJoiner sj = new StringJoiner(";");
-                    // 输出响应头
-                    System.out.println("Response Headers:");
-                    for (org.apache.http.Header header : httpResponse.getAllHeaders()) {
-                        SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get().put(header.getName(),header.getValue());
-                        System.out.println(header.getName() + ": " + header.getValue());
-                    }
-                    for (Cookie cookie : cookieStore.getCookies()) {
-                        System.out.println(cookie.getName() + ": " + cookie.getValue());
-                        sj.add(cookie.getName() + "=" + cookie.getValue());
-                    }
-                    String cookie = sj.toString();
-                    if (StrUtil.isNotBlank(cookie)){
-                        CookiesConfig.steamCookies.set(sj.toString());
-                    }
-                    String base64Encode = Base64.getEncoder().encodeToString(byteArray);
-                    return base64Encode;
-                }
+//                //steam登录接口
+//                if (SteamLoginUtilTest.steamLoginUrlFlag.get()){
+//                    byte[] byteArray = EntityUtils.toByteArray(entity);
+//                    StringJoiner sj = new StringJoiner(";");
+//                    // 输出响应头
+//                    System.out.println("Response Headers:");
+//                    for (org.apache.http.Header header : httpResponse.getAllHeaders()) {
+//                        SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get().put(header.getName(),header.getValue());
+//                        System.out.println(header.getName() + ": " + header.getValue());
+//                    }
+//                    for (Cookie cookie : cookieStore.getCookies()) {
+//                        System.out.println(cookie.getName() + ": " + cookie.getValue());
+//                        sj.add(cookie.getName() + "=" + cookie.getValue());
+//                    }
+//                    String cookie = sj.toString();
+//                    if (StrUtil.isNotBlank(cookie)){
+//                        CookiesConfig.steamCookies.set(sj.toString());
+//                    }
+//                    String base64Encode = Base64.getEncoder().encodeToString(byteArray);
+//                    return base64Encode;
+//                }
                 return EntityUtils.toString(entity, resultCharset);
             }
             if (statusCode == 429) {
