@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
@@ -34,7 +35,6 @@ public class SteamLoginUtil {
      * @return
      */
     public static List<SteamUserDate> readFilesInFolder(String folderPath) throws Exception {
-        String s = new String(folderPath.getBytes(), "UTF-8");
         List<SteamUserDate> steamUserDates = new ArrayList();
         File folder = new File(folderPath);
         if (folder.exists() && folder.isDirectory()) {
@@ -63,16 +63,14 @@ public class SteamLoginUtil {
 
             String jsonString = content.toString();
             SteamUserDate steamUserDate = JSONObject.parseObject(jsonString, SteamUserDate.class);
-//            String password = file.getName().split("-")[1].split("\\.")[0];
-//            steamUserDate.setUserPsw(password);
-//            login(steamUserDate);
-            // 在这里对 jsonObject 进行你需要的处理
-//            System.out.println(JSONObject.parseObject(jsonString));
-//            String refreshToken = steamUserDate.getSession().getRefreshToken();
-//            if (StrUtil.isEmpty(refreshToken)){
-//                throw new Exception("steam的maFile文件中获取RefreshToken失败，RefreshToken值为："+refreshToken);
-//
-//            }
+            new Thread(new SampleWebCookie(steamUserDate.getAccount_name(), "QingLiu98!",steamUserDate)).start();
+            while (true){
+                if (StrUtil.isEmpty(steamUserDate.getSession().getRefreshToken())){
+                    ThreadUtil.sleep(30 *1000);
+                }else {
+                    break;
+                }
+            }
             return steamUserDate;
         } catch (IOException e) {
             e.printStackTrace();
@@ -146,15 +144,14 @@ public class SteamLoginUtil {
     }
 
     public String getCookies(SteamUserDate steamUserDate) {
-        HashMap<Object, Object> map = new HashMap() {{
-            put("steamLoginSecure", get_access_token(steamUserDate));
-            put("sessionid", steamUserDate.getSession().getSessionID());
-            put("Steam_Language", "english");
-            put("timezoneOffset", "28800,0");
-            put("_ga", "GA1.2.234547838.1688523763");
-            put("browserid", "'2685889387687629642'");
-            put("strInventoryLastContext", "2504460_2");
-        }};
+        HashMap<Object, Object> map = new HashMap() ;
+        map.put("steamLoginSecure", SteamUserDate.steamTokensNumberAndTokenMap.get(steamUserDate.getAccount_name()));
+        map.put("sessionid", steamUserDate.getSession().getSessionID());
+        map.put("Steam_Language", "english");
+        map.put("timezoneOffset", "28800,0");
+        map.put("_ga", "GA1.2.234547838.1688523763");
+        map.put("browserid", "'2685889387687629642'");
+        map.put("strInventoryLastContext", "2504460_2");
         StringJoiner sj = new StringJoiner(";");
         for (Map.Entry<Object, Object> entry : map.entrySet()) {
             sj.add(entry.getKey() + "=" + entry.getValue());

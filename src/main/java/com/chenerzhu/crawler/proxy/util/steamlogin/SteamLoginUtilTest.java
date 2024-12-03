@@ -27,7 +27,6 @@ import java.util.Map;
 
 import feign.HeaderMap;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.CHARACTERS;
 
 
 public class SteamLoginUtilTest {

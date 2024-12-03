@@ -41,11 +41,18 @@ public class SteamMyhistoryService {
 //        int start = 7030;
 //        int start = 5730;
 //        int start = 4230;
-        int start = 950;
-        while (start > 0) {
+        int start = 0;
+        while (true) {
             log.info("start的值为：{}", start);
-            marketMyhistory(start);
-            start = start - 10;
+            Boolean marketMyhistory = getMarketMyhistory(start);
+            if (marketMyhistory == null) {
+
+            }else if (marketMyhistory) {
+                start = start + 50;
+            }else {
+                return;
+            }
+
         }
     }
 
@@ -54,12 +61,14 @@ public class SteamMyhistoryService {
      *
      * @param start
      */
-    public void marketMyhistory(int start) {
-        String url = "https://steamcommunity.com/market/myhistory/render/?query=&count=10&start=" + start;
+    public Boolean getMarketMyhistory(int start) {
+        String url = "https://steamcommunity.com/market/myhistory/render/?query=&count=50&start=" + start;
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         SteamMyhistoryRoot steamMyhistoryRoot = JSONObject.parseObject(resStr, SteamMyhistoryRoot.class);
-
-        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(steamMyhistoryRoot.getAssets()));
+        if (steamMyhistoryRoot.getTotal_count() == 0){
+            return null;
+        }
+        JSONObject jsonObject =JSONObject.parseObject(JSONObject.toJSONString(steamMyhistoryRoot.getAssets()));
         JSONObject jsonObject1 = jsonObject.getJSONObject("730").getJSONObject("2");
         Map<String, SteamCostEntity> mapSteamCostEntity = getMapSteamCostEntity(jsonObject1);
         Map<String, Double> hisotryPrice = getHisotryPrice(steamMyhistoryRoot.getResults_html());
@@ -87,6 +96,7 @@ public class SteamMyhistoryService {
         SleepUtil.sleep(3000);
         sellCost.forEach(steamBuyItemService::saveForsellPrice);
         buyCost.forEach(steamBuyItemService::saveForCostPrice);
+        return true;
     }
 
 

@@ -18,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 启动后steam账号信息初始化
@@ -105,7 +107,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
     public SteamUserDate loginSteamUserDate(SteamUserDate steamDate) {
         String account_name = steamDate.getAccount_name();
         //从缓存中获取cookie
-        StringBuilder cookieSb = steamCacheService.getCookie(account_name);
+        StringBuilder cookieSb = new StringBuilder();
         if (StrUtil.isEmpty(cookieSb.toString())) {
             int count = 0;
             while (count++ < 5) {
@@ -128,8 +130,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
         if (steamLoginUtil.checkCookieExpired(cookieSb.toString())) {
             steamCacheService.removeCookie(account_name);
         }
-        //缓存cookie
-        steamCacheService.addCookie(account_name, cookieSb);
+
         steamDate.setCookies(cookieSb);
         //获取apikey
         SleepUtil.sleep(2 * 1000);
@@ -157,16 +158,21 @@ public class SteamApplicationRunner implements ApplicationRunner {
         HttpBean httpBean = http.request(url,
                 "GET", null, cookie, true, "http://steamcommunity.com/id/csgo/tradeoffers/sent/", true);
         String response = httpBean.getResponse();
-        if (!response.contains("Key: ") && !response.contains("密钥: ")) {
+        // 定义正则表达式匹配 API 密钥（32 个十六进制字符）
+        String apiKeyRegex = "\\b[0-9A-F]{32}\\b";
+        // 编译正则表达式
+        Pattern pattern = Pattern.compile(apiKeyRegex);
+        Matcher matcher = pattern.matcher(response);
+        String apikey = "";
+        // 查找并输出匹配的 API 密钥
+        while (matcher.find()) {
+             apikey = matcher.group();
+        }
+        if (StrUtil.isEmpty(apikey)) {
             log.error("{}:获取交易apikye失败，请访问[ https://steamcommunity.com/dev/apikey ] 检查是否有 apikey链接", account);
-            System.exit(0);
         }
-        String[] arr = response.split("Key: ");
-        if (arr.length == 1) {
-            arr = response.split("密钥: ");
-        }
-        String apikey = arr[1].split("</p>")[0];
-        log.info("{}:获取交易apikye为{}", account, apikey);
+
+        log.info("{}:获取交易apikye为: {}", account, apikey);
         return apikey;
     }
 }

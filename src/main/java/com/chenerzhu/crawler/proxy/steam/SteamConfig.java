@@ -40,13 +40,9 @@ public class SteamConfig implements ApplicationRunner {
      * @return
      */
     public static Map<String, String> getSteamHeader() {
-        Map<String, String> headers1 = new HashMap() {{
-            //steam请求头
-//            put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            put("Cookie", getCookie());
-            put("Host", "steamcommunity.com");
-//            put("Referer", "https://steamcommunity.com/profiles/"+SteamConfig.getSteamId()+"/inventory?modal=1&market=1");
-        }};
+        Map<String, String> headers1 = new HashMap();
+       headers1.put("Cookie", getCookie());
+       headers1.put("Host", "steamcommunity.com");
         return headers1;
     }
 
@@ -105,7 +101,7 @@ public class SteamConfig implements ApplicationRunner {
         if (StrUtil.isNotEmpty(cookies)) {
             return cookies;
         }
-        cookies = SteamApplicationRunner.steamUserDates.get(0).getCookies().toString();
+        cookies = SteamApplicationRunner.steamUserDateTL.get().getCookies().toString();
         return cookies;
     }
 

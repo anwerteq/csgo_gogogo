@@ -1,6 +1,6 @@
-package com.chenerzhu.crawler.proxy.util.steamlogin;
+package com.chenerzhu.crawler.proxy.util;
 
-import cn.hutool.json.JSONObject;
+import com.chenerzhu.crawler.proxy.util.steamlogin.UserConsoleAuthenticatorimpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -22,7 +22,6 @@ import in.dragonbra.javasteam.steam.steamclient.callbacks.DisconnectedCallback;
 import in.dragonbra.javasteam.steam.steamclient.configuration.SteamConfiguration;
 import in.dragonbra.javasteam.steam.steamclient.configuration.SteamConfigurationState;
 import in.dragonbra.javasteam.steam.webapi.WebAPI;
-import in.dragonbra.javasteam.util.Strings;
 import in.dragonbra.javasteam.util.log.DefaultLogListener;
 import in.dragonbra.javasteam.util.log.LogManager;
 import lombok.var;
@@ -30,22 +29,18 @@ import okhttp3.OkHttpClient;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Base64;
+import java.util.EnumSet;
 import java.util.concurrent.CancellationException;
 
 /**
  * @author lossy
- * @since 2023-11-06
+ * @since 2023-03-19
  */
 @SuppressWarnings("FieldCanBeLocal")
-public class SampleWebCookie implements Runnable {
+public class SampleLogonAuthentication implements Runnable {
 
     private SteamClient steamClient;
-
-    private SteamAuthentication auth;
 
     private CallbackManager manager;
 
@@ -57,45 +52,40 @@ public class SampleWebCookie implements Runnable {
 
     private final String pass;
 
-    private String accessToken;
+    private String previouslyStoredGuardData; // For the sake of this sample, we do not persist guard data
 
-    private String refreshToken;
-
-    private OkHttpClient client;
-
-    private  SteamUserDate steamUserDate;
-
-
-    public SampleWebCookie(String user, String pass) {
+    public SampleLogonAuthentication(String user, String pass) {
         this.user = user;
         this.pass = pass;
-    }
-
-    public SampleWebCookie(String user, String pass,SteamUserDate steamUserDate) {
-        this.user = user;
-        this.pass = pass;
-        this.steamUserDate = steamUserDate;
     }
 
     public static void main(String[] args) {
 //        if (args.length < 2) {
-//            System.out.println("SampleWebCookie: No username and password specified!");
+//            System.out.println("Sample1: No username and password specified!");
 //            return;
 //        }
 
         LogManager.addListener(new DefaultLogListener());
 
-        new SampleWebCookie("mu64KKRO", "QingLiu98!").run();
+        new SampleLogonAuthentication("mu64kkro","QingLiu98!").run();
     }
 
     @Override
     public void run() {
 
+        // // If any configuration needs to be set; such as connection protocol api key, etc., you can configure it like so.
+        // var configuration = SteamConfiguration.create(config -> {
+        //    config.withProtocolTypes(ProtocolTypes.WEB_SOCKET);
+        // });
+        // // create our steamclient instance with custom configuration.
+        // steamClient = new SteamClient(configuration);
+
+        // create our steamclient instance using default configuration
         // 创建一个代理对象，指定代理服务器的 IP 地址和端口号
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890));
 
         // 创建 OkHttpClient 并设置代理
-         client = new OkHttpClient.Builder()
+        OkHttpClient client = new OkHttpClient.Builder()
                 .proxy(proxy)
                 .build();
         // create our steamclient instance using default configuration
@@ -139,101 +129,102 @@ public class SampleWebCookie implements Runnable {
         }
     }
 
+    @SuppressWarnings("DanglingJavadoc")
     private void onConnected(ConnectedCallback callback) {
         System.out.println("Connected to Steam! Logging in " + user + "...");
 
-        AuthSessionDetails authSessionDetails = new AuthSessionDetails();
-        authSessionDetails.username = user;
-        authSessionDetails.password = pass;
-        authSessionDetails.persistentSession = false;
-        authSessionDetails.authenticator = new UserConsoleAuthenticatorimpl();
+        var shouldRememberPassword = false;
 
-        // get the authentication handler, which used for authenticating with Steam
-        auth = new SteamAuthentication(steamClient);
+        AuthSessionDetails authDetails = new AuthSessionDetails();
+        authDetails.username = user;
+        authDetails.password = pass;
+        authDetails.persistentSession = shouldRememberPassword;
+
+        // See NewGuardData comment below.
+        authDetails.guardData = previouslyStoredGuardData;
+
+        /**
+         * {@link UserConsoleAuthenticator} is the default authenticator implementation provided by JavaSteam
+         * for ease of use which blocks the thread and asks for user input to enter the code.
+         * However, if you require special handling (e.g. you have the TOTP secret and can generate codes on the fly),
+         * you can implement your own {@link IAuthenticator}.
+         */
+        authDetails.authenticator = new UserConsoleAuthenticatorimpl();
 
         try {
-
-            CredentialsAuthSession authSession = auth.beginAuthSessionViaCredentials(authSessionDetails);
+            // Begin authenticating via credentials.
+            var authSession = steamClient.getAuthentication().beginAuthSessionViaCredentials(authDetails);
 
             // Note: This is blocking, it would be up to you to make it non-blocking for Java.
             // Note: Kotlin uses should use ".pollingWaitForResult()" as its a suspending function.
             AuthPollResult pollResponse = authSession.pollingWaitForResultCompat().get();
 
-            LogOnDetails logOnDetails = new LogOnDetails();
-            logOnDetails.setUsername(pollResponse.getAccountName());
-            logOnDetails.setAccessToken(pollResponse.getRefreshToken());
+            if (pollResponse.getNewGuardData() != null) {
+                // When using certain two factor methods (such as email 2fa), guard data may be provided by Steam
+                // for use in future authentication sessions to avoid triggering 2FA again (this works similarly to the old sentry file system).
+                // Do note that this guard data is also a JWT token and has an expiration date.
+                previouslyStoredGuardData = pollResponse.getNewGuardData();
+            }
+
+            // Logon to Steam with the access token we have received
+            // Note that we are using RefreshToken for logging on here
+            LogOnDetails details = new LogOnDetails();
+            details.setUsername(pollResponse.getAccountName());
+            details.setAccessToken(pollResponse.getRefreshToken());
 
             // Set LoginID to a non-zero value if you have another client connected using the same account,
             // the same private ip, and same public ip.
-            logOnDetails.setLoginID(149);
+            details.setLoginID(149);
 
-            steamUser.logOn(logOnDetails);
-            // AccessToken can be used as the steamLogi  nSecure cookie
-            // RefreshToken is required to generate new access tokens
-            accessToken = pollResponse.getAccessToken();
-            refreshToken = pollResponse.getRefreshToken();
+            steamUser.logOn(details);
 
-
+            // This is not required, but it is possible to parse the JWT access token to see the scope and expiration date.
+             parseJsonWebToken(pollResponse.getAccessToken(), "AccessToken");
+             parseJsonWebToken(pollResponse.getRefreshToken(), "RefreshToken");
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-
             // List a couple of exceptions that could be important to handle.
             if (e instanceof AuthenticationException) {
-                System.out.println("An Authentication error has occurred. " + e.getMessage());
+                System.err.println("An Authentication error has occurred. " + e.getMessage());
+            } else if (e instanceof CancellationException) {
+                System.err.println("An Cancellation exception was raised. Usually means a timeout occurred. " + e.getMessage());
+            } else {
+                System.err.println("An error occurred:" + e.getMessage());
             }
 
-            if (e instanceof CancellationException) {
-                System.out.println("An Cancellation exception was raised. Usually means a timeout occurred. " + e.getMessage());
-            }
+            steamUser.logOff();
         }
     }
 
     private void onDisconnected(DisconnectedCallback callback) {
-        System.out.println("Disconnected from Steam");
+        System.out.println("Disconnected from Steam. User initialized: " + callback.isUserInitiated());
 
-        isRunning = false;
+        // If the disconnection was not user initiated, we will retry connecting to steam again after a short delay.
+        if (callback.isUserInitiated()) {
+            isRunning = false;
+        } else {
+            try {
+                Thread.sleep(2000L);
+                steamClient.connect();
+            } catch (InterruptedException e) {
+                System.err.println("An Interrupted exception occurred. " + e.getMessage());
+            }
+        }
     }
 
     private void onLoggedOn(LoggedOnCallback callback) {
         if (callback.getResult() != EResult.OK) {
-            System.out.println("Unable to login to steam: " + callback.getResult() + " / " + callback.getExtendedResult());
+            System.out.println("Unable to logon to Steam: " + callback.getResult() + " / " + callback.getExtendedResult());
 
             isRunning = false;
-
             return;
         }
+
         System.out.println("Successfully logged on!");
 
-        // This is how you concatenate the cookie, you can set it on the Steam domains, and it should work
-        // but actual usage of this will be left as an exercise for the reader
-        @SuppressWarnings("unused")
-        String steamLoginSecure = callback.getClientSteamID().convertToUInt64() + "||" + accessToken;
+        // at this point, we'd be able to perform actions on Steam
 
-        // The access token expires in 24 hours (at the time of writing) so you will have to renew it.
-        // Parse this token with a JWT library to get the expiration date and set up a timer to renew it.
-        // To renew you will have to call this:
-        // When allowRenewal is set to true, Steam may return new RefreshToken
-        AccessTokenGenerateResult newTokens = auth.generateAccessTokenForApp(callback.getClientSteamID(), refreshToken, true);
-
-        accessToken = newTokens.getAccessToken();
-        if (!Strings.isNullOrEmpty(newTokens.getRefreshToken())) {
-            refreshToken = newTokens.getRefreshToken();
-        }
-        steamLoginSecure = callback.getClientSteamID().convertToUInt64() + "||" + accessToken;
-        //设置steam的token
-        SteamUserDate.steamTokensNumberAndTokenMap.put(user,steamLoginSecure);
-        // Do not forget to update steamLoginSecure with the new accessToken!
-        // Begin authenticating via credentials.
-
-
-        // This is not required, but it is possible to parse the JWT access token to see the scope and expiration date.
-        parseJsonWebToken(accessToken, "AccessToken");
-        parseJsonWebToken(refreshToken, "RefreshToken");
-        steamUserDate.setAuth(auth);
-        steamUserDate.setCallback(callback);
-        steamUserDate.getSession().setRefreshToken(refreshToken);
         // for this sample we'll just log off
-//        steamUser.logOff();
+        steamUser.logOff();
     }
 
     private void onLoggedOff(LoggedOffCallback callback) {
@@ -241,6 +232,7 @@ public class SampleWebCookie implements Runnable {
 
         isRunning = false;
     }
+
 
     @SuppressWarnings("unused")
     private void parseJsonWebToken(String token, String name) {
@@ -260,31 +252,9 @@ public class SampleWebCookie implements Runnable {
         JsonElement payload = JsonParser.parseString(new String(payloadBytes));
         String formatted = gson.toJson(payload);
 
-        JSONObject jsonObject = new JSONObject(formatted);
-        String exp = jsonObject.getStr("exp");
-        String timeStr = convertTimestampToDate(Long.valueOf(exp));
-
         // For brevity, we will simply output formatted json to console
         System.out.println(name + ": " + formatted);
-        System.out.println(name + ": " + formatted);
-
-        System.out.println(name+":"+timeStr);
         System.out.println();
     }
 
-
-    public static String convertTimestampToDate(long timestamp) {
-        // 将时间戳转换为 Instant
-        Instant instant = Instant.ofEpochSecond(timestamp);
-
-        // 使用系统默认时区或指定时区
-        ZoneId zoneId = ZoneId.systemDefault();
-
-        // 定义格式化器
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                .withZone(zoneId);
-
-        // 格式化时间戳
-        return formatter.format(instant);
-    }
 }

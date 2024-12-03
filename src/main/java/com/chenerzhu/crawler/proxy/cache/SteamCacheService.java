@@ -12,15 +12,6 @@ import org.springframework.stereotype.Service;
 public class SteamCacheService {
 
 
-//    @Cacheable(value = "steam_cookie", key = "#account")
-    public StringBuilder getCookie(String account) {
-        // 从数据库或其他数据源获取数据的逻辑
-        // ...
-
-        // 返回获取的数据
-        return new StringBuilder();
-    }
-
     @CachePut(value = "steam_cookie", key = "#account")
     public StringBuilder addCookie(String account, StringBuilder cookieSb) {
         // 将对象存储到缓存中

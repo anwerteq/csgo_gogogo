@@ -1,8 +1,10 @@
 package com.chenerzhu.crawler.proxy.steam.controller;
 
+import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Cookeis;
 import com.chenerzhu.crawler.proxy.steam.service.*;
+import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,7 +87,9 @@ public class SteamController {
      */
     @RequestMapping("marketMyhistorys")
     @ResponseBody
-    public void pullSteamItems() {
+    public void pullSteamItems(String name) {
+        SteamUserDate steamUserDate1 = SteamApplicationRunner.steamUserDates.stream().filter(o -> name.equals(o.getAccount_name())).findFirst().get();
+        SteamApplicationRunner.steamUserDateTL.set(steamUserDate1);
         steamMyhistoryService.marketMyhistorys();
     }
 
