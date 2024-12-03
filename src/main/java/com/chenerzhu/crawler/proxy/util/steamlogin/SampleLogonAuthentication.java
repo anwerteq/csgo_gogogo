@@ -71,7 +71,7 @@ public class SampleLogonAuthentication implements Runnable {
         this.pass = pass;
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
 //        if (args.length < 2) {
 //            System.out.println("Sample1: No username and password specified!");
 //            return;
@@ -276,6 +276,10 @@ public class SampleLogonAuthentication implements Runnable {
         System.out.println();
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(generateOneTimeCode("t8tQpKktBC8/Wy6gZ4poP8AE0vY=", null));
+    }
     /**
      * 生成认证码
      *

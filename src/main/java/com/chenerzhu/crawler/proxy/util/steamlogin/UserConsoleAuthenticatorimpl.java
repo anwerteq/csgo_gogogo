@@ -2,6 +2,7 @@ package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 import in.dragonbra.javasteam.steam.authentication.IAuthenticator;
 import in.dragonbra.javasteam.steam.authentication.UserConsoleAuthenticator;
+import lombok.Data;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,11 +11,14 @@ import java.util.concurrent.CompletableFuture;
 
 import static java.sql.DriverManager.println;
 
+@Data
 public class UserConsoleAuthenticatorimpl implements IAuthenticator {
+
+    private String sharedSecret;
     @NotNull
     @Override
     public CompletableFuture<String> getDeviceCode(boolean b) {
-        String vbAREhPkibtwemEklyePZH2b73c = SampleLogonAuthentication.generateOneTimeCode("vbAREhPkibtwemEklyePZH2b73c", null);
+        String vbAREhPkibtwemEklyePZH2b73c = SampleLogonAuthentication.generateOneTimeCode(sharedSecret, null);
         return CompletableFuture.completedFuture(vbAREhPkibtwemEklyePZH2b73c);
     }
 

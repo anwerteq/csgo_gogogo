@@ -63,7 +63,7 @@ public class SteamMyhistoryService {
      * @param start
      */
     public Boolean getMarketMyhistory(int start) {
-        String url = "https://steamcommunity.com/market/myhistory/render/?query=&count=50&start=" + start;
+        String url = "https://steamcommunity.com/market/myhistory/render/?query=&count=50&l=schinese&start=" + start;
         String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
         SteamMyhistoryRoot steamMyhistoryRoot = JSONObject.parseObject(resStr, SteamMyhistoryRoot.class);
         if (steamMyhistoryRoot.getTotal_count() == 0){
@@ -216,6 +216,14 @@ public class SteamMyhistoryService {
                 tradingType = "buy";
             }
             jsonObject.put("tradingType", tradingType);
+
+            // 交易日期
+            String tradingDate = historyPriceRow.getElementsByClass("market_listing_right_cell market_listing_listed_date can_combine").get(0).text();
+            jsonObject.put("tradingDate", tradingDate);
+
+            // 上架日期
+            String listingDate = historyPriceRow.getElementsByClass("market_listing_right_cell market_listing_listed_date can_combine").get(1).text();
+            jsonObject.put("listingDate", listingDate);
 
             String id = historyPriceRow.id();
             keyAndPrice.put(id, jsonObject);

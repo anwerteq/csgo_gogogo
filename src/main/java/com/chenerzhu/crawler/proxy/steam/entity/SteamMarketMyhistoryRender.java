@@ -27,6 +27,9 @@ public class SteamMarketMyhistoryRender {
     private String tradingType;
 
 
+    /**
+     * 交易日期
+     */
     private String tradingDate;
 
     private String assetid;
@@ -37,7 +40,15 @@ public class SteamMarketMyhistoryRender {
 
     private String hashName;
 
+    /**
+     * 交易美元
+     */
     private Double usd;
+
+    /**
+     * 上架日期
+     */
+    private String listingDate;
 
 
 

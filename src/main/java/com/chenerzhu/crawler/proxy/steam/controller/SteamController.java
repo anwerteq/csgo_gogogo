@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 操作steam的控制层
@@ -88,7 +89,11 @@ public class SteamController {
     @RequestMapping("marketMyhistorys")
     @ResponseBody
     public void pullSteamItems(String name) {
-        SteamUserDate steamUserDate1 = SteamApplicationRunner.steamUserDates.stream().filter(o -> name.equals(o.getAccount_name())).findFirst().get();
+        Optional<SteamUserDate> first = SteamApplicationRunner.steamUserDates.stream().filter(o -> name.toLowerCase().equals(o.getAccount_name().toLowerCase())).findFirst();
+        if (!first.isPresent()) {
+            throw new RuntimeException("账号："+name+"不存");
+        }
+        SteamUserDate steamUserDate1 = (SteamUserDate) first.get();
         SteamApplicationRunner.steamUserDateTL.set(steamUserDate1);
         steamMyhistoryService.marketMyhistorys();
     }

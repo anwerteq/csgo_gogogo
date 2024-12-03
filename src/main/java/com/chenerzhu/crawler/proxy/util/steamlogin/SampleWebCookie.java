@@ -146,7 +146,9 @@ public class SampleWebCookie implements Runnable {
         authSessionDetails.username = user;
         authSessionDetails.password = pass;
         authSessionDetails.persistentSession = false;
-        authSessionDetails.authenticator = new UserConsoleAuthenticatorimpl();
+        UserConsoleAuthenticatorimpl userConsoleAuthenticatorimpl = new UserConsoleAuthenticatorimpl();
+        userConsoleAuthenticatorimpl.setSharedSecret(steamUserDate.getShared_secret());
+        authSessionDetails.authenticator = userConsoleAuthenticatorimpl;
 
         // get the authentication handler, which used for authenticating with Steam
         auth = new SteamAuthentication(steamClient);
@@ -179,6 +181,9 @@ public class SampleWebCookie implements Runnable {
 
             // List a couple of exceptions that could be important to handle.
             if (e instanceof AuthenticationException) {
+                AuthenticationException authenticationException = (AuthenticationException) e;
+                EResult result = authenticationException.getResult();
+
                 System.out.println("An Authentication error has occurred. " + e.getMessage());
             }
 
