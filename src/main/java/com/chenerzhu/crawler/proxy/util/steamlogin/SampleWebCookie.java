@@ -85,7 +85,7 @@ public class SampleWebCookie implements Runnable {
 
         LogManager.addListener(new DefaultLogListener());
 
-        new SampleWebCookie("mu64KKRO", "QingLiu98!").run();
+        new SampleWebCookie("mj00cAux", "QingLiu98!").run();
     }
 
     @Override
@@ -189,8 +189,12 @@ public class SampleWebCookie implements Runnable {
     }
 
     private void onDisconnected(DisconnectedCallback callback) {
+        steamUserDate.setIsTokenExpired(true);
+        steamUserDate.setAuth(null);
+        steamUserDate.setCallback(null);
+        steamUserDate.getSession().setRefreshToken("");
         System.out.println("Disconnected from Steam");
-
+        new Thread(new SampleWebCookie(user,pass,steamUserDate)).start();
         isRunning = false;
     }
 
@@ -232,6 +236,7 @@ public class SampleWebCookie implements Runnable {
         steamUserDate.setAuth(auth);
         steamUserDate.setCallback(callback);
         steamUserDate.getSession().setRefreshToken(refreshToken);
+        steamUserDate.setIsTokenExpired(false);
         // for this sample we'll just log off
 //        steamUser.logOff();
     }

@@ -16,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -78,7 +79,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<SteamUserDate> steamUserDatesInit = SteamLoginUtil.readFilesInFolder(sdaPath);
+        List<SteamUserDate> steamUserDatesInit = SteamLoginUtil.readFilesInFolder(new String(sdaPath.getBytes(StandardCharsets.ISO_8859_1)));
         if (steamUserDatesInit.isEmpty()) {
             log.error("为找到有效sda文件，请检查sda路径(sda路径不能包含中文)，正在关闭脚本");
 

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
+import com.chenerzhu.crawler.proxy.steam.entity.SteamMarketMyhistoryRender;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamMyhistoryRoot;
 import com.chenerzhu.crawler.proxy.steam.service.steamrenderhistory.SteamAsset;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
@@ -71,27 +72,20 @@ public class SteamMyhistoryService {
         JSONObject jsonObject =JSONObject.parseObject(JSONObject.toJSONString(steamMyhistoryRoot.getAssets()));
         JSONObject jsonObject1 = jsonObject.getJSONObject("730").getJSONObject("2");
         Map<String, SteamCostEntity> mapSteamCostEntity = getMapSteamCostEntity(jsonObject1);
-        Map<String, Double> hisotryPrice = getHisotryPrice(steamMyhistoryRoot.getResults_html());
+        Map<String, JSONObject> hisotryPrice = getHisotryPrice(steamMyhistoryRoot.getResults_html());
         //销售记录
         List<SteamCostEntity> sellCost = new ArrayList<>();
         //购买集合
         List<SteamCostEntity> buyCost = new ArrayList<>();
-        for (Map.Entry<String, Double> entry : hisotryPrice.entrySet()) {
-            //美元变美分
-            Double value = entry.getValue() * 100;
-            if (value == 0) {
-                continue;
-            }
+        for (Map.Entry<String, JSONObject> entry : hisotryPrice.entrySet()) {
+            SteamMarketMyhistoryRender myhistoryRender = new SteamMarketMyhistoryRender();
+            myhistoryRender.setHistoryRowId(entry.getKey());
+            JSONObject value = entry.getValue();
+            myhistoryRender.setUsd(value.getDouble("price"));
+            myhistoryRender.setTradingType(jsonObject.getString("tradingType"));
+
             SteamCostEntity steamCostEntity = mapSteamCostEntity.get(entry.getKey());
-            if (entry.getValue() > 0) {
-                //销售金额
-                steamCostEntity.setReturned_money(value.intValue());
-                sellCost.add(steamCostEntity);
-            } else {
-                //购买金额
-                steamCostEntity.setSteam_cost(-value.intValue());
-                buyCost.add(steamCostEntity);
-            }
+
         }
         SleepUtil.sleep(3000);
         sellCost.forEach(steamBuyItemService::saveForsellPrice);
@@ -200,26 +194,31 @@ public class SteamMyhistoryService {
      * @param body
      * @return
      */
-    public Map<String, Double> getHisotryPrice(String body) {
-        Map<String, Double> keyAndPrice = new HashMap<>();
+    public Map<String, JSONObject> getHisotryPrice(String body) {
+        Map<String, JSONObject> keyAndPrice = new HashMap<>();
         Document parse = Jsoup.parse(body);
         Element child = parse.child(0).child(1);
         Elements historyPriceRows = child.getElementsByClass("market_listing_row market_recent_listing_row");
+        JSONObject jsonObject = new JSONObject();
         //历史价格行数
         for (Element historyPriceRow : historyPriceRows) {
             String price = historyPriceRow.getElementsByClass("market_listing_right_cell market_listing_their_price").text();
             price = price.replace("$", "");
+            jsonObject.put("price", price);
+
             String name_block = historyPriceRow.getElementsByClass("market_listing_whoactedwith_name_block").text();
-            String id = historyPriceRow.id();
+
             //购买的商品
+            String tradingType = "";
             if (name_block.contains("卖家")) {
-                price = "-" + price;
+                tradingType = "sell";
             } else if (name_block.contains("买家")) {
-                //销售的价格
-            } else {
-                price = "0";
+                tradingType = "buy";
             }
-            keyAndPrice.put(id, Double.valueOf(price));
+            jsonObject.put("tradingType", tradingType);
+
+            String id = historyPriceRow.id();
+            keyAndPrice.put(id, jsonObject);
         }
         return keyAndPrice;
     }

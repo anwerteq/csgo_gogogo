@@ -64,13 +64,6 @@ public class SteamLoginUtil {
             String jsonString = content.toString();
             SteamUserDate steamUserDate = JSONObject.parseObject(jsonString, SteamUserDate.class);
             new Thread(new SampleWebCookie(steamUserDate.getAccount_name(), "QingLiu98!",steamUserDate)).start();
-            while (true){
-                if (StrUtil.isEmpty(steamUserDate.getSession().getRefreshToken())){
-                    ThreadUtil.sleep(30 *1000);
-                }else {
-                    break;
-                }
-            }
             return steamUserDate;
         } catch (IOException e) {
             e.printStackTrace();

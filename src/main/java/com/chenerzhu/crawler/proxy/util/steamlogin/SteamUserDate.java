@@ -1,12 +1,14 @@
 package com.chenerzhu.crawler.proxy.util.steamlogin;
 
 
+import cn.hutool.core.thread.ThreadUtil;
 import in.dragonbra.javasteam.steam.authentication.AccessTokenGenerateResult;
 import in.dragonbra.javasteam.steam.authentication.SteamAuthentication;
 import in.dragonbra.javasteam.steam.handlers.steamuser.callback.LoggedOnCallback;
 import in.dragonbra.javasteam.steam.steamclient.callbacks.ConnectedCallback;
 import in.dragonbra.javasteam.util.Strings;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Transient;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Data
+@Slf4j
 public class SteamUserDate {
 
     /**
@@ -47,6 +50,11 @@ public class SteamUserDate {
     @Transient
     private LoggedOnCallback callback;
 
+    /**
+     * token是否失效
+     */
+    private Boolean isTokenExpired = true;
+
     public void refreshCookies(Map<String,String> map ){
         String string = cookies.toString();
         Map<String,String> objectObjectHashMap = new HashMap<>();
@@ -66,6 +74,10 @@ public class SteamUserDate {
     }
 
     public StringBuilder getCookies() {
+        while (isTokenExpired){
+            log.info(account_name +": token失效，等待更新中");
+            ThreadUtil.sleep(5 * 1000);
+        }
         if (auth != null) {
             AccessTokenGenerateResult newTokens = auth.generateAccessTokenForApp(callback.getClientSteamID(), getSession().getRefreshToken(), true);
             String  accessToken = newTokens.getAccessToken();
