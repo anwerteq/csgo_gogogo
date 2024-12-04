@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.chenerzhu.crawler.proxy.protobufs.steammessages_unified_base;
+package com.xiaojuzi.st.protobufs.steammessages_unified_base;
 
 // 导入必要的 Protobuf 描述符
 import "google/protobuf/descriptor.proto";

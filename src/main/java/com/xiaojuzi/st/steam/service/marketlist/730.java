@@ -1,7 +1,7 @@
 ///**
 //  * Copyright 2023 json.cn
 //  */
-//package com.chenerzhu.crawler.proxy.steam.service.marketlist;
+//package com.xiaojuzi.st.steam.service.marketlist;
 //import java.util.Date;
 //
 ///**

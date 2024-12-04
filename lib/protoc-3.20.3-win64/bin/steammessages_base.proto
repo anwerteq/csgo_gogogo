@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.chenerzhu.crawler.proxy.protobufs;
+package com.xiaojuzi.st.protobufs;
 
 // IP 地址消息
 message CMsgIPAddress {

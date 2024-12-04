@@ -9,7 +9,7 @@ import com.xiaojuzi.st.buff.entity.BuffCostEntity;
 import com.xiaojuzi.st.buff.service.ProfitService;
 import com.xiaojuzi.st.buff.service.PullItemService;
 import com.xiaojuzi.st.config.CookiesConfig;
-import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.*;
+import com.xiaojuzi.st.csgo.BuffBuyItemEntity.*;
 import com.xiaojuzi.st.csgo.BuffBuyItemEntity.*;
 import com.xiaojuzi.st.csgo.buyentity.PayBillRepData;
 import com.xiaojuzi.st.csgo.buyentity.PayBillRepRoot;

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.chenerzhu.crawler.proxy.protobufs;
+package com.xiaojuzi.st.protobufs;
 
 // 空响应消息
 message NoResponse {}

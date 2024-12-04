@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiaojuzi.st.buff.entity.BuffCostEntity;
 import com.xiaojuzi.st.csgo.repository.SellBuffProfitRepository;
 import com.xiaojuzi.st.csgo.service.BuffCostService;
-import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.*;
+import com.xiaojuzi.st.csgo.steamentity.InventoryEntity.*;
 import com.xiaojuzi.st.csgo.steamentity.InventoryEntity.*;
 import com.xiaojuzi.st.steam.SteamConfig;
 import com.xiaojuzi.st.steam.entity.SteamCostEntity;

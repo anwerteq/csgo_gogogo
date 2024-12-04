@@ -1,6 +1,6 @@
 package com.xiaojuzi.st.buff.controller;
 
-import com.chenerzhu.crawler.proxy.buff.service.*;
+import com.xiaojuzi.st.buff.service.*;
 import com.xiaojuzi.st.buff.service.*;
 import com.xiaojuzi.st.csgo.service.BuffBuyItemService;
 import com.xiaojuzi.st.steam.service.SteamBuyItemService;

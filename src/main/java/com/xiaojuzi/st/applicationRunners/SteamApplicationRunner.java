@@ -6,7 +6,7 @@ import com.xiaojuzi.st.cache.SteamCacheService;
 import com.xiaojuzi.st.config.CookiesConfig;
 import com.xiaojuzi.st.steam.SteamConfig;
 import com.xiaojuzi.st.steam.util.SleepUtil;
-import com.chenerzhu.crawler.proxy.util.steamlogin.*;
+import com.xiaojuzi.st.util.steamlogin.*;
 import com.xiaojuzi.st.util.steamlogin.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

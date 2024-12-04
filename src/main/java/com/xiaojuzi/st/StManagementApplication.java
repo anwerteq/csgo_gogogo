@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@ServletComponentScan("com.chenerzhu.crawler.proxy.pool.listener")
+@ServletComponentScan("com.xiaojuzi.st.pool.listener")
 @EnableFeignClients
 @EnableScheduling
 @PropertySource(value = "classpath:application.properties", encoding = "UTF-8")

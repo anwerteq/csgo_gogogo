@@ -5,7 +5,7 @@ import com.xiaojuzi.st.applicationRunners.SteamApplicationRunner;
 import com.xiaojuzi.st.buff.service.deliverOrder.ItemsToTrade;
 import com.xiaojuzi.st.config.CookiesConfig;
 import com.xiaojuzi.st.steam.SteamConfig;
-import com.chenerzhu.crawler.proxy.steam.service.steamtrade.*;
+import com.xiaojuzi.st.steam.service.steamtrade.*;
 import com.xiaojuzi.st.steam.service.steamtrade.*;
 import com.xiaojuzi.st.steam.util.SleepUtil;
 import com.xiaojuzi.st.util.HttpClientUtils;

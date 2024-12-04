@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.chenerzhu.crawler.proxy.protobufs.steammessages_auth;
+package com.xiaojuzi.st.protobufs.steammessages_auth;
 
 // 导入基础消息
 import "steammessages_base.proto";

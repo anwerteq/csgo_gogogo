@@ -3,7 +3,7 @@ package com.xiaojuzi.st.steam.controller;
 import com.xiaojuzi.st.applicationRunners.SteamApplicationRunner;
 import com.xiaojuzi.st.config.CookiesConfig;
 import com.xiaojuzi.st.steam.entity.Cookeis;
-import com.chenerzhu.crawler.proxy.steam.service.*;
+import com.xiaojuzi.st.steam.service.*;
 import com.xiaojuzi.st.steam.service.*;
 import com.xiaojuzi.st.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
