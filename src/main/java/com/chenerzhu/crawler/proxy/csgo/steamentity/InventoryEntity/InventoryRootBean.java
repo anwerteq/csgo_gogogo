@@ -3,6 +3,8 @@
  */
 package com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity;
 
+import com.chenerzhu.crawler.proxy.steam.entity.Descriptions;
+
 import java.util.List;
 
 /**

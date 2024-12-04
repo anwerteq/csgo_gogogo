@@ -9,6 +9,7 @@ import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.service.BuffCostService;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.*;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
+import com.chenerzhu.crawler.proxy.steam.entity.Descriptions;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
 import com.chenerzhu.crawler.proxy.steam.repository.SteamCostRepository;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
