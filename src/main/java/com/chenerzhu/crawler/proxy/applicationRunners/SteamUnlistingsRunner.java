@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.applicationRunners;
 
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.service.RemovelistingService;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class SteamUnlistingsRunner implements ApplicationRunner {
         if (!auto_unlistings) {
             return;
         }
-        List<SteamUserDate> steamUserDates = SteamApplicationRunner.steamUserDates;
+        List<SteamUserDate> steamUserDates = SteamTheadeUtil.steamUserDates;
         for (SteamUserDate steamUserDate : steamUserDates) {
-            SteamApplicationRunner.steamUserDateTL.set(steamUserDate);
+            SteamTheadeUtil.steamUserDateTL.set(steamUserDate);
             CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
             for (int i = 1; i < 100; i++) {
                 removelistingService.unlistings(i);

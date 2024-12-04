@@ -6,6 +6,7 @@ import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -50,7 +51,7 @@ public class RemovelistingService {
 //
 //        String sessionid = resStr.split("g_sessionID = \"")[1].split(";")[0];
 //        sessionid = sessionid.substring(0, sessionid.length() - 1);
-//        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+//        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
 //        steamUserDate.getSession().setSessionID(sessionid);
 
 
@@ -140,7 +141,7 @@ public class RemovelistingService {
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         saleHeader.put("Referer", "https://steamcommunity.com/market/");
-        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
 //        paramerMap.put("sessionid", steamUserDate.getSession().getSessionID());
         paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);

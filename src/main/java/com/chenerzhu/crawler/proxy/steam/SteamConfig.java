@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.Session;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +71,7 @@ public class SteamConfig implements ApplicationRunner {
      * 获取steamId
      */
     public static String getSteamId() {
-        String steamID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSteamID();
+        String steamID = SteamTheadeUtil.steamUserDateTL.get().getSession().getSteamID();
 //        String steamLoginSecure = getCookieOnlyKey("steamLoginSecure");
 //        String substring = steamLoginSecure.substring(0, 17);
         return steamID;
@@ -87,7 +88,7 @@ public class SteamConfig implements ApplicationRunner {
             return "";
         }
         String steamId = buffUserData.getSteamId();
-        for (SteamUserDate steamUserDate : SteamApplicationRunner.steamUserDates) {
+        for (SteamUserDate steamUserDate : SteamTheadeUtil.steamUserDates) {
             Session session = steamUserDate.getSession();
             if (steamId.equals(session.getSteamID())) {
                 return steamUserDate.getCookies().toString();
@@ -101,7 +102,7 @@ public class SteamConfig implements ApplicationRunner {
         if (StrUtil.isNotEmpty(cookies)) {
             return cookies;
         }
-        cookies = SteamApplicationRunner.steamUserDateTL.get().getCookies().toString();
+        cookies = SteamTheadeUtil.steamUserDateTL.get().getCookies().toString();
         return cookies;
     }
 
@@ -109,7 +110,7 @@ public class SteamConfig implements ApplicationRunner {
         String[] split = getCookie().split(key + "=");
         String value = split[1].split(";")[0];
         return value.trim();
-//        String sessionID = SteamApplicationRunner.steamUserDateTL.get().getSession().getSessionID();
+//        String sessionID = SteamTheadeUtil.steamUserDateTL.get().getSession().getSessionID();
 //        return sessionID;
     }
 

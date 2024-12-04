@@ -25,6 +25,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import feign.HeaderMap;
 
 
@@ -53,7 +54,7 @@ public class SteamLoginUtilTest {
         steamUserDate.setUserPsw("QingLiu98!");
         steamUserDate.setShared_secret("vbAREhPkibtwemEklyePZH2b73c=");
         steamUserDate.getSession().setSteamID("76561199351185401");
-        SteamApplicationRunner.steamUserDateTL.set(steamUserDate);
+        SteamTheadeUtil.steamUserDateTL.set(steamUserDate);
         step1();
 //        SteammessagesAuth.CAuthentication_GetPasswordRSAPublicKey_Response step2Value = step2();
 //        String encryptPasswordProtobuf = encryptPasswordProtobuf(step2Value.getPublickeyExp(), step2Value.getPublickeyMod(), steamUserDate.getUserPsw());
@@ -282,7 +283,7 @@ public class SteamLoginUtilTest {
     }
 
 //    public static  void step4(SteammessagesAuth.CAuthentication_BeginAuthSessionViaCredentials_Response authSessionViaCredentialsResponse){
-//        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+//        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
 //        Map<String, String> headerMap = SteamLoginUtilTest.steamLoginHeaderMapThreadLocal.get();
 //        headerMap.put("Cookie", CookiesConfig.steamCookies.get());
 //        headerMap.put("Content-Type", "application/x-www-form-urlencoded"); // 设置请求头为 JSON

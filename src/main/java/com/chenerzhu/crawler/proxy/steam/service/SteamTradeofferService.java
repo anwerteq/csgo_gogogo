@@ -8,6 +8,7 @@ import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.service.steamtrade.*;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.ConfirmUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import com.chenerzhu.crawler.proxy.util.steamlogin.TimeUtil;
@@ -100,7 +101,7 @@ public class SteamTradeofferService {
      */
     public SteamTradeOfferData getTradeOffer(String tradeId) {
         SleepUtil.sleep(5000);
-        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
         CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
         String apikey = steamUserDate.getApikey();
         String tradeofferid = tradeId;
@@ -208,7 +209,7 @@ public class SteamTradeofferService {
      * 创建确认操作参数  1696758679000
      */
     private Map<String, String> createConfirmationParams(String tag) {
-        SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
         long timestamp = TimeUtil.getTimeStamp();
         String confirmation_key = ConfirmUtil.getKey(steamUserDate.getIdentity_secret(), tag, timestamp);
         String steamId = steamUserDate.getSession().getSteamID();

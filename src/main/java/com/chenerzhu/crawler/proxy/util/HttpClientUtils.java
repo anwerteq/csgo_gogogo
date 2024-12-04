@@ -149,7 +149,7 @@ public class HttpClientUtils implements ApplicationRunner {
                 if (StringUtils.isEmpty(resultCharset)) {
                     resultCharset = DEFAULT_CHARSET;
                 }
-                SteamUserDate steamUserDate = SteamApplicationRunner.steamUserDateTL.get();
+                SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
                 if ( steamUserDate != null){
                     Map<String, String> newHeader = new HashMap<>();
                     for (Cookie cookie : cookieStore.getCookies()) {

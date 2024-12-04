@@ -6,6 +6,7 @@ import com.chenerzhu.crawler.proxy.cache.SteamCacheService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.chenerzhu.crawler.proxy.util.SteamTheadeUtil.steamUserDates;
+
 /**
  * 启动后steam账号信息初始化
  */
@@ -30,9 +33,7 @@ import java.util.regex.Pattern;
 @Order(2)
 public class SteamApplicationRunner implements ApplicationRunner {
 
-    public static List<SteamUserDate> steamUserDates = new ArrayList<>();
 
-    public static ThreadLocal<SteamUserDate> steamUserDateTL = new ThreadLocal<>();
 
 
     /**
@@ -44,7 +45,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
         for (SteamUserDate steamUserDate : steamUserDates) {
             Session session = steamUserDate.getSession();
             if (steamId.equals(session.getSteamID())) {
-                steamUserDateTL.set(steamUserDate);
+                SteamTheadeUtil.steamUserDateTL.set(steamUserDate);
                 CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
                 return true;
             }
@@ -63,7 +64,7 @@ public class SteamApplicationRunner implements ApplicationRunner {
      */
     public static Boolean checkHasSteamCookie() {
         String theadLocalCookie = SteamConfig.getTheadLocalCookie();
-        return StrUtil.isNotEmpty(theadLocalCookie);
+        return (Boolean) StrUtil.isNotEmpty(theadLocalCookie);
     }
 
     @Autowired
