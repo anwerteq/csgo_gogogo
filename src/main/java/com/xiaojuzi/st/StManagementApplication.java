@@ -17,14 +17,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @PropertySource(value = "classpath:application.properties", encoding = "UTF-8")
 @Slf4j
 @EnableCaching
-public class ProxyPoolApplication {
+public class StManagementApplication {
 
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(ProxyPoolApplication.class, args);
-//        SteamLossPaintwearService bean = run.getBean(SteamLossPaintwearService.class);
-//        bean.getMarketLists(null,null);
-//        ItemGoodsService bean = run.getBean(ItemGoodsService.class);
-//        bean.getLowPaintwear();
+        ConfigurableApplicationContext run = SpringApplication.run(StManagementApplication.class, args);
+
     }
 }

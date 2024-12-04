@@ -1,7 +1,7 @@
 package com.xiaojuzi.st.util.bufflogin;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xiaojuzi.st.ProxyPoolApplication;
+import com.xiaojuzi.st.StManagementApplication;
 import com.xiaojuzi.st.buff.BuffConfig;
 import com.xiaojuzi.st.buff.BuffUserData;
 import com.xiaojuzi.st.config.CookiesConfig;
@@ -153,7 +153,7 @@ public class BuffAutoLoginUtil {
      */
     public static String getResource() {
         // 获取资源的URL
-        URL resourceUrl = ProxyPoolApplication.class.getClassLoader().getResource("edgedriver_win64/msedgedriver.exe");
+        URL resourceUrl = StManagementApplication.class.getClassLoader().getResource("edgedriver_win64/msedgedriver.exe");
         // 获取资源的绝对路径
         String resourcePath = resourceUrl.getPath().replaceFirst("file:/", "");
         log.debug("jarPath11111111:{}", resourcePath);
