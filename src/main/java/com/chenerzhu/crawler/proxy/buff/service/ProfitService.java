@@ -107,7 +107,7 @@ public class ProfitService implements ApplicationRunner {
      */
     public Double checkBuffPriceDate(ItemGoods itemGoods) {
         //获取最近几天的中位数
-        Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getId(), 20);
+        Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getMarketHashName(), 20);
         //获取buff
         String sell_min_price = itemGoods.getSell_min_price();
         Double sell_min_priceD = Double.valueOf(sell_min_price);
@@ -165,7 +165,7 @@ public class ProfitService implements ApplicationRunner {
      */
     public SellSteamProfitEntity checkBuyBuffItem(ItemGoods itemGoods) {
         SellSteamProfitEntity entity = new SellSteamProfitEntity();
-        entity.setItem_id(itemGoods.getId());
+        entity.setItem_id(itemGoods.getMarketHashName());
         entity.setName(itemGoods.getName());
         entity.setBuff_price(Double.valueOf(itemGoods.getSell_min_price()));
         entity.setSell_steam_price(itemGoods.getGoods_info().getSteam_price_cny());

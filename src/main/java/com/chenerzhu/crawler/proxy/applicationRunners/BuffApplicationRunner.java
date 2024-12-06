@@ -47,9 +47,7 @@ public class BuffApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        if (true){
-            return;
-        }
+
         List<String> buff_cookies = buffAccountInfoConfig.getBuff_cookies();
         List<String> account_information = buffAccountInfoConfig.getAccount_information();
         if (CollectionUtil.isEmpty(account_information) && CollectionUtil.isEmpty(buff_cookies)) {

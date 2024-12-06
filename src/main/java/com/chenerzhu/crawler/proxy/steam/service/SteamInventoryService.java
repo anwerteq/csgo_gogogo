@@ -4,6 +4,8 @@ package com.chenerzhu.crawler.proxy.steam.service;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.config.BatchInsertService;
+import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
+import com.chenerzhu.crawler.proxy.csgo.repository.IItemGoodsRepository;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.steam.entity.Descriptions;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.InventoryRootBean;
@@ -47,6 +49,9 @@ public class SteamInventoryService {
     @Autowired
     TempTableSaveService tempTableSaveService;
 
+    @Autowired
+    IItemGoodsRepository iItemGoodsRepository;
+
 
     /**
      * 获取steam库存
@@ -66,26 +71,28 @@ public class SteamInventoryService {
 
     public void refreshSteamInventory() {
         InventoryRootBean steamInventory = getSteamInventory();
-        Map<String, Assets> keyAndAssets = steamInventory.getAssets().stream().collect(Collectors.toMap(o1 -> o1.getClassid() + o1.getInstanceid(), o2 -> o2, (o1, o2) -> o1, HashMap::new));
+        Map<String, List<Assets>>  keyAndAssets = steamInventory.getAssets().stream().collect(Collectors.groupingBy(o1-> o1.getClassid() + o1.getInstanceid()));
         Map<String, Descriptions> keyAndDescriptions = steamInventory.getDescriptions().stream().collect(Collectors.toMap(o1 -> o1.getClassid() + o1.getInstanceid(), o2 -> o2, (o1, o2) -> o1, HashMap::new));
         List<Descriptions> descriptionsList = new ArrayList<>();
-        for (Map.Entry<String, Assets> assetsEntry : keyAndAssets.entrySet()) {
-            Assets assets = assetsEntry.getValue();
-            Descriptions descriptions = keyAndDescriptions.get(assetsEntry.getKey());
-            Descriptions descriptionsNew = JSONObject.parseObject(JSONObject.toJSONString(descriptions), Descriptions.class);
-            descriptionsNew.setAssetid(assets.getAssetid());
-            descriptionsNew.setAmount(Integer.parseInt(assets.getAmount()));
-            descriptionsNew.setCdkey_id(descriptionsNew.assetidClassidInstanceid());
-            descriptionsNew.setNumber_name(SteamTheadeUtil.getThreadSteamUserDate().getAccount_name());
-            descriptionsList.add(descriptionsNew);
+        Map<String, Double> hashNameAndPrice = iItemGoodsRepository.findAll().stream().collect(Collectors.toMap(ItemGoods::getMarketHashName, ItemGoods::getSell_min_price));
+        for (Map.Entry<String, List<Assets>> assetsEntry : keyAndAssets.entrySet()) {
+            List<Assets> assetss = assetsEntry.getValue();
+            for (Assets assets : assetss) {
+                Descriptions descriptions = keyAndDescriptions.get(assetsEntry.getKey());
+                Descriptions descriptionsNew = JSONObject.parseObject(JSONObject.toJSONString(descriptions), Descriptions.class);
+                descriptionsNew.setAssetid(assets.getAssetid());
+                descriptionsNew.setAmount(Integer.parseInt(assets.getAmount()));
+                descriptionsNew.setCdkey_id(descriptionsNew.assetidClassidInstanceid());
+                descriptionsNew.setNumber_name(SteamTheadeUtil.getThreadSteamUserDate().getAccount_name());
+                Double price = hashNameAndPrice.get(descriptionsNew.getMarket_hash_name());
+                descriptionsNew.setBuff_min_price(price);
+                descriptionsList.add(descriptionsNew);
+            }
         }
         List<String> collect = descriptionsList.stream().map(Descriptions::getCdkey_id).collect(Collectors.toList());
-
-
         System.out.println(new Date());
         mtdtDbUtil.execSql("delete from steam_descriptions where  cdkey_id  ",collect);
-        System.out.println(new Date());
-
+         System.out.println(new Date());
         tempTableSaveService.batchSave(descriptionsList,Descriptions.class);
         System.out.println(new Date());
 

@@ -59,7 +59,7 @@ public class SteamController {
     }
 
     /**
-     * 刷新库存信息
+     * 刷新steam库存信息
      */
     @RequestMapping("refreshSteamInventory")
     public void refreshSteamInventory(String name){
@@ -68,6 +68,7 @@ public class SteamController {
         steamInventoryService.refreshSteamInventory();
 
     }
+
 
 
     /**

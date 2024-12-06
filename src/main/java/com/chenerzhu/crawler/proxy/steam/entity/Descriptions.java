@@ -80,6 +80,12 @@ public class Descriptions {
     @Column
     private String number_name;
 
+    /**
+     * buff最低价值
+     */
+    @Column
+    private Double buff_min_price;
+
     @Transient
     public String assetidClassidInstanceid() {
         StringJoiner sj = new StringJoiner("-");

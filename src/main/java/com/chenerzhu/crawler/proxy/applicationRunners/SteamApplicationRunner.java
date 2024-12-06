@@ -30,7 +30,7 @@ import static com.chenerzhu.crawler.proxy.util.SteamTheadeUtil.steamUserDates;
  */
 @Slf4j
 @Component
-@Order(2)
+@Order(4)
 public class SteamApplicationRunner implements ApplicationRunner {
 
 

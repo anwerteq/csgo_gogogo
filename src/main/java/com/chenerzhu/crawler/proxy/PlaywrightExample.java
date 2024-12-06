@@ -2,17 +2,18 @@ package com.chenerzhu.crawler.proxy;
 
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.Cookie;
 
-import javax.servlet.http.Cookie;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 public class PlaywrightExample {
     public static void main(String[] args) {
         String url = "https://buff.163.com/";
         // 初始化 Playwright
         try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+            BrowserContext context = browser.newContext();
             Page page = browser.newPage();
-
             // 打开 URL
             page.navigate(url);
 
@@ -47,10 +48,9 @@ public class PlaywrightExample {
 //            Locator loginBut = frameLocator.locator("xpath=/html/body/div[2]/div[2]/div[2]/form/div/div[7]/a");
             Locator loginBut = frameLocator.locator("[id='submitBtn']");
             loginBut.click();
-
-
             // 等待并获取 cookie
             page.waitForTimeout(2900);
+            List<Cookie> cookies = context.cookies();
             String cookie = page.context().cookies().stream()
                     .filter(c -> "session".equals(c.name)) // 直接访问字段
                     .map(c -> c.value) // 直接访问字段

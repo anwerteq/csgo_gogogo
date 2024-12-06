@@ -7,6 +7,7 @@ import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.BuffUserData;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
+import com.chenerzhu.crawler.proxy.test.SliderCaptchaSolver;
 import com.chenerzhu.crawler.proxy.util.OpenCVUtil;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.BoundingBox;
@@ -86,15 +87,16 @@ public class BuffAutoLoginUtil {
 //            Locator loginBut = frameLocator.locator("xpath=/html/body/div[2]/div[2]/div[2]/form/div/div[7]/a");
             Locator loginBut = frameLocator.locator("[id='submitBtn']");
             loginBut.click();
-//            poJieyanzhengma(frameLocator,page);
             //验证码
-            Locator yanzhengmaLocator = frameLocator.locator("xpath=/html/body/div[3]/div[1]");
-            if (yanzhengmaLocator.count() > 0){
-
-
-
-            }
-            // yidun_cover-frame  /html/body/div[3]/div[2]
+            int tryHuaKuai = 0;
+           try {
+               while (frameLocator.locator("xpath=/html/body/div[3]").count() > 0 || tryHuaKuai > 3){
+                   poJieyanzhengma(frameLocator, page);
+                   tryHuaKuai++;
+               }
+           }catch (Exception e){
+               log.info("账号：{},在buff登陆时，无滑动模块",username);
+           }
 
             // 等待并获取 cookie
             page.waitForTimeout(2900);
@@ -138,8 +140,20 @@ public class BuffAutoLoginUtil {
         String bgimgUrl = bgLocatos.getAttribute("src");
         //滑块url
         String mvimgUrl = mvLocatos.getAttribute("src");
-        Double moveLimit = OpenCVUtil.getMoveLimit(bgimgUrl, mvimgUrl);
-        moveLimit = moveLimit * 234.0 / 320 ;
+
+        int tryCoubnt = 0;
+        Double moveHuaKuai = 0.0;
+        while (tryCoubnt<3){
+            try {
+                moveHuaKuai = SliderCaptchaSolver.getMoveHuaKuai(bgimgUrl,mvimgUrl);
+            }catch (Exception e){
+                tryCoubnt ++;
+                continue;
+            }
+            break;
+        }
+
+        Double   moveLimit = moveHuaKuai * 234.0 / 320 ;
         Locator mvButton = frameLocator.locator("xpath=/html/body/div[3]/div[2]/div/div/div[2]/div/div[2]/div[2]");
         System.out.println(mvButton.boundingBox().width);
         BoundingBox boundingBox = mvButton.boundingBox();

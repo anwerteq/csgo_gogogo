@@ -1,6 +1,8 @@
 package com.chenerzhu.crawler.proxy.buff.controller;
 
+import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
 import com.chenerzhu.crawler.proxy.buff.service.*;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.csgo.service.BuffBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +41,23 @@ public class BuffController {
 
 
     /**
+     * 自动购买饰品
+     */
+    @RequestMapping("autoItemGoods")
+    @ResponseBody
+    public void autoBuyItemGoods() {
+        pullItemService.autoBuyItemGoods(false);
+    }
+
+    /**
      * 拉取商品列表信息（拉取推荐购买和销售数据）
      */
     @RequestMapping("pullItmeGoods")
     @ResponseBody
     public void pullItem() {
-        pullItemService.pullItmeGoods(false);
+        BuffApplicationRunner.buffUserDataThreadLocal.set(BuffApplicationRunner.buffUserDataList.get(0));
+        CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
+        pullItemService.pullItmeGoods();
     }
 
     /**
@@ -68,7 +81,6 @@ public class BuffController {
             buffBuyItemService.buyHotItem();
             System.out.println("接口调用，购买商品完成");
         }
-
     }
     /**
      * buff确认订单

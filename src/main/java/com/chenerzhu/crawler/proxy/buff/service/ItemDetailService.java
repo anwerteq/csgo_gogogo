@@ -87,8 +87,8 @@ public class ItemDetailService {
      * 构建 扫steam低磨损的数据
      */
     public void autoButSteam(ItemGoods itemGoods) {
-        List<String> wearIntervalList = getWearInterval(itemGoods.getId());
-        Map<String, String> sellPrices = getSellPrices(itemGoods.getId(), wearIntervalList);
+        List<String> wearIntervalList = getWearInterval(itemGoods.getMarketHashName());
+        Map<String, String> sellPrices = getSellPrices(itemGoods.getMarketHashName(), wearIntervalList);
         steamLossPaintwearService.getMarketLists(itemGoods, sellPrices);
     }
 

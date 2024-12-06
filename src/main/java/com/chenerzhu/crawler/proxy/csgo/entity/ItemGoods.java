@@ -3,10 +3,12 @@
  */
 package com.chenerzhu.crawler.proxy.csgo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Auto-generated: 2023-05-14 0:18:12
@@ -22,7 +24,8 @@ public class ItemGoods {
 
     private static final long serialVersionUID = 1L;
     @Id
-    private String id;
+    @Column(name = "market_hash_name")
+    private String marketHashName;
 
     @Column(name = "appid")
     private int appid;
@@ -45,8 +48,7 @@ public class ItemGoods {
     private Goods_info goods_info;
     @Column(name = "has_buff_price_history")
     private boolean has_buff_price_history;
-    @Column(name = "market_hash_name")
-    private String marketHashName;
+
     @Column(name = "market_min_price")
     private String market_min_price;
     @Column(name = "name")
@@ -54,7 +56,7 @@ public class ItemGoods {
     @Column(name = "quick_price")
     private String quick_price;
     @Column(name = "sell_min_price")
-    private String sell_min_price;
+    private Double sell_min_price;
     @Column(name = "sell_num")
     private int sell_num;
     @Column(name = "sell_reference_price")
@@ -65,6 +67,9 @@ public class ItemGoods {
     private String steam_market_url;
     @Column(name = "transacted_num")
     private int transacted_num;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime create_date;
 
 
     //临时字段
