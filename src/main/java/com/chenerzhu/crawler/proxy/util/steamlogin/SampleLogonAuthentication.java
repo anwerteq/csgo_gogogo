@@ -278,7 +278,7 @@ public class SampleLogonAuthentication implements Runnable {
 
 
     public static void main(String[] args) {
-        System.out.println(generateOneTimeCode("t8tQpKktBC8/Wy6gZ4poP8AE0vY=", null));
+        System.out.println(generateOneTimeCode("R3dTE2+Orb9oQgesGFqUP6cOSAs=", null));
     }
     /**
      * 生成认证码

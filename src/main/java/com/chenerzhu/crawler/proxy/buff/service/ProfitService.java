@@ -73,7 +73,7 @@ public class ProfitService implements ApplicationRunner {
     public void saveSellBuffProfitEntity(ItemGoods itemGoods, Boolean isBuy) {
         String marketName = itemGoods.getName();
         int priceWhere = GameCommet.getPriceWhere();
-        if (Double.parseDouble(itemGoods.getSell_min_price()) > priceWhere) {
+        if (itemGoods.getSell_min_price() > priceWhere) {
             log.info("商品：{}，价格为：{}元，不符合小于：{}元求购要求", marketName, itemGoods.getSell_min_price(), priceWhere);
             return;
         }
@@ -109,7 +109,7 @@ public class ProfitService implements ApplicationRunner {
         //获取最近几天的中位数
         Double dayMedianPrice = pullHistoryService.get20dayMedianPrice(itemGoods.getMarketHashName(), 20);
         //获取buff
-        String sell_min_price = itemGoods.getSell_min_price();
+        Double sell_min_price = itemGoods.getSell_min_price();
         Double sell_min_priceD = Double.valueOf(sell_min_price);
         Double meanRatio = sell_min_priceD / dayMedianPrice;
         if (meanRatio < mean_ratio_min || meanRatio > mean_ratio_max) {

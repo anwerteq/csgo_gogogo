@@ -47,7 +47,6 @@ public class BuffApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-
         List<String> buff_cookies = buffAccountInfoConfig.getBuff_cookies();
         List<String> account_information = buffAccountInfoConfig.getAccount_information();
         if (CollectionUtil.isEmpty(account_information) && CollectionUtil.isEmpty(buff_cookies)) {
@@ -56,22 +55,24 @@ public class BuffApplicationRunner implements ApplicationRunner {
             return;
         }
 
-        for (String acountData : account_information) {
-            BuffUserData buffUserData = new BuffUserData();
-            String acount = acountData.split("-")[0];
-            String pwd = acountData.split("-")[1];
-            buffUserData.setAcount(acount);
-            buffUserData.setPwd(pwd);
-            int count = 0;
-            String cookie = "";
-            while (StrUtil.isEmpty(cookie) && count++ < 3) {
-                cookie = buffCacheService.getCookie(acount, buffUserData);
-                break;
+        if (account_information != null && account_information.size() > 0) {
+            for (String acountData : account_information) {
+                BuffUserData buffUserData = new BuffUserData();
+                String acount = acountData.split("-")[0];
+                String pwd = acountData.split("-")[1];
+                buffUserData.setAcount(acount);
+                buffUserData.setPwd(pwd);
+                int count = 0;
+                String cookie = "";
+                while (StrUtil.isEmpty(cookie) && count++ < 3) {
+                    cookie = buffCacheService.getCookie(acount, buffUserData);
+                    break;
+                }
+                //获取steamid
+                String steamId = buffCacheService.getSteamId(acount, cookie);
+                buffUserData.setSteamId(steamId);
+                buffUserDataList.add(buffUserData);
             }
-            //获取steamid
-            String steamId = buffCacheService.getSteamId(acount, cookie);
-            buffUserData.setSteamId(steamId);
-            buffUserDataList.add(buffUserData);
         }
 
 
