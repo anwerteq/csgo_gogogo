@@ -235,6 +235,7 @@ public class SteamMyhistoryService {
             }
             //含有交易时间的 分为两种： 1：上市交易的，2：购买的（仓库中的存在这）
             String price = historyPriceRow.getElementsByClass("market_listing_right_cell market_listing_their_price").text();
+            price = price.replace("$", "");
             jsonObject.put("price", price);
             // 交易日期
             String tradingDate = historyPriceRow.getElementsByClass("market_listing_right_cell market_listing_listed_date can_combine").get(0).text();
