@@ -8,14 +8,15 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "csgo_items")
+@Table(name = "csgo_items",indexes = {
+@Index(name = "idx_steam_inventory_mark_id", columnList = "steamInventoryMarkId") // 添加索引
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CZ75Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
@@ -194,6 +195,19 @@ public class CZ75Item {
      */
     @Column
     private String steamInventoryMarkId;
+
+    /**
+     * 交易类型（买，或者 卖）
+     */
+    @Column
+    private String theTypeOfTransaction;
+
+    /**
+     * steamId
+     */
+    @Column
+    private String steamId;
+
 
     /**
      * 刷新仓库id

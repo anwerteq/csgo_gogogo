@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * Auto-generated: 2023-05-22 14:41:55
+ * steam仓库饰品信息
  *
  * @author json.cn (i@json.cn)
  * @website http://www.json.cn/java2pojo/
@@ -80,18 +80,47 @@ public class Descriptions {
     @Column
     private String number_name;
 
+    @Column
+    private String steamId;
+
+    /**
+     * 仓库逻辑id
+     */
+    @Column
+    private String steamInventoryMarkId;
     /**
      * buff最低价值
      */
     @Column
     private Double buff_min_price;
 
+    /**
+     * 购买价格
+     */
+    @Column
+    private Double buy_price;
+
+    /**
+     * 购买平台
+     */
+    @Column
+    private String  buy_type;
+
     @Transient
-    public String assetidClassidInstanceid() {
+    public void refreashCdkey_id() {
         StringJoiner sj = new StringJoiner("-");
         sj.add(assetid);
         sj.add(classid);
         sj.add(instanceid);
-        return sj.toString();
+        setCdkey_id(sj.toString());
+    }
+
+
+    /**
+     * 刷新仓库id
+     */
+    public void refreshSteamInventoryMarkId(){
+        setSteamInventoryMarkId(classid +"-"+ instanceid);
+
     }
 }

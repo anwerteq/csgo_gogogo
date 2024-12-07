@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -112,7 +113,7 @@ public class PullItemService {
             throw new ArithmeticException("");
         }
         productList.getData().getItems().forEach((item)->{item.setCreate_date(LocalDateTime.now());});
-        itemRepository.saveAll(productList.getData().getItems());
+        CompletableFuture.supplyAsync(()-> itemRepository.saveAll(productList.getData().getItems()));
 
         return productList.getData().getPage_num() >= page_num;
     }

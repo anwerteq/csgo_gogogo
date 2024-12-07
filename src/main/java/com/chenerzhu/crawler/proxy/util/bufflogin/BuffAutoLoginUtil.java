@@ -201,7 +201,7 @@ public class BuffAutoLoginUtil {
         String url = "https://buff.163.com/account/api/user/info";
         String sessionId = buffUserData.getCookie();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Cookie", "session=" + sessionId);
+        headers.set("Cookie",  sessionId);
         headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36");
         headers.set("Referer", "https://buff.163.com");
         HttpEntity<MultiValueMap<String, String>> entity1 = new HttpEntity(headers);

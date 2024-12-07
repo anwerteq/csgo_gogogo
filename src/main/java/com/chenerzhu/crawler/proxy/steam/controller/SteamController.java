@@ -44,7 +44,6 @@ public class SteamController {
      */
     @RequestMapping("grounding")
     public void grounding(){
-
         groundingService.productListingOperation();
         List<Cookeis> cookeisList = CookiesConfig.cookeisList;
         for (Cookeis cookeis : cookeisList) {
@@ -64,9 +63,7 @@ public class SteamController {
     @RequestMapping("refreshSteamInventory")
     public void refreshSteamInventory(String name){
         SteamTheadeUtil.setThreadSteamUserDate(name);
-
         steamInventoryService.refreshSteamInventory();
-
     }
 
 

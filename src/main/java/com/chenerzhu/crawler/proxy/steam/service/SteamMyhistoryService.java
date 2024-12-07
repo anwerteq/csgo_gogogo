@@ -13,6 +13,7 @@ import com.chenerzhu.crawler.proxy.steam.repository.CZ75ItemRepository;
 import com.chenerzhu.crawler.proxy.steam.service.steamrenderhistory.SteamAsset;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -81,6 +83,7 @@ public class SteamMyhistoryService {
         Map<String, JSONObject> hisotryPrice = getHisotryPrice(steamMyhistoryRoot.getResults_html(),steamMyhistoryRoot.getHovers());
         List<CZ75Item> cz75ItemList = change2CZ75ItemList(steamMyhistoryRoot.getAssets());
         Map<Long, CZ75Item> idAndCZ75Item = cz75ItemList.stream().collect(Collectors.toMap(CZ75Item::getId, o2 -> o2));
+        String steamID = SteamTheadeUtil.getThreadSteamUserDate().getSession().getSteamID();
         //只遍历 购买和售出的
         List<CZ75Item> collect = hisotryPrice.entrySet().stream().map(entry -> {
             CZ75Item cz75Item = idAndCZ75Item.get(Long.parseLong(entry.getKey()));
@@ -89,14 +92,13 @@ public class SteamMyhistoryService {
             cz75Item.setListingDate(jsonObject.getString("listingDate"));
             cz75Item.setTradingDate(jsonObject.getString("tradingDate"));
             cz75Item.setMemo(jsonObject.getString("memoDate"));
+            cz75Item.setTheTypeOfTransaction(jsonObject.getString("theTypeOfTransaction"));
+            cz75Item.setSteamId(steamID);
             cz75Item.refreshSteamInventoryMarkId();
             return cz75Item;
         }).collect(Collectors.toList());
-
-
-        cz75ItemRepository.saveAll(collect);
+        CompletableFuture.supplyAsync(()->cz75ItemRepository.saveAll(collect));
         SleepUtil.sleep(3000);
-
         return true;
     }
 
@@ -245,9 +247,16 @@ public class SteamMyhistoryService {
             String listingDate = historyPriceRow.getElementsByClass("market_listing_right_cell market_listing_listed_date can_combine").get(1).text();
             jsonObject.put("listingDate", listingDate);
 
-            // 上架日期
+            // 交易备注
             String memoDate = historyPriceRow.getElementsByClass("market_listing_listed_date_combined").get(0).text();
             jsonObject.put("memoDate", memoDate);
+            if (memoDate.contains("购买")){
+                jsonObject.put("theTypeOfTransaction","买");
+            }else if (memoDate.contains("售出")){
+                jsonObject.put("theTypeOfTransaction","卖");
+            }else {
+                System.out.println("");
+            }
             String htmlId = historyPriceRow.id();
             String id = htmlRowIdAndhId.get(htmlId);
             // 存在 history_row_4390503095263598883_event_2，饰品过期，自动下架。

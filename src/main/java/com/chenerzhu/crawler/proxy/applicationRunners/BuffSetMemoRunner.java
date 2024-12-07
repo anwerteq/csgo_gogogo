@@ -27,15 +27,15 @@ public class BuffSetMemoRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (!auto_remark){
-            return;
-        }
-        PullItemService.executorService.execute(() -> {
-            for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
-                BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
-                buffSetMemoService.assetRemarkChange();
-            }
-        });
+//        if (!auto_remark){
+//            return;
+//        }
+//        PullItemService.executorService.execute(() -> {
+//            for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
+//                BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
+//                buffSetMemoService.assetRemarkChange();
+//            }
+//        });
 
     }
 }

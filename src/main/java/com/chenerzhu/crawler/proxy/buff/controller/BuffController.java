@@ -38,6 +38,9 @@ public class BuffController {
     @Autowired
     OrderHistoryService orderHistoryService;
 
+    @Autowired
+    BuffSetMemoService buffSetMemoService;
+
 
 
     /**
@@ -125,5 +128,14 @@ public class BuffController {
 
 
 
-
+    /**
+     * buff商品设置成本价格
+     */
+    @RequestMapping("remarkChange")
+    @ResponseBody
+    public void remarkChange() {
+        BuffApplicationRunner.buffUserDataThreadLocal.set(BuffApplicationRunner.buffUserDataList.get(0));
+        CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
+        buffSetMemoService.assetRemarkChange();
+    }
 }
