@@ -106,6 +106,20 @@ public class BuffController {
         System.out.println("接口调用，buff自动上架完成");
     }
 
+
+
+    /**
+     * buff自动上架
+     */
+    @RequestMapping("autoSale")
+    @ResponseBody
+    public void autoSale() {
+        BuffApplicationRunner.buffUserDataThreadLocal.set(BuffApplicationRunner.buffUserDataList.get(0));
+        CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
+        steamInventorySerivce.autoSale();
+        System.out.println("接口调用，buff自动上架完成");
+    }
+
     /**
      * 拉取商品的历史交易价格
      */

@@ -16,6 +16,8 @@ import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyRoot;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
+import com.chenerzhu.crawler.proxy.steam.entity.Descriptions;
+import com.chenerzhu.crawler.proxy.steam.repository.DescriptionsRepository;
 import com.chenerzhu.crawler.proxy.steam.service.SteamBuyItemService;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.CheckWearUtil;
@@ -52,6 +54,9 @@ public class SteamInventorySerivce {
 
     @Value("${buff_user_id}")
     private String buffUserIds;
+
+    @Autowired
+    DescriptionsRepository descriptionsRepository;
 
 
     /**
@@ -94,113 +99,97 @@ public class SteamInventorySerivce {
      */
     public Boolean autoSale() {
         List<Items> items = steamInventory();
-        items = filterItem(items);
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         if (items.isEmpty()) {
             log.info("buff账号:{},库存中没有可上架饰品", buffUserData.getAcount());
             return false;
         }
-        //建立 assetid-classid-instanceid：paintwear的关系
-        Map<String, String> keyAndPaintwear = items.stream().collect(Collectors.toMap(Items::getAssetidClassidInstanceid, item -> item.getAsset_info().getPaintwear()));
-        List<Assets> assets = changeAssets(items);
+        //获取steam库存信息
+        List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(buffUserData.getSteamId());
+        if (allBySteamId.isEmpty()) {
+            throw new RuntimeException("buff账号:"+buffUserData.getAcount() +" 未更新库存");
+        }
+        Map<String, Double> cdKeyIdAndPrice = allBySteamId.stream().filter(o->o.getBuy_price() != null).collect(Collectors.toMap(Descriptions::getCdkey_id, Descriptions::getBuy_price));
+        List<Assets> assets = new ArrayList<>();
         int count = 0;
-        for (Assets asset : assets) {
-            if (StrUtil.isNotEmpty(asset.getPrice())) {
+        for (Items item : items) {
+            Double sellMinPrice = Double.valueOf(item.getSell_min_price()) ;
+            //限制售卖的价格
+            if (sellMinPrice > 50) {
                 continue;
             }
-            if (count > 10) {
-                assets.remove(asset);
+           // 没有完全刷新库存信息
+            Double buyPrice = cdKeyIdAndPrice.get(item.getAssetidClassidInstanceid());
+            if (buyPrice == null){
                 continue;
             }
-            //有磨损度的饰品
-            String paintwear = keyAndPaintwear.getOrDefault(asset.assetidClassidInstanceid(), "");
-            if (StrUtil.isEmpty(paintwear)) {
-                //以防万一
-                assets.remove(asset);
+            //低于成本，不售卖
+            if (sellMinPrice < buyPrice * 6){
+                continue;
             }
-            String sellPrice = getSellPrice(asset.getGoods_id(), paintwear);
-            asset.setPrice(sellPrice);
-            Double income = Double.valueOf(asset.getPrice()) * 0.975;
-            asset.setIncome(String.valueOf(income));
-            log.info("饰品:{}准备上架数据中,磨损度:{},在售价格:{}", asset.getMarket_hash_name(), paintwear, asset.getPrice());
+            Double realtimeSellPrice = getSellPrice(String.valueOf(item.getGoods_id()));
+            //低于成本，不售卖
+            if (realtimeSellPrice < buyPrice * 6){
+                continue;
+            }
+            Assets asset = buildSell_orderParam(item, realtimeSellPrice);
             count++;
+            log.info("饰品:{}准备上架数据中,在售价格:{}", asset.getMarket_hash_name(), asset.getPrice());
+            assets.add(asset);
+            if (count > 40) {
+                if ( !sellOrderCreate(assets)){
+                    return false;
+                }
+                log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
+                SleepUtil.sleep(30 * 1000);
+                assets.clear();
+            }
+
         }
-        Boolean gotoUp = false;
-        gotoUp = sellOrderCreate(assets);
+        if ( !sellOrderCreate(assets)){
+            return false;
+        }
         log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
-        SleepUtil.sleep(30 * 1000);
-        long count1 = assets.stream().filter(assets1 -> priceMax.equals(assets1.getPrice())).count();
-        if (count1 != 0) {
-            //下架没有磨损度的商品
-            downOnSale();
-            gotoUp = true;
-        }
-        return gotoUp;
+        assets.clear();
+        return true;
     }
 
+
+    public Assets buildSell_orderParam(Items item, Double realtimeSellPrice){
+        Assets asset = new Assets();
+        asset.setAssetid(item.getAsset_info().getAssetid());
+        asset.setClassid(item.getAsset_info().getClassid());
+        asset.setInstanceid(item.getAsset_info().getInstanceid());
+        asset.setMarket_hash_name(item.getMarket_hash_name());
+        asset.setGoods_id(String.valueOf(item.getGoods_id()));
+        asset.setPrice(String.valueOf(realtimeSellPrice));
+        asset.setIncome(String.valueOf(realtimeSellPrice * 0.975));
+        return asset;
+    }
     public static void main(String[] args) {
 
     }
 
 
-    /**
-     * 过滤不可上架的饰品
-     *
-     * @param items
-     * @return
-     */
-    public List<Items> filterItem(List<Items> items) {
-
-        items = items.stream().filter(item -> {
-            String sell_min_price = item.getSell_min_price();
-            //大于43的不自动上架
-            if (43 < Double.valueOf(sell_min_price)) {
-                log.info("饰品:{}价格为:{}大于43不自动上架", item.getName(), sell_min_price);
-                return false;
-            }
-            //校验是特殊磨损,是的话有值返回
-            String painwear = item.getPainwear();
-            if (StrUtil.isNotEmpty(painwear)) {
-                String painwearStr = CheckWearUtil.checkWear(painwear);
-                if (StrUtil.isNotEmpty(painwearStr)) {
-                    log.info("饰品:{},特殊磨损为:{},不自动上架", item.getName(), painwearStr);
-                    return false;
-                }
-            }
-            //校验成本
-            return item.cehck_isSale_remark_cost();
-        }).collect(Collectors.toList());
-        return items;
-    }
 
     /**
      * 根据磨损度获取售卖列表的价格
      *
      * @return
      */
-    public String getSellPrice(String goods_id, String paintwear) {
-        String paintwearInterval = getPaintwearInterval(paintwear);
-        String min_paintwear = paintwearInterval.split("-")[0];
-        String max_paintwear = paintwearInterval.split("-")[1];
+    public Double getSellPrice(String goods_id) {
+        SleepUtil.sleep(5500);
         String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id
                 + "&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&min_paintwear="
-                + min_paintwear + "&max_paintwear=" + max_paintwear + "&_=" + System.currentTimeMillis();
+                + "&_=" + System.currentTimeMillis();
         ResponseEntity<BuffBuyRoot> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), BuffBuyRoot.class);
         BuffBuyRoot body = responseEntity.getBody();
         BuffBuyData data = body.getData();
         List<BuffBuyItems> items = data.getItems();
-        SleepUtil.sleep(5500);
-        if (items.size() < 2) {
-            double paintwearf = Double.valueOf(paintwear) + 0.01;
-            return getSellPrice(goods_id, String.valueOf(paintwearf));
-        }
         BuffBuyItems buffBuyItems = items.get(1);
         Double price = Double.valueOf(buffBuyItems.getPrice());
-        if (StrUtil.isEmpty(buffUserIds) || buffUserIds.contains(buffBuyItems.getUser_id())) {
-            return String.valueOf(price);
-        }
-        String priceStr = String.valueOf(price - 0.01);
-        return priceStr;
+
+        return price;
     }
 
 
@@ -248,7 +237,7 @@ public class SteamInventorySerivce {
             asset.setGoods_id(String.valueOf(item.getGoods_id()));
             String paintwear = item.getAsset_info().getPaintwear();
             if (StrUtil.isEmpty(paintwear)) {
-                asset.setPrice(priceMax);
+
                 Double income = Double.valueOf(asset.getPrice()) * 0.975;
                 asset.setIncome(income.toString());
             }
@@ -340,6 +329,9 @@ public class SteamInventorySerivce {
      */
 
     public Boolean sellOrderCreate(List<Assets> assets) {
+        if (assets.isEmpty()){
+            return false;
+        }
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Csrftoken", BuffConfig.getCookieOnlyKey("csrf_token"));
