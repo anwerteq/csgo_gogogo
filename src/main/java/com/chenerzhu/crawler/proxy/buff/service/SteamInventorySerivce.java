@@ -134,7 +134,7 @@ public class SteamInventorySerivce {
             }
             Assets asset = buildSell_orderParam(item, realtimeSellPrice);
             count++;
-            log.info("饰品:{}准备上架数据中,在售价格:{}", asset.getMarket_hash_name(), asset.getPrice());
+            log.info("饰品:{}准备上架数据中,在售价格:{},成本价格：{}", asset.getMarket_hash_name(), asset.getPrice(), buyPrice * 6);
             assets.add(asset);
             if (count > 40) {
                 if ( !sellOrderCreate(assets)){
