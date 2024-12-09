@@ -7,12 +7,14 @@ import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Actions;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Market_actions;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Owner_descriptions;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Tags;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
 
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -105,6 +107,10 @@ public class Descriptions {
      */
     @Column
     private String  buy_type;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime create_date;
+
 
     @Transient
     public void refreashCdkey_id() {

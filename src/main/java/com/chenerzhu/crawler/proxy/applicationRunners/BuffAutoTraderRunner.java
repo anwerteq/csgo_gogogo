@@ -28,7 +28,7 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (!auto_trader) {
+        if (true) {
             return;
         }
         PullItemService.executorService.execute(() -> {

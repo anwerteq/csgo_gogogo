@@ -62,9 +62,9 @@ public class SteamInventorySerivce {
     /**
      * 获取buff中可出售的库存数据
      */
-    public List<Items> steamInventory() {
+    public List<Items> steamInventory(int page_num) {
         //查询的为可交易的
-        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=1000&search=&state=cansell&_=" + System.currentTimeMillis();
+        String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=500&search=&state=cansell&_=" + System.currentTimeMillis()+"&page_num="+page_num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
         List<Items> items = steamInventoryRoot.getData().getItems();
@@ -97,8 +97,8 @@ public class SteamInventorySerivce {
     /**
      * 自动上架逻辑
      */
-    public Boolean autoSale() {
-        List<Items> items = steamInventory();
+    public Boolean autoSale(int page_num) {
+        List<Items> items = steamInventory(page_num);
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         if (items.isEmpty()) {
             log.info("buff账号:{},库存中没有可上架饰品", buffUserData.getAcount());
@@ -115,21 +115,18 @@ public class SteamInventorySerivce {
         for (Items item : items) {
             Double sellMinPrice = Double.valueOf(item.getSell_min_price()) ;
             //限制售卖的价格
-            if (sellMinPrice > 50) {
-                continue;
-            }
            // 没有完全刷新库存信息
             Double buyPrice = cdKeyIdAndPrice.get(item.getAssetidClassidInstanceid());
             if (buyPrice == null){
                 continue;
             }
             //低于成本，不售卖
-            if (sellMinPrice < buyPrice * 6){
+            if (sellMinPrice <= buyPrice * 6){
                 continue;
             }
             Double realtimeSellPrice = getSellPrice(String.valueOf(item.getGoods_id()));
             //低于成本，不售卖
-            if (realtimeSellPrice < buyPrice * 6){
+            if (realtimeSellPrice <= buyPrice * 6){
                 continue;
             }
             Assets asset = buildSell_orderParam(item, realtimeSellPrice);
@@ -143,6 +140,7 @@ public class SteamInventorySerivce {
                 log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
                 SleepUtil.sleep(30 * 1000);
                 assets.clear();
+                count= 0;
             }
 
         }

@@ -102,7 +102,7 @@ public class BuffController {
     @RequestMapping("steamInventory")
     @ResponseBody
     public void steamInventory() {
-        steamInventorySerivce.steamInventory();
+        steamInventorySerivce.steamInventory(1);
         System.out.println("接口调用，buff自动上架完成");
     }
 
@@ -116,7 +116,8 @@ public class BuffController {
     public void autoSale() {
         BuffApplicationRunner.buffUserDataThreadLocal.set(BuffApplicationRunner.buffUserDataList.get(0));
         CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
-        steamInventorySerivce.autoSale();
+        int page_num=1;
+        while (steamInventorySerivce.autoSale(page_num++));
         System.out.println("接口调用，buff自动上架完成");
     }
 

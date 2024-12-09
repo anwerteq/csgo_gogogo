@@ -65,10 +65,10 @@ public class BuffAutoSaleRunner implements ApplicationRunner {
 
     public void autoSale(BuffUserData buffUserData) {
         try {
-            //上架商品
-            while (steamInventorySerivce.autoSale()) {
-
-            }
+//            //上架商品
+//            while (steamInventorySerivce.autoSale()) {
+//
+//            }
         } catch (Exception e) {
             log.info("buff账号:{},自动上架异常", buffUserData.getAcount(), e);
         }

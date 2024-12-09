@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Transient;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -65,10 +68,11 @@ public class SteamInventoryService {
         return inventoryRootBean;
     }
 
+    @Transactional
     public void refreshSteamInventory() {
         InventoryRootBean steamInventory = getSteamInventory();
-        Map<String, List<Assets>>  keyAndAssets = steamInventory.getAssets().stream().collect(Collectors.groupingBy(o1-> o1.getClassid() + o1.getInstanceid()));
-        Map<String, Descriptions> keyAndDescriptions = steamInventory.getDescriptions().stream().collect(Collectors.toMap(o1 -> o1.getClassid() + o1.getInstanceid(), o2 -> o2, (o1, o2) -> o1, HashMap::new));
+        Map<String, List<Assets>>  keyAndAssets = steamInventory.getAssets().stream().collect(Collectors.groupingBy(o1-> o1.getClassid() +"-"+ o1.getInstanceid()));
+        Map<String, Descriptions> keyAndDescriptions = steamInventory.getDescriptions().stream().collect(Collectors.toMap(o1 -> o1.getClassid() +"-"+ o1.getInstanceid(), o2 -> o2, (o1, o2) -> o1, HashMap::new));
         List<Descriptions> descriptionsList = new ArrayList<>();
         Map<String, Double> hashNameAndPrice = iItemGoodsRepository.findAll().stream().collect(Collectors.toMap(ItemGoods::getMarketHashName, ItemGoods::getSell_min_price));
         String steamID = SteamTheadeUtil.getThreadSteamUserDate().getSession().getSteamID();
@@ -84,6 +88,7 @@ public class SteamInventoryService {
                 Double price = hashNameAndPrice.get(descriptionsNew.getMarket_hash_name());
                 descriptionsNew.setBuff_min_price(price);
                 descriptionsNew.refreashCdkey_id();
+                descriptionsNew.setCreate_date(LocalDateTime.now());
                 descriptionsNew.refreshSteamInventoryMarkId();
                 descriptionsList.add(descriptionsNew);
             }
@@ -102,7 +107,7 @@ public class SteamInventoryService {
             }
         }
         descriptionsRepository.deleteBySteamId(steamID);
-        CompletableFuture.supplyAsync(()->descriptionsRepository.saveAll(descriptionsList));
+        descriptionsRepository.saveAll(descriptionsList);
     }
 
 
