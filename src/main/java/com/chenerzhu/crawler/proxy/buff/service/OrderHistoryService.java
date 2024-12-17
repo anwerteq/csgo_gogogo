@@ -47,32 +47,33 @@ public class OrderHistoryService {
         Set<Integer> numbers = allByMobileNumber.stream().map(BuffCostEntity::getNumber).collect(Collectors.toSet());
         int pageCount = getPageCount();
         //pageCount没有数据
-        List<BuffCostEntity> buffCostEntities = pullOnePageHistory(pageCount);
-        if (CollectionUtil.isEmpty(buffCostEntities)) {
+        List<BuffCostEntity> onebuffCostEntities = pullOnePageHistory(pageCount);
+        if (CollectionUtil.isEmpty(onebuffCostEntities)) {
             pageCount--;
         }
         //pageCount 页不满10条
-        List<BuffCostEntity> buffCostEntitiesLadt = pullOnePageHistory(pageCount);
+        List<BuffCostEntity> twoBuffCostEntitiesLadt = pullOnePageHistory(pageCount);
         int count = 0;
-        Collections.reverse(buffCostEntitiesLadt);
-        for (BuffCostEntity buffCostEntity : buffCostEntitiesLadt) {
+        Collections.reverse(twoBuffCostEntitiesLadt);
+        for (BuffCostEntity buffCostEntity : twoBuffCostEntitiesLadt) {
             buffCostEntity.setNumber(++count);
             buffCostEntity.refreashCdkey_id();
         }
-        buffCostRepository.saveAll(buffCostEntities);
+        buffCostRepository.saveAll(twoBuffCostEntitiesLadt);
         pageCount--;
         //
         for (int i = 1; i <= pageCount * 10; i++) {
             if (!numbers.contains(count+i)) {
-                buffCostEntities = pullOnePageHistory(pageCount);
-                Collections.reverse(buffCostEntities);
-                for (BuffCostEntity buffCostEntity : buffCostEntities) {
-                    buffCostEntity.setNumber(count+i);
+                onebuffCostEntities = pullOnePageHistory(pageCount);
+                Collections.reverse(onebuffCostEntities);
+                int count_i = 0;
+                for (BuffCostEntity buffCostEntity : onebuffCostEntities) {
+                    buffCostEntity.setNumber(count+i+(++count_i));
                     buffCostEntity.refreashCdkey_id();
                 }
-                buffCostRepository.saveAll(buffCostEntities);
+                buffCostRepository.saveAll(onebuffCostEntities);
                 pageCount--;
-                i = i/10 + 10;
+                i = (i/10)*10 + 10;
             }
         }
     }
@@ -174,6 +175,7 @@ public class OrderHistoryService {
             buffCostEntity.setBuff_cost(Double.valueOf(priceRmb));
             arrayList.add(buffCostEntity);
         }
+        log.info("拉取buff历史交易记录条数为为："+arrayList.size());
         return arrayList;
     }
 }
