@@ -70,6 +70,7 @@ public class SteamInventoryService {
 
     @Transactional
     public void refreshSteamInventory() {
+        log.info("开始拉取steam 接口中的的库存信息");
         InventoryRootBean steamInventory = getSteamInventory();
         Map<String, List<Assets>>  keyAndAssets = steamInventory.getAssets().stream().collect(Collectors.groupingBy(o1-> o1.getClassid() +"-"+ o1.getInstanceid()));
         Map<String, Descriptions> keyAndDescriptions = steamInventory.getDescriptions().stream().collect(Collectors.toMap(o1 -> o1.getClassid() +"-"+ o1.getInstanceid(), o2 -> o2, (o1, o2) -> o1, HashMap::new));
@@ -108,6 +109,7 @@ public class SteamInventoryService {
         }
         descriptionsRepository.deleteBySteamId(steamID);
         descriptionsRepository.saveAll(descriptionsList);
+        log.info("刷新steam库存信息完成");
     }
 
 

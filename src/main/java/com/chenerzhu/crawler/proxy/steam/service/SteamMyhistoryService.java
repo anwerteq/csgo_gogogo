@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
@@ -49,7 +50,7 @@ public class SteamMyhistoryService {
         int start = 1;
         while (true) {
             log.info("start的值为：{}", start);
-            Boolean marketMyhistory = getMarketMyhistory(start,200);
+            Boolean marketMyhistory = getMarketMyhistory(start,500);
             if (marketMyhistory == null) {
 
             }else if (marketMyhistory) {
@@ -75,6 +76,7 @@ public class SteamMyhistoryService {
             steamMyhistoryRoot = JSON.parseObject(resStr, MarketListingResponse.class);
         }catch (JSONException e){
             log.error("getMarketMyhistory 序列化失败，进行序列化信息为："+resStr);
+            ThreadUtil.sleep(30000);
             return false;
         }
         if (steamMyhistoryRoot.getTotal_count() == 0){
@@ -97,6 +99,7 @@ public class SteamMyhistoryService {
             cz75Item.refreshSteamInventoryMarkId();
             return cz75Item;
         }).collect(Collectors.toList());
+        log.info("保存的steam市场信息，共："+collect.size()+"条");
         CompletableFuture.supplyAsync(()->cz75ItemRepository.saveAll(collect));
         SleepUtil.sleep(3000);
         return true;

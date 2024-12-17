@@ -32,9 +32,11 @@ public class BuffSetMemoService {
      * 设置成本的主要逻辑
      */
     public void assetRemarkChange() {
+        log.info("开始更新buff的备注信息");
         String steamId = BuffApplicationRunner.buffUserDataThreadLocal.get().getSteamId();
         List<Descriptions> allByBySteamId = descriptionsRepository.findAllBySteamId(steamId);
-        List<Descriptions> descriptionsList = allByBySteamId.stream().filter(descriptions -> ObjectUtil.isNotNull(descriptions.getBuy_price())).collect(Collectors.toList());
+        List<Descriptions> descriptionsList = allByBySteamId;
+                //allByBySteamId.stream().filter(descriptions -> ObjectUtil.isNotNull(descriptions.getBuy_price())).collect(Collectors.toList());
         List<Descriptions> childList = new ArrayList<>();
         for (Descriptions descriptions : descriptionsList) {
             childList.add(descriptions);
@@ -44,6 +46,7 @@ public class BuffSetMemoService {
             }
         }
         remarkChange(childList);
+        log.info("更新buff的备注信息结束");
     }
 
 
@@ -85,7 +88,12 @@ public class BuffSetMemoService {
         List<Map<String, Object>> assets = new ArrayList<>();
         for (Descriptions descriptions : descriptionsList) {
             Map<String, Object> hashMap = new HashMap();
-            hashMap.put("remark", "成本:" + descriptions.getBuy_price() + "元");
+           if (descriptions.getBuy_price() != null){
+               hashMap.put("remark", "成本:" + descriptions.getBuy_price() + "元");
+           }else {
+               hashMap.put("remark", "");
+           }
+
             hashMap.put("assetid", descriptions.getAssetid());
             assets.add(hashMap);
         }

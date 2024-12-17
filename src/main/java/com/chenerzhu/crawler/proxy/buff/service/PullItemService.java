@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
@@ -85,6 +86,7 @@ public class PullItemService {
                 pullItmeGoods(type);
             }
         }
+        log.info("拉取buff市场信息完成");
     }
 
     public void pullItmeGoods(String category_group) {
@@ -101,8 +103,9 @@ public class PullItemService {
 
     public Boolean pullItmeGoods(Integer page_num,String category_group) {
         String url1 = "https://buff.163.com/api/market/goods?game=" + GameCommet.getGame() + "&page_num=" + page_num
-                + "&use_suggestion=0&_=1684057330094&page_size=80&category_group=" + category_group;
-        SleepUtil.sleep(10000);
+                + "&use_suggestion=0&_="+ System.currentTimeMillis()+"&page_size=80&category_group=" + category_group;
+        log.info("正在拉取类型：{}，页数：{}，每页大小：{}",category_group,page_num,80);
+        ThreadUtil.sleep(10 *1000);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url1, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         if (responseEntity.getStatusCode().value() == 302) {
             return false;

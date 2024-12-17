@@ -41,7 +41,7 @@ public class OrderHistoryService {
      * @param num
      */
     public void pullOrderHistory(int num){
-        String url = "https://buff.163.com/market/buy_order/history?game=csgo&page_num="+ num;
+        String url = "https://buff.163.com/market/buy_order/history?game=csgo&state=success&page_num="+ num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         String body = responseEntity.getBody();
         parseBod(body);

@@ -138,6 +138,9 @@ public class BuffController {
     @RequestMapping("pullOrderHistorys")
     @ResponseBody
     public void pullOrderHistorys() {
+        BuffApplicationRunner.buffUserDataThreadLocal.set(BuffApplicationRunner.buffUserDataList.get(0));
+        CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
+
         orderHistoryService.pullOrderHistory();
     }
 
