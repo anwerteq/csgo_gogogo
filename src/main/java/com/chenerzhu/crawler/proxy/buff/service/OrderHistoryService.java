@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.csgo.repository.BuffCostRepository;
@@ -31,35 +32,37 @@ public class OrderHistoryService {
 
 
     public void pullOrderHistory(){
-        int num = 0;
-        while (num < 400){
-            num = num +1;
-            log.info("buff拉取，第{}页",num);
-            pullOrderHistory(num);
-        }
+        int num = 1;
+        while ( pullOrderHistory(num++));
     }
 
     /**
      * 拉取buff的历史订单数据
      * @param num
      */
-    public void pullOrderHistory(int num){
+    public Boolean pullOrderHistory(int num){
+        log.info("buff拉取，第{}页",num);
+        ThreadUtil.sleep(10 * 1000);
         String url = "https://buff.163.com/market/buy_order/history?game=csgo&state=success&page_num="+ num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         String body = responseEntity.getBody();
-        parseBod(body);
+        return parseBod(body);
     }
 
     /**
      * 解析parsebody
      * @param body
      */
-    public void parseBod(String body) {
+    public Boolean parseBod(String body) {
         List<BuffCostEntity> arrayList = new ArrayList();
         Document document = Jsoup.parse(body);
         Elements list_tb_csgo = document.getElementsByClass("list_tb_csgo");
         Element element = list_tb_csgo.get(0);
         Elements tr = element.getElementsByTag("tr");
+        String nodata = tr.get(0).getElementsByClass("nodata").text();
+        if (nodata.length()< 10){
+            return false;
+        }
         for (Element elementTr : tr) {
             //解析出需要的对象
             BuffCostEntity buffCostEntity = new BuffCostEntity();
@@ -87,6 +90,6 @@ public class OrderHistoryService {
         if (arrayList.size() > 0){
             buffCostRepository.saveAll(arrayList);
         }
-
+        return true;
     }
 }
