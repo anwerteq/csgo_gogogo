@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +62,13 @@ public class OrderHistoryService {
         buffCostRepository.saveAll(twoBuffCostEntitiesLadt);
         pageCount--;
         //
-        for (int i = 1; i <= pageCount * 10; i++) {
+        int allPageCount = pageCount;
+        for (int i = 1; i <= allPageCount * 10; i++) {
+            //十条都保存过
+            if (numbers.contains(count + i) && i%10 == 0) {
+                pageCount--;
+            }
+
             if (!numbers.contains(count + i)) {
                 List<BuffCostEntity> threeBuffCostEntities = pullOnePageHistory(pageCount);
                 Collections.reverse(threeBuffCostEntities);
@@ -70,9 +77,12 @@ public class OrderHistoryService {
                     buffCostEntity.setNumber(count + i + (count_i++));
                     buffCostEntity.refreashCdkey_id();
                 }
-                buffCostRepository.saveAll(threeBuffCostEntities);
+                CompletableFuture.runAsync(()-> buffCostRepository.saveAll(threeBuffCostEntities));
                 pageCount--;
-                i = (i / 10) * 10 + 10;
+                if (i%10 != 0) {
+                    //前九个存在，进入下一组
+                    i = (i / 10) * 10 + 10;
+                }
             }
         }
     }
@@ -120,7 +130,7 @@ public class OrderHistoryService {
      */
     public List<BuffCostEntity> pullOnePageHistory(int num) {
         log.info("buff拉取，第{}页", num);
-        ThreadUtil.sleep(10 * 1000);
+        ThreadUtil.sleep(5 * 1000);
         String url = "https://buff.163.com/market/buy_order/history?game=csgo&page_num=" + num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         String body = responseEntity.getBody();
