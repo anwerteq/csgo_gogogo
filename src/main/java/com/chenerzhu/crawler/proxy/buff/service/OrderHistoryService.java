@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,16 +36,52 @@ public class OrderHistoryService {
     BuffCostRepository buffCostRepository;
 
 
-    public void pullOrderHistory(){
-        int num = 1;
-        while ( pullOrderHistory(num++));
-    }
+
 
     /**
      * 拉取buff的历史订单数据
-     * @param num
+     * @param
      */
-    public Boolean pullOrderHistory(int num){
+    public void pullOrderHistory(){
+        List<BuffCostEntity> allByMobileNumber = buffCostRepository.findAllByMobileNumberOrderByNumberAsc(BuffApplicationRunner.buffUserDataThreadLocal.get().getAcount());
+        Set<Integer> numbers = allByMobileNumber.stream().map(BuffCostEntity::getNumber).collect(Collectors.toSet());
+        int pageCount = getPageCount();
+        //pageCount没有数据
+        List<BuffCostEntity> buffCostEntities = pullOnePageHistory(pageCount);
+        if (CollectionUtil.isEmpty(buffCostEntities)) {
+            pageCount--;
+        }
+        //pageCount 页不满10条
+        List<BuffCostEntity> buffCostEntitiesLadt = pullOnePageHistory(pageCount);
+        int count = 0;
+        Collections.reverse(buffCostEntitiesLadt);
+        for (BuffCostEntity buffCostEntity : buffCostEntitiesLadt) {
+            buffCostEntity.setNumber(++count);
+            buffCostEntity.refreashCdkey_id();
+        }
+        buffCostRepository.saveAll(buffCostEntities);
+        pageCount--;
+        //
+        for (int i = 1; i <= pageCount * 10; i++) {
+            if (!numbers.contains(count+i)) {
+                buffCostEntities = pullOnePageHistory(pageCount);
+                Collections.reverse(buffCostEntities);
+                for (BuffCostEntity buffCostEntity : buffCostEntities) {
+                    buffCostEntity.setNumber(count+i);
+                    buffCostEntity.refreashCdkey_id();
+                }
+                buffCostRepository.saveAll(buffCostEntities);
+                pageCount--;
+                i = i/10 + 10;
+            }
+        }
+    }
+
+    /**
+     * 获取buff 历史交易的页数
+     * @return
+     */
+    public int getPageCount(){
         //最大页数
         int top_count= 100 * 10;
         int temp_count=top_count / 2;
@@ -51,6 +90,10 @@ public class OrderHistoryService {
         //二分法，算出有数据的最后一页
         while (true){
             List<BuffCostEntity> buffCostEntities = pullOnePageHistory(temp_count);
+            //最后一页，不足10个
+            if (buffCostEntities.size() != 0 && buffCostEntities.size() < 10){
+                break;
+            }
             //是空集合
             if (CollectionUtil.isEmpty(buffCostEntities)){
                 //往下
@@ -61,13 +104,12 @@ public class OrderHistoryService {
                 down_count= temp_count;
                 temp_count = (top_count -  temp_count) /2 +down_count;
             }
-            //最后一页，不足10个
-            if (buffCostEntities.size() != 0 && buffCostEntities.size() < 10){
+            //最后一页是十个则退出
+            if (top_count == temp_count || down_count == temp_count){
                 break;
             }
         }
-
-        return true;
+        return temp_count;
     }
 
     /**
@@ -76,7 +118,7 @@ public class OrderHistoryService {
      */
     public List<BuffCostEntity> pullOnePageHistory(int num){
         log.info("buff拉取，第{}页",num);
-        ThreadUtil.sleep(3 * 1000);
+        ThreadUtil.sleep(10 * 1000);
         String url = "https://buff.163.com/market/buy_order/history?game=csgo&page_num="+ num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         String body = responseEntity.getBody();

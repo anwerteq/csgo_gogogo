@@ -1,9 +1,12 @@
 package com.chenerzhu.crawler.proxy.csgo.repository;
 
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
+import com.sun.mail.imap.protocol.ID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface BuffCostRepository extends JpaRepository<BuffCostEntity, String> {
@@ -47,4 +50,7 @@ public interface BuffCostRepository extends JpaRepository<BuffCostEntity, String
 
     @Query(value = " select * from buff_cost where  hash_name = ?1  order by buff_cost desc  limit 1", nativeQuery = true)
     BuffCostEntity selectOneNotMate(String  hashName);
+
+    // 按 number 字段正序排序
+    List<BuffCostEntity> findAllByMobileNumberOrderByNumberAsc(String mobileNumber);
 }
