@@ -147,7 +147,9 @@ public class SampleWebCookie implements Runnable {
         authSessionDetails.password = pass;
         authSessionDetails.persistentSession = false;
         UserConsoleAuthenticatorimpl userConsoleAuthenticatorimpl = new UserConsoleAuthenticatorimpl();
-        userConsoleAuthenticatorimpl.setSharedSecret(steamUserDate.getShared_secret());
+        if(steamUserDate != null) {
+            userConsoleAuthenticatorimpl.setSharedSecret(steamUserDate.getShared_secret());
+        }
         authSessionDetails.authenticator = userConsoleAuthenticatorimpl;
 
         // get the authentication handler, which used for authenticating with Steam

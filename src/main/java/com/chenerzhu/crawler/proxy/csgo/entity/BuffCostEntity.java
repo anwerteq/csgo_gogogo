@@ -18,6 +18,8 @@ public class BuffCostEntity {
 
     @Id
     @Column(length = 155)
+    private String id;
+    @Column
     private String cdkey_id;
 
     @Column(length = 126)
@@ -44,6 +46,12 @@ public class BuffCostEntity {
     String classid;
     @Column(length = 126)
     String instanceid;
+
+    /**
+     * 状态文本
+     */
+    @Column
+    String statucText;
 
 
 
@@ -73,6 +81,20 @@ public class BuffCostEntity {
      */
     @Column
     Date create_time;
+
+
+    /**
+     * 手机号
+     */
+    @Column
+    String mobileNumber;
+
+
+    /**
+     * 手机号
+     */
+    @Column
+    int number;
 
     /**
      * 更新时间

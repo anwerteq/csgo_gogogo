@@ -133,7 +133,7 @@ public class SampleWebApi implements Runnable {
         LogOnDetails details = new LogOnDetails();
         details.setUsername(user);
         details.setPassword(pass);
-//        details.setTwoFactorCode(SampleLogonAuthentication.generateOneTimeCode("vbAREhPkibtwemEklyePZH2b73c", null));
+        details.setTwoFactorCode(SampleLogonAuthentication.generateOneTimeCode("vbAREhPkibtwemEklyePZH2b73c", null));
 
         // Set LoginID to a non-zero value if you have another client connected using the same account,
         // the same private ip, and same public ip.
