@@ -5,7 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
 import com.chenerzhu.crawler.proxy.buff.ExecutorUtil;
-import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.buff.service.ProfitService;
 import com.chenerzhu.crawler.proxy.buff.service.PullItemService;
 import com.chenerzhu.crawler.proxy.config.CookiesConfig;

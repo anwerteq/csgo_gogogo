@@ -1,4 +1,4 @@
-package com.chenerzhu.crawler.proxy.buff.entity;
+package com.chenerzhu.crawler.proxy.csgo.entity;
 
 import lombok.Data;
 import lombok.ToString;
@@ -6,7 +6,9 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
+import java.util.StringJoiner;
 
 /**
  * buff购买记录表
@@ -18,7 +20,7 @@ import java.util.Date;
 public class BuffCostEntity {
 
     @Id
-    private String costId;
+    private String cdkey_id;
 
     String name;
     /**
@@ -34,9 +36,11 @@ public class BuffCostEntity {
 
 
     String hash_name;
-    long assetid;
+    String assetid;
 
-    long classid;
+    String classid;
+
+    String instanceid;
 
 
 
@@ -67,5 +71,14 @@ public class BuffCostEntity {
      */
     Date update_time;
 
+
+    @Transient
+    public void refreashCdkey_id() {
+        StringJoiner sj = new StringJoiner("-");
+        sj.add(assetid);
+        sj.add(classid);
+        sj.add(instanceid);
+        setCdkey_id(sj.toString());
+    }
 
 }

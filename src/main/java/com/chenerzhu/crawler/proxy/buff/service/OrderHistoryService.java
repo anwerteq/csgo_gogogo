@@ -1,9 +1,9 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
 import com.chenerzhu.crawler.proxy.buff.BuffConfig;
-import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.repository.BuffCostRepository;
 import com.chenerzhu.crawler.proxy.csgo.service.BuffCostService;
-import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +25,9 @@ public class OrderHistoryService {
     RestTemplate restTemplate;
     @Autowired
     BuffCostService buffCostService;
+
+    @Autowired
+    BuffCostRepository buffCostRepository;
 
 
     public void pullOrderHistory(){
@@ -62,25 +65,28 @@ public class OrderHistoryService {
             BuffCostEntity buffCostEntity = new BuffCostEntity();
             Elements tds = elementTr.getElementsByTag("td");
             String statucText = tds.get(6).text();
-            if (!"购买成功".equals(statucText)){
-                continue;
+            if ("购买成功".equals(statucText) || statucText.contains("求购成功")){
+                String name = tds.get(2).getElementsByTag("h3").get(0).text();
+                buffCostEntity.setName(name);
+                //assId 和classId在第一个
+                Element assidAndClassId = tds.get(1).child(0);
+                String assetid =assidAndClassId.attr("data-assetid");
+                buffCostEntity.setAssetid(assetid);
+                String classid =assidAndClassId.attr("data-classid");
+                buffCostEntity.setClassid(classid);
+                String instanceid = assidAndClassId.attr("data-instanceid");
+                buffCostEntity.setInstanceid(instanceid);
+                buffCostEntity.refreashCdkey_id();
+                Element element1 = tds.get(3);
+                Element child = element1.child(0);
+                String priceRmb = child.text().replace("¥ ","");
+                buffCostEntity.setBuff_cost(Double.valueOf(priceRmb));
+                arrayList.add(buffCostEntity);
             }
-            String name = tds.get(2).getElementsByTag("h3").get(0).text();
-            buffCostEntity.setName(name);
-            //assId 和classId在第一个
-            Element assidAndClassId = tds.get(1).child(0);
-            String assetid =assidAndClassId.attr("data-assetid");
-            buffCostEntity.setAssetid(Long.valueOf(assetid));
-            String classid =assidAndClassId.attr("data-classid");
-            buffCostEntity.setClassid(Long.valueOf(classid));
-            String instanceid = assidAndClassId.attr("data-instanceid");
-            Element element1 = tds.get(3);
-            Element child = element1.child(0);
-            String priceRmb = child.text().replace("¥ ","");
-            buffCostEntity.setBuff_cost(Double.valueOf(priceRmb));
-            arrayList.add(buffCostEntity);
         }
-        SleepUtil.sleep(1500);
-        buffCostService.byOrderHistorySave(arrayList);
+        if (arrayList.size() > 0){
+            buffCostRepository.saveAll(arrayList);
+        }
+
     }
 }

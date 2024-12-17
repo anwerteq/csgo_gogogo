@@ -2,7 +2,7 @@ package com.chenerzhu.crawler.proxy.csgo.service;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.BuffBuyItems;
 import com.chenerzhu.crawler.proxy.csgo.repository.BuffCostRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -30,10 +29,10 @@ public class BuffCostService {
 
     public BuffCostEntity createMarkCost(BuffBuyItems buyItem) {
         BuffCostEntity buffCostEntity = new BuffCostEntity();
-        buffCostEntity.setCostId(UUID.randomUUID().toString());
-        buffCostEntity.setBuff_cost(Double.valueOf(buyItem.getPrice()));
-        buffCostEntity.setAssetid(Long.valueOf(buyItem.getAsset_info().getAssetid()));
-        buffCostEntity.setClassid(Long.valueOf(buyItem.getAsset_info().getClassid()));
+//        buffCostEntity.setCostId(UUID.randomUUID().toString());
+//        buffCostEntity.setBuff_cost(Double.valueOf(buyItem.getPrice()));
+//        buffCostEntity.setAssetid(Long.valueOf(buyItem.getAsset_info().getAssetid()));
+//        buffCostEntity.setClassid(Long.valueOf(buyItem.getAsset_info().getClassid()));
         buffCostEntity.setCreate_time(new Date());
         buffCostEntity.setName(buyItem.getName());
         buffCostEntity.setHash_name(buyItem.getHash_name());
@@ -82,8 +81,8 @@ public class BuffCostService {
         int steamAfterTaxPrice = Math.max(afterTaxCentMoney, lowCostCent);
         //没有，匹配过，进行匹配
         if (buffCostEntity.getIs_mate() == 0) {
-            buffCostEntity.setAssetid(Long.valueOf(assetid));
-            buffCostEntity.setClassid(Long.valueOf(classid));
+            buffCostEntity.setAssetid(assetid);
+            buffCostEntity.setClassid(classid);
             buffCostEntity.setIs_mate(1);
         }
         buffCostEntity.setReturned_money(steamAfterTaxPrice * 7);
@@ -103,13 +102,13 @@ public class BuffCostService {
      */
     public void byOrderHistorySave(List<BuffCostEntity> arrayList){
         for (BuffCostEntity costEntity : arrayList) {
-            int i = buffCostRepository.exitClassAndAssetid(costEntity.getAssetid(), costEntity.getClassid());
-            if (i > 0){
-                //这条记录生成过
-                continue;
-            }
-            costEntity.setBuy_status(2);
-            costEntity.setCostId(UUID.randomUUID().toString());
+//            int i = buffCostRepository.exitClassAndAssetid(costEntity.getAssetid(), costEntity.getClassid());
+//            if (i > 0){
+//                //这条记录生成过
+//                continue;
+//            }
+//            costEntity.setBuy_status(2);
+//            costEntity.setCostId(UUID.randomUUID().toString());
             buffCostRepository.save(costEntity);
         }
     }

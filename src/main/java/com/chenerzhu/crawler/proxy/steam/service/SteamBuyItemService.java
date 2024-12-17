@@ -2,7 +2,7 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.common.GameCommet;
 import com.chenerzhu.crawler.proxy.csgo.repository.BuffCostRepository;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;

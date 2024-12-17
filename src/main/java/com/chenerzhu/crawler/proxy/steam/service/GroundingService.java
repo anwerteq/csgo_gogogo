@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.service.BuffCostService;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.*;

@@ -3,7 +3,9 @@ package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.csgo.entity.ItemGoods;
+import com.chenerzhu.crawler.proxy.csgo.repository.BuffCostRepository;
 import com.chenerzhu.crawler.proxy.csgo.repository.IItemGoodsRepository;
 import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
 import com.chenerzhu.crawler.proxy.steam.entity.CZ75Item;
@@ -19,13 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -41,8 +39,8 @@ public class SteamInventoryService {
     @Autowired
     DescriptionsRepository descriptionsRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    BuffCostRepository buffCostRepository;
 
 
 
@@ -96,6 +94,7 @@ public class SteamInventoryService {
         }
         //设置购入价格
         List<String> collect = descriptionsList.stream().map(Descriptions::getSteamInventoryMarkId).collect(Collectors.toList());
+        //获取steam市场交易记录
         List<CZ75Item> buyCZ75Item = cz75ItemRepository.findBySteamInventoryMarkIdInAndTheTypeOfTransaction(collect, "买");
         buyCZ75Item.sort((o1,o2)-> o2.getMemo().compareTo(o1.getMemo()));
         Map<String, Double> steamInventoryMarkIdAndPrice =buyCZ75Item.stream()
@@ -107,6 +106,10 @@ public class SteamInventoryService {
                 descriptions.setBuy_type("平台:steam");
             }
         }
+        //获取buff交易记录
+        List<String> ids = descriptionsList.stream().map(Descriptions::getCdkey_id).collect(Collectors.toList());
+        List<BuffCostEntity> allById = buffCostRepository.findAllById(ids);
+        allById.stream().collect(Collectors.toMap(BuffCostEntity::getCdkey_id, buffCostEntity -> buffCostEntity));
         descriptionsRepository.deleteBySteamId(steamID);
         descriptionsRepository.saveAll(descriptionsList);
         log.info("刷新steam库存信息完成");

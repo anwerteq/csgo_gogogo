@@ -1,12 +1,12 @@
 package com.chenerzhu.crawler.proxy.csgo.repository;
 
-import com.chenerzhu.crawler.proxy.buff.entity.BuffCostEntity;
+import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BuffCostRepository extends JpaRepository<BuffCostEntity, Long> {
+public interface BuffCostRepository extends JpaRepository<BuffCostEntity, String> {
 
     /**
      * 校验商品是否存在记录表
@@ -20,7 +20,6 @@ public interface BuffCostRepository extends JpaRepository<BuffCostEntity, Long> 
     /**
      * 查询商品购买记录
      * @param assetid
-     * @param classid
      * @return
      */
     @Query(value = "select * from buff_cost where assetid= ?1 limit 1", nativeQuery = true)
