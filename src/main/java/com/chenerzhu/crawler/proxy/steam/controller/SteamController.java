@@ -43,18 +43,10 @@ public class SteamController {
      * steam库存商品上架市场
      */
     @RequestMapping("grounding")
-    public void grounding(){
+    public void grounding(String name){
+        SteamTheadeUtil.setThreadSteamUserDate(name);
         groundingService.productListingOperation();
-        List<Cookeis> cookeisList = CookiesConfig.cookeisList;
-        for (Cookeis cookeis : cookeisList) {
-            CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
-            try {
-                groundingService.productListingOperation();
-            }catch (Exception e){
-                log.error("账号：{}，拉取steam市场信息异常：{}",cookeis.getNumber(),e);
-            }
-            CookiesConfig.steamCookies.set("");
-        }
+
     }
 
     /**

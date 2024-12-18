@@ -19,8 +19,8 @@ public class BuffCostEntity {
     @Id
     @Column(length = 155)
     private String id;
-    @Column
-    private String cdkey_id;
+    @Column(name = "cdkey_id")
+    private String cdkeyId;
 
     @Column(length = 126)
     String name;
@@ -109,7 +109,7 @@ public class BuffCostEntity {
         sj.add(assetid);
         sj.add(classid);
         sj.add(instanceid);
-        setCdkey_id(sj.toString());
+        setCdkeyId(sj.toString());
     }
 
 }

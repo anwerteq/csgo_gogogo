@@ -53,4 +53,15 @@ public interface BuffCostRepository extends JpaRepository<BuffCostEntity, String
 
     // 按 number 字段正序排序
     List<BuffCostEntity> findAllByMobileNumberOrderByNumberAsc(String mobileNumber);
+
+
+    /**
+     *
+     * @param cdkeyIds
+     * @param statucText
+     * @return
+     */
+    List<BuffCostEntity> findByCdkeyIdInAndStatucTextContaining(List<String> cdkeyIds,String statucText);
+
+    List<BuffCostEntity> findByCdkeyIdIn(List<String> cdkeyIds);
 }

@@ -69,6 +69,7 @@ public class OrderHistoryService {
                 pageCount--;
             }
 
+            //不存在，则更新页签数据
             if (!numbers.contains(count + i)) {
                 List<BuffCostEntity> threeBuffCostEntities = pullOnePageHistory(pageCount);
                 Collections.reverse(threeBuffCostEntities);
@@ -79,6 +80,7 @@ public class OrderHistoryService {
                 }
                 CompletableFuture.runAsync(()-> buffCostRepository.saveAll(threeBuffCostEntities));
                 pageCount--;
+                //最后一条不存在，则自动进入下一页签
                 if (i%10 != 0) {
                     //前九个存在，进入下一组
                     i = (i / 10) * 10 + 10;
@@ -130,7 +132,7 @@ public class OrderHistoryService {
      */
     public List<BuffCostEntity> pullOnePageHistory(int num) {
         log.info("buff拉取，第{}页", num);
-        ThreadUtil.sleep(5 * 1000);
+        ThreadUtil.sleep(10 * 1000);
         String url = "https://buff.163.com/market/buy_order/history?game=csgo&page_num=" + num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         String body = responseEntity.getBody();

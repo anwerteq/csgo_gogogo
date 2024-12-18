@@ -53,7 +53,7 @@ public class BuffController {
     }
 
     /**
-     * 拉取商品列表信息（拉取推荐购买和销售数据）
+     * 拉取商品市场信息
      */
     @RequestMapping("pullItmeGoods")
     @ResponseBody

@@ -76,7 +76,7 @@ public class BuffSetMemoService {
             log.error("饰品备注失败:错误信息为:{}", reponse);
             return;
         }
-        log.info("饰品备注成功");
+        log.info("饰品共计：{},备注成功",descriptionsList.size());
     }
 
     /**

@@ -11,9 +11,12 @@ import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.*;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Descriptions;
 import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
+import com.chenerzhu.crawler.proxy.steam.repository.DescriptionsRepository;
 import com.chenerzhu.crawler.proxy.steam.repository.SteamCostRepository;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
+import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
+import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,122 +45,39 @@ public class GroundingService {
     @Autowired
     SteamBuyItemService steamBuyItemService;
 
+    @Autowired
+    DescriptionsRepository descriptionsRepository;
+
     /**
      * steam上架操作逻辑
      */
     public void productListingOperation() {
-        //获取库存
-        InventoryRootBean inventoryRootBean = getSteamInventory();
-        if (inventoryRootBean.getDescriptions().isEmpty()) {
-            log.info("未有需要上架的商品");
-            return;
-        }
-        //提高匹配速度
-        HashMap<String, Descriptions> descriptionsHashMap = new HashMap();
-        for (Descriptions description : inventoryRootBean.getDescriptions()) {
-            descriptionsHashMap.put(description.getClassid(), description);
-        }
-
-        Collections.shuffle(inventoryRootBean.getAssets());
-        //获取商品类的价格信息集合
-        inventoryRootBean.getAssets().stream().forEach(assets -> {
-            Descriptions description = descriptionsHashMap.get(assets.getClassid());
-            if (1 == description.getTradable()){
-                return;
+        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
+        List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
+        for (Descriptions descriptions : allBySteamId) {
+            if (descriptions.getBuy_price() == null){
+                continue;
             }
-//获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-            PriceVerviewRoot priceVerview = getPriceVerview(description.getMarket_hash_name());
-
-            try {
-                String  lowest_price = priceVerview.getLowest_price().replace("$","");
-                //steam推荐的金额和buff售卖最低金额 选高的
-                saleItem(assets.getAssetid(), Double.valueOf(Double.valueOf(lowest_price) * 1.4 *100).intValue(), assets.getAmount());
-            } catch (Exception e) {
-                log.error("上架商品失败，失败信息：{}", e);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-            }
-            log.info("steam商品上架完成:" + assets.getClassid());
-
-            if (true) {
-                return;
-            }
-            SleepUtil.sleep(400);
-
-            //获取最大的销售金额
-            int steamAfterTaxPrice = 0;
-            //已经匹配过的信息
-            SteamCostEntity steamCostEntity = steamCostRepository.selectByAssetId(assets.getAssetid(), assets.getClassid());
-            if (ObjectUtil.isNull(steamCostEntity)) {
-                //和steam购买的信息进行匹配
-                steamCostEntity = steamCostRepository.selectByHashName(description.getMarket_hash_name());
-            }
-
-            if (ObjectUtil.isNotNull(steamCostEntity)) {
-                //还未到过期时间，高价挂在steam市场中
-                steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 10)).intValue();
-                //存在在steam售卖的情况
-                steamCostEntity.setReturned_money(steamAfterTaxPrice);
-//                steamBuyItemService.updateSteamCostEntity(assets, steamCostEntity, description.getName());
-            }
-
-
-            if (true) {
-                return;
-            }
-            if (ObjectUtil.isNull(steamCostEntity)) {
-                steamCostEntity = steamCostRepository.selectByHashNameNotStatus(description.getMarket_hash_name());
-                if (ObjectUtil.isNotNull(steamCostEntity)) {
-                    steamAfterTaxPrice = Double.valueOf((steamCostEntity.getSteam_cost() * 1.3)).intValue();
-
-                }
-            }
-
-
-            if (ObjectUtil.isNull(steamCostEntity)) {
+            if (descriptions.getBuy_price() * 5 < descriptions.getBuff_min_price()){
+                //成本价远远小于，此时售卖价，上架到steam市场
                 //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-                 priceVerview = getPriceVerview(description.getMarket_hash_name());
-                SleepUtil.sleep(300);
-                if (priceVerview == null) {
-                    return;
+                PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
+
+                try {
+                    String  lowest_price = priceVerview.getLowest_price().replace("$","");
+                    //steam推荐的金额和buff售卖最低金额 选高的
+                    saleItem(descriptions, Double.valueOf(Double.valueOf(lowest_price) * 1.4 *100).intValue(), descriptions.getAmount() + "");
+                } catch (Exception e) {
+                    log.error("上架商品失败，失败信息：{}", e);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
                 }
-                priceVerview.setClassid(assets.getClassid());
-                if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
-                    return;
-                }
-                //获取最大的销售金额
-                steamAfterTaxPrice = getSteamAfterTaxPrice(priceVerview, assets, description);
-                if (0 == steamAfterTaxPrice) {
-                    //必须保证售卖的商品在buff_cost表里面存在（不然会出现亏损的情况）
-                    log.info("商品名称【{}】，在buff_cost表中没有数据", description.getName());
-                    return;
-                }
+
             }
-            if (CollectionUtil.isEmpty(description.getOwner_descriptions())) {
-                //需要更换新的cookie
-                log.error("获取不到过期时间,需要更换cookie");
-                return;
-            }
-            if (steamAfterTaxPrice == 0) {
-                return;
-            }
-            //长时间在steam卖不出来，放在buff中售卖 获取商品的过期时间
-            Date expirationTime = getExpirationTime(description.getOwner_descriptions());
-            if (expirationTime.compareTo(new Date()) <= 0) {
-                //上架到buff中
-                return;
-            }
-            try {
-                //steam推荐的金额和buff售卖最低金额 选高的
-                saleItem(assets.getAssetid(), steamAfterTaxPrice, assets.getAmount());
-            } catch (Exception e) {
-                log.error("上架商品失败，失败信息：{}", e);
-            }
-            log.info("steam商品上架完成:" + assets.getClassid());
-        });
+        }
         log.info("steam全部商品上架完成");
     }
 
@@ -246,7 +166,7 @@ public class GroundingService {
     private PriceVerviewRoot getPriceVerview(String market_hash_name) {
         String url = null;
         try {
-            Thread.sleep(700);
+            Thread.sleep(4 * 2100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -268,10 +188,12 @@ public class GroundingService {
     /**
      * 设置商品上架价格
      *
-     * @param assetid：商品类目的id
+     * @param descriptions：商品类目的id
      * @param steamAfterTaxPrice：售卖的税后美分
      */
-    private void saleItem(String assetid, int steamAfterTaxPrice, String amount) {
+    private void saleItem(Descriptions descriptions, int steamAfterTaxPrice, String amount) {
+        String name = descriptions.getName();
+        String assetid = descriptions.getAssetid();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         String url = "https://steamcommunity.com/market/sellitem";
         Map<String, String> paramerMap = new HashMap<>();
@@ -283,17 +205,15 @@ public class GroundingService {
         paramerMap.put("price", String.valueOf(steamAfterTaxPrice));
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
         if (StrUtil.isEmpty(responseStr)) {
-            log.info("商品assetid-{}-上架失败", assetid);
+            log.info("steam商品名称-{}-上架失败", name);
             return;
         }
         JSONObject jsonObject = JSONObject.parseObject(responseStr);
         String success = jsonObject.getString("success");
         if ("false".equals(success)) {
-
-            log.info("商品assetid-{}-上架失败，失败信息{}", assetid, jsonObject.getString("message"));
-
+            log.info("steam商品名称-{}-上架失败，失败信息{}", name, jsonObject.getString("message"));
             return;
         }
-        log.info("商品assetid-{}-上架成功，上架成功是否需要确认（1：是，0：否）:{}", assetid, jsonObject.getString("requires_confirmation"));
+        log.info("steam商品名称-{}-上架成功，上架成功是否需要确认（1：是，0：否）:{}", name, jsonObject.getString("requires_confirmation"));
     }
 }

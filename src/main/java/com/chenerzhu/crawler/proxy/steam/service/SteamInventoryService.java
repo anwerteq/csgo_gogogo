@@ -99,17 +99,29 @@ public class SteamInventoryService {
         buyCZ75Item.sort((o1,o2)-> o2.getMemo().compareTo(o1.getMemo()));
         Map<String, Double> steamInventoryMarkIdAndPrice =buyCZ75Item.stream()
                 .collect(Collectors.toMap(CZ75Item::getSteamInventoryMarkId,CZ75Item::getUsd,(o1,o2)->o1));
+
+        //获取buff的购买价格
+        List<String> cdkeyIds = descriptionsList.stream().map(Descriptions::getCdkey_id).collect(Collectors.toList());
+        List<BuffCostEntity> byCdkeyIdIn = buffCostRepository.findByCdkeyIdIn(cdkeyIds);
+        HashMap<String, Double> cdKeyIdAndPriva = byCdkeyIdIn.stream().collect(Collectors.toMap(BuffCostEntity::getCdkeyId, BuffCostEntity::getBuff_cost, (e1, e2) -> e1, HashMap::new));
+
         for (Descriptions descriptions : descriptionsList) {
             Double orDefault = steamInventoryMarkIdAndPrice.getOrDefault(descriptions.getSteamInventoryMarkId(), null);
             descriptions.setBuy_price(orDefault);
             if (orDefault != null){
                 descriptions.setBuy_type("平台:steam");
+            }else {
+                Double orDefault1 = cdKeyIdAndPriva.getOrDefault(descriptions.getCdkey_id(), null);
+                descriptions.setBuy_price(orDefault1);
+                if (orDefault1 != null){
+                    descriptions.setBuy_type("平台:buff");
+                }
             }
         }
         //获取buff交易记录
         List<String> ids = descriptionsList.stream().map(Descriptions::getCdkey_id).collect(Collectors.toList());
         List<BuffCostEntity> allById = buffCostRepository.findAllById(ids);
-        allById.stream().collect(Collectors.toMap(BuffCostEntity::getCdkey_id, buffCostEntity -> buffCostEntity));
+        allById.stream().collect(Collectors.toMap(BuffCostEntity::getCdkeyId, buffCostEntity -> buffCostEntity));
         descriptionsRepository.deleteBySteamId(steamID);
         descriptionsRepository.saveAll(descriptionsList);
         log.info("刷新steam库存信息完成");

@@ -98,6 +98,7 @@ public class SteamInventorySerivce {
      * 自动上架逻辑
      */
     public Boolean autoSale(int page_num) {
+        log.info("拉取buff，第{}页库存信息，", page_num);
         List<Items> items = steamInventory(page_num);
         BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
         if (items.isEmpty()) {
@@ -131,7 +132,7 @@ public class SteamInventorySerivce {
             }
             Assets asset = buildSell_orderParam(item, realtimeSellPrice);
             count++;
-            log.info("饰品:{}准备上架数据中,在售价格:{},成本价格：{}", asset.getMarket_hash_name(), asset.getPrice(), buyPrice * 6);
+            log.info("饰品:{}准备上架数据中,在售价格:{},本价格：{}元", asset.getMarket_hash_name(), asset.getPrice(), buyPrice * 6);
             assets.add(asset);
             if (count > 40) {
                 if ( !sellOrderCreate(assets)){
