@@ -67,7 +67,13 @@ public class SteamInventorySerivce {
         String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=500&search=&state=cansell&_=" + System.currentTimeMillis()+"&page_num="+page_num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
         SteamInventoryRoot steamInventoryRoot = JSONObject.parseObject(responseEntity.getBody(), SteamInventoryRoot.class);
-        List<Items> items = steamInventoryRoot.getData().getItems();
+        SteamInventoryData data = steamInventoryRoot.getData();
+        int totalPage = data.getTotal_page();
+        if (page_num > totalPage) {
+            //超过页面数量
+            return new ArrayList<>();
+        }
+        List<Items> items = data.getItems();
         return items;
     }
 
@@ -134,8 +140,12 @@ public class SteamInventorySerivce {
             count++;
             log.info("饰品:{}准备上架数据中,在售价格:{},本价格：{}元", asset.getMarket_hash_name(), asset.getPrice(), buyPrice * 6);
             assets.add(asset);
+            if (assets.isEmpty()){
+                continue;
+            }
             if (count > 40) {
                 if ( !sellOrderCreate(assets)){
+                    log.info("buff账号:{},创建订单失败", buffUserData.getAcount());
                     return false;
                 }
                 log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
@@ -145,7 +155,11 @@ public class SteamInventorySerivce {
             }
 
         }
+        if (assets.isEmpty()){
+            return true;
+        }
         if ( !sellOrderCreate(assets)){
+            log.info("buff账号:{},创建订单失败1", buffUserData.getAcount());
             return false;
         }
         log.info("buff账号:{},一共上架商品数量为:{},休眠30s", buffUserData.getAcount(), assets.size());
