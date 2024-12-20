@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * steam上架商品的服务
@@ -48,22 +50,25 @@ public class GroundingService {
     @Autowired
     DescriptionsRepository descriptionsRepository;
 
+    @Autowired
+    SteamInventoryService steamInventoryService;
+
     /**
      * steam上架操作逻辑
      */
     public void productListingOperation() {
+        //刷新库存信息
+        steamInventoryService.refreshSteamInventory();
         SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
         List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
         for (Descriptions descriptions : allBySteamId) {
             if (descriptions.getBuy_price() == null){
                 continue;
             }
-            if (descriptions.getBuy_price() * 5 < descriptions.getBuff_min_price()){
-                //成本价远远小于，此时售卖价，上架到steam市场
-                //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-                PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
-
-                try {
+            if (descriptions.getBuy_price() * 6 < descriptions.getBuff_min_price()){
+                try { //成本价远远小于，此时售卖价，上架到steam市场
+                    //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
+                    PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
                     String  lowest_price = priceVerview.getLowest_price().replace("$","");
                     //steam推荐的金额和buff售卖最低金额 选高的
                     saleItem(descriptions, Double.valueOf(Double.valueOf(lowest_price) * 1.4 *100).intValue(), descriptions.getAmount() + "");
@@ -192,6 +197,7 @@ public class GroundingService {
      * @param steamAfterTaxPrice：售卖的税后美分
      */
     private void saleItem(Descriptions descriptions, int steamAfterTaxPrice, String amount) {
+        ThreadUtil.sleep(5*1000);
         String name = descriptions.getName();
         String assetid = descriptions.getAssetid();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();

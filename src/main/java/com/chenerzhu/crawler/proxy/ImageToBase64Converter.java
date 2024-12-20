@@ -15,7 +15,8 @@ public class ImageToBase64Converter {
         // 设置代理主机和端口
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890));
         URL url = new URL(imageUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
         try (InputStream inputStream = connection.getInputStream();
