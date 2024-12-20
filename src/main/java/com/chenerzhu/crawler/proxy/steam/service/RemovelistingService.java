@@ -1,5 +1,6 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.applicationRunners.SteamApplicationRunner;
@@ -47,24 +48,13 @@ public class RemovelistingService {
 
         //获取上架的饰品id
         Set<String> mylistings = getMylistings();
-        mylistings.forEach(this::removeList);
-//
-//        String sessionid = resStr.split("g_sessionID = \"")[1].split(";")[0];
-//        sessionid = sessionid.substring(0, sessionid.length() - 1);
-//        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
-//        steamUserDate.getSession().setSessionID(sessionid);
-
-
-//        String url = "https://steamcommunity.com/market";
-//        String resStr = HttpClientUtils.sendGet(url, SteamConfig.getSteamHeader());
-//        Document parse = Jsoup.parse(resStr);
-//
-//        Element marketListingsRows = parse.getElementById("tabContentsMyActiveMarketListingsRows");
-//        //下架，已经上架的商品
-//        parseActiveMarketList(marketListingsRows);
-//        Elements market_content_block = parse.getElementsByClass("my_listing_section market_content_block market_home_listing_table");
-//        //取消需要审核的商品
-//        parseMarkBlockList(market_content_block);
+        for (String mylisting : mylistings) {
+           try {
+               removeList(mylisting);
+           }catch (Exception e){
+               log.info("下架失败",e);
+           }
+        }
     }
 
     /**
@@ -141,12 +131,12 @@ public class RemovelistingService {
         Map<String, String> paramerMap = new HashMap<>();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
         saleHeader.put("Referer", "https://steamcommunity.com/market/");
-        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
-//        paramerMap.put("sessionid", steamUserDate.getSession().getSessionID());
         paramerMap.put("sessionid", SteamConfig.getCookieOnlyKey("sessionid"));
-        String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
-        ArrayList arrayList = JSONObject.parseObject(responseStr, ArrayList.class);
-//        SleepUtil.sleep(500);
-        log.info("需要审批的饰品下架信息：{}", responseStr);
+      try {
+          String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
+          log.info("需要审批的饰品下架信息：{}", responseStr);
+      }catch (Exception e) {
+          e.printStackTrace();
+      }
     }
 }

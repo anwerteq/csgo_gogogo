@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 操作steam的控制层
@@ -65,14 +66,12 @@ public class SteamController {
      */
     @RequestMapping("unlistingBlock")
     @ResponseBody
-    public void unlistingBlock(@RequestParam(value = "sum", required = false, defaultValue = "1") int sum) {
-        removelistingService.unlistings(sum);
-        List<Cookeis> cookeisList = CookiesConfig.cookeisList;
-        for (Cookeis cookeis : cookeisList) {
-            CookiesConfig.steamCookies.set(cookeis.getSteam_cookie());
+    public void unlistingBlock(@RequestParam(value = "sum", required = false, defaultValue = "1") int sum,String name) {
+        CompletableFuture.runAsync(()-> {
+            SteamTheadeUtil.setThreadSteamUserDate(name);
+            removelistingService.unlistings(sum);
+        });
 
-            CookiesConfig.steamCookies.set("");
-        }
     }
 
     /**

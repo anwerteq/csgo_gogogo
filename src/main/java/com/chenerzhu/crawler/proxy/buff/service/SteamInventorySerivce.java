@@ -153,7 +153,6 @@ public class SteamInventorySerivce {
                 assets.clear();
                 count= 0;
             }
-
         }
         if (assets.isEmpty()){
             return true;

@@ -1,17 +1,17 @@
 package com.chenerzhu.crawler.proxy.steam.service;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.service.BuffCostService;
-import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.*;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Assets;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.InventoryRootBean;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.Owner_descriptions;
+import com.chenerzhu.crawler.proxy.csgo.steamentity.InventoryEntity.PriceVerviewRoot;
 import com.chenerzhu.crawler.proxy.steam.SteamConfig;
 import com.chenerzhu.crawler.proxy.steam.entity.Descriptions;
-import com.chenerzhu.crawler.proxy.steam.entity.SteamCostEntity;
 import com.chenerzhu.crawler.proxy.steam.repository.DescriptionsRepository;
 import com.chenerzhu.crawler.proxy.steam.repository.SteamCostRepository;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
@@ -24,8 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * steam上架商品的服务
@@ -62,23 +64,26 @@ public class GroundingService {
         SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
         List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
         for (Descriptions descriptions : allBySteamId) {
-            if (descriptions.getBuy_price() == null){
+            Double buyPrice = descriptions.getBuy_price();
+            if (buyPrice == null) {
                 continue;
             }
-            if (descriptions.getBuy_price() * 5.7 < descriptions.getBuff_min_price()){
+            Double buffMinPrice = descriptions.getBuff_min_price();
+            //成本价大于售卖价
+            if (buyPrice * 6 > buffMinPrice) {
                 try { //成本价远远小于，此时售卖价，上架到steam市场
                     //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                     PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
                     String lowestPrice = priceVerview.getLowest_price();
-                    if (StrUtil.isEmpty(lowestPrice)){
+                    if (StrUtil.isEmpty(lowestPrice)) {
                         lowestPrice = priceVerview.getMedian_price();
                     }
-                    String  lowest_price = lowestPrice.replace("$","");
-                    Double steamPrice =  Double.valueOf(lowest_price) * 1.4 *100;
-                    Double buffPrice =  descriptions.getBuff_min_price() / 7.3 *130;
+                    String lowest_price = lowestPrice.replace("$", "");
+                    Double steamPrice = Double.valueOf(lowest_price) * 1.4 * 100;
+                    Double buffPrice = buyPrice * 7.3 * 115;
                     double max = Math.max(buffPrice, steamPrice);
                     //steam推荐的金额和buff售卖最低金额 选高的
-                    saleItem(descriptions, (int) max , descriptions.getAmount() + "");
+                    saleItem(descriptions, (int) max, descriptions.getAmount() + "");
                 } catch (Exception e) {
                     log.error("上架商品失败，失败信息：{}", e);
                     try {
@@ -204,7 +209,7 @@ public class GroundingService {
      * @param steamAfterTaxPrice：售卖的税后美分
      */
     private void saleItem(Descriptions descriptions, int steamAfterTaxPrice, String amount) {
-        ThreadUtil.sleep(5*1000);
+        ThreadUtil.sleep(5 * 1000);
         String name = descriptions.getName();
         String assetid = descriptions.getAssetid();
         Map<String, String> saleHeader = SteamConfig.getSaleHeader();
