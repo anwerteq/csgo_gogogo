@@ -65,7 +65,7 @@ public class GroundingService {
             if (descriptions.getBuy_price() == null){
                 continue;
             }
-            if (descriptions.getBuy_price() * 6 < descriptions.getBuff_min_price()){
+            if (descriptions.getBuy_price() * 5.7 < descriptions.getBuff_min_price()){
                 try { //成本价远远小于，此时售卖价，上架到steam市场
                     //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                     PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
@@ -74,8 +74,11 @@ public class GroundingService {
                         lowestPrice = priceVerview.getMedian_price();
                     }
                     String  lowest_price = lowestPrice.replace("$","");
+                    Double steamPrice =  Double.valueOf(lowest_price) * 1.4 *100;
+                    Double buffPrice =  descriptions.getBuff_min_price() / 7.3 *130;
+                    double max = Math.max(buffPrice, steamPrice);
                     //steam推荐的金额和buff售卖最低金额 选高的
-                    saleItem(descriptions, Double.valueOf(Double.valueOf(lowest_price) * 1.4 *100).intValue(), descriptions.getAmount() + "");
+                    saleItem(descriptions, (int) max , descriptions.getAmount() + "");
                 } catch (Exception e) {
                     log.error("上架商品失败，失败信息：{}", e);
                     try {
