@@ -69,13 +69,17 @@ public class GroundingService {
                 try { //成本价远远小于，此时售卖价，上架到steam市场
                     //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
                     PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
-                    String  lowest_price = priceVerview.getLowest_price().replace("$","");
+                    String lowestPrice = priceVerview.getLowest_price();
+                    if (StrUtil.isEmpty(lowestPrice)){
+                        lowestPrice = priceVerview.getMedian_price();
+                    }
+                    String  lowest_price = lowestPrice.replace("$","");
                     //steam推荐的金额和buff售卖最低金额 选高的
                     saleItem(descriptions, Double.valueOf(Double.valueOf(lowest_price) * 1.4 *100).intValue(), descriptions.getAmount() + "");
                 } catch (Exception e) {
                     log.error("上架商品失败，失败信息：{}", e);
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException interruptedException) {
                         interruptedException.printStackTrace();
                     }
