@@ -80,7 +80,7 @@ public class HttpClientUtils implements ApplicationRunner {
                 //设置代理IP、端口
                 HttpHost proxy = new HttpHost(staticProxyIp.split(":")[0], Integer.parseInt(staticProxyIp.split(":")[1]));
                 DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-//            httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
+//            httpClient = HttpClients.custom().build();
                 httpClient = HttpClients.custom().setRoutePlanner(routePlanner).setSSLSocketFactory(getSSL()).setDefaultCookieStore(cookieStore).build();
             } else {
                 httpClient = HttpClients.custom().setSSLSocketFactory(getSSL()).setDefaultCookieStore(cookieStore).build();

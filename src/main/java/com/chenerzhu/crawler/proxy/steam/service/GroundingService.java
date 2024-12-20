@@ -61,6 +61,7 @@ public class GroundingService {
     public void productListingOperation() {
         //刷新库存信息
         steamInventoryService.refreshSteamInventory();
+        ThreadUtil.sleep(5 * 1000);
         SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
         List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
         for (Descriptions descriptions : allBySteamId) {
@@ -78,9 +79,11 @@ public class GroundingService {
                     if (StrUtil.isEmpty(lowestPrice)) {
                         lowestPrice = priceVerview.getMedian_price();
                     }
+                    // steam最低价
                     String lowest_price = lowestPrice.replace("$", "");
                     Double steamPrice = Double.valueOf(lowest_price) * 1.4 * 100;
-                    Double buffPrice = buyPrice * 7.3 * 115;
+                    //购买价格
+                    Double buffPrice = buyPrice  * 115;
                     double max = Math.max(buffPrice, steamPrice);
                     //steam推荐的金额和buff售卖最低金额 选高的
                     saleItem(descriptions, (int) max, descriptions.getAmount() + "");
