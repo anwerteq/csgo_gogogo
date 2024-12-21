@@ -57,6 +57,8 @@ public class ItemGoods {
     private String quick_price;
     @Column(name = "sell_min_price")
     private Double sell_min_price;
+    @Column(name = "steam_price")
+    private Double steam_price;
     @Column(name = "sell_num")
     private int sell_num;
     @Column(name = "sell_reference_price")
@@ -67,6 +69,7 @@ public class ItemGoods {
     private String steam_market_url;
     @Column(name = "transacted_num")
     private int transacted_num;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime create_date;

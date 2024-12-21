@@ -73,7 +73,7 @@ public class SteamInventoryService {
         Map<String, List<Assets>>  keyAndAssets = steamInventory.getAssets().stream().collect(Collectors.groupingBy(o1-> o1.getClassid() +"-"+ o1.getInstanceid()));
         Map<String, Descriptions> keyAndDescriptions = steamInventory.getDescriptions().stream().collect(Collectors.toMap(o1 -> o1.getClassid() +"-"+ o1.getInstanceid(), o2 -> o2, (o1, o2) -> o1, HashMap::new));
         List<Descriptions> descriptionsList = new ArrayList<>();
-        Map<String, Double> hashNameAndPrice = iItemGoodsRepository.findAll().stream().collect(Collectors.toMap(ItemGoods::getMarketHashName, ItemGoods::getSell_min_price));
+        Map<String, ItemGoods> hashNameAndItemGoods = iItemGoodsRepository.findAll().stream().collect(Collectors.toMap(ItemGoods::getMarketHashName, e -> e));
         String steamID = SteamTheadeUtil.getThreadSteamUserDate().getSession().getSteamID();
         for (Map.Entry<String, List<Assets>> assetsEntry : keyAndAssets.entrySet()) {
             List<Assets> assetss = assetsEntry.getValue();
@@ -84,8 +84,9 @@ public class SteamInventoryService {
                 descriptionsNew.setAmount(Integer.parseInt(assets.getAmount()));
                 descriptionsNew.setNumber_name(SteamTheadeUtil.getThreadSteamUserDate().getAccount_name());
                 descriptionsNew.setSteamId(steamID);
-                Double price = hashNameAndPrice.get(descriptionsNew.getMarket_hash_name());
-                descriptionsNew.setBuff_min_price(price);
+                ItemGoods itemGoods = hashNameAndItemGoods.get(descriptionsNew.getMarket_hash_name());
+                descriptionsNew.setBuff_min_price( itemGoods.getSell_min_price());
+                descriptionsNew.setSteam_price(itemGoods.getSteam_price());
                 descriptionsNew.refreashCdkey_id();
                 descriptionsNew.setCreate_date(LocalDateTime.now());
                 descriptionsNew.refreshSteamInventoryMarkId();

@@ -66,22 +66,25 @@ public class GroundingService {
         List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
         for (Descriptions descriptions : allBySteamId) {
             Double buyPrice = descriptions.getBuy_price();
-            if (buyPrice == null) {
-                continue;
-            }
             Double buffMinPrice = descriptions.getBuff_min_price();
+            String marketHashName = descriptions.getMarket_hash_name();
+            //成本价远远小于，此时售卖价，上架到steam市场
+            //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
+            PriceVerviewRoot priceVerview = getPriceVerview(marketHashName);
+            String lowestPrice = priceVerview.getLowest_price();
+            if (StrUtil.isEmpty(lowestPrice)) {
+                lowestPrice = priceVerview.getMedian_price();
+            }
+            // steam最低价
+            String lowest_price = lowestPrice.replace("$", "");
+            Double steamPrice = Double.valueOf(lowest_price) * 1.4 * 100;
+            if (buyPrice == null) {
+                //没有购买成本金额，不适合倒卖的，上架市场
+                buyPrice = Double.valueOf(lowest_price);
+            }
             //成本价大于售卖价
             if (buyPrice * 6 > buffMinPrice) {
-                try { //成本价远远小于，此时售卖价，上架到steam市场
-                    //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-                    PriceVerviewRoot priceVerview = getPriceVerview(descriptions.getMarket_hash_name());
-                    String lowestPrice = priceVerview.getLowest_price();
-                    if (StrUtil.isEmpty(lowestPrice)) {
-                        lowestPrice = priceVerview.getMedian_price();
-                    }
-                    // steam最低价
-                    String lowest_price = lowestPrice.replace("$", "");
-                    Double steamPrice = Double.valueOf(lowest_price) * 1.4 * 100;
+                try {
                     //购买价格
                     Double buffPrice = buyPrice  * 115;
                     double max = Math.max(buffPrice, steamPrice);
@@ -95,7 +98,6 @@ public class GroundingService {
                         interruptedException.printStackTrace();
                     }
                 }
-
             }
         }
         log.info("steam全部商品上架完成");
@@ -186,7 +188,7 @@ public class GroundingService {
     private PriceVerviewRoot getPriceVerview(String market_hash_name) {
         String url = null;
         try {
-            Thread.sleep(4 * 2100);
+            Thread.sleep(4 * 1100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

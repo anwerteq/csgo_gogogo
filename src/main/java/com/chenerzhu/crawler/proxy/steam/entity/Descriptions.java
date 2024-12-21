@@ -97,6 +97,12 @@ public class Descriptions {
     private Double buff_min_price;
 
     /**
+     * steam最低价值
+     */
+    @Column
+    private Double steam_price;
+
+    /**
      * 购买价格
      */
     @Column

@@ -115,7 +115,10 @@ public class PullItemService {
             log.error("buff的coookie过期，请重启脚本");
             throw new ArithmeticException("");
         }
-        productList.getData().getItems().forEach((item)->{item.setCreate_date(LocalDateTime.now());});
+        productList.getData().getItems().forEach((item)->{
+            item.setCreate_date(LocalDateTime.now());
+            item.setSteam_price(Double.valueOf(item.getGoods_info().getSteam_price()));
+        });
         CompletableFuture.supplyAsync(()-> itemRepository.saveAll(productList.getData().getItems()));
 
         return productList.getData().getPage_num() >= page_num;
