@@ -100,7 +100,12 @@ public class GroundingService {
                 }else {
                     lowestPricestr=  priceVerview.getLowest_price();
                 }
-                lowestPrice =  Double.valueOf( lowestPricestr.replace("$", ""));
+              try {
+                  lowestPrice =  Double.valueOf( lowestPricestr.replace("$", ""));
+              }catch (Exception e){
+                  log.error("替换$符号一场",e);
+                  continue;
+              }
             }
             // steam最低价
             Double steamPrice = lowestPrice * 1.4 * 100;

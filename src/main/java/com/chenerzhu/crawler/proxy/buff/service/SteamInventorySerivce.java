@@ -145,14 +145,16 @@ public class SteamInventorySerivce {
             if (sellMinPrice <= buyPrice * 6){
                 continue;
             }
-            Double realtimeSellPrice = getSellPrice(String.valueOf(item.getGoods_id()));
+            Double realtimeSellPrice = sellMinPrice- 0.0;
+                    // getSellPrice(String.valueOf(item.getGoods_id()));
             //低于成本，不售卖
             if (realtimeSellPrice <= buyPrice * 6){
                 continue;
             }
+            realtimeSellPrice = realtimeSellPrice -0.01;
             Assets asset = buildSell_orderParam(item, realtimeSellPrice);
             count++;
-            log.info("饰品:{}准备上架数据中,在售价格:{},本价格：{}元", asset.getMarket_hash_name(), asset.getPrice(), buyPrice * 6);
+            log.info("饰品:{}准备上架数据中,在售价格:{},售卖价：{}，成本价格：{}元", asset.getMarket_hash_name(), asset.getPrice(), realtimeSellPrice,buyPrice * 6);
             assets.add(asset);
             if (assets.isEmpty()){
                 continue;
@@ -204,7 +206,7 @@ public class SteamInventorySerivce {
      * @return
      */
     public Double getSellPrice(String goods_id) {
-        SleepUtil.sleep(5500);
+        SleepUtil.sleep(9*1000);
         String url = "https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id=" + goods_id
                 + "&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&min_paintwear="
                 + "&_=" + System.currentTimeMillis();
@@ -212,7 +214,7 @@ public class SteamInventorySerivce {
         BuffBuyRoot body = responseEntity.getBody();
         BuffBuyData data = body.getData();
         List<BuffBuyItems> items = data.getItems();
-        BuffBuyItems buffBuyItems = items.get(1);
+        BuffBuyItems buffBuyItems = items.get(0);
         Double price = Double.valueOf(buffBuyItems.getPrice());
 
         return price;
