@@ -10,6 +10,7 @@ import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import com.chenerzhu.crawler.proxy.util.SteamTheadeUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.ConfirmUtil;
+import com.chenerzhu.crawler.proxy.util.steamlogin.SteamLoginUtil;
 import com.chenerzhu.crawler.proxy.util.steamlogin.SteamUserDate;
 import com.chenerzhu.crawler.proxy.util.steamlogin.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -103,11 +104,13 @@ public class SteamTradeofferService {
         SleepUtil.sleep(5000);
         SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
         CookiesConfig.steamCookies.set(steamUserDate.getCookies().toString());
+        String accessToken = steamUserDate.getSession().getAccessToken();
+        String cookies = CookiesConfig.steamCookies.get();
         String apikey = steamUserDate.getApikey();
         String tradeofferid = tradeId;
-        String url = "https://api.steampowered.com/IEconService/GetTradeOffer/v1?key=" + apikey + "&tradeofferid=" + tradeofferid + "&language=english";
+        String url = "https://api.steampowered.com/IEconService/GetTradeOffer/v1?access_token=" + accessToken + "&tradeofferid=" + tradeofferid + "&language=english";
         Map<String, String> headers = new HashMap() {{
-            put("Cookie", CookiesConfig.steamCookies.get());
+            put("Cookie", cookies);
         }};
         String resStr = HttpClientUtils.sendGet(url, headers);
         SteamTradeOfferData steamTradeOfferData = JSONObject.parseObject(resStr, SteamTradeOfferData.class);

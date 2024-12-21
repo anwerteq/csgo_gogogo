@@ -3,7 +3,6 @@ package com.chenerzhu.crawler.proxy.util.steamlogin;
 import in.dragonbra.javasteam.steam.authentication.IAuthenticator;
 import in.dragonbra.javasteam.steam.authentication.UserConsoleAuthenticator;
 import lombok.Data;
-import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

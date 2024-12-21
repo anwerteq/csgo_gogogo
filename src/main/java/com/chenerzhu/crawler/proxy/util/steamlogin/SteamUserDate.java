@@ -56,21 +56,29 @@ public class SteamUserDate {
     private Boolean isTokenExpired = true;
 
     public void refreshCookies(Map<String,String> map ){
-        String string = cookies.toString();
-        Map<String,String> objectObjectHashMap = new HashMap<>();
-        String[] values = string.split(";");
-        for (String value : values) {
-            String[] split = value.split("=");
-            objectObjectHashMap.put(split[0], split[1]);
-        }
+        String cookie = cookies.toString();
+        Map<String,String> objectObjectHashMap = getCookieValues(cookie);
         objectObjectHashMap.putAll(map);
         StringJoiner sj = new StringJoiner(";");
         for (Map.Entry<String, String> entry : objectObjectHashMap.entrySet()) {
             sj.add(entry.getKey() + "=" + entry.getValue());
         }
         setCookies(new StringBuilder(sj.toString()));
+    }
 
-
+    /**
+     * 获取cooke中的键值对
+     * @param cookie
+     * @return
+     */
+    public Map<String,String> getCookieValues(String cookie){
+        Map<String,String> objectObjectHashMap = new HashMap<>();
+        String[] values = cookie.split(";");
+        for (String value : values) {
+            String[] split = value.split("=");
+            objectObjectHashMap.put(split[0], split[1]);
+        }
+        return objectObjectHashMap;
     }
 
     public StringBuilder getCookies() {
@@ -84,6 +92,7 @@ public class SteamUserDate {
             if (!Strings.isNullOrEmpty(newTokens.getRefreshToken())) {
                 String refreshToken = newTokens.getRefreshToken();
                 getSession().setRefreshToken(refreshToken);
+                getSession().setAccessToken(newTokens.getAccessToken());
             }
             String steamLoginSecure = callback.getClientSteamID().convertToUInt64() + "||" + accessToken;
             Map<String,String> map  = new HashMap<>();

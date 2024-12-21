@@ -24,7 +24,6 @@ import in.dragonbra.javasteam.steam.steamclient.configuration.SteamConfiguration
 import in.dragonbra.javasteam.steam.webapi.WebAPI;
 import in.dragonbra.javasteam.util.log.DefaultLogListener;
 import in.dragonbra.javasteam.util.log.LogManager;
-import lombok.var;
 import okhttp3.OkHttpClient;
 
 import java.net.InetSocketAddress;

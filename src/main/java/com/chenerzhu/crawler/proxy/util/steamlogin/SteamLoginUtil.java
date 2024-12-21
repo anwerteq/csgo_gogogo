@@ -3,6 +3,7 @@ package com.chenerzhu.crawler.proxy.util.steamlogin;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
 import com.chenerzhu.crawler.proxy.steam.util.SleepUtil;
 import com.chenerzhu.crawler.proxy.util.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -115,10 +116,11 @@ public class SteamLoginUtil {
      * @param steamUserDate
      * @return
      */
-    public String get_access_token(SteamUserDate steamUserDate) {
+    public static String get_access_token(SteamUserDate steamUserDate) {
         String url = "https://api.steampowered.com/IAuthenticationService/GenerateAccessTokenForApp/v1/";
         Map<String, String> headerMap = new HashMap() {{
             put("Referer", "https://steamcommunity.com");
+            put("Cookie",  CookiesConfig.steamCookies.get());
         }};
         Map<String, String> dataMap = new HashMap() {{
             put("refresh_token", steamUserDate.getSession().getRefreshToken());
