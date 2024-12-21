@@ -114,6 +114,10 @@ public class SteamInventorySerivce {
         return items;
     }
 
+    public void autoSale(){
+        int page_num=1;
+        while (autoSale(page_num++));
+    }
     /**
      * 自动上架逻辑
      */

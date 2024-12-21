@@ -70,6 +70,7 @@ public class SteamTradeofferService {
             }
         }
 
+
     }
 
 
@@ -161,7 +162,7 @@ public class SteamTradeofferService {
         paramerMap.put("partner", partner);
         String responseStr = HttpClientUtils.sendPostForm(url, "", saleHeader, paramerMap);
         TradeofferAcceptData acceptData = JSONObject.parseObject(responseStr, TradeofferAcceptData.class);
-        log.info("确认收货{}：,接口返回的参数{}", partner, responseStr);
+        log.info("接收报价：{}：,接口返回的参数{}", partner, responseStr);
         return acceptData;
     }
 

@@ -116,8 +116,8 @@ public class BuffController {
     public void autoSale() {
         BuffApplicationRunner.buffUserDataThreadLocal.set(BuffApplicationRunner.buffUserDataList.get(0));
         CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
-        int page_num=1;
-        while (steamInventorySerivce.autoSale(page_num++));
+        steamInventorySerivce.autoSale();
+
         System.out.println("接口调用，buff自动上架完成");
     }
 
