@@ -143,7 +143,7 @@ public class SteamInventorySerivce {
            // 没有完全刷新库存信息
             Double buyPrice = cdKeyIdAndPrice.get(item.getAssetidClassidInstanceid());
             if (buyPrice == null){
-                continue;
+                buyPrice = item.getSteam_price();
             }
             //低于成本，不售卖
             if (sellMinPrice <= buyPrice * 6){

@@ -50,8 +50,7 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
                 } catch (Exception e) {
                     log.error("buff自动收货异常", e);
                 }
-                SleepUtil.sleep(60 * 1000);
             }
-        },1, TimeUnit.SECONDS);
+        },5 * 60, TimeUnit.SECONDS);
     }
 }
