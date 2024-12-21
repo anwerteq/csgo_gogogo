@@ -77,7 +77,7 @@ public class GroundingService {
             CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
             List<Items> items = steamInventorySerivce.steamInventorys();
             // steam的价格映射
-           hashNameAndSteamPrice = items.stream().collect(Collectors.toMap(Items::getMarket_hash_name, item -> item.getSteam_price()));
+           hashNameAndSteamPrice = items.stream().collect(Collectors.toMap(Items::getMarket_hash_name, item -> item.getSteam_price(),(e1,e2)->e1));
         }else {
             //从steam获取饰品steam价格
             //刷新库存信息
