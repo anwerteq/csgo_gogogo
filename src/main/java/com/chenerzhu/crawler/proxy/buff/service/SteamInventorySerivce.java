@@ -1,6 +1,7 @@
 package com.chenerzhu.crawler.proxy.buff.service;
 
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
@@ -63,6 +64,7 @@ public class SteamInventorySerivce {
      * 获取buff中可出售的库存数据
      */
     public List<Items> steamInventory(int page_num) {
+        ThreadUtil.sleep(8 * 1000);
         //查询的为可交易的
         String url = "https://buff.163.com/api/market/steam_inventory?game=csgo&force=1&page_num=1&page_size=500&search=&state=cansell&_=" + System.currentTimeMillis()+"&page_num="+page_num;
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, BuffConfig.getBuffHttpEntity(), String.class);
@@ -74,6 +76,16 @@ public class SteamInventorySerivce {
             return new ArrayList<>();
         }
         List<Items> items = data.getItems();
+        return items;
+    }
+
+    /**
+     * 获取buff中可出售的库存数据
+     */
+    public List<Items> steamInventorys() {
+        List<Items> items = new ArrayList<>();
+        int page_num = 1;
+        while (items.addAll(steamInventory(page_num++)));
         return items;
     }
 

@@ -85,6 +85,9 @@ public class SteamInventoryService {
                 descriptionsNew.setNumber_name(SteamTheadeUtil.getThreadSteamUserDate().getAccount_name());
                 descriptionsNew.setSteamId(steamID);
                 ItemGoods itemGoods = hashNameAndItemGoods.get(descriptionsNew.getMarket_hash_name());
+                if (itemGoods == null){
+                    continue;
+                }
                 descriptionsNew.setBuff_min_price( itemGoods.getSell_min_price());
                 descriptionsNew.setSteam_price(itemGoods.getSteam_price());
                 descriptionsNew.refreashCdkey_id();

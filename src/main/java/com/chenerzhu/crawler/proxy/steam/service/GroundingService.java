@@ -3,6 +3,11 @@ package com.chenerzhu.crawler.proxy.steam.service;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.chenerzhu.crawler.proxy.applicationRunners.BuffApplicationRunner;
+import com.chenerzhu.crawler.proxy.buff.BuffUserData;
+import com.chenerzhu.crawler.proxy.buff.service.SteamInventorySerivce;
+import com.chenerzhu.crawler.proxy.config.CookiesConfig;
+import com.chenerzhu.crawler.proxy.csgo.BuffBuyItemEntity.Items;
 import com.chenerzhu.crawler.proxy.csgo.entity.BuffCostEntity;
 import com.chenerzhu.crawler.proxy.csgo.repository.SellBuffProfitRepository;
 import com.chenerzhu.crawler.proxy.csgo.service.BuffCostService;
@@ -28,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * steam上架商品的服务
@@ -55,51 +61,73 @@ public class GroundingService {
     @Autowired
     SteamInventoryService steamInventoryService;
 
+    @Autowired
+    SteamInventorySerivce steamInventorySerivce;
+
     /**
      * steam上架操作逻辑
      */
     public void productListingOperation() {
-        //刷新库存信息
-        steamInventoryService.refreshSteamInventory();
-        ThreadUtil.sleep(5 * 1000);
-        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
-        List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
-        for (Descriptions descriptions : allBySteamId) {
-            Double buyPrice = descriptions.getBuy_price();
-            Double buffMinPrice = descriptions.getBuff_min_price();
-            String marketHashName = descriptions.getMarket_hash_name();
-            //成本价远远小于，此时售卖价，上架到steam市场
-            //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-            PriceVerviewRoot priceVerview = getPriceVerview(marketHashName);
-            String lowestPrice = priceVerview.getLowest_price();
-            if (StrUtil.isEmpty(lowestPrice)) {
-                lowestPrice = priceVerview.getMedian_price();
-            }
-            // steam最低价
-            String lowest_price = lowestPrice.replace("$", "");
-            Double steamPrice = Double.valueOf(lowest_price) * 1.4 * 100;
-            if (buyPrice == null) {
-                //没有购买成本金额，不适合倒卖的，上架市场
-                buyPrice = Double.valueOf(lowest_price);
-            }
-            //成本价大于售卖价
-            if (buyPrice * 6 > buffMinPrice) {
-                try {
-                    //购买价格
-                    Double buffPrice = buyPrice  * 115;
-                    double max = Math.max(buffPrice, steamPrice);
-                    //steam推荐的金额和buff售卖最低金额 选高的
-                    saleItem(descriptions, (int) max, descriptions.getAmount() + "");
-                } catch (Exception e) {
-                    log.error("上架商品失败，失败信息：{}", e);
+        SteamUserDate steamUserDate1 = SteamTheadeUtil.steamUserDateTL.get();
+        String steamID = steamUserDate1.getSession().getSteamID();
+        BuffUserData buffUserData = BuffApplicationRunner.getBuffUserDataBySteamId(steamID);
+        Map<String, Double> hashNameAndSteamPrice = new HashMap<>();
+        if (buffUserData !=null){
+            BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
+            CookiesConfig.buffCookies.set(BuffApplicationRunner.buffUserDataThreadLocal.get().getCookie());
+            List<Items> items = steamInventorySerivce.steamInventorys();
+            // steam的价格映射
+           hashNameAndSteamPrice = items.stream().collect(Collectors.toMap(Items::getMarket_hash_name, item -> item.getSteam_price()));
+        }else {
+            //从steam获取饰品steam价格
+            //刷新库存信息
+            steamInventoryService.refreshSteamInventory();
+            ThreadUtil.sleep(5 * 1000);
+            SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
+            List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
+            for (Descriptions descriptions : allBySteamId) {
+                Double buyPrice = descriptions.getBuy_price();
+                Double buffMinPrice = descriptions.getBuff_min_price();
+                String marketHashName = descriptions.getMarket_hash_name();
+                //成本价远远小于，此时售卖价，上架到steam市场
+                //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
+                Double lowestPrice = hashNameAndSteamPrice.get(marketHashName);
+                if (lowestPrice == null) {
+                    PriceVerviewRoot priceVerview = getPriceVerview(marketHashName);
+                    String lowestPricestr = "";
+                    if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
+                        lowestPricestr = priceVerview.getMedian_price();
+                    }else {
+                        lowestPricestr=  priceVerview.getLowest_price();
+                    }
+                    lowestPrice =  Double.valueOf( lowestPricestr.replace("$", ""));
+                }
+                // steam最低价
+                Double steamPrice = lowestPrice * 1.4 * 100;
+                if (buyPrice == null) {
+                    //没有购买成本金额，购买金额等于steam
+                    buyPrice = lowestPrice;
+                }
+                //成本高于buff售卖价，进行上架
+                if (buyPrice * 6 >= buffMinPrice) {
                     try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
+                        //购买价格
+                        Double buffPrice = buyPrice  * 115;
+                        double max = Math.max(buffPrice, steamPrice);
+                        //steam推荐的金额和buff售卖最低金额 选高的
+                        saleItem(descriptions, (int) max, descriptions.getAmount() + "");
+                    } catch (Exception e) {
+                        log.error("上架商品失败，失败信息：{}", e);
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException interruptedException) {
+                            interruptedException.printStackTrace();
+                        }
                     }
                 }
             }
         }
+
         log.info("steam全部商品上架完成");
     }
 

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 启动后buff账号信息初始化
@@ -107,5 +108,18 @@ public class BuffApplicationRunner implements ApplicationRunner {
         String CNYStr = jsonObject.getJSONObject("rates").getString("CNY");
         cny = Double.valueOf(CNYStr);
         return 0.0;
+    }
+
+    /**
+     * 通过steamId 获取buff信息
+     * @param steamId
+     * @return
+     */
+    public static BuffUserData getBuffUserDataBySteamId(String steamId ){
+        List<BuffUserData> collect = buffUserDataList.stream().filter(buffUserData -> buffUserData.getSteamId().equals(steamId)).collect(Collectors.toList());
+        if (collect.isEmpty()){
+            return null;
+        }
+        return collect.get(0);
     }
 }

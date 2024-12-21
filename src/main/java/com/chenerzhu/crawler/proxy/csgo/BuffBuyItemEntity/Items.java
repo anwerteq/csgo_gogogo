@@ -97,6 +97,8 @@ public class Items
 
     private int updated_at;
 
+    private Double steam_price;
+
     String market_hash_name;
 
     String sell_min_price;
