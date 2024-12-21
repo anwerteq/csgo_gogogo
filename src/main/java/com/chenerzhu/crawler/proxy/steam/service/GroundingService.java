@@ -78,56 +78,54 @@ public class GroundingService {
             List<Items> items = steamInventorySerivce.steamInventorys();
             // steam的价格映射
            hashNameAndSteamPrice = items.stream().collect(Collectors.toMap(Items::getMarket_hash_name, item -> item.getSteam_price(),(e1,e2)->e1));
-        }else {
-            //从steam获取饰品steam价格
-            //刷新库存信息
-            steamInventoryService.refreshSteamInventory();
-            ThreadUtil.sleep(5 * 1000);
-            SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
-            List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
-            for (Descriptions descriptions : allBySteamId) {
-                Double buyPrice = descriptions.getBuy_price();
-                Double buffMinPrice = descriptions.getBuff_min_price();
-                String marketHashName = descriptions.getMarket_hash_name();
-                //成本价远远小于，此时售卖价，上架到steam市场
-                //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
-                Double lowestPrice = hashNameAndSteamPrice.get(marketHashName);
-                if (lowestPrice == null) {
-                    PriceVerviewRoot priceVerview = getPriceVerview(marketHashName);
-                    String lowestPricestr = "";
-                    if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
-                        lowestPricestr = priceVerview.getMedian_price();
-                    }else {
-                        lowestPricestr=  priceVerview.getLowest_price();
-                    }
-                    lowestPrice =  Double.valueOf( lowestPricestr.replace("$", ""));
+        }
+        //从steam获取饰品steam价格
+        //刷新库存信息
+        steamInventoryService.refreshSteamInventory();
+        ThreadUtil.sleep(5 * 1000);
+        SteamUserDate steamUserDate = SteamTheadeUtil.steamUserDateTL.get();
+        List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(steamUserDate.getSession().getSteamID());
+        for (Descriptions descriptions : allBySteamId) {
+            Double buyPrice = descriptions.getBuy_price();
+            Double buffMinPrice = descriptions.getBuff_min_price();
+            String marketHashName = descriptions.getMarket_hash_name();
+            //成本价远远小于，此时售卖价，上架到steam市场
+            //获取steam推荐的 税前售卖金额（美金）如： $0.03 美金
+            Double lowestPrice = hashNameAndSteamPrice.get(marketHashName);
+            if (lowestPrice == null) {
+                PriceVerviewRoot priceVerview = getPriceVerview(marketHashName);
+                String lowestPricestr = "";
+                if (StrUtil.isEmpty(priceVerview.getLowest_price())) {
+                    lowestPricestr = priceVerview.getMedian_price();
+                }else {
+                    lowestPricestr=  priceVerview.getLowest_price();
                 }
-                // steam最低价
-                Double steamPrice = lowestPrice * 1.4 * 100;
-                if (buyPrice == null) {
-                    //没有购买成本金额，购买金额等于steam
-                    buyPrice = lowestPrice;
-                }
-                //成本高于buff售卖价，进行上架
-                if (buyPrice * 6 >= buffMinPrice) {
+                lowestPrice =  Double.valueOf( lowestPricestr.replace("$", ""));
+            }
+            // steam最低价
+            Double steamPrice = lowestPrice * 1.4 * 100;
+            if (buyPrice == null) {
+                //没有购买成本金额，购买金额等于steam
+                buyPrice = lowestPrice;
+            }
+            //成本高于buff售卖价，进行上架
+            if (buyPrice * 6 >= buffMinPrice) {
+                try {
+                    //购买价格
+                    Double buffPrice = buyPrice  * 115;
+                    double max = Math.max(buffPrice, steamPrice);
+                    //steam推荐的金额和buff售卖最低金额 选高的
+                    saleItem(descriptions, (int) max, descriptions.getAmount() + "");
+                } catch (Exception e) {
+                    log.error("上架商品失败，失败信息：{}", e);
                     try {
-                        //购买价格
-                        Double buffPrice = buyPrice  * 115;
-                        double max = Math.max(buffPrice, steamPrice);
-                        //steam推荐的金额和buff售卖最低金额 选高的
-                        saleItem(descriptions, (int) max, descriptions.getAmount() + "");
-                    } catch (Exception e) {
-                        log.error("上架商品失败，失败信息：{}", e);
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException interruptedException) {
-                            interruptedException.printStackTrace();
-                        }
+                        Thread.sleep(5000);
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
                     }
                 }
             }
         }
-
         log.info("steam全部商品上架完成");
     }
 
