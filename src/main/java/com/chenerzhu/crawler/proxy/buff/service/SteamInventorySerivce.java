@@ -86,6 +86,8 @@ public class SteamInventorySerivce {
         List<Items> items = new ArrayList<>();
         int page_num = 1;
         while (items.addAll(steamInventory(page_num++)));
+        Set<String> collect = items.stream().map(Items::getId).collect(Collectors.toSet());
+        items = items.stream().filter(o-> collect.remove(o.getId())).collect(Collectors.toList());
         return items;
     }
 
