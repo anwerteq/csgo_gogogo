@@ -38,10 +38,9 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        scheduledExecutorService.schedule(() -> {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             log.info("开始buff自动收货");
             for (BuffUserData buffUserData : BuffApplicationRunner.buffUserDataList) {
-                ThreadUtil.sleep(20 * 1000);
                 BuffApplicationRunner.buffUserDataThreadLocal.set(buffUserData);
                 CookiesConfig.buffCookies.set(buffUserData.getCookie());
                 log.info("buff账号:{},开始自动收货,", buffUserData.getAcount());
@@ -51,6 +50,6 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
                     log.error("buff自动收货异常", e);
                 }
             }
-        },5 * 60, TimeUnit.SECONDS);
+        }, 60,60, TimeUnit.SECONDS);
     }
 }

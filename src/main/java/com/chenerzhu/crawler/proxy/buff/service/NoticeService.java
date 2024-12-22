@@ -50,8 +50,6 @@ public class NoticeService {
      * 获取buff的相关通知信息
      */
     public JsonsRootBean steamTrade() {
-
-        requireBuyerSendOffer();
         getNotification();
         return null;
     }
@@ -65,6 +63,7 @@ public class NoticeService {
         }
         int csgoDeliverOrderCount = getCsgoDeliverOrderCount(jsonsRootBean);
         if (0 != csgoDeliverOrderCount) {
+            requireBuyerSendOffer();
             //key：交易订单，value:商品信息
             BuffUserData buffUserData = BuffApplicationRunner.buffUserDataThreadLocal.get();
             Map<String, List<ItemsToTrade>> orderTradeofferid = getDeliverOrderTradeofferid();

@@ -137,28 +137,30 @@ public class SteamInventorySerivce {
         Map<String, Double> cdKeyIdAndPrice = allBySteamId.stream().filter(o->o.getBuy_price() != null).collect(Collectors.toMap(Descriptions::getCdkey_id, Descriptions::getBuy_price));
         List<Assets> assets = new ArrayList<>();
         int count = 0;
+        //打乱从buff库存拉取的数据，减少因为售卖不出的饰品占用上架位
+        Collections.shuffle(items);
         for (Items item : items) {
             Double sellMinPrice = Double.valueOf(item.getSell_min_price()) ;
             //限制售卖的价格
            // 没有完全刷新库存信息
-            Double buyPrice = cdKeyIdAndPrice.get(item.getAssetidClassidInstanceid());
-            if (buyPrice == null){
-                buyPrice = item.getSteam_price();
+            Double buyPrice = item.getSteam_price();
+
+            //不适合倒卖
+            if (sellMinPrice <= buyPrice * 6){
+                //判断购买价低于售出价
+                buyPrice = cdKeyIdAndPrice.get(item.getAssetidClassidInstanceid());
+                if (buyPrice == null){
+                    continue;
+                }
             }
             //低于成本，不售卖
             if (sellMinPrice <= buyPrice * 6){
                 continue;
             }
-            Double realtimeSellPrice = sellMinPrice- 0.0;
-                    // getSellPrice(String.valueOf(item.getGoods_id()));
-            //低于成本，不售卖
-            if (realtimeSellPrice <= buyPrice * 6){
-                continue;
-            }
-            realtimeSellPrice = realtimeSellPrice -0.01;
-            Assets asset = buildSell_orderParam(item, realtimeSellPrice);
+            sellMinPrice = sellMinPrice -0.01;
+            Assets asset = buildSell_orderParam(item, sellMinPrice);
             count++;
-            log.info("饰品:{}准备上架数据中,在售价格:{},售卖价：{}，成本价格：{}元", asset.getMarket_hash_name(), asset.getPrice(), realtimeSellPrice,buyPrice * 6);
+            log.info("饰品:{}准备上架数据中,在售价格:{},售卖价：{}，成本价格：{}元", asset.getMarket_hash_name(), asset.getPrice(), sellMinPrice,buyPrice * 6);
             assets.add(asset);
             if (assets.isEmpty()){
                 continue;
