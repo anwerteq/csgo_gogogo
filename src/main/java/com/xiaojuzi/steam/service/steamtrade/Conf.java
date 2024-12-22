@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Auto-generated: 2023-10-08 20:44:11
  *
- * @author www.ecjson.com
  * @website http://www.ecjson.com/json2java/
  */
 public class Conf {

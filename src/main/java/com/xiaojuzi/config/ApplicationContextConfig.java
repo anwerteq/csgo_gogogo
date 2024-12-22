@@ -16,11 +16,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 
-/**
- * @author Yeafel
- * 2021/3/13 23:45
- * Do or Die,To be a better man!
- */
 @Configuration
 public class ApplicationContextConfig {
 

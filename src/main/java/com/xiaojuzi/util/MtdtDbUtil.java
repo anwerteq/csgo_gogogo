@@ -18,7 +18,6 @@ import java.util.*;
 /**
  * jdbc通用工具类
  *
- * @author chenhong
  * @date 2023/05/22
  */
 @Slf4j

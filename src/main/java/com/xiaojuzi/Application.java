@@ -25,10 +25,6 @@ public class Application {
 
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
-//        SteamLossPaintwearService bean = run.getBean(SteamLossPaintwearService.class);
-//        bean.getMarketLists(null,null);
-//        ItemGoodsService bean = run.getBean(ItemGoodsService.class);
-//        bean.getLowPaintwear();
+        SpringApplication.run(Application.class, args);
     }
 }

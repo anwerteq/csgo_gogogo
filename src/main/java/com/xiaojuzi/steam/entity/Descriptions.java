@@ -21,7 +21,6 @@ import java.util.StringJoiner;
 /**
  * steam仓库饰品信息
  *
- * @author json.cn (i@json.cn)
  * @website http://www.json.cn/java2pojo/
  */
 @Data

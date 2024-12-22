@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @author chenerzhu
  * @create 2018-08-29 19:51
  **/
 @Slf4j

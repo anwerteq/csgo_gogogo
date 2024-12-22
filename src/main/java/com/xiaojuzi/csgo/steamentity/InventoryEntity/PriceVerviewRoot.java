@@ -8,7 +8,6 @@ import lombok.Data;
 /**
  * Auto-generated: 2023-05-22 17:34:12
  *
- * @author json.cn (i@json.cn)
  * @website http://www.json.cn/java2pojo/
  */
 @Data

@@ -6,7 +6,6 @@ package com.xiaojuzi.csgo.entity;
 /**
  * Auto-generated: 2023-05-15 15:46:20
  *
- * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
 public class Weapon {

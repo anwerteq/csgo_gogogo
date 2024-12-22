@@ -6,7 +6,6 @@ package com.xiaojuzi.csgo.steamentity.InventoryEntity;
 /**
  * Auto-generated: 2023-05-22 14:41:55
  *
- * @author json.cn (i@json.cn)
  * @website http://www.json.cn/java2pojo/
  */
 

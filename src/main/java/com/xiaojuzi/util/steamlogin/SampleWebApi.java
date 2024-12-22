@@ -40,7 +40,6 @@ import java.util.Map;
 // as such, the API for interacting with the WebAPI follows a similar methodology
 
 /**
- * @author lngtr
  * @since 2021-10-11
  */
 @SuppressWarnings("FieldCanBeLocal")

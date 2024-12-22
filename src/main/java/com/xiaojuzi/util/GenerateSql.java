@@ -16,7 +16,6 @@ import static com.xiaojuzi.util.StreamUtil.distinctByKey;
  * 生成insert语句工具
  *
  * @param <T>
- * @author chenhong
  * @date 2023/05/22
  */
 public class GenerateSql<T> {

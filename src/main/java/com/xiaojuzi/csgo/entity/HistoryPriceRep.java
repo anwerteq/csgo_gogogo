@@ -6,7 +6,6 @@ package com.xiaojuzi.csgo.entity;
 /**
  * Auto-generated: 2023-05-15 21:42:53
  *
- * @author jb51.net (i@jb51.net)
  * @website http://tools.jb51.net/code/json2javabean
  */
 @lombok.Data

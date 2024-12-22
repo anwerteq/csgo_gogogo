@@ -33,7 +33,6 @@ import java.util.EnumSet;
 import java.util.concurrent.CancellationException;
 
 /**
- * @author lossy
  * @since 2023-03-19
  */
 @SuppressWarnings("FieldCanBeLocal")

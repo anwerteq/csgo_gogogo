@@ -36,7 +36,6 @@ import java.util.*;
 import java.util.concurrent.CancellationException;
 
 /**
- * @author lossy
  * @since 2023-11-06
  */
 @SuppressWarnings("FieldCanBeLocal")

@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Auto-generated: 2023-10-09 21:6:53
  *
- * @author www.ecjson.com
  * @website http://www.ecjson.com/json2java/
  */
 @Data

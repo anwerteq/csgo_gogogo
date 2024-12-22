@@ -9,7 +9,6 @@ import java.util.StringJoiner;
 /**
  * Auto-generated: 2023-11-06 21:33:51
  *
- * @author www.pcjson.com
  * @website http://www.pcjson.com/json2java/
  */
 @Data

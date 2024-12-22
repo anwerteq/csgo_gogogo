@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
  * Created Date by 2020/1/14 0014.
  * Redis 工具类
  *
- * @author Parker
  */
 @Component
 @Slf4j

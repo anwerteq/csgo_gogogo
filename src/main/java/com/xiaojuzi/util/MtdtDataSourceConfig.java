@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- * @author lbb
  * @date 2023/7/27 16:11
  * @description
  */

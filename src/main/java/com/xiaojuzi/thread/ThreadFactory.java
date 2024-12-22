@@ -3,7 +3,6 @@ package com.xiaojuzi.thread;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author chenerzhu
  * @create 2018-09-10 20:27
  **/
 public class ThreadFactory implements java.util.concurrent.ThreadFactory {

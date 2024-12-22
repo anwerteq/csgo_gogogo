@@ -6,7 +6,6 @@ package com.xiaojuzi.csgo.service.LowPaintwearEntity;
 /**
  * Auto-generated: 2023-10-28 0:0:22
  *
- * @author ab173.com (info@ab173.com)
  * @website http://www.ab173.com/json/
  */
 public class LowPainJsonRootBean {

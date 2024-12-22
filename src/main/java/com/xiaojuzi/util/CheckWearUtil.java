@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 /**
  * 校验磨损工具类
  *
- * @author muyun
  * @date 2023/10/28 16:06
  */
 public class CheckWearUtil {

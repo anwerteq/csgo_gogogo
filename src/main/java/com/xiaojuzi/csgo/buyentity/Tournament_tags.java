@@ -6,7 +6,6 @@ package com.xiaojuzi.csgo.buyentity;
 /**
  * Auto-generated: 2023-05-24 18:40:29
  *
- * @author json.cn (i@json.cn)
  * @website http://www.json.cn/java2pojo/
  */
 public class Tournament_tags {

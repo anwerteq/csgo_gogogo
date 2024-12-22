@@ -3,7 +3,6 @@ package com.xiaojuzi.steam.service.steamtrade;
 /**
  * Auto-generated: 2023-10-09 6:16:35
  *
- * @author www.ecjson.com
  * @website http://www.ecjson.com/json2java/
  */
 public class DetailsConfData {

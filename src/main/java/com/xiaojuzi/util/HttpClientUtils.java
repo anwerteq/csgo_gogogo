@@ -48,7 +48,6 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 
 /**
- * @author chenerzhu
  * @create 2018-08-11 11:25
  **/
 @Slf4j
@@ -263,7 +262,6 @@ public class HttpClientUtils implements ApplicationRunner {
     /**
      * @param url 路径
      * @return int
-     * @author
      * @date
      */
     private static int getPort(String url) {

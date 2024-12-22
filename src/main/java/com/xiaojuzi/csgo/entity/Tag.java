@@ -11,7 +11,6 @@ import javax.persistence.*;
 /**
  * Auto-generated: 2023-05-14 0:18:12
  *
- * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
 @Data

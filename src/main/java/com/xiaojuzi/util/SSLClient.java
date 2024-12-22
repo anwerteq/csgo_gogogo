@@ -1,6 +1,5 @@
 package com.xiaojuzi.util; /**
  * @Description: 用于进行Https请求的HttpClient
- * @author: jackromer
  * @version: 1.0, Jan 24, 2019
  */
 

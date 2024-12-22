@@ -6,7 +6,6 @@
 ///**
 // * Auto-generated: 2023-11-04 0:29:52
 // *
-// * @author json.cn (i@json.cn)
 // * @website http://www.json.cn/java2pojo/
 // */
 //public class App_data {

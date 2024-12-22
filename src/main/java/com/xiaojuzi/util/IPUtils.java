@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created Date by 2020/4/21 0021.
  *
- * @author Parker
  */
 @Slf4j
 public class IPUtils {
