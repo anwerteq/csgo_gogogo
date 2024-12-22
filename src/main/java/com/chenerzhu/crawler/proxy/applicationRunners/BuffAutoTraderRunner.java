@@ -50,6 +50,6 @@ public class BuffAutoTraderRunner implements ApplicationRunner {
                     log.error("buff自动收货异常", e);
                 }
             }
-        }, 60,60, TimeUnit.SECONDS);
+        }, 120,120, TimeUnit.SECONDS);
     }
 }

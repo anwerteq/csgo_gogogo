@@ -131,14 +131,14 @@ public class SteamInventorySerivce {
         }
         //获取steam库存信息
         List<Descriptions> allBySteamId = descriptionsRepository.findAllBySteamId(buffUserData.getSteamId());
-        if (allBySteamId.isEmpty()) {
-            throw new RuntimeException("buff账号:"+buffUserData.getAcount() +" 未更新库存");
-        }
+//        if (allBySteamId.isEmpty()) {
+//            throw new RuntimeException("buff账号:"+buffUserData.getAcount() +" 未更新库存");
+//        }
         Map<String, Double> cdKeyIdAndPrice = allBySteamId.stream().filter(o->o.getBuy_price() != null).collect(Collectors.toMap(Descriptions::getCdkey_id, Descriptions::getBuy_price));
         List<Assets> assets = new ArrayList<>();
         int count = 0;
         //打乱从buff库存拉取的数据，减少因为售卖不出的饰品占用上架位
-        Collections.shuffle(items);
+//        Collections.shuffle(items);
         for (Items item : items) {
             Double sellMinPrice = Double.valueOf(item.getSell_min_price()) ;
             //限制售卖的价格
@@ -146,7 +146,7 @@ public class SteamInventorySerivce {
             Double buyPrice = item.getSteam_price();
 
             //不适合倒卖
-            if (sellMinPrice <= buyPrice * 6){
+            if (sellMinPrice < buyPrice * 6){
                 //判断购买价低于售出价
                 buyPrice = cdKeyIdAndPrice.get(item.getAssetidClassidInstanceid());
                 if (buyPrice == null){
@@ -154,7 +154,7 @@ public class SteamInventorySerivce {
                 }
             }
             //低于成本，不售卖
-            if (sellMinPrice <= buyPrice * 6){
+            if (sellMinPrice < buyPrice * 6){
                 continue;
             }
             sellMinPrice = sellMinPrice -0.01;
